@@ -1,0 +1,77 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
+plugins {
+    id 'org.springframework.boot' version '2.0.3.RELEASE'
+}
+
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'idea'
+
+
+version = '0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+//        maven { url "https://repo.spring.io/snapshot" }
+//        maven { url "https://repo.spring.io/milestone" }
+}
+
+dependencyManagement {
+    imports {
+        mavenBom SpringBootPlugin.BOM_COORDINATES
+    }
+}
+
+dependencies {
+    // Spring Boot starter
+    compile('org.springframework.boot:spring-boot-starter')
+    // Spring logging
+    compile('org.springframework.boot:spring-boot-starter-logging')
+
+    // Jackson
+    compile('com.fasterxml.jackson.core:jackson-databind')
+
+    // Testing
+    // Spring testing
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    // Spock
+    testCompile('org.spockframework:spock-core:1.1-groovy-2.4')
+    testCompile('org.spockframework:spock-spring:1.1-groovy-2.4')
+
+    // Development tools
+    compile('org.springframework.boot:spring-boot-configuration-processor')
+    compile('org.springframework.boot:spring-boot-devtools')
+}
+
+sourceSets {
+    // integration tests
+    integrationTest {
+        groovy {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/integration-test/groovy')
+        }
+        resources.srcDir file('src/integration-test/resources')
+    }
+}
+
+configurations {
+    // IT
+    integrationTestCompile.extendsFrom testCompile
+    integrationTestRuntime.extendsFrom testRuntime
+}
+
+task integrationTest(type: Test) {
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+
+    mustRunAfter test
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.8'
+    distributionType = Wrapper.DistributionType.ALL
+}

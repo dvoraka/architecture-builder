@@ -12,6 +12,8 @@ public class Directory {
     private String name;
     private String filename;
 
+    private DirType type;
+
     @JsonBackReference
     private Directory parent;
     @JsonManagedReference
@@ -45,6 +47,10 @@ public class Directory {
 
     public String getFilename() {
         return filename;
+    }
+
+    public DirType getType() {
+        return type;
     }
 
     public Directory getParent() {

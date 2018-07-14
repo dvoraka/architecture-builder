@@ -39,6 +39,15 @@ public class Directory {
         }
     }
 
+    @JsonIgnore
+    public String getPath() {
+        if (isRoot()) {
+            return getName();
+        } else {
+            return getParent().getPath() + File.separatorChar + getName();
+        }
+    }
+
     boolean isRoot() {
         return getParent() == null;
     }

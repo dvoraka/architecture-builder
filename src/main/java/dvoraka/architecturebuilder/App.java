@@ -17,7 +17,7 @@ public class App {
         return args -> {
             System.out.println("App");
 
-            Directory root = new Directory.DirectoryBuilder("")
+            Directory root = new Directory.DirectoryBuilder("rootDir")
                     .withType(DirType.ROOT)
                     .withParent(null)
                     .build();
@@ -38,6 +38,7 @@ public class App {
                     .build();
 
             System.out.println(service.getPackageName());
+            System.out.println(service.getPath());
         };
     }
 }

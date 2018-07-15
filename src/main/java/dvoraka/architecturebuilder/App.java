@@ -15,7 +15,6 @@ public class App {
     @Bean
     public CommandLineRunner runner() {
         return args -> {
-            System.out.println("App");
 
             Directory root = new Directory.DirectoryBuilder("rootDir")
                     .withType(DirType.ROOT)
@@ -27,9 +26,19 @@ public class App {
                     .withParent(root)
                     .build();
 
+            Directory srcTestRoot = new Directory.DirectoryBuilder("src/test/groovy")
+                    .withType(DirType.SRC_TEST_ROOT)
+                    .withParent(root)
+                    .build();
+
             Directory srcBase = new Directory.DirectoryBuilder("dvoraka/testapp")
                     .withType(DirType.SRC_BASE)
                     .withParent(srcRoot)
+                    .build();
+
+            Directory srcTestBase = new Directory.DirectoryBuilder("dvoraka/testapp")
+                    .withType(DirType.SRC_TEST_BASE)
+                    .withParent(srcTestRoot)
                     .build();
 
             Directory service = new Directory.DirectoryBuilder("service")
@@ -39,6 +48,27 @@ public class App {
 
             System.out.println(service.getPackageName());
             System.out.println(service.getPath());
+
+            processDirs(root);
         };
+    }
+
+    public void processDirs(Directory root) {
+        if (root.getChildren().isEmpty()) {
+            processLeaf(root);
+        } else {
+            for (Directory dir : root.getChildren()) {
+                processDirs(dir);
+            }
+            process(root);
+        }
+    }
+
+    public void processLeaf(Directory directory) {
+        System.out.println("Processing leaf: " + directory.getName());
+    }
+
+    public void process(Directory directory) {
+        System.out.println("Processing: " + directory.getName());
     }
 }

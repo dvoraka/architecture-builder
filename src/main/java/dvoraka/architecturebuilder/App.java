@@ -64,7 +64,7 @@ public class App {
             for (Directory dir : root.getChildren()) {
                 processDirs(dir);
             }
-            process(root);
+            processNode(root);
         }
     }
 
@@ -79,7 +79,7 @@ public class App {
         }
     }
 
-    public void process(Directory directory) {
+    public void processNode(Directory directory) {
         System.out.println("Processing: " + directory.getName());
     }
 }

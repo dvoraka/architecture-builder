@@ -1,16 +1,17 @@
 package dvoraka.architecturebuilder;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
 @SpringBootApplication
 public class App {
+
+    @Autowired
+    private DirService dirService;
+
 
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
@@ -53,33 +54,7 @@ public class App {
             System.out.println(service.getPackageName());
             System.out.println(service.getPath());
 
-            processDirs(root);
+            dirService.processDirs(root);
         };
-    }
-
-    public void processDirs(Directory root) {
-        if (root.getChildren().isEmpty()) {
-            processLeaf(root);
-        } else {
-            for (Directory dir : root.getChildren()) {
-                processDirs(dir);
-            }
-            processNode(root);
-        }
-    }
-
-    public void processLeaf(Directory directory) {
-        System.out.println("Processing leaf: " + directory.getName());
-        if (!directory.getType().isAbstractType()) {
-            try {
-                Files.createDirectories(Paths.get(directory.getPath()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void processNode(Directory directory) {
-        System.out.println("Processing: " + directory.getName());
     }
 }

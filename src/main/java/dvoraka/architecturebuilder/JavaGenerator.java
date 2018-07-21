@@ -39,6 +39,6 @@ public class JavaGenerator implements LangGenerator {
 
     @Override
     public void generate(Directory directory) {
-
+        log.debug("Generating code for: {}", directory.getType());
     }
 }

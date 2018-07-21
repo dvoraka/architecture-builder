@@ -12,7 +12,9 @@ public class App {
     @Autowired
     private DirService dirService;
     @Autowired
-    private LangGenerator generator;
+    private LangGenerator langGenerator;
+    @Autowired
+    private Generator generator;
 
 
     public static void main(String[] args) {
@@ -53,15 +55,7 @@ public class App {
                     .withParent(srcBase)
                     .build();
 
-            System.out.println(service.getPackageName());
-            System.out.println(service.getPath());
-
-//            dirService.processDirs(root);
-
-            dirService.processDirLeafs(root, System.out::println);
-            dirService.processDirNodes(root, System.out::println);
-
-//            generator.generate(root);
+            generator.generate(root);
         };
     }
 }

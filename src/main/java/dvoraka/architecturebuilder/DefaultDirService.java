@@ -36,6 +36,11 @@ public class DefaultDirService implements DirService {
     }
 
     @Override
+    public void processDirs(Directory root, Consumer<Directory> processor) {
+        processDirs(root, processor, processor);
+    }
+
+    @Override
     public void processDirLeafs(Directory root, Consumer<Directory> processor) {
         if (root.getChildren().isEmpty()) {
             processor.accept(root);

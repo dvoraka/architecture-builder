@@ -14,6 +14,8 @@ public interface DirService {
 
     void processDirs(Directory root, Consumer<Directory> nodeProcessor, Consumer<Directory> leafProcessor);
 
+    void processDirs(Directory root, Consumer<Directory> processor);
+
     void processDirLeafs(Directory root, Consumer<Directory> processor);
 
     void processDirNodes(Directory root, Consumer<Directory> processor);

@@ -1,6 +1,7 @@
 package dvoraka.architecturebuilder;
 
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public interface DirService {
 
@@ -10,6 +11,12 @@ public interface DirService {
      * @param root the directory root
      */
     void processDirs(Directory root);
+
+    void processDirs(Directory root, Consumer<Directory> nodeProcessor, Consumer<Directory> leafProcessor);
+
+    void processDirLeafs(Directory root, Consumer<Directory> processor);
+
+    void processDirNodes(Directory root, Consumer<Directory> processor);
 
     /**
      * Finds a given type in the whole directory.

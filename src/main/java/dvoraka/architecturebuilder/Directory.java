@@ -84,6 +84,17 @@ public class Directory {
         return packageName.replace(File.separatorChar, '.');
     }
 
+    @Override
+    public String toString() {
+        return "Directory{" +
+                "name='" + name + '\'' +
+                ", filename='" + filename + '\'' +
+                ", type=" + type +
+                ", parent=" + (parent != null ? parent.getName() : null) +
+                ", children=" + children +
+                '}';
+    }
+
     public static final class DirectoryBuilder {
 
         private String name;

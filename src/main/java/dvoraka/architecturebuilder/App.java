@@ -56,9 +56,12 @@ public class App {
             System.out.println(service.getPackageName());
             System.out.println(service.getPath());
 
-            dirService.processDirs(root);
+//            dirService.processDirs(root);
 
-            generator.generate(root);
+            dirService.processDirLeafs(root, System.out::println);
+            dirService.processDirNodes(root, System.out::println);
+
+//            generator.generate(root);
         };
     }
 }

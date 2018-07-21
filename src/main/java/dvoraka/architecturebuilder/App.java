@@ -11,6 +11,8 @@ public class App {
 
     @Autowired
     private DirService dirService;
+    @Autowired
+    private Generator generator;
 
 
     public static void main(String[] args) {
@@ -55,6 +57,8 @@ public class App {
             System.out.println(service.getPath());
 
             dirService.processDirs(root);
+
+            generator.generate(root);
         };
     }
 }

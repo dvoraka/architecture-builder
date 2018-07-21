@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 import static java.util.Objects.requireNonNull;
 
 @Service
-public class JavaGenerator implements Generator {
+public class JavaGenerator implements LangGenerator {
 
     private final DirService dirService;
 

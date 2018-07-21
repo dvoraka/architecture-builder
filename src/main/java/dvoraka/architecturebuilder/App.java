@@ -12,7 +12,7 @@ public class App {
     @Autowired
     private DirService dirService;
     @Autowired
-    private Generator generator;
+    private LangGenerator generator;
 
 
     public static void main(String[] args) {

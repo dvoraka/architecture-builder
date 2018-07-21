@@ -5,13 +5,6 @@ import java.util.function.Consumer;
 
 public interface DirService {
 
-    /**
-     * Process all dirs from a given root.
-     *
-     * @param root the directory root
-     */
-    void processDirs(Directory root);
-
     void processDirs(Directory root, Consumer<Directory> nodeProcessor, Consumer<Directory> leafProcessor);
 
     void processDirs(Directory root, Consumer<Directory> processor);

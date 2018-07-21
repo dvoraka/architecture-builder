@@ -33,6 +33,9 @@ public class MainGenerator implements Generator {
         // create dirs
         dirService.processDirLeafs(directory, this::createDirectory);
 
+        // print nodes
+        dirService.processDirNodes(directory, System.out::println);
+
         // generate code
         dirService.processDirs(directory, langGenerator::generate);
     }

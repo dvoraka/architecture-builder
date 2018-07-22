@@ -25,6 +25,8 @@ public class JavaGenerator implements LangGenerator {
         this.dirService = requireNonNull(dirService);
 
         conf = new EnumMap<>(DirType.class);
+        conf.put(DirType.SERVICE, this::genService);
+        conf.put(DirType.SERVICE_IMPL, this::genServiceImpl);
 
         checkImplementation();
     }
@@ -40,5 +42,17 @@ public class JavaGenerator implements LangGenerator {
     @Override
     public void generate(Directory directory) {
         log.debug("Generating code for: {}", directory.getType());
+
+        if (conf.containsKey(directory.getType())) {
+            conf.get(directory.getType()).accept(directory);
+        }
+    }
+
+    private void genService(Directory directory) {
+        log.debug("Generating service...");
+    }
+
+    private void genServiceImpl(Directory directory) {
+        log.debug("Generating service implementation...");
     }
 }

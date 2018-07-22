@@ -15,16 +15,15 @@ import static java.util.Objects.requireNonNull;
 public class MainGenerator implements Generator {
 
     private final DirService dirService;
+    private final LangGenerator langGenerator;
 
     private final Logger log = LoggerFactory.getLogger(MainGenerator.class);
 
-    private final LangGenerator langGenerator;
-
 
     @Autowired
-    public MainGenerator(DirService dirService) {
+    public MainGenerator(DirService dirService, LangGenerator langGenerator) {
         this.dirService = requireNonNull(dirService);
-        langGenerator = new JavaGenerator(dirService);
+        this.langGenerator = requireNonNull(langGenerator);
     }
 
     @Override

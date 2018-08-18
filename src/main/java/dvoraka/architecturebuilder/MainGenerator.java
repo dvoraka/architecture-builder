@@ -40,8 +40,8 @@ public class MainGenerator implements Generator {
     }
 
     private void createDirectory(Directory directory) {
-        log.debug("Creating directory: {}", directory.getPath());
         if (!directory.getType().isAbstractType()) {
+            log.debug("Creating directory: {}", directory.getPath());
             try {
                 Files.createDirectories(Paths.get(directory.getPath()));
             } catch (IOException e) {

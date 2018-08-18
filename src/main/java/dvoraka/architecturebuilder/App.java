@@ -45,9 +45,20 @@ public class App {
                     .withParent(srcRoot)
                     .build();
 
+            Directory srcBaseAbs = new Directory.DirectoryBuilder("dvoraka/diffapp")
+                    .withType(DirType.SRC_BASE_ABSTRACT)
+                    .withParent(root)
+                    .build();
+
             Directory srcTestBase = new Directory.DirectoryBuilder("dvoraka/testapp")
                     .withType(DirType.SRC_TEST_BASE)
                     .withParent(srcTestRoot)
+                    .build();
+
+            Directory serviceAbs = new Directory.DirectoryBuilder("service")
+                    .withType(DirType.SERVICE_ABSTRACT)
+                    .withParent(srcBaseAbs)
+                    .withFilename("AbstractService")
                     .build();
 
             Directory service = new Directory.DirectoryBuilder("service")

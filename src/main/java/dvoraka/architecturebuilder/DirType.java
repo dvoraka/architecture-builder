@@ -11,6 +11,7 @@ public enum DirType {
     SRC_TEST_ROOT,
 
     SRC_BASE(false, true),
+    SRC_BASE_ABSTRACT(true, true),
     SRC_TEST_BASE(false, true),
 
     SRC_PROPERTIES,

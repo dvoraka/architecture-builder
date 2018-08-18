@@ -1,5 +1,6 @@
 package dvoraka.architecturebuilder;
 
+import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeSpec;
 import org.slf4j.Logger;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.lang.model.element.Modifier;
 import java.io.IOException;
 import java.util.EnumMap;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import static java.util.Objects.requireNonNull;
@@ -54,15 +56,28 @@ public class JavaGenerator implements LangGenerator {
 
     private void genService(Directory directory) {
         log.debug("Generating service...");
-
         log.debug("D: {}", directory);
 
         String interfaceName = directory.getFilename();
 
-        TypeSpec serviceInterface = TypeSpec.interfaceBuilder(interfaceName)
-                .addModifiers(Modifier.PUBLIC)
-//                .addSuperinterface(ClassName.get(baseInterfacePackageName, baseInterfaceName))
-                .build();
+        // find superinterface
+        Optional<Directory> superInterfaceDir = dirService.findByType(DirType.SERVICE_ABSTRACT, directory);
+
+        TypeSpec serviceInterface;
+        if (superInterfaceDir.isPresent()) {
+
+            String pkgName = superInterfaceDir.get().getPackageName();
+            String name = superInterfaceDir.get().getFilename();
+
+            serviceInterface = TypeSpec.interfaceBuilder(interfaceName)
+                    .addModifiers(Modifier.PUBLIC)
+                    .addSuperinterface(ClassName.get(pkgName, name))
+                    .build();
+        } else {
+            serviceInterface = TypeSpec.interfaceBuilder(interfaceName)
+                    .addModifiers(Modifier.PUBLIC)
+                    .build();
+        }
 
         JavaFile javaFile = JavaFile.builder(directory.getPackageName(), serviceInterface)
                 .build();

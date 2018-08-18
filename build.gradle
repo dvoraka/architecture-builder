@@ -72,6 +72,6 @@ task integrationTest(type: Test) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.8'
+    gradleVersion = '4.9'
     distributionType = Wrapper.DistributionType.ALL
 }

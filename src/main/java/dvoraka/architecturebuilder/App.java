@@ -53,6 +53,7 @@ public class App {
             Directory service = new Directory.DirectoryBuilder("service")
                     .withType(DirType.SERVICE)
                     .withParent(srcBase)
+                    .withFilename("CoolService")
                     .build();
 
             generator.generate(root);

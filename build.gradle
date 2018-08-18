@@ -32,6 +32,9 @@ dependencies {
     // Jackson
     compile('com.fasterxml.jackson.core:jackson-databind')
 
+    // JavaPoet
+    compile('com.squareup:javapoet:1.11.1')
+
     // Testing
     // Spring testing
     testCompile('org.springframework.boot:spring-boot-starter-test')

@@ -48,16 +48,32 @@ public class DefaultDirService implements DirService {
 
     @Override
     public Optional<Directory> findByType(DirType type, Directory directory) {
-        return Optional.empty();
+        return findByTypeFrom(type, getRoot(directory));
     }
 
     @Override
     public Optional<Directory> findByTypeFrom(DirType type, Directory fromDirectory) {
+
+        if (fromDirectory.getType() == type) {
+            return Optional.of(fromDirectory);
+        } else {
+            for (Directory dir : fromDirectory.getChildren()) {
+                Optional<Directory> found = findByTypeFrom(type, dir);
+                if (found.isPresent()) {
+                    return found;
+                }
+            }
+        }
+
         return Optional.empty();
     }
 
     @Override
     public Directory getRoot(Directory directory) {
-        return null;
+        if (directory.isRoot()) {
+            return directory;
+        } else {
+            return getRoot(directory.getParent());
+        }
     }
 }

@@ -130,7 +130,6 @@ public class JavaGenerator implements LangGenerator {
             Type retType = m.getGenericReturnType();
 
             // parameters
-            Type[] parTypes = m.getGenericParameterTypes();
             List<ParameterSpec> parSpecs = new ArrayList<>();
             Parameter[] params = m.getParameters();
             for (Parameter param : params) {
@@ -147,9 +146,16 @@ public class JavaGenerator implements LangGenerator {
                 exceptionTypes.add(TypeName.get(type));
             }
 
+            // modifiers
+            List<Modifier> modifiers = new ArrayList<>();
+            if ((m.getModifiers() & java.lang.reflect.Modifier.PUBLIC) == 1) {
+                modifiers.add(Modifier.PUBLIC);
+            }
+
             MethodSpec spec = MethodSpec.methodBuilder(m.getName())
                     .addAnnotation(Override.class)
                     .returns(retType)
+                    .addModifiers(modifiers)
                     .addParameters(parSpecs)
                     .addExceptions(exceptionTypes)
                     .build();
@@ -157,14 +163,15 @@ public class JavaGenerator implements LangGenerator {
             methodSpecs.add(spec);
         }
 
-        TypeSpec serviceImpl2 = TypeSpec.classBuilder("Impl")
+        String name = "Default" + clazz.getSimpleName();
+        TypeSpec serviceImpl = TypeSpec.classBuilder(name)
                 .addModifiers(Modifier.PUBLIC)
                 .addSuperinterface(clazz)
                 .addAnnotation(Service.class)
                 .addMethods(methodSpecs)
                 .build();
 
-        JavaFile javaFile = JavaFile.builder(directory.getPackageName(), serviceImpl2)
+        JavaFile javaFile = JavaFile.builder(directory.getPackageName(), serviceImpl)
                 .build();
 
         try {

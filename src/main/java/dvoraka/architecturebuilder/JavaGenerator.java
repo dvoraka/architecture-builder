@@ -1,6 +1,5 @@
 package dvoraka.architecturebuilder;
 
-import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
@@ -75,12 +74,21 @@ public class JavaGenerator implements LangGenerator {
         TypeSpec serviceInterface;
         if (superInterfaceDir.isPresent()) {
 
+            // resolve abstract type
+            Class<?> clazz = null;
+            try {
+                clazz = Class.forName(superInterfaceDir.get().getFilename());
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
             String pkgName = superInterfaceDir.get().getPackageName();
             String name = superInterfaceDir.get().getFilename();
 
             serviceInterface = TypeSpec.interfaceBuilder(interfaceName)
                     .addModifiers(Modifier.PUBLIC)
-                    .addSuperinterface(ClassName.get(pkgName, name))
+//                    .addSuperinterface(ClassName.get(pkgName, name))
+                    .addSuperinterface(clazz)
                     .build();
         } else {
             serviceInterface = TypeSpec.interfaceBuilder(interfaceName)
@@ -101,16 +109,16 @@ public class JavaGenerator implements LangGenerator {
     private void genServiceImpl(Directory directory) {
         log.debug("Generating service implementation...");
 
-        // testing abstract type
-//        Class<?> clazz = DirectoryStream.class;
-//        Class<?> clazz = Comparable.class;
+        // find superinterface
+        Optional<Directory> superInterfaceDir = dirService.findByType(DirType.SERVICE_ABSTRACT, directory);
+
+        // resolve abstract type
         Class<?> clazz = null;
         try {
-            clazz = Class.forName("java.lang.Comparable");
+            clazz = Class.forName(superInterfaceDir.get().getFilename());
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-//        Class<?> clazz = DirService.class;
 
         // methods from the type
         Method methods[] = clazz.getDeclaredMethods();

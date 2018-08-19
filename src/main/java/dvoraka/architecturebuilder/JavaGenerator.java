@@ -75,13 +75,8 @@ public class JavaGenerator implements LangGenerator {
         TypeSpec serviceInterface;
         if (superInterfaceDir.isPresent()) {
 
-            // resolve abstract type
-            Class<?> clazz = null;
-            try {
-                clazz = Class.forName(superInterfaceDir.get().getFilename());
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+            Class<?> clazz = loadClass(superInterfaceDir.get().getFilename())
+                    .orElseThrow(RuntimeException::new);
 
             String pkgName = superInterfaceDir.get().getPackageName();
             String name = superInterfaceDir.get().getFilename();
@@ -110,18 +105,14 @@ public class JavaGenerator implements LangGenerator {
     private void genServiceImpl(Directory directory) {
         log.debug("Generating service implementation...");
 
-        // find supersuperinterface
-        Optional<Directory> superSuperInterfaceDir = dirService.findByType(DirType.SERVICE_ABSTRACT, directory);
+        Directory superSuperInterfaceDir = dirService.findByType(DirType.SERVICE_ABSTRACT, directory)
+                .orElseThrow(RuntimeException::new);
 
-        Optional<Directory> superInterfaceDir = dirService.findByType(DirType.SERVICE, directory);
+        Directory superInterfaceDir = dirService.findByType(DirType.SERVICE, directory)
+                .orElseThrow(RuntimeException::new);
 
-        // resolve abstract type
-        Class<?> clazz = null;
-        try {
-            clazz = Class.forName(superSuperInterfaceDir.get().getFilename());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        Class<?> clazz = loadClass(superSuperInterfaceDir.getFilename())
+                .orElseThrow(RuntimeException::new);
 
         // methods from the type
         Method methods[] = clazz.getDeclaredMethods();
@@ -179,12 +170,12 @@ public class JavaGenerator implements LangGenerator {
             methodSpecs.add(spec);
         }
 
-        String name = "Default" + superInterfaceDir.get().getFilename();
+        String name = "Default" + superInterfaceDir.getFilename();
         TypeSpec serviceImpl = TypeSpec.classBuilder(name)
                 .addModifiers(Modifier.PUBLIC)
-                .addSuperinterface(
-                        ClassName.get(superInterfaceDir.get().getPackageName(),
-                                superInterfaceDir.get().getFilename()))
+                .addSuperinterface(ClassName.get(
+                        superInterfaceDir.getPackageName(),
+                        superInterfaceDir.getFilename()))
                 .addAnnotation(Service.class)
                 .addMethods(methodSpecs)
                 .build();
@@ -210,5 +201,16 @@ public class JavaGenerator implements LangGenerator {
         }
 
         return methods;
+    }
+
+    private Optional<Class<?>> loadClass(String className) {
+        Class<?> clazz = null;
+        try {
+            clazz = Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return Optional.ofNullable(clazz);
     }
 }

@@ -2,6 +2,9 @@ package dvoraka.architecturebuilder;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.ParameterSpec;
+import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.lang.model.element.Modifier;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.nio.file.DirectoryStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -105,10 +109,53 @@ public class JavaGenerator implements LangGenerator {
         System.out.println(Arrays.toString(methods));
 
         // find all methods
-        findMethods(clazz).forEach(System.out::println);
+        List<Method> allMethods = findMethods(clazz);
+        allMethods.forEach(System.out::println);
+
+        // process all methods
+        List<MethodSpec> methodSpecs = new ArrayList<>();
+        for (Method m : allMethods) {
+            log.debug("Processing method: {}", m.toGenericString());
+
+            // skip default methods
+            if (m.isDefault()) {
+                log.debug("Skipping default method: {}", m.getName());
+                continue;
+            }
+
+            // return type
+            Type retType = m.getGenericReturnType();
+            System.out.println(retType);
+
+            // parameters
+            Type[] parTypes = m.getGenericParameterTypes();
+            List<ParameterSpec> parSpecs = new ArrayList<>();
+            for (Type parType : parTypes) {
+                ParameterSpec parSpec = ParameterSpec.builder(parType, "par")
+                        .build();
+
+                parSpecs.add(parSpec);
+            }
+
+            // exceptions
+            Type[] exceptions = m.getGenericExceptionTypes();
+            List<TypeName> exceptionTypes = new ArrayList<>();
+            for (Type type : exceptions) {
+                exceptionTypes.add(TypeName.get(type));
+            }
+
+            MethodSpec spec = MethodSpec.methodBuilder(m.getName())
+                    .addAnnotation(Override.class)
+                    .returns(retType)
+                    .addParameters(parSpecs)
+                    .addExceptions(exceptionTypes)
+                    .build();
+
+            methodSpecs.add(spec);
+        }
     }
 
-    public List<Method> findMethods(Class<?> clazz) {
+    private List<Method> findMethods(Class<?> clazz) {
         if (clazz.getInterfaces().length == 0) {
             return Arrays.asList(clazz.getDeclaredMethods());
         }

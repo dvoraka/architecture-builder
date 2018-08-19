@@ -1,5 +1,6 @@
 package dvoraka.architecturebuilder;
 
+import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
@@ -109,13 +110,15 @@ public class JavaGenerator implements LangGenerator {
     private void genServiceImpl(Directory directory) {
         log.debug("Generating service implementation...");
 
-        // find superinterface
-        Optional<Directory> superInterfaceDir = dirService.findByType(DirType.SERVICE_ABSTRACT, directory);
+        // find supersuperinterface
+        Optional<Directory> superSuperInterfaceDir = dirService.findByType(DirType.SERVICE_ABSTRACT, directory);
+
+        Optional<Directory> superInterfaceDir = dirService.findByType(DirType.SERVICE, directory);
 
         // resolve abstract type
         Class<?> clazz = null;
         try {
-            clazz = Class.forName(superInterfaceDir.get().getFilename());
+            clazz = Class.forName(superSuperInterfaceDir.get().getFilename());
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -176,10 +179,12 @@ public class JavaGenerator implements LangGenerator {
             methodSpecs.add(spec);
         }
 
-        String name = "Default" + clazz.getSimpleName();
+        String name = "Default" + superInterfaceDir.get().getFilename();
         TypeSpec serviceImpl = TypeSpec.classBuilder(name)
                 .addModifiers(Modifier.PUBLIC)
-                .addSuperinterface(clazz)
+                .addSuperinterface(
+                        ClassName.get(superInterfaceDir.get().getPackageName(),
+                                superInterfaceDir.get().getFilename()))
                 .addAnnotation(Service.class)
                 .addMethods(methodSpecs)
                 .build();

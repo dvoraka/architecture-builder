@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
-import java.nio.file.DirectoryStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -103,8 +102,14 @@ public class JavaGenerator implements LangGenerator {
         log.debug("Generating service implementation...");
 
         // testing abstract type
-        Class<?> clazz = DirectoryStream.class;
+//        Class<?> clazz = DirectoryStream.class;
 //        Class<?> clazz = Comparable.class;
+        Class<?> clazz = null;
+        try {
+            clazz = Class.forName("java.lang.Comparable");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 //        Class<?> clazz = DirService.class;
 
         // methods from the type

@@ -10,7 +10,12 @@ import org.springframework.stereotype.Service;
 
 import javax.lang.model.element.Modifier;
 import java.io.IOException;
+import java.lang.reflect.Method;
+import java.nio.file.DirectoryStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -91,5 +96,28 @@ public class JavaGenerator implements LangGenerator {
 
     private void genServiceImpl(Directory directory) {
         log.debug("Generating service implementation...");
+
+        // testing abstract type
+        Class<?> clazz = DirectoryStream.class;
+
+        // methods from the type
+        Method methods[] = clazz.getDeclaredMethods();
+        System.out.println(Arrays.toString(methods));
+
+        // find all methods
+        findMethods(clazz).forEach(System.out::println);
+    }
+
+    public List<Method> findMethods(Class<?> clazz) {
+        if (clazz.getInterfaces().length == 0) {
+            return Arrays.asList(clazz.getDeclaredMethods());
+        }
+
+        List<Method> methods = new ArrayList<>();
+        for (Class<?> cls : clazz.getInterfaces()) {
+            methods.addAll(findMethods(cls));
+        }
+
+        return methods;
     }
 }

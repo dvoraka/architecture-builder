@@ -67,6 +67,11 @@ public class App {
                     .withFilename("CoolService")
                     .build();
 
+            Directory serviceImpl = new Directory.DirectoryBuilder("service")
+                    .withType(DirType.SERVICE_IMPL)
+                    .withParent(srcBase)
+                    .build();
+
             generator.generate(root);
         };
     }

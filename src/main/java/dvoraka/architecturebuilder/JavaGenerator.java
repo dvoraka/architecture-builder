@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.lang.model.element.Modifier;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.nio.file.DirectoryStream;
 import java.util.ArrayList;
@@ -103,6 +104,8 @@ public class JavaGenerator implements LangGenerator {
 
         // testing abstract type
         Class<?> clazz = DirectoryStream.class;
+//        Class<?> clazz = Comparable.class;
+//        Class<?> clazz = DirService.class;
 
         // methods from the type
         Method methods[] = clazz.getDeclaredMethods();
@@ -125,13 +128,13 @@ public class JavaGenerator implements LangGenerator {
 
             // return type
             Type retType = m.getGenericReturnType();
-            System.out.println(retType);
 
             // parameters
             Type[] parTypes = m.getGenericParameterTypes();
             List<ParameterSpec> parSpecs = new ArrayList<>();
-            for (Type parType : parTypes) {
-                ParameterSpec parSpec = ParameterSpec.builder(parType, "par")
+            Parameter[] params = m.getParameters();
+            for (Parameter param : params) {
+                ParameterSpec parSpec = ParameterSpec.builder(param.getParameterizedType(), param.getName())
                         .build();
 
                 parSpecs.add(parSpec);
@@ -152,6 +155,22 @@ public class JavaGenerator implements LangGenerator {
                     .build();
 
             methodSpecs.add(spec);
+        }
+
+        TypeSpec serviceImpl2 = TypeSpec.classBuilder("Impl")
+                .addModifiers(Modifier.PUBLIC)
+                .addSuperinterface(clazz)
+                .addAnnotation(Service.class)
+                .addMethods(methodSpecs)
+                .build();
+
+        JavaFile javaFile = JavaFile.builder(directory.getPackageName(), serviceImpl2)
+                .build();
+
+        try {
+            javaFile.writeTo(System.out);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

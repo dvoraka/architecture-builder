@@ -15,7 +15,9 @@ import javax.lang.model.element.Modifier;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -231,10 +233,22 @@ public class JavaGenerator implements LangGenerator {
         if (returnType instanceof Class
                 && !((Class) returnType).isPrimitive()) {
             returnValue = "null";
-        }
-
-        if (returnType == Boolean.TYPE) {
+        } else if (returnType instanceof ParameterizedType) {
+            returnValue = "null";
+        } else if (returnType instanceof TypeVariable) {
+            returnValue = "null";
+        } else if (returnType == Boolean.TYPE) {
             returnValue = "false";
+        } else if (returnType == Character.TYPE) {
+            returnValue = "'\n'";
+        } else if (returnType == Double.TYPE) {
+            returnValue = "0.0";
+        } else if (returnType == Float.TYPE) {
+            returnValue = "0.0f";
+        } else if (returnType == Integer.TYPE || returnType == Short.TYPE || returnType == Byte.TYPE) {
+            returnValue = "0";
+        } else if (returnType == Long.TYPE) {
+            returnValue = "0L";
         }
 
         return returnValue;

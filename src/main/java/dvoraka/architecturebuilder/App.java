@@ -58,8 +58,9 @@ public class App {
             Directory serviceAbs = new Directory.DirectoryBuilder("service")
                     .withType(DirType.SERVICE_ABSTRACT)
                     .withParent(srcBaseAbs)
-                    .withFilename("java.security.AlgorithmConstraints")
+//                    .withFilename("java.security.AlgorithmConstraints")
 //                    .withFilename("java.lang.Runnable")
+                    .withFilename("java.util.concurrent.RunnableFuture")
                     .build();
 
             Directory service = new Directory.DirectoryBuilder("service")

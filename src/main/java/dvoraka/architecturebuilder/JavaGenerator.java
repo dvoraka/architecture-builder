@@ -18,6 +18,9 @@ import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -253,4 +256,15 @@ public class JavaGenerator implements LangGenerator {
 
         return returnValue;
     }
+
+//    private void save(Directory directory) {
+//        try {
+//            Files.write(
+//                    Paths.get(directory.getPath()) + "/" + directory.getFilename() + ".java"),
+//                    javaFile.toString().getBytes(),
+//                    StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }

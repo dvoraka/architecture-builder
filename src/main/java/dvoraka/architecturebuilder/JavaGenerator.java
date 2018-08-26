@@ -74,16 +74,11 @@ public class JavaGenerator implements LangGenerator {
 
         TypeSpec serviceInterface;
         if (superInterfaceDir.isPresent()) {
-
             Class<?> clazz = loadClass(superInterfaceDir.get().getFilename())
                     .orElseThrow(RuntimeException::new);
 
-            String pkgName = superInterfaceDir.get().getPackageName();
-            String name = superInterfaceDir.get().getFilename();
-
             serviceInterface = TypeSpec.interfaceBuilder(interfaceName)
                     .addModifiers(Modifier.PUBLIC)
-//                    .addSuperinterface(ClassName.get(pkgName, name))
                     .addSuperinterface(clazz)
                     .build();
         } else {
@@ -135,6 +130,10 @@ public class JavaGenerator implements LangGenerator {
 
             // return type
             Type retType = m.getGenericReturnType();
+            String retValue = null;
+            if (retType != Void.TYPE) {
+                retValue = findReturnValue(retType);
+            }
 
             // parameters
             List<ParameterSpec> parSpecs = new ArrayList<>();
@@ -159,13 +158,25 @@ public class JavaGenerator implements LangGenerator {
                 modifiers.add(Modifier.PUBLIC);
             }
 
-            MethodSpec spec = MethodSpec.methodBuilder(m.getName())
-                    .addAnnotation(Override.class)
-                    .returns(retType)
-                    .addModifiers(modifiers)
-                    .addParameters(parSpecs)
-                    .addExceptions(exceptionTypes)
-                    .build();
+            MethodSpec spec;
+            if (retValue == null) {
+                spec = MethodSpec.methodBuilder(m.getName())
+                        .addAnnotation(Override.class)
+                        .returns(retType)
+                        .addModifiers(modifiers)
+                        .addParameters(parSpecs)
+                        .addExceptions(exceptionTypes)
+                        .build();
+            } else {
+                spec = MethodSpec.methodBuilder(m.getName())
+                        .addAnnotation(Override.class)
+                        .returns(retType)
+                        .addModifiers(modifiers)
+                        .addParameters(parSpecs)
+                        .addExceptions(exceptionTypes)
+                        .addStatement("return " + retValue)
+                        .build();
+            }
 
             methodSpecs.add(spec);
         }
@@ -212,5 +223,20 @@ public class JavaGenerator implements LangGenerator {
         }
 
         return Optional.ofNullable(clazz);
+    }
+
+    private String findReturnValue(Type returnType) {
+        String returnValue = "XXX";
+
+        if (returnType instanceof Class
+                && !((Class) returnType).isPrimitive()) {
+            returnValue = "null";
+        }
+
+        if (returnType == Boolean.TYPE) {
+            returnValue = "false";
+        }
+
+        return returnValue;
     }
 }

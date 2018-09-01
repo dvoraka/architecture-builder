@@ -297,6 +297,13 @@ public class JavaGenerator implements LangGenerator {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        System.out.println("Compiling source...");
+
+        String file = directory.getPath() + File.separator + filename;
+        int success = compiler.run(null, null, null, file);
+        System.out.println(success);
     }
 
     private String javaSuffix(String filename) {

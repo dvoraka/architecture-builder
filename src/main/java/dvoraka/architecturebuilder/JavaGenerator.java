@@ -4,14 +4,18 @@ import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
+import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.TypeVariableName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.lang.model.element.Modifier;
+import javax.tools.JavaCompiler;
+import javax.tools.ToolProvider;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -85,10 +89,28 @@ public class JavaGenerator implements LangGenerator {
             Class<?> clazz = loadClass(superInterfaceDir.get().getFilename())
                     .orElseThrow(RuntimeException::new);
 
-            serviceInterface = TypeSpec.interfaceBuilder(interfaceName)
-                    .addModifiers(Modifier.PUBLIC)
-                    .addSuperinterface(clazz)
-                    .build();
+            if (clazz.getTypeParameters().length == 0) {
+                serviceInterface = TypeSpec.interfaceBuilder(interfaceName)
+                        .addModifiers(Modifier.PUBLIC)
+                        .addSuperinterface(clazz)
+                        .build();
+
+            } else {
+                ParameterizedTypeName parameterizedTypeName =
+                        ParameterizedTypeName.get(clazz, clazz.getTypeParameters());
+
+                List<TypeVariableName> typeVariableNames = new ArrayList<>();
+                for (TypeName typeArgument : parameterizedTypeName.typeArguments) {
+                    typeVariableNames.add(TypeVariableName.get(typeArgument.toString()));
+                }
+
+                serviceInterface = TypeSpec.interfaceBuilder(interfaceName)
+                        .addModifiers(Modifier.PUBLIC)
+                        .addSuperinterface(parameterizedTypeName)
+                        .addTypeVariables(typeVariableNames)
+                        .build();
+            }
+
         } else {
             serviceInterface = TypeSpec.interfaceBuilder(interfaceName)
                     .addModifiers(Modifier.PUBLIC)

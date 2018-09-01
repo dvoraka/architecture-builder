@@ -12,12 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.lang.model.element.Modifier;
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -201,6 +203,7 @@ public class JavaGenerator implements LangGenerator {
 
         try {
             javaFile.writeTo(System.out);
+            save(directory, javaFile.toString(), name);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -257,14 +260,14 @@ public class JavaGenerator implements LangGenerator {
         return returnValue;
     }
 
-//    private void save(Directory directory) {
-//        try {
-//            Files.write(
-//                    Paths.get(directory.getPath()) + "/" + directory.getFilename() + ".java"),
-//                    javaFile.toString().getBytes(),
-//                    StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING;
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    private void save(Directory directory, String source, String filename) {
+        try {
+            Files.write(
+                    Paths.get(directory.getPath() + File.separator + filename + ".java"),
+                    source.getBytes(StandardCharsets.UTF_8),
+                    StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

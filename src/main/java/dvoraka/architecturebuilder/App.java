@@ -45,6 +45,12 @@ public class App {
                     .withParent(srcRoot)
                     .build();
 
+            Directory srcProps = new Directory.DirectoryBuilder("src/main/resources")
+                    .withType(DirType.SRC_PROPERTIES)
+                    .withParent(root)
+                    .withFilename("application.properties")
+                    .build();
+
             Directory srcBaseAbs = new Directory.DirectoryBuilder("dvoraka/diffapp")
                     .withType(DirType.SRC_BASE_ABSTRACT)
                     .withParent(root)

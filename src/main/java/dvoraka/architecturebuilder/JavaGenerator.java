@@ -49,6 +49,7 @@ public class JavaGenerator implements LangGenerator {
         conf = new EnumMap<>(DirType.class);
         conf.put(DirType.SERVICE, this::genService);
         conf.put(DirType.SERVICE_IMPL, this::genServiceImpl);
+        conf.put(DirType.SRC_PROPERTIES, this::genSrcProps);
 
         checkImplementation();
     }
@@ -99,6 +100,7 @@ public class JavaGenerator implements LangGenerator {
 
         try {
             javaFile.writeTo(System.out);
+            save(directory, javaFile.toString(), javaSuffix(interfaceName));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -203,10 +205,14 @@ public class JavaGenerator implements LangGenerator {
 
         try {
             javaFile.writeTo(System.out);
-            save(directory, javaFile.toString(), name);
+            save(directory, javaFile.toString(), javaSuffix(name));
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void genSrcProps(Directory directory) {
+        save(directory, "", directory.getFilename());
     }
 
     private List<Method> findMethods(Class<?> clazz) {
@@ -263,11 +269,15 @@ public class JavaGenerator implements LangGenerator {
     private void save(Directory directory, String source, String filename) {
         try {
             Files.write(
-                    Paths.get(directory.getPath() + File.separator + filename + ".java"),
+                    Paths.get(directory.getPath() + File.separator + filename),
                     source.getBytes(StandardCharsets.UTF_8),
                     StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private String javaSuffix(String filename) {
+        return filename + ".java";
     }
 }

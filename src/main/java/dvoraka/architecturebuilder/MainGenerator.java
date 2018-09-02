@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static java.util.Objects.requireNonNull;
 
@@ -35,6 +38,10 @@ public class MainGenerator implements Generator {
         // print nodes
         dirService.processDirNodes(directory, System.out::println);
 
+        // build the dependency data structure and then call generate in the right order
+        Map<Directory, List<Directory>> dependencies = new HashMap<>();
+        dirService.processDirs(directory, (dir) -> findDependencies(dir, dependencies));
+
         // generate code
         dirService.processDirs(directory, langGenerator::generate);
     }
@@ -47,6 +54,12 @@ public class MainGenerator implements Generator {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void findDependencies(Directory directory, Map<Directory, List<Directory>> dependencies) {
+        if (!directory.getDependencies().isEmpty()) {
+            dependencies.put(directory, directory.getDependencies());
         }
     }
 }

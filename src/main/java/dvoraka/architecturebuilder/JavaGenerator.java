@@ -78,6 +78,8 @@ public class JavaGenerator implements LangGenerator {
     public void generate(Directory directory) {
         log.debug("Generating code for: {}", directory.getType());
 
+        //TODO: make this method idempotent
+
         if (conf.containsKey(directory.getType())) {
             conf.get(directory.getType()).accept(directory);
         }

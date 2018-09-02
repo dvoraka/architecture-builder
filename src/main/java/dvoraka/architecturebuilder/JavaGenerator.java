@@ -16,15 +16,23 @@ import org.springframework.stereotype.Service;
 import javax.lang.model.element.Modifier;
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
@@ -138,6 +146,9 @@ public class JavaGenerator implements LangGenerator {
                 .orElseThrow(RuntimeException::new);
 
         Class<?> clazz = loadClass(superSuperInterfaceDir.getFilename())
+                .orElseThrow(RuntimeException::new);
+
+        Class<?> clazz2 = loadClass("dvoraka.testapp.service.CoolService")
                 .orElseThrow(RuntimeException::new);
 
         // methods from the type
@@ -274,14 +285,38 @@ public class JavaGenerator implements LangGenerator {
     }
 
     private Optional<Class<?>> loadClass(String className) {
+
         Class<?> clazz = null;
         try {
             clazz = Class.forName(className);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+
+//            clazz = loadNonCpClass(className);
         }
 
         return Optional.ofNullable(clazz);
+    }
+
+    private void addClassPath(Path path) {
+        try {
+            Method method = URLClassLoader.class.getDeclaredMethod(
+                    "addURL", URL.class);
+            method.setAccessible(true);
+            method.invoke(ClassLoader.getSystemClassLoader(), path.toUri().toURL());
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Class<?> loadNonCpClass(Path path) {
+        return new ByteClassLoader(this.getClass().getClassLoader()).loadClass(path);
     }
 
     private String findReturnValue(Type returnType) {
@@ -331,5 +366,42 @@ public class JavaGenerator implements LangGenerator {
 
     private String javaSuffix(String filename) {
         return filename + ".java";
+    }
+
+    public static class ByteClassLoader extends ClassLoader {
+
+        public ByteClassLoader(ClassLoader parent) {
+            super(parent);
+        }
+
+        public Class<?> loadClass(Path path) {
+
+            try {
+                String url = "file:/";
+                URL myUrl = new URL(url);
+                URLConnection connection = myUrl.openConnection();
+                InputStream input = connection.getInputStream();
+                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+                int data = input.read();
+
+                while (data != -1) {
+                    buffer.write(data);
+                    data = input.read();
+                }
+
+                input.close();
+
+                byte[] classData = buffer.toByteArray();
+
+                return defineClass(null, classData, 0, classData.length);
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
     }
 }

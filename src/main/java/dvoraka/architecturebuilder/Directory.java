@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Directory {
@@ -20,9 +21,12 @@ public class Directory {
     @JsonManagedReference
     private List<Directory> children;
 
+    private List<Directory> dependencies;
+
 
     public Directory() {
         children = new ArrayList<>();
+        dependencies = new ArrayList<>();
     }
 
     public void addChildren(Directory directory) {
@@ -76,6 +80,10 @@ public class Directory {
         return children;
     }
 
+    public List<Directory> getDependencies() {
+        return Collections.unmodifiableList(dependencies);
+    }
+
     private String pkg2path(String packageName) {
         return packageName.replace('.', File.separatorChar);
     }
@@ -102,9 +110,12 @@ public class Directory {
         private DirType type;
         private Directory parent;
 
+        private List<Directory> dependencies;
+
 
         public DirectoryBuilder(String name) {
             this.name = name;
+            dependencies = new ArrayList<>();
         }
 
         public DirectoryBuilder withFilename(String filename) {
@@ -122,12 +133,18 @@ public class Directory {
             return this;
         }
 
+        public DirectoryBuilder dependsOn(Directory directory) {
+            dependencies.add(directory);
+            return this;
+        }
+
         public Directory build() {
             Directory directory = new Directory();
             directory.name = this.name;
             directory.type = this.type;
             directory.filename = this.filename;
             directory.parent = this.parent;
+            directory.dependencies = this.dependencies;
 
             if (parent != null) {
                 parent.addChildren(directory);

@@ -84,6 +84,7 @@ public class App {
             Directory serviceImpl = new Directory.DirectoryBuilder("service")
                     .withType(DirType.SERVICE_IMPL)
                     .withParent(srcBase)
+                    .dependsOn(service)
                     .build();
 
             generator.generate(root);

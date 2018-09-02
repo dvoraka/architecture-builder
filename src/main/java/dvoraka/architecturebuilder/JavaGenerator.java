@@ -213,14 +213,37 @@ public class JavaGenerator implements LangGenerator {
         }
 
         String name = "Default" + superInterfaceDir.getFilename();
-        TypeSpec serviceImpl = TypeSpec.classBuilder(name)
-                .addModifiers(Modifier.PUBLIC)
-                .addSuperinterface(ClassName.get(
-                        superInterfaceDir.getPackageName(),
-                        superInterfaceDir.getFilename()))
-                .addAnnotation(Service.class)
-                .addMethods(methodSpecs)
-                .build();
+
+        TypeSpec serviceImpl;
+        if (clazz.getTypeParameters().length == 0) {
+
+            serviceImpl = TypeSpec.classBuilder(name)
+                    .addModifiers(Modifier.PUBLIC)
+                    .addSuperinterface(ClassName.get(
+                            superInterfaceDir.getPackageName(),
+                            superInterfaceDir.getFilename()))
+                    .addAnnotation(Service.class)
+                    .addMethods(methodSpecs)
+                    .build();
+        } else {
+            ParameterizedTypeName parameterizedTypeName =
+                    ParameterizedTypeName.get(clazz, clazz.getTypeParameters());
+
+            List<TypeVariableName> typeVariableNames = new ArrayList<>();
+            for (TypeName typeArgument : parameterizedTypeName.typeArguments) {
+                typeVariableNames.add(TypeVariableName.get(typeArgument.toString()));
+            }
+
+            serviceImpl = TypeSpec.classBuilder(name)
+                    .addModifiers(Modifier.PUBLIC)
+                    .addSuperinterface(ClassName.get(
+                            superInterfaceDir.getPackageName(),
+                            superInterfaceDir.getFilename()))
+                    .addTypeVariables(typeVariableNames)
+                    .addAnnotation(Service.class)
+                    .addMethods(methodSpecs)
+                    .build();
+        }
 
         JavaFile javaFile = JavaFile.builder(directory.getPackageName(), serviceImpl)
                 .build();

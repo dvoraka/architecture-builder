@@ -38,6 +38,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -52,6 +53,7 @@ public class JavaGenerator implements LangGenerator {
     private final Logger log = LoggerFactory.getLogger(JavaGenerator.class);
 
     private final EnumMap<DirType, Consumer<Directory>> conf;
+    private final HashSet<Directory> processedDirs;
 
 
     @Autowired
@@ -64,6 +66,7 @@ public class JavaGenerator implements LangGenerator {
         conf.put(DirType.SRC_PROPERTIES, this::genSrcProps);
 
         checkImplementation();
+        processedDirs = new HashSet<>();
     }
 
     private void checkImplementation() {
@@ -76,9 +79,13 @@ public class JavaGenerator implements LangGenerator {
 
     @Override
     public void generate(Directory directory) {
-        log.debug("Generating code for: {}", directory.getType());
+        if (processedDirs.contains(directory)) {
+            log.debug("Already processed: {}", directory.getType());
+            return;
+        }
 
-        //TODO: make this method idempotent
+        log.debug("Generating code for: {}", directory.getType());
+        processedDirs.add(directory);
 
         if (conf.containsKey(directory.getType())) {
             conf.get(directory.getType()).accept(directory);

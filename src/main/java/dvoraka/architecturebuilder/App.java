@@ -65,8 +65,6 @@ public class App {
             Directory srcTestBase = new Directory.DirectoryBuilder("dvoraka/testapp")
                     .withType(DirType.SRC_TEST_BASE)
                     .withParent(srcTestRoot)
-                    .dependsOn(srcBaseAbs)
-                    .dependsOn(root)
                     .build();
 
             Directory serviceAbs = new Directory.DirectoryBuilder("service")
@@ -81,15 +79,12 @@ public class App {
                     .withType(DirType.SERVICE)
                     .withParent(srcBase)
                     .withFilename("CoolService")
-                    .dependsOn(srcTestBase)
-                    .dependsOn(root)
                     .build();
 
             Directory serviceImpl = new Directory.DirectoryBuilder("service")
                     .withType(DirType.SERVICE_IMPL)
                     .withParent(srcBase)
                     .dependsOn(service)
-                    .dependsOn(srcBase)
                     .build();
 
             generator.generate(root);

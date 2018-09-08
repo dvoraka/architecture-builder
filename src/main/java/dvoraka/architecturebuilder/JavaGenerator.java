@@ -67,6 +67,8 @@ public class JavaGenerator implements LangGenerator {
 
         checkImplementation();
         processedDirs = new HashSet<>();
+
+        addClassPath(Paths.get("rootDir/src/main/java"));
     }
 
     private void checkImplementation() {
@@ -157,7 +159,8 @@ public class JavaGenerator implements LangGenerator {
         Class<?> clazz = loadClass(superSuperInterfaceDir.getFilename())
                 .orElseThrow(RuntimeException::new);
 
-        Class<?> clazz2 = loadClass("dvoraka.testapp.service.CoolService")
+        Class<?> clazz2 = loadClass(
+                superInterfaceDir.getPackageName() + "." + superInterfaceDir.getFilename())
                 .orElseThrow(RuntimeException::new);
 
         // methods from the type
@@ -294,7 +297,6 @@ public class JavaGenerator implements LangGenerator {
     }
 
     private Optional<Class<?>> loadClass(String className) {
-
         Class<?> clazz = null;
         try {
             clazz = Class.forName(className);
@@ -309,8 +311,7 @@ public class JavaGenerator implements LangGenerator {
 
     private void addClassPath(Path path) {
         try {
-            Method method = URLClassLoader.class.getDeclaredMethod(
-                    "addURL", URL.class);
+            Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
             method.setAccessible(true);
             method.invoke(ClassLoader.getSystemClassLoader(), path.toUri().toURL());
         } catch (NoSuchMethodException e) {

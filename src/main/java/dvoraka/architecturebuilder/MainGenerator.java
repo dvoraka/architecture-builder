@@ -41,9 +41,36 @@ public class MainGenerator implements Generator {
         // build the dependency data structure and then call generate in the right order
         Map<Directory, List<Directory>> dependencies = new HashMap<>();
         dirService.processDirs(directory, (dir) -> findDependencies(dir, dependencies));
+        generateDependencies(dependencies, null);
+
+        System.exit(0);
 
         // generate code
         dirService.processDirs(directory, langGenerator::generate);
+    }
+
+    private void generateDependencies(Map<Directory, List<Directory>> dependencies, Directory directory) {
+
+        if (directory == null) {
+            directory = dependencies.keySet().iterator().next();
+        }
+
+        List<Directory> deps = dependencies.get(directory);
+
+        for (Directory dep : deps) {
+
+            if (dependencies.containsKey(dep)) {
+
+                generateDependencies(dependencies, dep);
+
+            } else {
+                // generate
+                System.out.println("Generate: " + dep.getType());
+            }
+        }
+
+        // generate
+        System.out.println("Generate: " + directory.getType());
     }
 
     private void createDirectory(Directory directory) {

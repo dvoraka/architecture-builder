@@ -159,8 +159,7 @@ public class JavaGenerator implements LangGenerator {
         Class<?> clazz = loadClass(superSuperInterfaceDir.getFilename())
                 .orElseThrow(RuntimeException::new);
 
-        Class<?> clazz2 = loadClass(
-                superInterfaceDir.getPackageName() + "." + superInterfaceDir.getFilename())
+        Class<?> clazz2 = loadClass(getClassName(superInterfaceDir))
                 .orElseThrow(RuntimeException::new);
 
         // methods from the type
@@ -238,8 +237,7 @@ public class JavaGenerator implements LangGenerator {
         String name = "Default" + superInterfaceDir.getFilename();
 
         TypeSpec serviceImpl;
-        if (clazz.getTypeParameters().length == 0) {
-
+        if (clazz2.getTypeParameters().length == 0) {
             serviceImpl = TypeSpec.classBuilder(name)
                     .addModifiers(Modifier.PUBLIC)
                     .addSuperinterface(ClassName.get(
@@ -250,7 +248,7 @@ public class JavaGenerator implements LangGenerator {
                     .build();
         } else {
             ParameterizedTypeName parameterizedTypeName =
-                    ParameterizedTypeName.get(clazz, clazz.getTypeParameters());
+                    ParameterizedTypeName.get(clazz2, clazz2.getTypeParameters());
 
             List<TypeVariableName> typeVariableNames = new ArrayList<>();
             for (TypeName typeArgument : parameterizedTypeName.typeArguments) {
@@ -259,9 +257,7 @@ public class JavaGenerator implements LangGenerator {
 
             serviceImpl = TypeSpec.classBuilder(name)
                     .addModifiers(Modifier.PUBLIC)
-                    .addSuperinterface(ClassName.get(
-                            superInterfaceDir.getPackageName(),
-                            superInterfaceDir.getFilename()))
+                    .addSuperinterface(parameterizedTypeName)
                     .addTypeVariables(typeVariableNames)
                     .addAnnotation(Service.class)
                     .addMethods(methodSpecs)
@@ -370,12 +366,19 @@ public class JavaGenerator implements LangGenerator {
         System.out.println("Compiling source...");
 
         String file = directory.getPath() + File.separator + filename;
-        int success = compiler.run(null, null, null, file);
+        //TODO: we need to add all necessary classpaths
+        //TODO: it is possible to use all classpaths from the loaded classloader
+        int success = compiler.run(null, null, null,
+                "-cp", "rootDir/src/main/java", file);
         System.out.println(success);
     }
 
     private String javaSuffix(String filename) {
         return filename + ".java";
+    }
+
+    private String getClassName(Directory directory) {
+        return directory.getPackageName() + "." + directory.getFilename();
     }
 
     public static class ByteClassLoader extends ClassLoader {

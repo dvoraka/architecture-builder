@@ -366,10 +366,16 @@ public class JavaGenerator implements LangGenerator {
         System.out.println("Compiling source...");
 
         String file = directory.getPath() + File.separator + filename;
-        //TODO: we need to add all necessary classpaths
-        //TODO: it is possible to use all classpaths from the loaded classloader
-        int success = compiler.run(null, null, null,
-                "-cp", "rootDir/src/main/java", file);
+
+        // build a classpath string for the compiler
+        URL[] urls = ((URLClassLoader) ClassLoader.getSystemClassLoader()).getURLs();
+        StringBuilder cp = new StringBuilder();
+        for (URL url : urls) {
+            cp.append(url.getPath());
+            cp.append(File.pathSeparator);
+        }
+
+        int success = compiler.run(null, null, null, "-cp", cp.toString(), file);
         System.out.println(success);
     }
 

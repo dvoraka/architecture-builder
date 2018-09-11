@@ -247,8 +247,10 @@ public class JavaGenerator implements LangGenerator {
                     .addMethods(methodSpecs)
                     .build();
         } else {
-            ParameterizedTypeName parameterizedTypeName =
-                    ParameterizedTypeName.get(clazz2, clazz2.getTypeParameters());
+            Class<?> param1 = loadClass(directory.getParameters().get(0))
+                    .orElseThrow(RuntimeException::new);
+
+            ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(clazz2, param1);
 
             List<TypeVariableName> typeVariableNames = new ArrayList<>();
             for (TypeName typeArgument : parameterizedTypeName.typeArguments) {
@@ -258,7 +260,7 @@ public class JavaGenerator implements LangGenerator {
             serviceImpl = TypeSpec.classBuilder(name)
                     .addModifiers(Modifier.PUBLIC)
                     .addSuperinterface(parameterizedTypeName)
-                    .addTypeVariables(typeVariableNames)
+//                    .addTypeVariables(typeVariableNames)
                     .addAnnotation(Service.class)
                     .addMethods(methodSpecs)
                     .build();

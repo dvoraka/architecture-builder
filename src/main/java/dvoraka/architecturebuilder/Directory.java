@@ -22,11 +22,13 @@ public class Directory {
     private List<Directory> children;
 
     private List<Directory> dependencies;
+    private List<String> parameters;
 
 
     public Directory() {
         children = new ArrayList<>();
         dependencies = new ArrayList<>();
+        parameters = new ArrayList<>();
     }
 
     public void addChildren(Directory directory) {
@@ -84,6 +86,10 @@ public class Directory {
         return Collections.unmodifiableList(dependencies);
     }
 
+    public List<String> getParameters() {
+        return Collections.unmodifiableList(parameters);
+    }
+
     private String pkg2path(String packageName) {
         return packageName.replace('.', File.separatorChar);
     }
@@ -111,11 +117,13 @@ public class Directory {
         private Directory parent;
 
         private List<Directory> dependencies;
+        private List<String> parameters;
 
 
         public DirectoryBuilder(String name) {
             this.name = name;
             dependencies = new ArrayList<>();
+            parameters = new ArrayList<>();
         }
 
         public DirectoryBuilder withFilename(String filename) {
@@ -138,6 +146,11 @@ public class Directory {
             return this;
         }
 
+        public DirectoryBuilder addParameterType(String className) {
+            parameters.add(className);
+            return this;
+        }
+
         public Directory build() {
             Directory directory = new Directory();
             directory.name = this.name;
@@ -145,6 +158,7 @@ public class Directory {
             directory.filename = this.filename;
             directory.parent = this.parent;
             directory.dependencies = this.dependencies;
+            directory.parameters = this.parameters;
 
             if (parent != null) {
                 parent.addChildren(directory);

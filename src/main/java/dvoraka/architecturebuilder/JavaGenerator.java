@@ -38,8 +38,10 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -150,24 +152,29 @@ public class JavaGenerator implements LangGenerator {
     private void genServiceImpl(Directory directory) {
         log.debug("Generating service implementation...");
 
-        Directory superSuperInterfaceDir = dirService.findByType(DirType.SERVICE_ABSTRACT, directory)
+        Directory superSuperDir = dirService.findByType(DirType.SERVICE_ABSTRACT, directory)
+                .orElseThrow(RuntimeException::new);
+        Directory superDir = dirService.findByType(DirType.SERVICE, directory)
                 .orElseThrow(RuntimeException::new);
 
-        Directory superInterfaceDir = dirService.findByType(DirType.SERVICE, directory)
+        Class<?> superSuperClass = loadClass(superSuperDir.getFilename())
+                .orElseThrow(RuntimeException::new);
+        Class<?> superClass = loadClass(getClassName(superDir))
                 .orElseThrow(RuntimeException::new);
 
-        Class<?> clazz = loadClass(superSuperInterfaceDir.getFilename())
-                .orElseThrow(RuntimeException::new);
+        // save type parameters
+        TypeVariable<? extends Class<?>>[] typeParameters = superSuperClass.getTypeParameters();
+        Map<String, Integer> typeMapping = new HashMap<>();
+        for (int i = 0; i < typeParameters.length; i++) {
+            typeMapping.put(typeParameters[i].getName(), i);
+        }
 
-        Class<?> clazz2 = loadClass(getClassName(superInterfaceDir))
-                .orElseThrow(RuntimeException::new);
-
-        // methods from the type
-        Method methods[] = clazz.getDeclaredMethods();
+        // methods from the super super type
+        Method methods[] = superSuperClass.getDeclaredMethods();
         System.out.println(Arrays.toString(methods));
 
         // find all methods
-        List<Method> allMethods = findMethods(clazz);
+        List<Method> allMethods = findMethods(superSuperClass);
         allMethods.forEach(System.out::println);
 
         // process all methods
@@ -184,7 +191,10 @@ public class JavaGenerator implements LangGenerator {
             // return type
             Type retType = m.getGenericReturnType();
             String retValue = null;
-            if (retType != Void.TYPE) {
+            if (retType instanceof TypeVariable) {
+                retType = loadClass(directory.getParameters().get(typeMapping.get(((TypeVariable) retType).getName())))
+                        .orElseThrow(RuntimeException::new);
+            } else if (retType != Void.TYPE) {
                 retValue = findReturnValue(retType);
             }
 
@@ -234,15 +244,15 @@ public class JavaGenerator implements LangGenerator {
             methodSpecs.add(spec);
         }
 
-        String name = "Default" + superInterfaceDir.getFilename();
+        String name = "Default" + superDir.getFilename();
 
         TypeSpec serviceImpl;
-        if (clazz2.getTypeParameters().length == 0) {
+        if (superClass.getTypeParameters().length == 0) {
             serviceImpl = TypeSpec.classBuilder(name)
                     .addModifiers(Modifier.PUBLIC)
                     .addSuperinterface(ClassName.get(
-                            superInterfaceDir.getPackageName(),
-                            superInterfaceDir.getFilename()))
+                            superDir.getPackageName(),
+                            superDir.getFilename()))
                     .addAnnotation(Service.class)
                     .addMethods(methodSpecs)
                     .build();
@@ -250,7 +260,7 @@ public class JavaGenerator implements LangGenerator {
             Class<?> param1 = loadClass(directory.getParameters().get(0))
                     .orElseThrow(RuntimeException::new);
 
-            ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(clazz2, param1);
+            ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(superClass, param1);
 
             List<TypeVariableName> typeVariableNames = new ArrayList<>();
             for (TypeName typeArgument : parameterizedTypeName.typeArguments) {

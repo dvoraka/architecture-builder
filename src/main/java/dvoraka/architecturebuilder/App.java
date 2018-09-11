@@ -72,7 +72,8 @@ public class App {
                     .withParent(srcBaseAbs)
 //                    .withFilename("java.security.AlgorithmConstraints")
 //                    .withFilename("java.lang.Runnable")
-                    .withFilename("java.util.concurrent.RunnableFuture")
+//                    .withFilename("java.util.concurrent.RunnableFuture")
+                    .withFilename("java.util.Map")
                     .build();
 
             Directory service = new Directory.DirectoryBuilder("service")
@@ -85,6 +86,7 @@ public class App {
                     .withType(DirType.SERVICE_IMPL)
                     .withParent(srcBase)
                     .dependsOn(service)
+                    .addParameterType("java.lang.Integer")
                     .addParameterType("javax.lang.model.UnknownEntityException")
                     .build();
 

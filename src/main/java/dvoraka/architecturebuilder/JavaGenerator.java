@@ -202,8 +202,18 @@ public class JavaGenerator implements LangGenerator {
             List<ParameterSpec> parSpecs = new ArrayList<>();
             Parameter[] params = m.getParameters();
             for (Parameter param : params) {
-                ParameterSpec parSpec = ParameterSpec.builder(param.getParameterizedType(), param.getName())
-                        .build();
+
+                ParameterSpec parSpec = null;
+                if (param.getParameterizedType() instanceof TypeVariable) {
+                    Class<?> realClass = loadClass(directory.getParameters().get(typeMapping.get(
+                            ((TypeVariable) param.getParameterizedType()).getName())))
+                            .orElseThrow(RuntimeException::new);
+                    parSpec = ParameterSpec.builder(realClass, param.getName())
+                            .build();
+                } else {
+                    parSpec = ParameterSpec.builder(param.getParameterizedType(), param.getName())
+                            .build();
+                }
 
                 parSpecs.add(parSpec);
             }

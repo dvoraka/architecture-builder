@@ -8,6 +8,7 @@ import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.TypeVariableName;
+import com.squareup.javapoet.WildcardTypeName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.lang.reflect.WildcardType;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -203,13 +205,46 @@ public class JavaGenerator implements LangGenerator {
             Parameter[] params = m.getParameters();
             for (Parameter param : params) {
 
-                ParameterSpec parSpec = null;
+                ParameterSpec parSpec;
                 if (param.getParameterizedType() instanceof TypeVariable) {
+
                     Class<?> realClass = loadClass(directory.getParameters().get(typeMapping.get(
                             ((TypeVariable) param.getParameterizedType()).getName())))
                             .orElseThrow(RuntimeException::new);
                     parSpec = ParameterSpec.builder(realClass, param.getName())
                             .build();
+
+                } else if (param.getParameterizedType() instanceof ParameterizedType) {
+
+                    ParameterizedTypeName parameterizedTypeName = null;
+
+                    ParameterizedType type = ((ParameterizedType) param.getParameterizedType());
+                    Class<?> rawClass = (Class) type.getRawType();
+
+                    Type[] actualTypeArguments = type.getActualTypeArguments();
+                    for (Type actualTypeArgument : actualTypeArguments) {
+
+                        if (actualTypeArgument instanceof WildcardType) {
+
+                            WildcardType wildcardType = ((WildcardType) actualTypeArgument);
+                            if (wildcardType.getUpperBounds().length > 0) {
+
+                                WildcardTypeName wildcardTypeName = WildcardTypeName.subtypeOf(
+                                        loadClass(directory.getParameters().get(typeMapping.get(
+                                                ((WildcardType) actualTypeArgument).getUpperBounds()[0].getTypeName())))
+                                                .orElseThrow(RuntimeException::new));
+
+                                parameterizedTypeName = ParameterizedTypeName.get(
+                                        ClassName.get(rawClass), wildcardTypeName);
+                            } else {
+
+                            }
+                        }
+                    }
+
+                    parSpec = ParameterSpec.builder(parameterizedTypeName, param.getName())
+                            .build();
+
                 } else {
                     parSpec = ParameterSpec.builder(param.getParameterizedType(), param.getName())
                             .build();

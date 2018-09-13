@@ -17,10 +17,8 @@ import org.springframework.stereotype.Service;
 import javax.lang.model.element.Modifier;
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -31,7 +29,6 @@ import java.lang.reflect.WildcardType;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -50,7 +47,7 @@ import java.util.function.Consumer;
 import static java.util.Objects.requireNonNull;
 
 @Service
-public class JavaGenerator implements LangGenerator {
+public class JavaGenerator implements LangGenerator, JavaHelper {
 
     private final DirService dirService;
 
@@ -65,8 +62,8 @@ public class JavaGenerator implements LangGenerator {
         this.dirService = requireNonNull(dirService);
 
         conf = new EnumMap<>(DirType.class);
-        conf.put(DirType.SERVICE, this::genService);
-        conf.put(DirType.SERVICE_IMPL, this::genServiceImpl);
+        conf.put(DirType.SERVICE, this::genServiceSafe);
+        conf.put(DirType.SERVICE_IMPL, this::genServiceImplSafe);
         conf.put(DirType.SRC_PROPERTIES, this::genSrcProps);
 
         checkImplementation();
@@ -98,7 +95,15 @@ public class JavaGenerator implements LangGenerator {
         }
     }
 
-    private void genService(Directory directory) {
+    private void genServiceSafe(Directory directory) {
+        try {
+            genService(directory);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void genService(Directory directory) throws ClassNotFoundException {
         log.debug("Generating service...");
         log.debug("D: {}", directory);
 
@@ -109,8 +114,7 @@ public class JavaGenerator implements LangGenerator {
 
         TypeSpec serviceInterface;
         if (superInterfaceDir.isPresent()) {
-            Class<?> clazz = loadClass(superInterfaceDir.get().getFilename())
-                    .orElseThrow(RuntimeException::new);
+            Class<?> clazz = loadClass(superInterfaceDir.get().getFilename());
 
             if (clazz.getTypeParameters().length == 0) {
                 serviceInterface = TypeSpec.interfaceBuilder(interfaceName)
@@ -151,7 +155,15 @@ public class JavaGenerator implements LangGenerator {
         }
     }
 
-    private void genServiceImpl(Directory directory) {
+    private void genServiceImplSafe(Directory directory) {
+        try {
+            genServiceImpl(directory);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void genServiceImpl(Directory directory) throws ClassNotFoundException {
         log.debug("Generating service implementation...");
 
         Directory superSuperDir = dirService.findByType(DirType.SERVICE_ABSTRACT, directory)
@@ -159,10 +171,8 @@ public class JavaGenerator implements LangGenerator {
         Directory superDir = dirService.findByType(DirType.SERVICE, directory)
                 .orElseThrow(RuntimeException::new);
 
-        Class<?> superSuperClass = loadClass(superSuperDir.getFilename())
-                .orElseThrow(RuntimeException::new);
-        Class<?> superClass = loadClass(getClassName(superDir))
-                .orElseThrow(RuntimeException::new);
+        Class<?> superSuperClass = loadClass(superSuperDir.getFilename());
+        Class<?> superClass = loadClass(getClassName(superDir));
 
         // save type parameters
         TypeVariable<? extends Class<?>>[] typeParameters = superSuperClass.getTypeParameters();
@@ -194,10 +204,9 @@ public class JavaGenerator implements LangGenerator {
             Type retType = m.getGenericReturnType();
             String retValue = null;
             if (retType instanceof TypeVariable) {
-                retType = loadClass(directory.getParameters().get(typeMapping.get(((TypeVariable) retType).getName())))
-                        .orElseThrow(RuntimeException::new);
+                retType = loadClass(directory.getParameters().get(typeMapping.get(((TypeVariable) retType).getName())));
             } else if (retType != Void.TYPE) {
-                retValue = findReturnValue(retType);
+                retValue = getReturnValue(retType);
             }
 
             // parameters
@@ -209,8 +218,7 @@ public class JavaGenerator implements LangGenerator {
                 if (param.getParameterizedType() instanceof TypeVariable) {
 
                     Class<?> realClass = loadClass(directory.getParameters().get(typeMapping.get(
-                            ((TypeVariable) param.getParameterizedType()).getName())))
-                            .orElseThrow(RuntimeException::new);
+                            ((TypeVariable) param.getParameterizedType()).getName())));
                     parSpec = ParameterSpec.builder(realClass, param.getName())
                             .build();
 
@@ -231,9 +239,7 @@ public class JavaGenerator implements LangGenerator {
 
                                 WildcardTypeName wildcardTypeName = WildcardTypeName.subtypeOf(
                                         loadClass(directory.getParameters().get(typeMapping.get(
-                                                ((WildcardType) actualTypeArgument).getUpperBounds()[0].getTypeName())))
-                                                .orElseThrow(RuntimeException::new));
-
+                                                ((WildcardType) actualTypeArgument).getUpperBounds()[0].getTypeName()))));
                                 parameterizedTypeName = ParameterizedTypeName.get(
                                         ClassName.get(rawClass), wildcardTypeName);
                             } else {
@@ -302,8 +308,7 @@ public class JavaGenerator implements LangGenerator {
                     .addMethods(methodSpecs)
                     .build();
         } else {
-            Class<?> param1 = loadClass(directory.getParameters().get(0))
-                    .orElseThrow(RuntimeException::new);
+            Class<?> param1 = loadClass(directory.getParameters().get(0));
 
             ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(superClass, param1);
 
@@ -349,19 +354,6 @@ public class JavaGenerator implements LangGenerator {
         return methods;
     }
 
-    private Optional<Class<?>> loadClass(String className) {
-        Class<?> clazz = null;
-        try {
-            clazz = Class.forName(className);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-
-//            clazz = loadNonCpClass(className);
-        }
-
-        return Optional.ofNullable(clazz);
-    }
-
     private void addClassPath(Path path) {
         try {
             Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
@@ -380,33 +372,6 @@ public class JavaGenerator implements LangGenerator {
 
     private Class<?> loadNonCpClass(Path path) {
         return new ByteClassLoader(this.getClass().getClassLoader()).loadClass(path);
-    }
-
-    private String findReturnValue(Type returnType) {
-        String returnValue = "XXX";
-
-        if (returnType instanceof Class
-                && !((Class) returnType).isPrimitive()) {
-            returnValue = "null";
-        } else if (returnType instanceof ParameterizedType) {
-            returnValue = "null";
-        } else if (returnType instanceof TypeVariable) {
-            returnValue = "null";
-        } else if (returnType == Boolean.TYPE) {
-            returnValue = "false";
-        } else if (returnType == Character.TYPE) {
-            returnValue = "'\n'";
-        } else if (returnType == Double.TYPE) {
-            returnValue = "0.0";
-        } else if (returnType == Float.TYPE) {
-            returnValue = "0.0f";
-        } else if (returnType == Integer.TYPE || returnType == Short.TYPE || returnType == Byte.TYPE) {
-            returnValue = "0";
-        } else if (returnType == Long.TYPE) {
-            returnValue = "0L";
-        }
-
-        return returnValue;
     }
 
     private void save(Directory directory, String source, String filename) {
@@ -434,50 +399,5 @@ public class JavaGenerator implements LangGenerator {
 
         int success = compiler.run(null, null, null, "-cp", cp.toString(), file);
         System.out.println(success);
-    }
-
-    private String javaSuffix(String filename) {
-        return filename + ".java";
-    }
-
-    private String getClassName(Directory directory) {
-        return directory.getPackageName() + "." + directory.getFilename();
-    }
-
-    public static class ByteClassLoader extends ClassLoader {
-
-        public ByteClassLoader(ClassLoader parent) {
-            super(parent);
-        }
-
-        public Class<?> loadClass(Path path) {
-
-            try {
-                String url = "file:/";
-                URL myUrl = new URL(url);
-                URLConnection connection = myUrl.openConnection();
-                InputStream input = connection.getInputStream();
-                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-                int data = input.read();
-
-                while (data != -1) {
-                    buffer.write(data);
-                    data = input.read();
-                }
-
-                input.close();
-
-                byte[] classData = buffer.toByteArray();
-
-                return defineClass(null, classData, 0, classData.length);
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
     }
 }

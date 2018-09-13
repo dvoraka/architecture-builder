@@ -19,14 +19,12 @@ import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
@@ -339,35 +337,6 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
     private void genSrcProps(Directory directory) {
         save(directory, "", directory.getFilename());
-    }
-
-    private List<Method> findMethods(Class<?> clazz) {
-        if (clazz.getInterfaces().length == 0) {
-            return Arrays.asList(clazz.getDeclaredMethods());
-        }
-
-        List<Method> methods = new ArrayList<>();
-        for (Class<?> cls : clazz.getInterfaces()) {
-            methods.addAll(findMethods(cls));
-        }
-
-        return methods;
-    }
-
-    private void addClassPath(Path path) {
-        try {
-            Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
-            method.setAccessible(true);
-            method.invoke(ClassLoader.getSystemClassLoader(), path.toUri().toURL());
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
     }
 
     private Class<?> loadNonCpClass(Path path) {

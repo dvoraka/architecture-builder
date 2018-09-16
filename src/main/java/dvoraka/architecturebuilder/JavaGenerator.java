@@ -172,8 +172,11 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         Class<?> superSuperClass = loadClass(superSuperDir.getFilename());
         Class<?> superClass = loadClass(getClassName(superDir));
 
-        // save type parameters
+        // check parameter count and save type parameters
         TypeVariable<? extends Class<?>>[] typeParameters = superSuperClass.getTypeParameters();
+        if (typeParameters.length != directory.getParameters().size()) {
+            throw new RuntimeException("Bad type parameter count.");
+        }
         Map<String, Integer> typeMapping = new HashMap<>();
         for (int i = 0; i < typeParameters.length; i++) {
             typeMapping.put(typeParameters[i].getName(), i);

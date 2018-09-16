@@ -87,7 +87,7 @@ public class App {
                     .withParent(srcBase)
                     .dependsOn(service)
                     .addParameterType("java.lang.Integer")
-                    .addParameterType("javax.lang.model.UnknownEntityException")
+                    .addParameterType("java.lang.String")
                     .build();
 
             generator.generate(root);

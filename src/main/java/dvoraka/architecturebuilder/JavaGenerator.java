@@ -197,14 +197,18 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             }
 
             // return type
-            // * TypeVariable
-            // * Class
-            // * ParameterizedType
+            // + TypeVariable
+            // - Class
+            // - ParameterizedType
             Type retType = m.getGenericReturnType();
             String retValue = null;
             if (retType instanceof TypeVariable) {
-                retType = loadClass(directory.getParameters().get(typeMapping.get(((TypeVariable) retType).getName())));
-            } else if (retType != Void.TYPE) {
+
+                retType = typeVarToClass(((TypeVariable) retType), typeMapping, directory);
+
+            }
+
+            if (retType != Void.TYPE) {
                 retValue = getReturnValue(retType);
             }
 
@@ -334,6 +338,18 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private Class<?> typeVarToClass(TypeVariable typeVariable, Map<String, Integer> mapping, Directory dir)
+            throws ClassNotFoundException {
+
+        String varName = typeVariable.getName();
+        int index = mapping.get(varName);
+        String className = dir.getParameters().get(index);
+
+        Class<?> clazz = loadClass(className);
+
+        return clazz;
     }
 
     private void genSrcProps(Directory directory) {

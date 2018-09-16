@@ -124,13 +124,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
                 // check parameter count and save type parameters
                 TypeVariable<? extends Class<?>>[] typeParameters = superClass.getTypeParameters();
-                if (typeParameters.length != directory.getParameters().size()) {
-                    throw new RuntimeException("Bad type parameter count.");
-                }
-                Map<String, Integer> typeMapping = new HashMap<>();
-                for (int i = 0; i < typeParameters.length; i++) {
-                    typeMapping.put(typeParameters[i].getName(), i);
-                }
+                Map<String, Integer> typeMapping = getTypeVarMapping(directory, typeParameters);
 
                 // load parameter types
                 List<Type> types = new ArrayList<>();
@@ -192,14 +186,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         Class<?> superClass = loadClass(getClassName(superDir));
 
         // check parameter count and save type parameters
-        TypeVariable<? extends Class<?>>[] typeParameters = superSuperClass.getTypeParameters();
-        if (typeParameters.length != directory.getParameters().size()) {
-            throw new RuntimeException("Bad type parameter count.");
-        }
-        Map<String, Integer> typeMapping = new HashMap<>();
-        for (int i = 0; i < typeParameters.length; i++) {
-            typeMapping.put(typeParameters[i].getName(), i);
-        }
+        Map<String, Integer> typeMapping = getTypeVarMapping(directory, superSuperClass.getTypeParameters());
 
         // find all methods from the super super type
         List<Method> allMethods = findMethods(superSuperClass);
@@ -369,6 +356,20 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         Class<?> clazz = loadClass(className);
 
         return clazz;
+    }
+
+    private Map<String, Integer> getTypeVarMapping(Directory directory, TypeVariable<? extends Class<?>>[] typeVariables) {
+
+        if (typeVariables.length != directory.getParameters().size()) {
+            throw new RuntimeException("Bad type parameter count.");
+        }
+
+        Map<String, Integer> typeMapping = new HashMap<>();
+        for (int i = 0; i < typeVariables.length; i++) {
+            typeMapping.put(typeVariables[i].getName(), i);
+        }
+
+        return typeMapping;
     }
 
     private void genSrcProps(Directory directory) {

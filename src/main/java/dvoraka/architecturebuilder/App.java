@@ -81,6 +81,8 @@ public class App {
                     .withType(DirType.SERVICE)
                     .withParent(srcBase)
                     .withFilename("CoolService")
+                    .addParameterType("java.lang.Boolean")
+                    .addParameterType("java.lang.Long")
                     .build();
 
             Directory serviceImpl = new Directory.DirectoryBuilder("service")

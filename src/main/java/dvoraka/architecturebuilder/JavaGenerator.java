@@ -102,36 +102,55 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
     private void genService(Directory directory) throws ClassNotFoundException {
         log.debug("Generating service...");
-        log.debug("D: {}", directory);
 
         String interfaceName = directory.getFilename();
 
         // find superinterface
-        Optional<Directory> superInterfaceDir = dirService.findByType(DirType.SERVICE_ABSTRACT, directory);
+        Optional<Directory> superDir = dirService.findByType(DirType.SERVICE_ABSTRACT, directory);
 
         TypeSpec serviceInterface;
-        if (superInterfaceDir.isPresent()) {
-            Class<?> clazz = loadClass(superInterfaceDir.get().getFilename());
+        if (superDir.isPresent()) {
 
-            if (clazz.getTypeParameters().length == 0) {
+            Class<?> superClass = loadClass(superDir.get().getFilename());
+
+            if (superClass.getTypeParameters().length == 0) {
+
                 serviceInterface = TypeSpec.interfaceBuilder(interfaceName)
                         .addModifiers(Modifier.PUBLIC)
-                        .addSuperinterface(clazz)
+                        .addSuperinterface(superClass)
                         .build();
 
             } else {
-                ParameterizedTypeName parameterizedTypeName =
-                        ParameterizedTypeName.get(clazz, clazz.getTypeParameters());
 
-                List<TypeVariableName> typeVariableNames = new ArrayList<>();
-                for (TypeName typeArgument : parameterizedTypeName.typeArguments) {
-                    typeVariableNames.add(TypeVariableName.get(typeArgument.toString()));
+                // check parameter count and save type parameters
+                TypeVariable<? extends Class<?>>[] typeParameters = superClass.getTypeParameters();
+                if (typeParameters.length != directory.getParameters().size()) {
+                    throw new RuntimeException("Bad type parameter count.");
                 }
+                Map<String, Integer> typeMapping = new HashMap<>();
+                for (int i = 0; i < typeParameters.length; i++) {
+                    typeMapping.put(typeParameters[i].getName(), i);
+                }
+
+                // load parameter types
+                List<Type> types = new ArrayList<>();
+                for (TypeVariable<? extends Class<?>> typeVariable : typeParameters) {
+                    Class<?> clazz = typeVarToClass(typeVariable, typeMapping, directory);
+                    types.add(clazz);
+                }
+
+                ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName
+                        .get(superClass, types.toArray(new Class[0]));
+
+//                List<TypeVariableName> typeVariableNames = new ArrayList<>();
+//                for (TypeName typeArgument : parameterizedTypeName.typeArguments) {
+//                    typeVariableNames.add(TypeVariableName.get(typeArgument.toString()));
+//                }
 
                 serviceInterface = TypeSpec.interfaceBuilder(interfaceName)
                         .addModifiers(Modifier.PUBLIC)
                         .addSuperinterface(parameterizedTypeName)
-                        .addTypeVariables(typeVariableNames)
+//                        .addTypeVariables(typeVariableNames)
                         .build();
             }
 

@@ -33,7 +33,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -164,6 +163,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
     private void genServiceImpl(Directory directory) throws ClassNotFoundException {
         log.debug("Generating service implementation...");
 
+        //TODO: if we don't have a super super type it's OK to continue without it
         Directory superSuperDir = dirService.findByType(DirType.SERVICE_ABSTRACT, directory)
                 .orElseThrow(RuntimeException::new);
         Directory superDir = dirService.findByType(DirType.SERVICE, directory)
@@ -182,13 +182,8 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             typeMapping.put(typeParameters[i].getName(), i);
         }
 
-        // methods from the super super type
-        Method methods[] = superSuperClass.getDeclaredMethods();
-        System.out.println(Arrays.toString(methods));
-
-        // find all methods
+        // find all methods from the super super type
         List<Method> allMethods = findMethods(superSuperClass);
-        allMethods.forEach(System.out::println);
 
         // process all methods
         List<MethodSpec> methodSpecs = new ArrayList<>();
@@ -202,6 +197,9 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             }
 
             // return type
+            // * TypeVariable
+            // * Class
+            // * ParameterizedType
             Type retType = m.getGenericReturnType();
             String retValue = null;
             if (retType instanceof TypeVariable) {

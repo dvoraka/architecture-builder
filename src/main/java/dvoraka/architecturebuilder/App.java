@@ -74,6 +74,7 @@ public class App {
 //                    .withFilename("java.lang.Runnable")
 //                    .withFilename("java.util.concurrent.RunnableFuture")
                     .withFilename("java.util.Map")
+//                    .withFilename("org.springframework.context.MessageSource")
                     .build();
 
             Directory service = new Directory.DirectoryBuilder("service")

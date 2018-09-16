@@ -197,18 +197,18 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             }
 
             // return type
-            // + TypeVariable
-            // - Class
-            // - ParameterizedType
             Type retType = m.getGenericReturnType();
-            String retValue = null;
             if (retType instanceof TypeVariable) {
-
                 retType = typeVarToClass(((TypeVariable) retType), typeMapping, directory);
-
+            } else if (retType instanceof ParameterizedType) {
+                //TODO
             }
 
-            if (retType != Void.TYPE) {
+            // return value
+            String retValue;
+            if (retType == Void.TYPE) {
+                retValue = null;
+            } else {
                 retValue = getReturnValue(retType);
             }
 

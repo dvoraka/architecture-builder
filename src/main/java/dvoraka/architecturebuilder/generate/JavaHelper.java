@@ -1,4 +1,6 @@
-package dvoraka.architecturebuilder;
+package dvoraka.architecturebuilder.generate;
+
+import dvoraka.architecturebuilder.Directory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

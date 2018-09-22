@@ -1,5 +1,8 @@
 package dvoraka.architecturebuilder;
 
+import dvoraka.architecturebuilder.generate.Generator;
+import dvoraka.architecturebuilder.generate.LangGenerator;
+import dvoraka.architecturebuilder.service.DirService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

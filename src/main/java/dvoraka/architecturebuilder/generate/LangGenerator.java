@@ -1,4 +1,6 @@
-package dvoraka.architecturebuilder;
+package dvoraka.architecturebuilder.generate;
+
+import dvoraka.architecturebuilder.Directory;
 
 public interface LangGenerator {
 

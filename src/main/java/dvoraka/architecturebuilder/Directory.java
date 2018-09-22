@@ -54,7 +54,7 @@ public class Directory {
         }
     }
 
-    boolean isRoot() {
+    public boolean isRoot() {
         return getParent() == null;
     }
 

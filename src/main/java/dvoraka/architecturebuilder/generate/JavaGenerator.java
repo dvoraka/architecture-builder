@@ -206,10 +206,22 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
             // return type
             Type retType = m.getGenericReturnType();
+            TypeName retTypeName;
             if (retType instanceof TypeVariable) {
-                retType = typeVarToClass(((TypeVariable) retType), typeMapping, directory);
+
+                retTypeName = typeVarToTypeName(((TypeVariable) retType), typeMapping, directory);
+
             } else if (retType instanceof ParameterizedType) {
-                //TODO
+
+                ParameterizedType type = ((ParameterizedType) retType);
+                retTypeName = resolveParamType(
+                        type,
+                        typeMapping,
+                        directory
+                );
+
+            } else {
+                retTypeName = TypeName.get(retType);
             }
 
             // return value
@@ -235,34 +247,11 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
                 } else if (param.getParameterizedType() instanceof ParameterizedType) {
 
-                    ParameterizedTypeName parameterizedTypeName = null;
-
-                    ParameterizedType type = ((ParameterizedType) param.getParameterizedType());
-                    Class<?> rawClass = (Class) type.getRawType();
-
-                    Type[] actualTypeArguments = type.getActualTypeArguments();
-                    List<TypeName> typeNames = new ArrayList<>();
-                    for (Type actualTypeArgument : actualTypeArguments) {
-
-                        if (actualTypeArgument instanceof WildcardType) {
-
-                            WildcardType wildcardType = ((WildcardType) actualTypeArgument);
-                            if (wildcardType.getUpperBounds().length > 0) {
-
-                                WildcardTypeName wildcardTypeName = WildcardTypeName.subtypeOf(
-                                        loadClass(directory.getParameters().get(typeMapping.get(
-                                                ((WildcardType) actualTypeArgument).getUpperBounds()[0].getTypeName()))));
-
-                                typeNames.add(wildcardTypeName);
-
-                            } else {
-                                //TODO
-                            }
-                        }
-                    }
-
-                    parameterizedTypeName = ParameterizedTypeName.get(
-                            ClassName.get(rawClass), typeNames.toArray(new TypeName[0]));
+                    ParameterizedTypeName parameterizedTypeName = resolveParamType(
+                            ((ParameterizedType) param.getParameterizedType()),
+                            typeMapping,
+                            directory
+                    );
 
                     parSpec = ParameterSpec.builder(parameterizedTypeName, param.getName())
                             .build();
@@ -300,7 +289,8 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             } else {
                 spec = MethodSpec.methodBuilder(m.getName())
                         .addAnnotation(Override.class)
-                        .returns(retType)
+//                        .returns(retType)
+                        .returns(retTypeName)
                         .addModifiers(modifiers)
                         .addParameters(parSpecs)
                         .addExceptions(exceptionTypes)
@@ -353,6 +343,41 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         }
     }
 
+    private ParameterizedTypeName resolveParamType(ParameterizedType type, Map<String, Integer> mapping, Directory dir)
+            throws ClassNotFoundException {
+
+        ParameterizedTypeName parameterizedTypeName = null;
+        Class<?> rawClass = (Class) type.getRawType();
+
+        Type[] actualTypeArguments = type.getActualTypeArguments();
+        List<TypeName> typeNames = new ArrayList<>();
+        for (Type actualTypeArgument : actualTypeArguments) {
+
+            if (actualTypeArgument instanceof WildcardType) {
+
+                WildcardType wildcardType = ((WildcardType) actualTypeArgument);
+                if (wildcardType.getUpperBounds().length > 0) {
+
+                    WildcardTypeName wildcardTypeName = WildcardTypeName.subtypeOf(
+                            loadClass(dir.getParameters().get(mapping.get(
+                                    ((WildcardType) actualTypeArgument).getUpperBounds()[0].getTypeName()))));
+
+                    typeNames.add(wildcardTypeName);
+
+                } else {
+                    //TODO
+                }
+            }
+        }
+
+        parameterizedTypeName = ParameterizedTypeName.get(
+                ClassName.get(rawClass),
+                typeNames.toArray(new TypeName[0])
+        );
+
+        return parameterizedTypeName;
+    }
+
     private Class<?> typeVarToClass(TypeVariable typeVariable, Map<String, Integer> mapping, Directory dir)
             throws ClassNotFoundException {
 
@@ -363,6 +388,14 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         Class<?> clazz = loadClass(className);
 
         return clazz;
+    }
+
+    private TypeName typeVarToTypeName(TypeVariable typeVariable, Map<String, Integer> mapping, Directory dir)
+            throws ClassNotFoundException {
+
+        Class<?> clazz = typeVarToClass(typeVariable, mapping, dir);
+
+        return TypeName.get(clazz);
     }
 
     private Map<String, Integer> getTypeVarMapping(Directory directory, TypeVariable<? extends Class<?>>[] typeVariables) {

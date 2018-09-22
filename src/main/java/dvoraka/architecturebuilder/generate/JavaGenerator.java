@@ -346,14 +346,29 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
     private ParameterizedTypeName resolveParamType(ParameterizedType type, Map<String, Integer> mapping, Directory dir)
             throws ClassNotFoundException {
 
-        ParameterizedTypeName parameterizedTypeName = null;
+        ParameterizedTypeName parameterizedTypeName;
         Class<?> rawClass = (Class) type.getRawType();
 
         Type[] actualTypeArguments = type.getActualTypeArguments();
         List<TypeName> typeNames = new ArrayList<>();
         for (Type actualTypeArgument : actualTypeArguments) {
 
-            if (actualTypeArgument instanceof WildcardType) {
+            if (actualTypeArgument instanceof TypeVariable) {
+
+                TypeName typeVariableName = typeVarToTypeName(
+                        ((TypeVariable) actualTypeArgument),
+                        mapping,
+                        dir
+                );
+                typeNames.add(typeVariableName);
+
+            } else if (actualTypeArgument instanceof ParameterizedType) {
+
+                //TODO
+                TypeName paramTypeName = resolveParamType(((ParameterizedType) actualTypeArgument), mapping, dir);
+                typeNames.add(paramTypeName);
+
+            } else if (actualTypeArgument instanceof WildcardType) {
 
                 WildcardType wildcardType = ((WildcardType) actualTypeArgument);
                 if (wildcardType.getUpperBounds().length > 0) {
@@ -361,7 +376,6 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                     WildcardTypeName wildcardTypeName = WildcardTypeName.subtypeOf(
                             loadClass(dir.getParameters().get(mapping.get(
                                     ((WildcardType) actualTypeArgument).getUpperBounds()[0].getTypeName()))));
-
                     typeNames.add(wildcardTypeName);
 
                 } else {
@@ -385,9 +399,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         int index = mapping.get(varName);
         String className = dir.getParameters().get(index);
 
-        Class<?> clazz = loadClass(className);
-
-        return clazz;
+        return loadClass(className);
     }
 
     private TypeName typeVarToTypeName(TypeVariable typeVariable, Map<String, Integer> mapping, Directory dir)

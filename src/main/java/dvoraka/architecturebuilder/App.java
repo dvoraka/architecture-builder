@@ -92,8 +92,8 @@ public class App {
                     .withType(DirType.SERVICE_IMPL)
                     .withParent(srcBase)
                     .dependsOn(service)
-                    .addParameterType("java.lang.Integer")
-                    .addParameterType("java.lang.String")
+                    .addParameterType("java.lang.Boolean")
+                    .addParameterType("java.lang.Long")
                     .build();
 
             generator.generate(root);

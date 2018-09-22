@@ -241,6 +241,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                     Class<?> rawClass = (Class) type.getRawType();
 
                     Type[] actualTypeArguments = type.getActualTypeArguments();
+                    List<TypeName> typeNames = new ArrayList<>();
                     for (Type actualTypeArgument : actualTypeArguments) {
 
                         if (actualTypeArgument instanceof WildcardType) {
@@ -251,13 +252,17 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                                 WildcardTypeName wildcardTypeName = WildcardTypeName.subtypeOf(
                                         loadClass(directory.getParameters().get(typeMapping.get(
                                                 ((WildcardType) actualTypeArgument).getUpperBounds()[0].getTypeName()))));
-                                parameterizedTypeName = ParameterizedTypeName.get(
-                                        ClassName.get(rawClass), wildcardTypeName);
-                            } else {
 
+                                typeNames.add(wildcardTypeName);
+
+                            } else {
+                                //TODO
                             }
                         }
                     }
+
+                    parameterizedTypeName = ParameterizedTypeName.get(
+                            ClassName.get(rawClass), typeNames.toArray(new TypeName[0]));
 
                     parSpec = ParameterSpec.builder(parameterizedTypeName, param.getName())
                             .build();

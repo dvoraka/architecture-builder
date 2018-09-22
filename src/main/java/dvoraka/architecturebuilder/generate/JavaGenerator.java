@@ -116,7 +116,6 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         if (superDir.isPresent()) {
 
             Class<?> superClass = loadClass(superDir.get().getFilename());
-
             if (superClass.getTypeParameters().length == 0) {
 
                 serviceInterface = TypeSpec.interfaceBuilder(interfaceName)
@@ -125,7 +124,6 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                         .build();
 
             } else {
-
                 // check parameter count and save type parameters
                 TypeVariable<? extends Class<?>>[] typeParameters = superClass.getTypeParameters();
                 Map<String, Integer> typeMapping = getTypeVarMapping(directory, typeParameters);
@@ -230,8 +228,8 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 ParameterSpec parSpec;
                 if (param.getParameterizedType() instanceof TypeVariable) {
 
-                    Class<?> realClass = loadClass(directory.getParameters().get(typeMapping.get(
-                            ((TypeVariable) param.getParameterizedType()).getName())));
+                    TypeVariable typeVar = ((TypeVariable) param.getParameterizedType());
+                    Class<?> realClass = typeVarToClass(typeVar, typeMapping, directory);
                     parSpec = ParameterSpec.builder(realClass, param.getName())
                             .build();
 

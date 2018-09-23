@@ -2,6 +2,7 @@ package dvoraka.architecturebuilder.generate;
 
 import dvoraka.architecturebuilder.Directory;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -67,6 +68,10 @@ public interface JavaHelper {
 
     default String getClassName(Directory directory) {
         return directory.getPackageName() + "." + directory.getFilename();
+    }
+
+    default String getPathString(Directory directory, String filename) {
+        return directory.getPath() + File.separator + filename;
     }
 
     default void addClassPath(Path path) {

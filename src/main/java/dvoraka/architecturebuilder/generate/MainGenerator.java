@@ -47,8 +47,6 @@ public class MainGenerator implements Generator {
             generateDependencies(dependencies, dir);
         }
 
-        System.exit(0);
-
         // generate code
         dirService.processDirs(directory, langGenerator::generate);
     }

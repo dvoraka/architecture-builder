@@ -448,10 +448,14 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             e.printStackTrace();
         }
 
-        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        System.out.println("Compiling source...");
+        if (filename.endsWith(".java")) {
+            compileSource(getPathString(directory, filename));
+        }
+    }
 
-        String file = directory.getPath() + File.separator + filename;
+    private int compileSource(String pathString) {
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        log.debug("Compiling source: {}...", pathString);
 
         // build a classpath string for the compiler
         URL[] urls = ((URLClassLoader) ClassLoader.getSystemClassLoader()).getURLs();
@@ -461,7 +465,12 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             cp.append(File.pathSeparator);
         }
 
-        int success = compiler.run(null, null, null, "-cp", cp.toString(), file);
-        System.out.println(success);
+        return compiler.run(
+                null,
+                null,
+                null,
+                "-cp", cp.toString(),
+                pathString
+        );
     }
 }

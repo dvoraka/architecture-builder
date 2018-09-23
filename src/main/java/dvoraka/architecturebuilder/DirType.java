@@ -18,7 +18,10 @@ public enum DirType {
 
     SERVICE_ABSTRACT(true, false),
     SERVICE,
-    SERVICE_IMPL;
+    SERVICE_IMPL,
+
+    ABSTRACT(true, false),
+    IMPL;
 
     private final boolean abstractType;
     private final boolean baseType;

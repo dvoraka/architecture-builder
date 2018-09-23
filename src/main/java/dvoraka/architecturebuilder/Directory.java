@@ -21,6 +21,8 @@ public class Directory {
     @JsonManagedReference
     private List<Directory> children;
 
+    private Directory superType;
+
     private List<Directory> dependencies;
     private List<String> parameters;
 
@@ -82,6 +84,10 @@ public class Directory {
         return children;
     }
 
+    public Directory getSuperType() {
+        return superType;
+    }
+
     public List<Directory> getDependencies() {
         return Collections.unmodifiableList(dependencies);
     }
@@ -115,6 +121,7 @@ public class Directory {
         private String filename;
         private DirType type;
         private Directory parent;
+        private Directory superType;
 
         private List<Directory> dependencies;
         private List<String> parameters;
@@ -138,6 +145,11 @@ public class Directory {
 
         public DirectoryBuilder withParent(Directory parent) {
             this.parent = parent;
+            return this;
+        }
+
+        public DirectoryBuilder withSuperType(Directory superType) {
+            this.superType = superType;
             return this;
         }
 

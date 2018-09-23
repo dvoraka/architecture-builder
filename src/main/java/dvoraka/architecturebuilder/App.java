@@ -88,12 +88,27 @@ public class App {
                     .addParameterType("java.lang.Long")
                     .build();
 
+            Directory abstract1 = new Directory.DirectoryBuilder("component")
+                    .withType(DirType.ABSTRACT)
+                    .withParent(srcBase)
+                    .withFilename("java.lang.List")
+                    .build();
+
             Directory serviceImpl = new Directory.DirectoryBuilder("service")
                     .withType(DirType.SERVICE_IMPL)
                     .withParent(srcBase)
                     .dependsOn(service)
 //                    .addParameterType("java.lang.Boolean")
 //                    .addParameterType("java.lang.Long")
+                    .build();
+
+            Directory impl1 = new Directory.DirectoryBuilder("component")
+                    .withType(DirType.IMPL)
+                    .withParent(srcBase)
+                    .dependsOn(abstract1)
+                    .withSuperType(abstract1)
+                    .withFilename("CoolList")
+                    .addParameterType("java.lang.Integer")
                     .build();
 
             generator.generate(root);

@@ -188,7 +188,15 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         Class<?> superClass = loadClass(getClassName(superDir));
 
         // check parameter count and save type parameters
-        Map<String, Integer> typeMapping = getTypeVarMapping(directory, superSuperClass.getTypeParameters());
+        Map<String, Integer> typeMapping;
+        Directory paramDir;
+        if (directory.getParameters().isEmpty()) {
+            paramDir = superDir;
+            typeMapping = getTypeVarMapping(paramDir, superSuperClass.getTypeParameters());
+        } else {
+            paramDir = directory;
+            typeMapping = getTypeVarMapping(paramDir, superClass.getTypeParameters());
+        }
 
         // find all methods from the super super type
         List<Method> allMethods = findMethods(superSuperClass);
@@ -209,16 +217,12 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             TypeName retTypeName;
             if (retType instanceof TypeVariable) {
 
-                retTypeName = typeVarToTypeName(((TypeVariable) retType), typeMapping, directory);
+                retTypeName = typeVarToTypeName(((TypeVariable) retType), typeMapping, paramDir);
 
             } else if (retType instanceof ParameterizedType) {
 
                 ParameterizedType type = ((ParameterizedType) retType);
-                retTypeName = resolveParamType(
-                        type,
-                        typeMapping,
-                        directory
-                );
+                retTypeName = resolveParamType(type, typeMapping, paramDir);
 
             } else {
                 retTypeName = TypeName.get(retType);
@@ -241,7 +245,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 if (param.getParameterizedType() instanceof TypeVariable) {
 
                     TypeVariable typeVar = ((TypeVariable) param.getParameterizedType());
-                    Class<?> realClass = typeVarToClass(typeVar, typeMapping, directory);
+                    Class<?> realClass = typeVarToClass(typeVar, typeMapping, paramDir);
                     parSpec = ParameterSpec.builder(realClass, param.getName())
                             .build();
 
@@ -250,7 +254,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                     ParameterizedTypeName parameterizedTypeName = resolveParamType(
                             ((ParameterizedType) param.getParameterizedType()),
                             typeMapping,
-                            directory
+                            paramDir
                     );
 
                     parSpec = ParameterSpec.builder(parameterizedTypeName, param.getName())

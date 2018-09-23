@@ -364,7 +364,6 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
             } else if (actualTypeArgument instanceof ParameterizedType) {
 
-                //TODO
                 TypeName paramTypeName = resolveParamType(((ParameterizedType) actualTypeArgument), mapping, dir);
                 typeNames.add(paramTypeName);
 
@@ -373,11 +372,14 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 WildcardType wildcardType = ((WildcardType) actualTypeArgument);
                 if (wildcardType.getUpperBounds().length > 0) {
 
-                    WildcardTypeName wildcardTypeName = WildcardTypeName.subtypeOf(
-                            loadClass(dir.getParameters().get(mapping.get(
-                                    ((WildcardType) actualTypeArgument).getUpperBounds()[0].getTypeName()))));
-                    typeNames.add(wildcardTypeName);
+                    Type upperBoundsType = wildcardType.getUpperBounds()[0];
+                    if (upperBoundsType instanceof TypeVariable) {
 
+                        Class<?> clazz = typeVarToClass(((TypeVariable) upperBoundsType), mapping, dir);
+                        WildcardTypeName wildcardTypeName = WildcardTypeName.subtypeOf(clazz);
+                        typeNames.add(wildcardTypeName);
+
+                    }
                 } else {
                     //TODO
                 }

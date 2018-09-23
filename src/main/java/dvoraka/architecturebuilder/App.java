@@ -91,7 +91,7 @@ public class App {
             Directory abstract1 = new Directory.DirectoryBuilder("component")
                     .withType(DirType.ABSTRACT)
                     .withParent(srcBase)
-                    .withFilename("java.lang.List")
+                    .withTypeName("java.util.List")
                     .build();
 
             Directory serviceImpl = new Directory.DirectoryBuilder("service")

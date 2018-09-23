@@ -13,6 +13,7 @@ public class Directory {
 
     private String name;
     private String filename;
+    private String typeName;
 
     private DirType type;
 
@@ -72,6 +73,10 @@ public class Directory {
         return filename;
     }
 
+    public String getTypeName() {
+        return typeName;
+    }
+
     public DirType getType() {
         return type;
     }
@@ -119,6 +124,8 @@ public class Directory {
 
         private String name;
         private String filename;
+        private String typeName;
+
         private DirType type;
         private Directory parent;
         private Directory superType;
@@ -135,6 +142,11 @@ public class Directory {
 
         public DirectoryBuilder withFilename(String filename) {
             this.filename = filename;
+            return this;
+        }
+
+        public DirectoryBuilder withTypeName(String typeName) {
+            this.typeName = typeName;
             return this;
         }
 
@@ -166,9 +178,12 @@ public class Directory {
         public Directory build() {
             Directory directory = new Directory();
             directory.name = this.name;
-            directory.type = this.type;
             directory.filename = this.filename;
+            directory.typeName = this.typeName;
+
+            directory.type = this.type;
             directory.parent = this.parent;
+            directory.superType = this.superType;
             directory.dependencies = this.dependencies;
             directory.parameters = this.parameters;
 

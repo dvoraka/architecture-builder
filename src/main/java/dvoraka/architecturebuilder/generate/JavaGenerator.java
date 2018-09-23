@@ -63,6 +63,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         this.dirService = requireNonNull(dirService);
 
         conf = new EnumMap<>(DirType.class);
+        conf.put(DirType.IMPL, this::genImplSafe);
         conf.put(DirType.SERVICE, this::genServiceSafe);
         conf.put(DirType.SERVICE_IMPL, this::genServiceImplSafe);
         conf.put(DirType.SRC_PROPERTIES, this::genSrcProps);
@@ -94,6 +95,43 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         if (conf.containsKey(directory.getType())) {
             conf.get(directory.getType()).accept(directory);
         }
+    }
+
+    private void genImplSafe(Directory directory) {
+        try {
+            genImpl(directory);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void genImpl(Directory directory) throws ClassNotFoundException {
+        log.debug("Generating implementation {}...", directory.getFilename());
+
+        Class<?> superType = loadClass(directory.getSuperType().getTypeName());
+
+        TypeSpec implementation;
+        if (superType.isInterface()) {
+            implementation = TypeSpec.classBuilder("TEST")
+                    .addModifiers(Modifier.PUBLIC)
+                    .addSuperinterface(loadClass(""))
+                    .addAnnotation(Service.class)
+//                    .addMethods(methodSpecs)
+                    .build();
+
+        } else {
+            implementation = TypeSpec.classBuilder("TEST")
+                    .addModifiers(Modifier.PUBLIC)
+                    .superclass(loadClass(""))
+                    .addAnnotation(Service.class)
+//                    .addMethods(methodSpecs)
+                    .build();
+        }
+
+        JavaFile javaFile = JavaFile.builder(directory.getPackageName(), implementation)
+                .build();
+
+        System.out.println();
     }
 
     private void genServiceSafe(Directory directory) {

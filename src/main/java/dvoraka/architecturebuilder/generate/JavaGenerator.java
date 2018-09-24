@@ -7,7 +7,6 @@ import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
-import com.squareup.javapoet.TypeVariableName;
 import com.squareup.javapoet.WildcardTypeName;
 import dvoraka.architecturebuilder.DirType;
 import dvoraka.architecturebuilder.Directory;
@@ -321,7 +320,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             if (retValue == null) {
                 spec = MethodSpec.methodBuilder(m.getName())
                         .addAnnotation(Override.class)
-                        .returns(retType)
+                        .returns(retTypeName)
                         .addModifiers(modifiers)
                         .addParameters(parSpecs)
                         .addExceptions(exceptionTypes)
@@ -329,7 +328,6 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             } else {
                 spec = MethodSpec.methodBuilder(m.getName())
                         .addAnnotation(Override.class)
-//                        .returns(retType)
                         .returns(retTypeName)
                         .addModifiers(modifiers)
                         .addParameters(parSpecs)
@@ -347,9 +345,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         if (superClass.getTypeParameters().length == 0) {
             serviceImpl = TypeSpec.classBuilder(name)
                     .addModifiers(Modifier.PUBLIC)
-                    .addSuperinterface(ClassName.get(
-                            superDir.getPackageName(),
-                            superDir.getFilename()))
+                    .addSuperinterface(superClass)
                     .addAnnotation(Service.class)
                     .addMethods(methodSpecs)
                     .build();

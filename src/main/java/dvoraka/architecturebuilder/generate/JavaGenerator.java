@@ -115,7 +115,6 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             implementation = TypeSpec.classBuilder("TEST")
                     .addModifiers(Modifier.PUBLIC)
                     .addSuperinterface(loadClass(""))
-                    .addAnnotation(Service.class)
 //                    .addMethods(methodSpecs)
                     .build();
 
@@ -123,7 +122,6 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             implementation = TypeSpec.classBuilder("TEST")
                     .addModifiers(Modifier.PUBLIC)
                     .superclass(loadClass(""))
-                    .addAnnotation(Service.class)
 //                    .addMethods(methodSpecs)
                     .build();
         }
@@ -356,22 +354,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                     .addMethods(methodSpecs)
                     .build();
         } else {
-            Class<?> param1 = loadClass(directory.getParameters().get(0));
-
-            ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(superClass, param1);
-
-            List<TypeVariableName> typeVariableNames = new ArrayList<>();
-            for (TypeName typeArgument : parameterizedTypeName.typeArguments) {
-                typeVariableNames.add(TypeVariableName.get(typeArgument.toString()));
-            }
-
-            serviceImpl = TypeSpec.classBuilder(name)
-                    .addModifiers(Modifier.PUBLIC)
-                    .addSuperinterface(parameterizedTypeName)
-//                    .addTypeVariables(typeVariableNames)
-                    .addAnnotation(Service.class)
-                    .addMethods(methodSpecs)
-                    .build();
+            throw new RuntimeException("Super class has type parameters!");
         }
 
         JavaFile javaFile = JavaFile.builder(directory.getPackageName(), serviceImpl)

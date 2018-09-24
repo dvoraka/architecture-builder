@@ -364,6 +364,115 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         }
     }
 
+    private List<MethodSpec> genMethodSpecs(List<Method> methods) {
+
+//        List<MethodSpec> methodSpecs = new ArrayList<>();
+//
+//        for (Method method : methods) {
+//            log.debug("Processing method: {}", method.toGenericString());
+//
+//            // skip default methods
+//            if (method.isDefault()) {
+//                log.debug("Skipping default method: {}", method.getName());
+//                continue;
+//            }
+//
+//            // return type
+//            Type retType = method.getGenericReturnType();
+//            TypeName retTypeName;
+//            if (retType instanceof TypeVariable) {
+//
+//                retTypeName = typeVarToTypeName(((TypeVariable) retType), typeMapping, paramDir);
+//
+//            } else if (retType instanceof ParameterizedType) {
+//
+//                ParameterizedType type = ((ParameterizedType) retType);
+//                retTypeName = resolveParamType(type, typeMapping, paramDir);
+//
+//            } else {
+//                retTypeName = TypeName.get(retType);
+//            }
+//
+//            // return value
+//            String retValue;
+//            if (retType == Void.TYPE) {
+//                retValue = null;
+//            } else {
+//                retValue = getReturnValue(retType);
+//            }
+//
+//            // parameters
+//            List<ParameterSpec> parSpecs = new ArrayList<>();
+//            Parameter[] params = method.getParameters();
+//            for (Parameter param : params) {
+//
+//                ParameterSpec parSpec;
+//                if (param.getParameterizedType() instanceof TypeVariable) {
+//
+//                    TypeVariable typeVar = ((TypeVariable) param.getParameterizedType());
+//                    Class<?> realClass = typeVarToClass(typeVar, typeMapping, paramDir);
+//                    parSpec = ParameterSpec.builder(realClass, param.getName())
+//                            .build();
+//
+//                } else if (param.getParameterizedType() instanceof ParameterizedType) {
+//
+//                    ParameterizedTypeName parameterizedTypeName = resolveParamType(
+//                            ((ParameterizedType) param.getParameterizedType()),
+//                            typeMapping,
+//                            paramDir
+//                    );
+//
+//                    parSpec = ParameterSpec.builder(parameterizedTypeName, param.getName())
+//                            .build();
+//
+//                } else {
+//                    parSpec = ParameterSpec.builder(param.getParameterizedType(), param.getName())
+//                            .build();
+//                }
+//
+//                parSpecs.add(parSpec);
+//            }
+//
+//            // exceptions
+//            Type[] exceptions = method.getGenericExceptionTypes();
+//            List<TypeName> exceptionTypes = new ArrayList<>();
+//            for (Type type : exceptions) {
+//                exceptionTypes.add(TypeName.get(type));
+//            }
+//
+//            // modifiers
+//            List<Modifier> modifiers = new ArrayList<>();
+//            if ((method.getModifiers() & java.lang.reflect.Modifier.PUBLIC) == 1) {
+//                modifiers.add(Modifier.PUBLIC);
+//            }
+//
+//            MethodSpec spec;
+//            if (retValue == null) {
+//                spec = MethodSpec.methodBuilder(method.getName())
+//                        .addAnnotation(Override.class)
+//                        .returns(retTypeName)
+//                        .addModifiers(modifiers)
+//                        .addParameters(parSpecs)
+//                        .addExceptions(exceptionTypes)
+//                        .build();
+//            } else {
+//                spec = MethodSpec.methodBuilder(method.getName())
+//                        .addAnnotation(Override.class)
+//                        .returns(retTypeName)
+//                        .addModifiers(modifiers)
+//                        .addParameters(parSpecs)
+//                        .addExceptions(exceptionTypes)
+//                        .addStatement("return " + retValue)
+//                        .build();
+//            }
+//
+//            methodSpecs.add(spec);
+//        }
+
+//        return methodSpecs;
+        return null;
+    }
+
     private ParameterizedTypeName resolveParamType(ParameterizedType type, Map<String, Integer> mapping, Directory dir)
             throws ClassNotFoundException {
 
@@ -433,8 +542,10 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         return TypeName.get(clazz);
     }
 
-    private Map<String, Integer> getTypeVarMapping(Directory directory, TypeVariable<? extends Class<?>>[] typeVariables) {
-
+    private Map<String, Integer> getTypeVarMapping(
+            Directory directory,
+            TypeVariable<? extends Class<?>>[] typeVariables
+    ) {
         if (typeVariables.length != directory.getParameters().size()) {
             throw new RuntimeException("Bad type parameter count.");
         }
@@ -442,6 +553,27 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         Map<String, Integer> typeMapping = new HashMap<>();
         for (int i = 0; i < typeVariables.length; i++) {
             typeMapping.put(typeVariables[i].getName(), i);
+        }
+
+        return typeMapping;
+    }
+
+    private Map<TypeVariable, Type> getTypeVarMapping2(
+            Directory directory,
+            TypeVariable<? extends Class<?>>[] typeVariables
+    ) throws ClassNotFoundException {
+
+        if (typeVariables.length != directory.getParameters().size()) {
+            throw new RuntimeException("Bad type parameter count.");
+        }
+
+        Map<TypeVariable, Type> typeMapping = new HashMap<>();
+        for (int index = 0; index < typeVariables.length; index++) {
+
+            String className = directory.getParameters().get(index);
+            Type type = loadClass(className);
+
+            typeMapping.put(typeVariables[index], type);
         }
 
         return typeMapping;

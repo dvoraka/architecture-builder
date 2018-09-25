@@ -93,7 +93,8 @@ public class App {
                     .withParent(srcBase)
 //                    .withTypeName("java.util.List")
 //                    .withTypeName("java.lang.Object")
-                    .withTypeName("java.lang.Runnable")
+//                    .withTypeName("java.lang.Runnable")
+                    .withTypeName("java.util.Timer")
                     .build();
 
             Directory serviceImpl = new Directory.DirectoryBuilder("service")

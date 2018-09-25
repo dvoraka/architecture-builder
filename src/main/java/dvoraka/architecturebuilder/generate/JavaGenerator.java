@@ -45,6 +45,9 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 import static java.lang.reflect.Modifier.isAbstract;
+import static java.lang.reflect.Modifier.isFinal;
+import static java.lang.reflect.Modifier.isPrivate;
+import static java.lang.reflect.Modifier.isProtected;
 import static java.lang.reflect.Modifier.isPublic;
 import static java.util.Objects.requireNonNull;
 
@@ -307,6 +310,18 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         for (Method method : methods) {
             log.debug("Processing method: {}", method.toGenericString());
 
+            // skip synthetic methods
+            if (method.isSynthetic()) {
+                log.debug("Skipping synthetic method: {}", method.getName());
+                continue;
+            }
+
+            // skip private methods
+            if (isPrivate(method.getModifiers())) {
+                log.debug("Skipping private method: {}", method.getName());
+                continue;
+            }
+
             // skip default methods
             if (method.isDefault()) {
                 log.debug("Skipping default method: {}", method.getName());
@@ -316,6 +331,12 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             // skip non-abstract methods
             if (!isAbstract(method.getModifiers())) {
                 log.debug("Skipping non-abstract method: {}", method.getName());
+                continue;
+            }
+
+            // skip final methods
+            if (isFinal(method.getModifiers())) {
+                log.debug("Skipping final method: {}", method.getName());
                 continue;
             }
 
@@ -383,6 +404,8 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             List<Modifier> modifiers = new ArrayList<>();
             if (isPublic(method.getModifiers())) {
                 modifiers.add(Modifier.PUBLIC);
+            } else if (isProtected(method.getModifiers())) {
+                modifiers.add(Modifier.PROTECTED);
             }
 
             MethodSpec spec;
@@ -444,7 +467,11 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                         WildcardTypeName wildcardTypeName = WildcardTypeName.subtypeOf(superType);
                         typeNames.add(wildcardTypeName);
 
-                    } else if (upperBoundsType instanceof Class) {
+                    } else if (upperBoundsType instanceof ParameterizedType) {
+
+                        //TODO
+
+                    } else {
 
                         WildcardTypeName wildcardTypeName = WildcardTypeName.subtypeOf(upperBoundsType);
                         typeNames.add(wildcardTypeName);

@@ -223,29 +223,21 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         Class<?> superClass = loadClass(getClassName(superDir));
 
         // check parameter count and save type parameters
-        Map<String, Integer> typeMapping;
-        Map<TypeVariable, Type> typeMappingNew;
+        Map<TypeVariable, Type> typeMapping;
         Directory paramDir;
         if (directory.getParameters().isEmpty()) {
             paramDir = superDir;
-            typeMapping = getTypeVarMapping(paramDir, superSuperClass.getTypeParameters());
-            typeMappingNew = getTypeVarMapping2(paramDir, superSuperClass.getTypeParameters());
+            typeMapping = getTypeVarMapping2(paramDir, superSuperClass.getTypeParameters());
         } else {
             paramDir = directory;
-            typeMapping = getTypeVarMapping(paramDir, superClass.getTypeParameters());
-            typeMappingNew = getTypeVarMapping2(paramDir, superClass.getTypeParameters());
+            typeMapping = getTypeVarMapping2(paramDir, superClass.getTypeParameters());
         }
 
         // find all methods from the super super type
         List<Method> allMethods = findMethods(superSuperClass);
 
         // process all methods
-        List<MethodSpec> methodSpecs = genMethodSpecs(
-                allMethods,
-                typeMappingNew,
-                typeMapping,
-                paramDir
-        );
+        List<MethodSpec> methodSpecs = genMethodSpecs(allMethods, typeMapping);
 
         String name = "Default" + superDir.getFilename();
 
@@ -272,12 +264,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         }
     }
 
-    private List<MethodSpec> genMethodSpecs(
-            List<Method> methods,
-            Map<TypeVariable, Type> typeMapping,
-            Map<String, Integer> typeMapping2,
-            Directory paramDir
-    ) throws ClassNotFoundException {
+    private List<MethodSpec> genMethodSpecs(List<Method> methods, Map<TypeVariable, Type> typeMapping) {
 
         List<MethodSpec> methodSpecs = new ArrayList<>();
 
@@ -300,7 +287,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             } else if (retType instanceof ParameterizedType) {
 
                 ParameterizedType type = ((ParameterizedType) retType);
-                retTypeName = resolveParamType(type, typeMapping2, paramDir);
+                retTypeName = resolveParamType(type, typeMapping);
 
             } else {
                 retTypeName = TypeName.get(retType);
@@ -331,8 +318,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
                     ParameterizedTypeName parameterizedTypeName = resolveParamType(
                             ((ParameterizedType) param.getParameterizedType()),
-                            typeMapping2,
-                            paramDir
+                            typeMapping
                     );
 
                     parSpec = ParameterSpec.builder(parameterizedTypeName, param.getName())
@@ -385,9 +371,10 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         return methodSpecs;
     }
 
-    private ParameterizedTypeName resolveParamType(ParameterizedType type, Map<String, Integer> mapping, Directory dir)
-            throws ClassNotFoundException {
-
+    private ParameterizedTypeName resolveParamType(
+            ParameterizedType type,
+            Map<TypeVariable, Type> mapping2
+    ) {
         ParameterizedTypeName parameterizedTypeName;
         Class<?> rawClass = (Class) type.getRawType();
 
@@ -397,16 +384,12 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
             if (actualTypeArgument instanceof TypeVariable) {
 
-                TypeName typeVariableName = typeVarToTypeName(
-                        ((TypeVariable) actualTypeArgument),
-                        mapping,
-                        dir
-                );
+                TypeName typeVariableName = TypeName.get(mapping2.get(actualTypeArgument));
                 typeNames.add(typeVariableName);
 
             } else if (actualTypeArgument instanceof ParameterizedType) {
 
-                TypeName paramTypeName = resolveParamType(((ParameterizedType) actualTypeArgument), mapping, dir);
+                TypeName paramTypeName = resolveParamType(((ParameterizedType) actualTypeArgument), mapping2);
                 typeNames.add(paramTypeName);
 
             } else if (actualTypeArgument instanceof WildcardType) {
@@ -417,8 +400,8 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                     Type upperBoundsType = wildcardType.getUpperBounds()[0];
                     if (upperBoundsType instanceof TypeVariable) {
 
-                        Class<?> clazz = typeVarToClass(((TypeVariable) upperBoundsType), mapping, dir);
-                        WildcardTypeName wildcardTypeName = WildcardTypeName.subtypeOf(clazz);
+                        Type superType = mapping2.get(upperBoundsType);
+                        WildcardTypeName wildcardTypeName = WildcardTypeName.subtypeOf(superType);
                         typeNames.add(wildcardTypeName);
 
                     }

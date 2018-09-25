@@ -161,13 +161,13 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             } else {
                 // check parameter count and save type parameters
                 TypeVariable<? extends Class<?>>[] typeParameters = superClass.getTypeParameters();
-                Map<String, Integer> typeMapping = getTypeVarMapping(directory, typeParameters);
+                Map<TypeVariable, Type> typeMapping = getTypeVarMapping(directory, typeParameters);
 
                 // load parameter types
                 List<Type> types = new ArrayList<>();
                 for (TypeVariable<? extends Class<?>> typeVariable : typeParameters) {
-                    Class<?> clazz = typeVarToClass(typeVariable, typeMapping, directory);
-                    types.add(clazz);
+                    Type realType = typeMapping.get(typeVariable);
+                    types.add(realType);
                 }
 
                 ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName
@@ -227,10 +227,10 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         Directory paramDir;
         if (directory.getParameters().isEmpty()) {
             paramDir = superDir;
-            typeMapping = getTypeVarMapping2(paramDir, superSuperClass.getTypeParameters());
+            typeMapping = getTypeVarMapping(paramDir, superSuperClass.getTypeParameters());
         } else {
             paramDir = directory;
-            typeMapping = getTypeVarMapping2(paramDir, superClass.getTypeParameters());
+            typeMapping = getTypeVarMapping(paramDir, superClass.getTypeParameters());
         }
 
         // find all methods from the super super type
@@ -373,7 +373,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
     private ParameterizedTypeName resolveParamType(
             ParameterizedType type,
-            Map<TypeVariable, Type> mapping2
+            Map<TypeVariable, Type> varTypeMapping
     ) {
         ParameterizedTypeName parameterizedTypeName;
         Class<?> rawClass = (Class) type.getRawType();
@@ -384,12 +384,12 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
             if (actualTypeArgument instanceof TypeVariable) {
 
-                TypeName typeVariableName = TypeName.get(mapping2.get(actualTypeArgument));
+                TypeName typeVariableName = TypeName.get(varTypeMapping.get(actualTypeArgument));
                 typeNames.add(typeVariableName);
 
             } else if (actualTypeArgument instanceof ParameterizedType) {
 
-                TypeName paramTypeName = resolveParamType(((ParameterizedType) actualTypeArgument), mapping2);
+                TypeName paramTypeName = resolveParamType(((ParameterizedType) actualTypeArgument), varTypeMapping);
                 typeNames.add(paramTypeName);
 
             } else if (actualTypeArgument instanceof WildcardType) {
@@ -400,7 +400,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                     Type upperBoundsType = wildcardType.getUpperBounds()[0];
                     if (upperBoundsType instanceof TypeVariable) {
 
-                        Type superType = mapping2.get(upperBoundsType);
+                        Type superType = varTypeMapping.get(upperBoundsType);
                         WildcardTypeName wildcardTypeName = WildcardTypeName.subtypeOf(superType);
                         typeNames.add(wildcardTypeName);
 
@@ -419,41 +419,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         return parameterizedTypeName;
     }
 
-    private Class<?> typeVarToClass(TypeVariable typeVariable, Map<String, Integer> mapping, Directory dir)
-            throws ClassNotFoundException {
-
-        String varName = typeVariable.getName();
-        int index = mapping.get(varName);
-        String className = dir.getParameters().get(index);
-
-        return loadClass(className);
-    }
-
-    private TypeName typeVarToTypeName(TypeVariable typeVariable, Map<String, Integer> mapping, Directory dir)
-            throws ClassNotFoundException {
-
-        Class<?> clazz = typeVarToClass(typeVariable, mapping, dir);
-
-        return TypeName.get(clazz);
-    }
-
-    private Map<String, Integer> getTypeVarMapping(
-            Directory directory,
-            TypeVariable<? extends Class<?>>[] typeVariables
-    ) {
-        if (typeVariables.length != directory.getParameters().size()) {
-            throw new RuntimeException("Bad type parameter count.");
-        }
-
-        Map<String, Integer> typeMapping = new HashMap<>();
-        for (int i = 0; i < typeVariables.length; i++) {
-            typeMapping.put(typeVariables[i].getName(), i);
-        }
-
-        return typeMapping;
-    }
-
-    private Map<TypeVariable, Type> getTypeVarMapping2(
+    private Map<TypeVariable, Type> getTypeVarMapping(
             Directory directory,
             TypeVariable<? extends Class<?>>[] typeVariables
     ) throws ClassNotFoundException {

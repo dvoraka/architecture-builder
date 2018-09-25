@@ -295,7 +295,6 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             TypeName retTypeName;
             if (retType instanceof TypeVariable) {
 
-//                retTypeName = typeVarToTypeName(((TypeVariable) retType), typeMapping, paramDir);
                 retTypeName = TypeName.get(typeMapping.get(retType));
 
             } else if (retType instanceof ParameterizedType) {
@@ -324,8 +323,8 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 if (param.getParameterizedType() instanceof TypeVariable) {
 
                     TypeVariable typeVar = ((TypeVariable) param.getParameterizedType());
-                    Class<?> realClass = typeVarToClass(typeVar, typeMapping2, paramDir);
-                    parSpec = ParameterSpec.builder(realClass, param.getName())
+                    Type realType = typeMapping.get(typeVar);
+                    parSpec = ParameterSpec.builder(realType, param.getName())
                             .build();
 
                 } else if (param.getParameterizedType() instanceof ParameterizedType) {

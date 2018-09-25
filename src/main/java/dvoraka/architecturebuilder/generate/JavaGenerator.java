@@ -44,6 +44,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import static java.lang.reflect.Modifier.isAbstract;
+import static java.lang.reflect.Modifier.isPublic;
 import static java.util.Objects.requireNonNull;
 
 @Service
@@ -109,26 +111,60 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
         Class<?> superType = loadClass(directory.getSuperType().getTypeName());
 
+        // check parameter count and save type parameters
+        Map<TypeVariable, Type> typeMapping;
+        Directory paramDir;
+
+        if (superType.getTypeParameters().length == 0) {
+
+            typeMapping = new HashMap<>();
+
+        } else {
+            //TODO
+            typeMapping = new HashMap<>();
+        }
+
+//        if (directory.getParameters().isEmpty()) {
+//            paramDir = directory.getSuperType();
+//            typeMapping = getTypeVarMapping(paramDir, superType.getTypeParameters());
+//        } else {
+//            paramDir = directory;
+//            typeMapping = getTypeVarMapping(paramDir, superClass.getTypeParameters());
+//        }
+
+        // find all methods from the super type
+        List<Method> allMethods = findMethods(superType);
+
+        // process all methods
+        List<MethodSpec> methodSpecs = genMethodSpecs(allMethods, typeMapping);
+
+        String name = superType.getSimpleName() + "Impl";
+
         TypeSpec implementation;
         if (superType.isInterface()) {
-            implementation = TypeSpec.classBuilder("TEST")
+            implementation = TypeSpec.classBuilder(name)
                     .addModifiers(Modifier.PUBLIC)
-                    .addSuperinterface(loadClass(""))
-//                    .addMethods(methodSpecs)
+                    .addSuperinterface(superType)
+                    .addMethods(methodSpecs)
                     .build();
 
         } else {
-            implementation = TypeSpec.classBuilder("TEST")
+            implementation = TypeSpec.classBuilder(name)
                     .addModifiers(Modifier.PUBLIC)
-                    .superclass(loadClass(""))
-//                    .addMethods(methodSpecs)
+                    .superclass(superType)
+                    .addMethods(methodSpecs)
                     .build();
         }
 
         JavaFile javaFile = JavaFile.builder(directory.getPackageName(), implementation)
                 .build();
 
-        System.out.println();
+        try {
+            javaFile.writeTo(System.out);
+            save(directory, javaFile.toString(), javaSuffix(name));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void genServiceSafe(Directory directory) {
@@ -277,6 +313,12 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 continue;
             }
 
+            // skip non-abstract methods
+            if (!isAbstract(method.getModifiers())) {
+                log.debug("Skipping non-abstract method: {}", method.getName());
+                continue;
+            }
+
             // return type
             Type retType = method.getGenericReturnType();
             TypeName retTypeName;
@@ -341,7 +383,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
             // modifiers
             List<Modifier> modifiers = new ArrayList<>();
-            if ((method.getModifiers() & java.lang.reflect.Modifier.PUBLIC) == 1) {
+            if (isPublic(method.getModifiers())) {
                 modifiers.add(Modifier.PUBLIC);
             }
 
@@ -402,6 +444,11 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
                         Type superType = varTypeMapping.get(upperBoundsType);
                         WildcardTypeName wildcardTypeName = WildcardTypeName.subtypeOf(superType);
+                        typeNames.add(wildcardTypeName);
+
+                    } else if (upperBoundsType instanceof Class) {
+
+                        WildcardTypeName wildcardTypeName = WildcardTypeName.subtypeOf(upperBoundsType);
                         typeNames.add(wildcardTypeName);
 
                     }

@@ -19,6 +19,7 @@ import java.util.List;
 public interface JavaHelper {
 
     default List<Method> findMethods(Class<?> clazz) {
+
         if (clazz.getInterfaces().length == 0) {
             return Arrays.asList(clazz.getDeclaredMethods());
         }

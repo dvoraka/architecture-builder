@@ -320,58 +320,56 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             }
 
             // return type
-            Type retType = method.getGenericReturnType();
-            TypeName retTypeName;
-            if (retType instanceof TypeVariable) {
+            Type returnType = method.getGenericReturnType();
+            TypeName returnTypeName;
+            if (returnType instanceof TypeVariable) {
 
-                retTypeName = TypeName.get(typeMapping.get(retType));
+                returnTypeName = TypeName.get(typeMapping.get(returnType));
 
-            } else if (retType instanceof ParameterizedType) {
+            } else if (returnType instanceof ParameterizedType) {
 
-                ParameterizedType type = ((ParameterizedType) retType);
-                retTypeName = resolveParamType(type, typeMapping);
+                ParameterizedType type = ((ParameterizedType) returnType);
+                returnTypeName = resolveParamType(type, typeMapping);
 
             } else {
-                retTypeName = TypeName.get(retType);
+                returnTypeName = TypeName.get(returnType);
             }
 
             // return value
             String retValue;
-            if (retType == Void.TYPE) {
+            if (returnType == Void.TYPE) {
                 retValue = null;
             } else {
-                retValue = getReturnValue(retType);
+                retValue = getReturnValue(returnType);
             }
 
             // parameters
-            List<ParameterSpec> parSpecs = new ArrayList<>();
-            Parameter[] params = method.getParameters();
-            for (Parameter param : params) {
+            List<ParameterSpec> parameterSpecs = new ArrayList<>();
+            Parameter[] parameters = method.getParameters();
+            for (Parameter parameter : parameters) {
 
-                ParameterSpec parSpec;
-                if (param.getParameterizedType() instanceof TypeVariable) {
+                ParameterSpec parameterSpec;
+                if (parameter.getParameterizedType() instanceof TypeVariable) {
 
-                    TypeVariable typeVar = ((TypeVariable) param.getParameterizedType());
+                    TypeVariable typeVar = ((TypeVariable) parameter.getParameterizedType());
                     Type realType = typeMapping.get(typeVar);
-                    parSpec = ParameterSpec.builder(realType, param.getName())
+                    parameterSpec = ParameterSpec.builder(realType, parameter.getName())
                             .build();
-
-                } else if (param.getParameterizedType() instanceof ParameterizedType) {
+                } else if (parameter.getParameterizedType() instanceof ParameterizedType) {
 
                     ParameterizedTypeName parameterizedTypeName = resolveParamType(
-                            ((ParameterizedType) param.getParameterizedType()),
+                            ((ParameterizedType) parameter.getParameterizedType()),
                             typeMapping
                     );
-
-                    parSpec = ParameterSpec.builder(parameterizedTypeName, param.getName())
+                    parameterSpec = ParameterSpec.builder(parameterizedTypeName, parameter.getName())
                             .build();
-
                 } else {
-                    parSpec = ParameterSpec.builder(param.getParameterizedType(), param.getName())
+
+                    parameterSpec = ParameterSpec.builder(parameter.getParameterizedType(), parameter.getName())
                             .build();
                 }
 
-                parSpecs.add(parSpec);
+                parameterSpecs.add(parameterSpec);
             }
 
             // exceptions
@@ -391,17 +389,17 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             if (retValue == null) {
                 spec = MethodSpec.methodBuilder(method.getName())
                         .addAnnotation(Override.class)
-                        .returns(retTypeName)
+                        .returns(returnTypeName)
                         .addModifiers(modifiers)
-                        .addParameters(parSpecs)
+                        .addParameters(parameterSpecs)
                         .addExceptions(exceptionTypes)
                         .build();
             } else {
                 spec = MethodSpec.methodBuilder(method.getName())
                         .addAnnotation(Override.class)
-                        .returns(retTypeName)
+                        .returns(returnTypeName)
                         .addModifiers(modifiers)
-                        .addParameters(parSpecs)
+                        .addParameters(parameterSpecs)
                         .addExceptions(exceptionTypes)
                         .addStatement("return " + retValue)
                         .build();

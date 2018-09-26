@@ -76,7 +76,7 @@ public class App {
 //                    .withFilename("java.security.AlgorithmConstraints")
 //                    .withFilename("java.lang.Runnable")
 //                    .withFilename("java.util.concurrent.RunnableFuture")
-                    .withFilename("java.util.Map")
+                    .withTypeName("java.util.Map")
 //                    .withFilename("org.springframework.context.MessageSource")
                     .build();
 

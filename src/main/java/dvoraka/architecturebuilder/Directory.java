@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class Directory {
@@ -77,8 +78,8 @@ public class Directory {
         return name;
     }
 
-    public String getFilename() {
-        return filename;
+    public Optional<String> getFilename() {
+        return Optional.ofNullable(filename);
     }
 
     public String getTypeName() {

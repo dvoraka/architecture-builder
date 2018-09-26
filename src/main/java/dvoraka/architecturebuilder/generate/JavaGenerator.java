@@ -114,34 +114,24 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
         Class<?> superType = loadClass(directory.getSuperType().getTypeName());
 
-        // check parameter count and save type parameters
+        // check type parameters
         Map<TypeVariable, Type> typeMapping;
-        Directory paramDir;
-
         if (superType.getTypeParameters().length == 0) {
-
             typeMapping = new HashMap<>();
-
         } else {
-            //TODO
-            typeMapping = new HashMap<>();
+            typeMapping = getTypeVarMapping(directory, superType.getTypeParameters());
         }
 
-//        if (directory.getParameters().isEmpty()) {
-//            paramDir = directory.getSuperType();
-//            typeMapping = getTypeVarMapping(paramDir, superType.getTypeParameters());
-//        } else {
-//            paramDir = directory;
-//            typeMapping = getTypeVarMapping(paramDir, superClass.getTypeParameters());
-//        }
-
-        // find all methods from the super type
         List<Method> allMethods = findMethods(superType);
 
-        // process all methods
         List<MethodSpec> methodSpecs = genMethodSpecs(allMethods, typeMapping);
 
-        String name = superType.getSimpleName() + "Impl";
+        String name;
+        if (directory.getFilename().isPresent()) {
+            name = directory.getFilename().get();
+        } else {
+            name = superType.getSimpleName() + "Impl";
+        }
 
         TypeSpec implementation;
         if (superType.isInterface()) {
@@ -179,9 +169,10 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
     }
 
     private void genService(Directory directory) throws ClassNotFoundException {
-        log.debug("Generating service...");
+        log.debug("Generating service: {}", directory);
 
-        String interfaceName = directory.getFilename();
+        String interfaceName = directory.getFilename()
+                .orElseThrow(() -> new RuntimeException("No service name!"));
 
         // find superinterface
         Optional<Directory> superDir = dirService.findByType(DirType.SERVICE_ABSTRACT, directory);
@@ -189,16 +180,14 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         TypeSpec serviceInterface;
         if (superDir.isPresent()) {
 
-            Class<?> superClass = loadClass(superDir.get().getFilename());
+            Class<?> superClass = loadClass(superDir.get().getTypeName());
             if (superClass.getTypeParameters().length == 0) {
 
                 serviceInterface = TypeSpec.interfaceBuilder(interfaceName)
                         .addModifiers(Modifier.PUBLIC)
                         .addSuperinterface(superClass)
                         .build();
-
             } else {
-                // check parameter count and save type parameters
                 TypeVariable<? extends Class<?>>[] typeParameters = superClass.getTypeParameters();
                 Map<TypeVariable, Type> typeMapping = getTypeVarMapping(directory, typeParameters);
 
@@ -258,7 +247,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         Directory superDir = dirService.findByType(DirType.SERVICE, directory)
                 .orElseThrow(RuntimeException::new);
 
-        Class<?> superSuperClass = loadClass(superSuperDir.getFilename());
+        Class<?> superSuperClass = loadClass(superSuperDir.getTypeName());
         Class<?> superClass = loadClass(getClassName(superDir));
 
         // check parameter count and save type parameters
@@ -513,7 +502,9 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
     }
 
     private void genSrcProps(Directory directory) {
-        save(directory, "", directory.getFilename());
+        String filename = directory.getFilename()
+                .orElseThrow(() -> new RuntimeException("No filename for source properties!"));
+        save(directory, "", filename);
     }
 
     private Class<?> loadNonCpClass(Path path) {

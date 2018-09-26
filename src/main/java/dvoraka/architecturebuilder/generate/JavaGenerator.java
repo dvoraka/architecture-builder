@@ -110,7 +110,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
     }
 
     private void genImpl(Directory directory) throws ClassNotFoundException {
-        log.debug("Generating implementation {}...", directory.getFilename());
+        log.debug("Generating implementation: {}", directory);
 
         Class<?> superType = loadClass(directory.getSuperType().getTypeName());
 
@@ -126,12 +126,8 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
         List<MethodSpec> methodSpecs = genMethodSpecs(allMethods, typeMapping);
 
-        String name;
-        if (directory.getFilename().isPresent()) {
-            name = directory.getFilename().get();
-        } else {
-            name = superType.getSimpleName() + "Impl";
-        }
+        String name = directory.getFilename()
+                .orElse(superType.getSimpleName() + "Impl");
 
         TypeSpec implementation;
         if (superType.isInterface()) {
@@ -267,7 +263,8 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         // process all methods
         List<MethodSpec> methodSpecs = genMethodSpecs(allMethods, typeMapping);
 
-        String name = "Default" + superDir.getFilename();
+        String name = "Default" + superDir.getFilename()
+                .orElse("Service");
 
         TypeSpec serviceImpl;
         if (superClass.getTypeParameters().length == 0) {

@@ -156,6 +156,8 @@ public class Directory {
 
         public DirectoryBuilder withTypeName(String typeName) {
             this.typeName = typeName;
+            String[] names = typeName.split("\\.");
+            this.filename = names[names.length - 1];
             return this;
         }
 

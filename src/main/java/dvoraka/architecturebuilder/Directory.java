@@ -8,8 +8,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 public class Directory {
+
+    private String id;
 
     private String name;
     private String filename;
@@ -28,7 +31,8 @@ public class Directory {
     private List<String> parameters;
 
 
-    public Directory() {
+    private Directory() {
+        id = UUID.randomUUID().toString();
         children = new ArrayList<>();
         dependencies = new ArrayList<>();
         parameters = new ArrayList<>();
@@ -63,6 +67,10 @@ public class Directory {
 
     boolean isBase() {
         return type.isBaseType();
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getName() {

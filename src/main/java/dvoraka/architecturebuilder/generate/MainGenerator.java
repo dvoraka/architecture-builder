@@ -35,8 +35,8 @@ public class MainGenerator implements Generator {
     @Override
     public void generate(Directory directory) {
 
-        dirService.findByType(DirType.IMPL, directory).ifPresent(langGenerator::generate);
-        System.exit(0);
+//        dirService.findByType(DirType.IMPL, directory).ifPresent(langGenerator::generate);
+//        System.exit(0);
 
         // create dirs
         dirService.processDirLeafs(directory, this::createDirectory);

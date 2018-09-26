@@ -31,6 +31,8 @@ public class Directory {
     private List<Directory> dependencies;
     private List<String> parameters;
 
+    private String text;
+
 
     private Directory() {
         id = UUID.randomUUID().toString();
@@ -110,6 +112,10 @@ public class Directory {
         return Collections.unmodifiableList(parameters);
     }
 
+    public String getText() {
+        return text;
+    }
+
     private String pkg2path(String packageName) {
         return packageName.replace('.', File.separatorChar);
     }
@@ -141,6 +147,7 @@ public class Directory {
 
         private List<Directory> dependencies;
         private List<String> parameters;
+        private String text;
 
 
         public DirectoryBuilder(String name) {
@@ -176,6 +183,11 @@ public class Directory {
             return this;
         }
 
+        public DirectoryBuilder withText(String text) {
+            this.text = text;
+            return this;
+        }
+
         public DirectoryBuilder dependsOn(Directory directory) {
             dependencies.add(directory);
             return this;
@@ -197,6 +209,7 @@ public class Directory {
             directory.superType = this.superType;
             directory.dependencies = this.dependencies;
             directory.parameters = this.parameters;
+            directory.text = this.text;
 
             if (parent != null) {
                 parent.addChildren(directory);

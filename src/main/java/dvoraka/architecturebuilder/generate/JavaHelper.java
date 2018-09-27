@@ -20,16 +20,18 @@ public interface JavaHelper {
 
     default List<Method> findMethods(Class<?> clazz) {
 
-        if (clazz.getInterfaces().length == 0) {
-            return Arrays.asList(clazz.getDeclaredMethods());
-        }
+        return Arrays.asList(clazz.getDeclaredMethods());
 
-        List<Method> methods = new ArrayList<>();
-        for (Class<?> cls : clazz.getInterfaces()) {
-            methods.addAll(findMethods(cls));
-        }
-
-        return methods;
+//        if (clazz.getInterfaces().length == 0) {
+//            return Arrays.asList(clazz.getDeclaredMethods());
+//        }
+//
+//        List<Method> methods = new ArrayList<>();
+//        for (Class<?> cls : clazz.getInterfaces()) {
+//            methods.addAll(findMethods(cls));
+//        }
+//
+//        return methods;
     }
 
     default String getReturnValue(Type returnType) {

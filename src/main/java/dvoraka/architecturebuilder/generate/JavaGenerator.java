@@ -424,7 +424,6 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             ParameterizedType type,
             Map<TypeVariable, Type> varTypeMapping
     ) {
-        ParameterizedTypeName parameterizedTypeName;
         Class<?> rawClass = (Class) type.getRawType();
 
         Type[] actualTypeArguments = type.getActualTypeArguments();
@@ -469,7 +468,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             }
         }
 
-        parameterizedTypeName = ParameterizedTypeName.get(
+        ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(
                 ClassName.get(rawClass),
                 typeNames.toArray(new TypeName[0])
         );

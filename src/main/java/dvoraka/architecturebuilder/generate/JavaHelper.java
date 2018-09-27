@@ -20,7 +20,7 @@ public interface JavaHelper {
 
     default List<Method> findMethods(Class<?> clazz) {
 
-        return Arrays.asList(clazz.getDeclaredMethods());
+        return Arrays.asList(clazz.getMethods());
 
 //        if (clazz.getInterfaces().length == 0) {
 //            return Arrays.asList(clazz.getDeclaredMethods());

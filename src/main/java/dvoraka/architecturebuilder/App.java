@@ -70,7 +70,7 @@ public class App {
                     .withParent(srcTestRoot)
                     .build();
 
-            Directory serviceAbs = new Directory.DirectoryBuilder("service")
+            Directory service1Abs = new Directory.DirectoryBuilder("service")
                     .withType(DirType.SERVICE_ABSTRACT)
                     .withParent(srcBaseAbs)
 //                    .withFilename("java.security.AlgorithmConstraints")
@@ -80,10 +80,10 @@ public class App {
 //                    .withFilename("org.springframework.context.MessageSource")
                     .build();
 
-            Directory service = new Directory.DirectoryBuilder("service")
+            Directory service1 = new Directory.DirectoryBuilder("service")
                     .withType(DirType.SERVICE)
                     .withParent(srcBase)
-                    .withSuperType(serviceAbs)
+                    .withSuperType(service1Abs)
                     .withFilename("CoolService")
                     .addParameterType("java.lang.Boolean")
                     .addParameterType("java.lang.Long")
@@ -98,13 +98,11 @@ public class App {
 //                    .withTypeName("java.util.Timer")
                     .build();
 
-            Directory serviceImpl = new Directory.DirectoryBuilder("service")
+            Directory service1Impl = new Directory.DirectoryBuilder("service")
                     .withType(DirType.SERVICE_IMPL)
                     .withParent(srcBase)
-                    .withSuperType(service)
-                    .dependsOn(service)
-//                    .addParameterType("java.lang.Boolean")
-//                    .addParameterType("java.lang.Long")
+                    .withSuperType(service1)
+                    .dependsOn(service1)
                     .build();
 
             Directory impl1 = new Directory.DirectoryBuilder("component")

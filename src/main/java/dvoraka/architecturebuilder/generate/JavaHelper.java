@@ -12,7 +12,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -89,5 +88,9 @@ public interface JavaHelper {
                 | MalformedURLException e) {
             e.printStackTrace();
         }
+    }
+
+    default RuntimeException noSuperTypeException() {
+        return new RuntimeException("No super type specified!");
     }
 }

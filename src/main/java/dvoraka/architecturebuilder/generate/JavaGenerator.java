@@ -112,7 +112,9 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
     private void genImpl(Directory directory) throws ClassNotFoundException {
         log.debug("Generating implementation: {}", directory);
 
-        Class<?> superType = loadClass(directory.getSuperType().getTypeName());
+        Class<?> superType = loadClass(directory.getSuperType()
+                .orElseThrow(this::noSuperTypeException)
+                .getTypeName());
 
         // check type parameters
         Map<TypeVariable, Type> typeMapping;
@@ -240,8 +242,8 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         //TODO: if we don't have a super super type it's OK to continue without it
         Directory superSuperDir = dirService.findByType(DirType.SERVICE_ABSTRACT, directory)
                 .orElseThrow(RuntimeException::new);
-        Directory superDir = dirService.findByType(DirType.SERVICE, directory)
-                .orElseThrow(RuntimeException::new);
+        Directory superDir = directory.getSuperType()
+                .orElseThrow(this::noSuperTypeException);
 
         Class<?> superSuperClass = loadClass(superSuperDir.getTypeName());
         Class<?> superClass = loadClass(getClassName(superDir));
@@ -257,8 +259,8 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             typeMapping = getTypeVarMapping(paramDir, superClass.getTypeParameters());
         }
 
-        // find all methods from the super super type
-        List<Method> allMethods = findMethods(superSuperClass);
+        // find all methods from the super type
+        List<Method> allMethods = findMethods(superClass);
 
         // process all methods
         List<MethodSpec> methodSpecs = genMethodSpecs(allMethods, typeMapping);

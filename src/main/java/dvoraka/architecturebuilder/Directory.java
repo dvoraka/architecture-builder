@@ -100,8 +100,8 @@ public class Directory {
         return children;
     }
 
-    public Directory getSuperType() {
-        return superType;
+    public Optional<Directory> getSuperType() {
+        return Optional.ofNullable(superType);
     }
 
     public List<Directory> getDependencies() {

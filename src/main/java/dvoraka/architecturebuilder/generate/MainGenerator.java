@@ -42,7 +42,7 @@ public class MainGenerator implements Generator {
         dirService.processDirLeafs(directory, this::createDirectory);
 
         // print nodes
-        dirService.processDirNodes(directory, System.out::println);
+//        dirService.processDirNodes(directory, System.out::println);
 
         // build the dependency data structure and then call generate in the right order
         Map<Directory, List<Directory>> dependencies = new HashMap<>();

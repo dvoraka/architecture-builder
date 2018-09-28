@@ -151,7 +151,6 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 .build();
 
         try {
-            javaFile.writeTo(System.out);
             save(directory, javaFile.toString(), javaSuffix(name));
         } catch (IOException e) {
             e.printStackTrace();
@@ -221,7 +220,6 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 .build();
 
         try {
-            javaFile.writeTo(System.out);
             save(directory, javaFile.toString(), javaSuffix(interfaceName));
         } catch (IOException e) {
             e.printStackTrace();
@@ -284,7 +282,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 .build();
 
         try {
-            javaFile.writeTo(System.out);
+//            javaFile.writeTo(System.out);
             save(directory, javaFile.toString(), javaSuffix(name));
         } catch (IOException e) {
             e.printStackTrace();
@@ -502,22 +500,22 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
     private void genSrcProps(Directory directory) {
         String filename = directory.getFilename()
                 .orElseThrow(() -> new RuntimeException("No filename for source properties!"));
-        save(directory, "", filename);
+        try {
+            save(directory, "", filename);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private Class<?> loadNonCpClass(Path path) {
         return new ByteClassLoader(this.getClass().getClassLoader()).loadClass(path);
     }
 
-    private void save(Directory directory, String source, String filename) {
-        try {
-            Files.write(
-                    Paths.get(directory.getPath() + File.separator + filename),
-                    source.getBytes(StandardCharsets.UTF_8),
-                    StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void save(Directory directory, String source, String filename) throws IOException {
+        Files.write(
+                Paths.get(directory.getPath() + File.separator + filename),
+                source.getBytes(StandardCharsets.UTF_8),
+                StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
         if (filename.endsWith(".java")) {
             compileSource(getPathString(directory, filename));

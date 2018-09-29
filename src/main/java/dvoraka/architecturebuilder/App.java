@@ -102,13 +102,11 @@ public class App {
                     .withType(DirType.SERVICE_IMPL)
                     .withParent(srcBase)
                     .withSuperType(service1)
-                    .dependsOn(service1)
                     .build();
 
             Directory impl1 = new Directory.DirectoryBuilder("component")
                     .withType(DirType.IMPL)
                     .withParent(srcBase)
-                    .dependsOn(abstract1)
                     .withSuperType(abstract1)
                     .withFilename("CoolList")
                     .addParameterType("java.lang.Integer")

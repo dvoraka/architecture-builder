@@ -180,6 +180,7 @@ public class Directory {
 
         public DirectoryBuilder withSuperType(Directory superType) {
             this.superType = superType;
+            dependsOn(superType);
             return this;
         }
 

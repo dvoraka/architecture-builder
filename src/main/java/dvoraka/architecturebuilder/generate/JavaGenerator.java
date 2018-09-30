@@ -172,7 +172,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 .orElseThrow(() -> new RuntimeException("No service name!"));
 
         // find superinterface
-        Optional<Directory> superDir = dirService.findByType(DirType.SERVICE_ABSTRACT, directory);
+        Optional<Directory> superDir = directory.getSuperType();
 
         TypeSpec serviceInterface;
         if (superDir.isPresent()) {
@@ -238,7 +238,8 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         log.debug("Generating service implementation...");
 
         //TODO: if we don't have a super super type it's OK to continue without it
-        Directory superSuperDir = dirService.findByType(DirType.SERVICE_ABSTRACT, directory)
+        Directory superSuperDir = directory.getSuperType()
+                .flatMap(Directory::getSuperType)
                 .orElseThrow(RuntimeException::new);
         Directory superDir = directory.getSuperType()
                 .orElseThrow(this::noSuperTypeException);

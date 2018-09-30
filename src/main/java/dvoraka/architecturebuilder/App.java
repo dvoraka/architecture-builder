@@ -70,44 +70,76 @@ public class App {
                     .withParent(srcTestRoot)
                     .build();
 
-            Directory service1Abs = new Directory.DirectoryBuilder("service")
+            //
+            // abstracts
+            //
+            Directory abstractMapService = new Directory.DirectoryBuilder("service")
                     .withType(DirType.SERVICE_ABSTRACT)
                     .withParent(srcBaseAbs)
-//                    .withFilename("java.security.AlgorithmConstraints")
-//                    .withFilename("java.lang.Runnable")
-//                    .withFilename("java.util.concurrent.RunnableFuture")
                     .withTypeName("java.util.Map")
-//                    .withFilename("org.springframework.context.MessageSource")
                     .build();
 
-            Directory service1 = new Directory.DirectoryBuilder("service")
-                    .withType(DirType.SERVICE)
-                    .withParent(srcBase)
-                    .withSuperType(service1Abs)
-                    .withFilename("CoolService")
-                    .addParameterType("java.lang.Boolean")
-                    .addParameterType("java.lang.Long")
+            Directory abstractRFService = new Directory.DirectoryBuilder("service")
+                    .withType(DirType.SERVICE_ABSTRACT)
+                    .withParent(srcBaseAbs)
+                    .withTypeName("java.util.concurrent.RunnableFuture")
                     .build();
 
-            Directory abstract1 = new Directory.DirectoryBuilder("component")
+
+            Directory abstractList = new Directory.DirectoryBuilder("component")
                     .withType(DirType.ABSTRACT)
                     .withParent(srcBase)
                     .withTypeName("java.util.List")
-//                    .withTypeName("java.lang.Object")
-//                    .withTypeName("java.lang.Runnable")
-//                    .withTypeName("java.util.Timer")
                     .build();
 
-            Directory service1Impl = new Directory.DirectoryBuilder("service")
+            Directory abstractTimer = new Directory.DirectoryBuilder("component")
+                    .withType(DirType.ABSTRACT)
+                    .withParent(srcBase)
+                    .withTypeName("java.util.Timer")
+                    .build();
+
+            Directory abstractObject = new Directory.DirectoryBuilder("component")
+                    .withType(DirType.ABSTRACT)
+                    .withParent(srcBase)
+                    .withTypeName("java.lang.Object")
+                    .build();
+
+            Directory mapService = new Directory.DirectoryBuilder("service")
+                    .withType(DirType.SERVICE)
+                    .withParent(srcBase)
+                    .withSuperType(abstractMapService)
+                    .withFilename("CoolMapService")
+                    .addParameterType("java.lang.String")
+                    .addParameterType("java.lang.Long")
+                    .build();
+
+            Directory rfService = new Directory.DirectoryBuilder("service")
+                    .withType(DirType.SERVICE)
+                    .withParent(srcBase)
+                    .withSuperType(abstractRFService)
+                    .withFilename("RFService")
+                    .addParameterType("java.lang.String")
+                    .build();
+
+            //
+            // implementations
+            //
+            Directory mapService1Impl = new Directory.DirectoryBuilder("service")
                     .withType(DirType.SERVICE_IMPL)
                     .withParent(srcBase)
-                    .withSuperType(service1)
+                    .withSuperType(mapService)
                     .build();
 
-            Directory impl1 = new Directory.DirectoryBuilder("component")
+            Directory rfService1Impl = new Directory.DirectoryBuilder("service2")
+                    .withType(DirType.SERVICE_IMPL)
+                    .withParent(srcBase)
+                    .withSuperType(rfService)
+                    .build();
+
+            Directory listImp = new Directory.DirectoryBuilder("component")
                     .withType(DirType.IMPL)
                     .withParent(srcBase)
-                    .withSuperType(abstract1)
+                    .withSuperType(abstractList)
                     .withFilename("CoolList")
                     .addParameterType("java.lang.Integer")
                     .build();

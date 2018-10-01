@@ -7,6 +7,7 @@ import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.TypeVariableName;
 import com.squareup.javapoet.WildcardTypeName;
 import dvoraka.architecturebuilder.DirType;
 import dvoraka.architecturebuilder.Directory;
@@ -327,6 +328,13 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 continue;
             }
 
+            //TODO
+            // type variables
+            TypeVariableName typeVariableName = null;
+            if (method.getTypeParameters().length > 0) {
+                typeVariableName = TypeVariableName.get(method.getTypeParameters()[0]);
+            }
+
             // return type
             Type returnType = method.getGenericReturnType();
             TypeName returnTypeName;
@@ -338,6 +346,10 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
                 ParameterizedType type = ((ParameterizedType) returnType);
                 returnTypeName = resolveParamType(type, typeMapping);
+
+//            } else if (returnType instanceof GenericArrayType) {
+//
+//                returnTypeName = ArrayTypeName.get(returnType);
 
             } else {
                 returnTypeName = TypeName.get(returnType);
@@ -405,14 +417,19 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                         .addExceptions(exceptionTypes)
                         .build();
             } else {
-                spec = MethodSpec.methodBuilder(method.getName())
+                MethodSpec.Builder builder = MethodSpec.methodBuilder(method.getName())
                         .addAnnotation(Override.class)
                         .returns(returnTypeName)
                         .addModifiers(modifiers)
                         .addParameters(parameterSpecs)
                         .addExceptions(exceptionTypes)
-                        .addStatement("return " + retValue)
-                        .build();
+                        .addStatement("return " + retValue);
+
+                if (typeVariableName != null) {
+                    builder.addTypeVariable(typeVariableName);
+                }
+
+                spec = builder.build();
             }
 
             methodSpecs.add(spec);

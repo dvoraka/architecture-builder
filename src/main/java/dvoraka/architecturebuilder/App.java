@@ -130,11 +130,11 @@ public class App {
                     .withSuperType(mapService)
                     .build();
 
-            Directory rfService1Impl = new Directory.DirectoryBuilder("service2")
-                    .withType(DirType.SERVICE_IMPL)
-                    .withParent(srcBase)
-                    .withSuperType(rfService)
-                    .build();
+//            Directory rfService1Impl = new Directory.DirectoryBuilder("service2")
+//                    .withType(DirType.SERVICE_IMPL)
+//                    .withParent(srcBase)
+//                    .withSuperType(rfService)
+//                    .build();
 
             Directory listImp = new Directory.DirectoryBuilder("component")
                     .withType(DirType.IMPL)

@@ -134,12 +134,32 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
         TypeSpec implementation;
         if (superType.isInterface()) {
-            implementation = TypeSpec.classBuilder(name)
-                    .addModifiers(Modifier.PUBLIC)
-                    .addSuperinterface(superType)
-                    .addMethods(methodSpecs)
-                    .build();
 
+            if (superType.getTypeParameters().length == 0) {
+                implementation = TypeSpec.classBuilder(name)
+                        .addModifiers(Modifier.PUBLIC)
+                        .addSuperinterface(superType)
+                        .addMethods(methodSpecs)
+                        .build();
+            } else {
+                TypeVariable<? extends Class<?>>[] typeParameters = superType.getTypeParameters();
+
+                // load parameter types
+                List<Type> types = new ArrayList<>();
+                for (TypeVariable<? extends Class<?>> typeVariable : typeParameters) {
+                    Type realType = typeMapping.get(typeVariable);
+                    types.add(realType);
+                }
+
+                ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName
+                        .get(superType, types.toArray(new Class[0]));
+
+                implementation = TypeSpec.classBuilder(name)
+                        .addModifiers(Modifier.PUBLIC)
+                        .addSuperinterface(parameterizedTypeName)
+                        .addMethods(methodSpecs)
+                        .build();
+            }
         } else {
             implementation = TypeSpec.classBuilder(name)
                     .addModifiers(Modifier.PUBLIC)
@@ -180,7 +200,6 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
             Class<?> superClass = loadClass(superDir.get().getTypeName());
             if (superClass.getTypeParameters().length == 0) {
-
                 serviceInterface = TypeSpec.interfaceBuilder(interfaceName)
                         .addModifiers(Modifier.PUBLIC)
                         .addSuperinterface(superClass)
@@ -329,7 +348,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             }
 
             //TODO
-            // type variables
+            // type parameters
             TypeVariableName typeVariableName = null;
             if (method.getTypeParameters().length > 0) {
                 typeVariableName = TypeVariableName.get(method.getTypeParameters()[0]);

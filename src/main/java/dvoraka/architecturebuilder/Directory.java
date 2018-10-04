@@ -156,35 +156,35 @@ public class Directory {
             parameters = new ArrayList<>();
         }
 
-        public DirectoryBuilder withFilename(String filename) {
+        public DirectoryBuilder filename(String filename) {
             this.filename = filename;
             return this;
         }
 
-        public DirectoryBuilder withTypeName(String typeName) {
+        public DirectoryBuilder typeName(String typeName) {
             this.typeName = typeName;
             String[] names = typeName.split("\\.");
             this.filename = names[names.length - 1];
             return this;
         }
 
-        public DirectoryBuilder withType(DirType type) {
+        public DirectoryBuilder type(DirType type) {
             this.type = type;
             return this;
         }
 
-        public DirectoryBuilder withParent(Directory parent) {
+        public DirectoryBuilder parent(Directory parent) {
             this.parent = parent;
             return this;
         }
 
-        public DirectoryBuilder withSuperType(Directory superType) {
+        public DirectoryBuilder superType(Directory superType) {
             this.superType = superType;
             dependsOn(superType);
             return this;
         }
 
-        public DirectoryBuilder withText(String text) {
+        public DirectoryBuilder text(String text) {
             this.text = text;
             return this;
         }
@@ -194,7 +194,7 @@ public class Directory {
             return this;
         }
 
-        public DirectoryBuilder addParameterType(String className) {
+        public DirectoryBuilder parameterType(String className) {
             parameters.add(className);
             return this;
         }

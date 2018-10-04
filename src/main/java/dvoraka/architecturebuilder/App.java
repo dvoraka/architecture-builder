@@ -29,105 +29,105 @@ public class App {
         return args -> {
 
             Directory root = new Directory.DirectoryBuilder("rootDir")
-                    .withType(DirType.ROOT)
-                    .withParent(null)
+                    .type(DirType.ROOT)
+                    .parent(null)
                     .build();
 
             Directory srcRoot = new Directory.DirectoryBuilder("src/main/java")
-                    .withType(DirType.SRC_ROOT)
-                    .withParent(root)
+                    .type(DirType.SRC_ROOT)
+                    .parent(root)
                     .build();
 
             Directory srcTestRoot = new Directory.DirectoryBuilder("src/test/groovy")
-                    .withType(DirType.SRC_TEST_ROOT)
-                    .withParent(root)
+                    .type(DirType.SRC_TEST_ROOT)
+                    .parent(root)
                     .build();
 
             Directory srcBase = new Directory.DirectoryBuilder("dvoraka/testapp")
-                    .withType(DirType.SRC_BASE)
-                    .withParent(srcRoot)
+                    .type(DirType.SRC_BASE)
+                    .parent(srcRoot)
                     .build();
 
             Directory srcProps = new Directory.DirectoryBuilder("src/main/resources")
-                    .withType(DirType.SRC_PROPERTIES)
-                    .withParent(root)
-                    .withFilename("application.properties")
+                    .type(DirType.SRC_PROPERTIES)
+                    .parent(root)
+                    .filename("application.properties")
                     .build();
 
             Directory srcTestProps = new Directory.DirectoryBuilder("src/test/resources")
-                    .withType(DirType.SRC_PROPERTIES)
-                    .withParent(root)
-                    .withFilename("application.properties")
+                    .type(DirType.SRC_PROPERTIES)
+                    .parent(root)
+                    .filename("application.properties")
                     .build();
 
             Directory srcBaseAbs = new Directory.DirectoryBuilder("dvoraka/diffapp")
-                    .withType(DirType.SRC_BASE_ABSTRACT)
-                    .withParent(root)
+                    .type(DirType.SRC_BASE_ABSTRACT)
+                    .parent(root)
                     .build();
 
             Directory srcTestBase = new Directory.DirectoryBuilder("dvoraka/testapp")
-                    .withType(DirType.SRC_TEST_BASE)
-                    .withParent(srcTestRoot)
+                    .type(DirType.SRC_TEST_BASE)
+                    .parent(srcTestRoot)
                     .build();
 
             //
             // abstracts
             //
             Directory abstractMapService = new Directory.DirectoryBuilder("service")
-                    .withType(DirType.SERVICE_ABSTRACT)
-                    .withParent(srcBaseAbs)
-                    .withTypeName("java.util.Map")
+                    .type(DirType.SERVICE_ABSTRACT)
+                    .parent(srcBaseAbs)
+                    .typeName("java.util.Map")
                     .build();
 
             Directory abstractRFService = new Directory.DirectoryBuilder("service")
-                    .withType(DirType.SERVICE_ABSTRACT)
-                    .withParent(srcBaseAbs)
-                    .withTypeName("java.util.concurrent.RunnableFuture")
+                    .type(DirType.SERVICE_ABSTRACT)
+                    .parent(srcBaseAbs)
+                    .typeName("java.util.concurrent.RunnableFuture")
                     .build();
 
 
             Directory abstractList = new Directory.DirectoryBuilder("component")
-                    .withType(DirType.ABSTRACT)
-                    .withParent(srcBase)
-                    .withTypeName("java.util.List")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeName("java.util.List")
                     .build();
 
             Directory abstractTimer = new Directory.DirectoryBuilder("component")
-                    .withType(DirType.ABSTRACT)
-                    .withParent(srcBase)
-                    .withTypeName("java.util.Timer")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeName("java.util.Timer")
                     .build();
 
             Directory abstractObject = new Directory.DirectoryBuilder("component")
-                    .withType(DirType.ABSTRACT)
-                    .withParent(srcBase)
-                    .withTypeName("java.lang.Object")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeName("java.lang.Object")
                     .build();
 
             Directory mapService = new Directory.DirectoryBuilder("service")
-                    .withType(DirType.SERVICE)
-                    .withParent(srcBase)
-                    .withSuperType(abstractMapService)
-                    .withFilename("CoolMapService")
-                    .addParameterType("java.lang.String")
-                    .addParameterType("java.lang.Long")
+                    .type(DirType.SERVICE)
+                    .parent(srcBase)
+                    .superType(abstractMapService)
+                    .filename("CoolMapService")
+                    .parameterType("java.lang.String")
+                    .parameterType("java.lang.Long")
                     .build();
 
             Directory rfService = new Directory.DirectoryBuilder("service")
-                    .withType(DirType.SERVICE)
-                    .withParent(srcBase)
-                    .withSuperType(abstractRFService)
-                    .withFilename("RFService")
-                    .addParameterType("java.lang.String")
+                    .type(DirType.SERVICE)
+                    .parent(srcBase)
+                    .superType(abstractRFService)
+                    .filename("RFService")
+                    .parameterType("java.lang.String")
                     .build();
 
             //
             // implementations
             //
             Directory mapService1Impl = new Directory.DirectoryBuilder("service")
-                    .withType(DirType.SERVICE_IMPL)
-                    .withParent(srcBase)
-                    .withSuperType(mapService)
+                    .type(DirType.SERVICE_IMPL)
+                    .parent(srcBase)
+                    .superType(mapService)
                     .build();
 
 //            Directory rfService1Impl = new Directory.DirectoryBuilder("service2")
@@ -137,27 +137,26 @@ public class App {
 //                    .build();
 
             Directory listImpl = new Directory.DirectoryBuilder("component")
-                    .withType(DirType.IMPL)
-                    .withParent(srcBase)
-                    .withSuperType(abstractList)
-                    .withFilename("CoolList")
-                    .addParameterType("java.lang.Integer")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abstractList)
+                    .filename("CoolList")
+                    .parameterType("java.lang.Integer")
                     .build();
 
             Directory objectImpl = new Directory.DirectoryBuilder("component")
-                    .withType(DirType.IMPL)
-                    .withParent(srcBase)
-                    .withSuperType(abstractObject)
-                    .withFilename("CoolObject")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abstractObject)
+                    .filename("CoolObject")
                     .build();
 
             Directory timerImpl = new Directory.DirectoryBuilder("componentAux")
-                    .withType(DirType.IMPL)
-                    .withParent(srcBase)
-                    .withSuperType(abstractTimer)
-                    .withFilename("CoolTimer")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abstractTimer)
+                    .filename("CoolTimer")
                     .build();
-
 
             generator.generate(root);
         };

@@ -3,6 +3,7 @@ package dvoraka.architecturebuilder.generate;
 import dvoraka.architecturebuilder.Directory;
 
 import java.io.File;
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -42,6 +43,8 @@ public interface JavaHelper {
         } else if (returnType instanceof ParameterizedType) {
             returnValue = "null";
         } else if (returnType instanceof TypeVariable) {
+            returnValue = "null";
+        } else if (returnType instanceof GenericArrayType) {
             returnValue = "null";
         } else if (returnType == Boolean.TYPE) {
             returnValue = "false";

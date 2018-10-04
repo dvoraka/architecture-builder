@@ -136,13 +136,28 @@ public class App {
 //                    .withSuperType(rfService)
 //                    .build();
 
-            Directory listImp = new Directory.DirectoryBuilder("component")
+            Directory listImpl = new Directory.DirectoryBuilder("component")
                     .withType(DirType.IMPL)
                     .withParent(srcBase)
                     .withSuperType(abstractList)
                     .withFilename("CoolList")
                     .addParameterType("java.lang.Integer")
                     .build();
+
+            Directory objectImpl = new Directory.DirectoryBuilder("component")
+                    .withType(DirType.IMPL)
+                    .withParent(srcBase)
+                    .withSuperType(abstractObject)
+                    .withFilename("CoolObject")
+                    .build();
+
+            Directory timerImpl = new Directory.DirectoryBuilder("componentAux")
+                    .withType(DirType.IMPL)
+                    .withParent(srcBase)
+                    .withSuperType(abstractTimer)
+                    .withFilename("CoolTimer")
+                    .build();
+
 
             generator.generate(root);
         };

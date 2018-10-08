@@ -52,12 +52,14 @@ public class App {
                     .type(DirType.SRC_PROPERTIES)
                     .parent(root)
                     .filename("application.properties")
+                    .text("prop1=value\nprop2=value2\n")
                     .build();
 
             Directory srcTestProps = new Directory.DirectoryBuilder("src/test/resources")
                     .type(DirType.SRC_PROPERTIES)
                     .parent(root)
                     .filename("application.properties")
+                    .text("testProp1=value\ntestProp2=value2\n")
                     .build();
 
             Directory srcBaseAbs = new Directory.DirectoryBuilder("dvoraka/diffapp")

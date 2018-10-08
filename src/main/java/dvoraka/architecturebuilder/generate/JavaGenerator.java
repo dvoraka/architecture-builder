@@ -538,7 +538,8 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         String filename = directory.getFilename()
                 .orElseThrow(() -> new RuntimeException("No filename for source properties!"));
         try {
-            save(directory, "", filename);
+            String text = directory.getText() != null ? directory.getText() : "";
+            save(directory, text, filename);
         } catch (IOException e) {
             e.printStackTrace();
         }

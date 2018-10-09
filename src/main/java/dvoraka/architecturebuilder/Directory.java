@@ -18,6 +18,7 @@ public class Directory {
     private String name;
     private String filename;
     private String typeName;
+    private boolean abstractType;
 
     private DirType type;
 
@@ -88,6 +89,10 @@ public class Directory {
         return typeName;
     }
 
+    public boolean isAbstractType() {
+        return abstractType;
+    }
+
     public DirType getType() {
         return type;
     }
@@ -140,6 +145,7 @@ public class Directory {
         private String name;
         private String filename;
         private String typeName;
+        private boolean abstractType;
 
         private DirType type;
         private Directory parent;
@@ -165,6 +171,11 @@ public class Directory {
             this.typeName = typeName;
             String[] names = typeName.split("\\.");
             this.filename = names[names.length - 1];
+            return this;
+        }
+
+        public DirectoryBuilder abstractType() {
+            this.abstractType = true;
             return this;
         }
 
@@ -204,6 +215,7 @@ public class Directory {
             directory.name = this.name;
             directory.filename = this.filename;
             directory.typeName = this.typeName;
+            directory.abstractType = this.abstractType;
 
             directory.type = this.type;
             directory.parent = this.parent;

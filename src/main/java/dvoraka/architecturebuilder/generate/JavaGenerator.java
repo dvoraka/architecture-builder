@@ -133,6 +133,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 .orElse(superType.getSimpleName() + "Impl");
 
         TypeSpec implementation;
+        TypeSpec.Builder implementationBuilder;
         if (superType.isInterface()) {
 
             if (superType.getTypeParameters().length == 0) {
@@ -160,12 +161,20 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                         .addMethods(methodSpecs)
                         .build();
             }
-        } else {
-            implementation = TypeSpec.classBuilder(name)
-                    .addModifiers(Modifier.PUBLIC)
+        } else { // class
+            implementationBuilder = TypeSpec.classBuilder(name)
                     .superclass(superType)
-                    .addMethods(methodSpecs)
-                    .build();
+                    .addMethods(methodSpecs);
+
+            if (directory.isAbstractType()) {
+                implementationBuilder = implementationBuilder
+                        .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
+            } else {
+                implementationBuilder = implementationBuilder
+                        .addModifiers(Modifier.PUBLIC);
+            }
+
+            implementation = implementationBuilder.build();
         }
 
         JavaFile javaFile = JavaFile.builder(directory.getPackageName(), implementation)

@@ -150,6 +150,7 @@ public class App {
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(abstractObject)
+                    .abstractType()
                     .filename("CoolObject")
                     .build();
 

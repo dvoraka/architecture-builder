@@ -69,7 +69,7 @@ public class Directory {
     }
 
     boolean isBase() {
-        return type.isBaseType();
+        return type.isBase();
     }
 
     public String getId() {

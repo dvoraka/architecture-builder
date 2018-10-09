@@ -36,11 +36,11 @@ public enum DirType {
         this.baseType = baseType;
     }
 
-    public boolean isAbstractType() {
+    public boolean isAbstract() {
         return abstractType;
     }
 
-    public boolean isBaseType() {
+    public boolean isBase() {
         return baseType;
     }
 }

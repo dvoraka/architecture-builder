@@ -1,6 +1,5 @@
 package dvoraka.architecturebuilder.generate;
 
-import dvoraka.architecturebuilder.DirType;
 import dvoraka.architecturebuilder.Directory;
 import dvoraka.architecturebuilder.service.DirService;
 import org.slf4j.Logger;
@@ -69,7 +68,7 @@ public class MainGenerator implements Generator {
     }
 
     private void createDirectory(Directory directory) {
-        if (!directory.getType().isAbstractType()) {
+        if (!directory.getType().isAbstract()) {
             log.debug("Creating directory: {}", directory.getPath());
             try {
                 Files.createDirectories(Paths.get(directory.getPath()));

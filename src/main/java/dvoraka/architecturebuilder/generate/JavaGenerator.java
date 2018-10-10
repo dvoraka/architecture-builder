@@ -373,7 +373,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             } else if (returnType instanceof ParameterizedType) {
 
                 ParameterizedType type = ((ParameterizedType) returnType);
-                returnTypeName = resolveParamType(type, typeMapping);
+                returnTypeName = resolveParametrizedType(type, typeMapping);
 
 //            } else if (returnType instanceof GenericArrayType) {
 //
@@ -405,7 +405,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                             .build();
                 } else if (parameter.getParameterizedType() instanceof ParameterizedType) {
 
-                    ParameterizedTypeName parameterizedTypeName = resolveParamType(
+                    ParameterizedTypeName parameterizedTypeName = resolveParametrizedType(
                             ((ParameterizedType) parameter.getParameterizedType()),
                             typeMapping
                     );
@@ -466,7 +466,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         return methodSpecs;
     }
 
-    private ParameterizedTypeName resolveParamType(
+    private ParameterizedTypeName resolveParametrizedType(
             ParameterizedType type,
             Map<TypeVariable, Type> varTypeMapping
     ) {
@@ -483,7 +483,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
             } else if (actualTypeArgument instanceof ParameterizedType) {
 
-                TypeName paramTypeName = resolveParamType(((ParameterizedType) actualTypeArgument), varTypeMapping);
+                TypeName paramTypeName = resolveParametrizedType(((ParameterizedType) actualTypeArgument), varTypeMapping);
                 typeNames.add(paramTypeName);
 
             } else if (actualTypeArgument instanceof WildcardType) {
@@ -491,7 +491,9 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 WildcardType wildcardType = ((WildcardType) actualTypeArgument);
                 if (wildcardType.getUpperBounds().length > 0) {
 
-                    Type upperBoundsType = wildcardType.getUpperBounds()[0];
+                    Type[] upperBoundsTypes = wildcardType.getUpperBounds();
+                    Type upperBoundsType = upperBoundsTypes[0]; // first type only now
+
                     if (upperBoundsType instanceof TypeVariable) {
 
                         Type superType = varTypeMapping.get(upperBoundsType);
@@ -502,14 +504,31 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
                         //TODO
 
-                    } else {
-
+                    } else { // class
                         WildcardTypeName wildcardTypeName = WildcardTypeName.subtypeOf(upperBoundsType);
                         typeNames.add(wildcardTypeName);
-
                     }
-                } else {
-                    //TODO
+                }
+
+                if (wildcardType.getLowerBounds().length > 0) {
+
+                    Type[] lowerBoundsTypes = wildcardType.getLowerBounds();
+                    Type lowerBoundsType = lowerBoundsTypes[0]; // first type only now
+
+                    if (lowerBoundsType instanceof TypeVariable) {
+
+                        Type superType = varTypeMapping.get(lowerBoundsType);
+                        WildcardTypeName wildcardTypeName = WildcardTypeName.supertypeOf(superType);
+                        typeNames.add(wildcardTypeName);
+
+                    } else if (lowerBoundsType instanceof ParameterizedType) {
+
+                        //TODO
+
+                    } else { // class
+                        WildcardTypeName wildcardTypeName = WildcardTypeName.supertypeOf(lowerBoundsType);
+                        typeNames.add(wildcardTypeName);
+                    }
                 }
             }
         }

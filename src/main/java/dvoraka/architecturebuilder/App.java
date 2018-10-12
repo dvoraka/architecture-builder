@@ -106,6 +106,12 @@ public class App {
                     .typeName("java.lang.Object")
                     .build();
 
+            Directory simpleInterface = new Directory.DirectoryBuilder("test")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeName("dvoraka.architecturebuilder.test.SimpleInterface")
+                    .build();
+
             Directory mapService = new Directory.DirectoryBuilder("service")
                     .type(DirType.SERVICE)
                     .parent(srcBase)
@@ -152,6 +158,14 @@ public class App {
                     .superType(abstractObject)
                     .abstractType()
                     .filename("CoolObject")
+                    .build();
+
+            Directory simpleInterfaceImpl = new Directory.DirectoryBuilder("test")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(simpleInterface)
+                    .abstractType()
+                    .filename("DefaultSimpleInterface")
                     .build();
 
             Directory timerImpl = new Directory.DirectoryBuilder("componentAux")

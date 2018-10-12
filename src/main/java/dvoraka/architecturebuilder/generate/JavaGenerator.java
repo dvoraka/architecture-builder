@@ -133,16 +133,15 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 .orElse(superType.getSimpleName() + "Impl");
 
         TypeSpec implementation;
-        TypeSpec.Builder implementationBuilder;
+        TypeSpec.Builder implementationBuilder = TypeSpec.classBuilder(name)
+                .addModifiers(Modifier.PUBLIC)
+                .addMethods(methodSpecs);
+
         if (superType.isInterface()) {
 
             if (superType.getTypeParameters().length == 0) {
-                implementation = TypeSpec.classBuilder(name)
-                        .addModifiers(Modifier.PUBLIC)
-                        .addSuperinterface(superType)
-                        .addMethods(methodSpecs)
-                        .build();
-            } else {
+                implementationBuilder = implementationBuilder.addSuperinterface(superType);
+            } else { // parametrized type
                 TypeVariable<? extends Class<?>>[] typeParameters = superType.getTypeParameters();
 
                 // load parameter types
@@ -155,27 +154,23 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName
                         .get(superType, types.toArray(new Class[0]));
 
-                implementation = TypeSpec.classBuilder(name)
-                        .addModifiers(Modifier.PUBLIC)
-                        .addSuperinterface(parameterizedTypeName)
-                        .addMethods(methodSpecs)
-                        .build();
+                implementationBuilder = implementationBuilder.addSuperinterface(parameterizedTypeName);
             }
-        } else { // class
-            implementationBuilder = TypeSpec.classBuilder(name)
-                    .superclass(superType)
-                    .addMethods(methodSpecs);
-
-            if (directory.isAbstractType()) {
-                implementationBuilder = implementationBuilder
-                        .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
-            } else {
-                implementationBuilder = implementationBuilder
-                        .addModifiers(Modifier.PUBLIC);
-            }
-
-            implementation = implementationBuilder.build();
+        } else { // supertype is class
+            implementationBuilder = implementationBuilder
+                    .superclass(superType);
         }
+
+        // should be implementation abstract
+        if (directory.isAbstractType()) {
+            implementationBuilder = implementationBuilder
+                    .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
+        } else {
+            implementationBuilder = implementationBuilder
+                    .addModifiers(Modifier.PUBLIC);
+        }
+
+        implementation = implementationBuilder.build();
 
         JavaFile javaFile = JavaFile.builder(directory.getPackageName(), implementation)
                 .build();

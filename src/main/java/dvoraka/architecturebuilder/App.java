@@ -112,6 +112,12 @@ public class App {
                     .typeName("dvoraka.architecturebuilder.test.SimpleInterface")
                     .build();
 
+            Directory interface4p = new Directory.DirectoryBuilder("test")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeName("dvoraka.architecturebuilder.test.Interface4P")
+                    .build();
+
             Directory mapService = new Directory.DirectoryBuilder("service")
                     .type(DirType.SERVICE)
                     .parent(srcBase)
@@ -166,6 +172,17 @@ public class App {
                     .superType(simpleInterface)
                     .abstractType()
                     .filename("DefaultSimpleInterface")
+                    .build();
+
+            Directory interface4pImpl = new Directory.DirectoryBuilder("test")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(interface4p)
+                    .filename("DefaultInterface4P")
+                    .parameterType("java.lang.String")
+                    .parameterType("java.lang.Long")
+                    .parameterType("java.lang.Boolean")
+                    .parameterType("dvoraka.architecturebuilder.test.SimpleInterface")
                     .build();
 
             Directory timerImpl = new Directory.DirectoryBuilder("componentAux")

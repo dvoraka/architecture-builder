@@ -1,4 +1,4 @@
-package dvoraka.architecturebuilder.test;
+package dvoraka.archbuilder.test;
 
 public interface Interface4P<T, U, V, W> {
 

@@ -1,7 +1,7 @@
-package dvoraka.architecturebuilder.service;
+package dvoraka.archbuilder.service;
 
-import dvoraka.architecturebuilder.DirType;
-import dvoraka.architecturebuilder.Directory;
+import dvoraka.archbuilder.DirType;
+import dvoraka.archbuilder.Directory;
 
 import java.util.Optional;
 import java.util.function.Consumer;

@@ -1,4 +1,4 @@
-package dvoraka.architecturebuilder;
+package dvoraka.archbuilder;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;

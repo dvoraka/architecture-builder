@@ -1,4 +1,4 @@
-package dvoraka.architecturebuilder.generate;
+package dvoraka.archbuilder.generate;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
@@ -9,10 +9,10 @@ import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.TypeVariableName;
 import com.squareup.javapoet.WildcardTypeName;
-import dvoraka.architecturebuilder.DirType;
-import dvoraka.architecturebuilder.Directory;
-import dvoraka.architecturebuilder.service.DirService;
-import dvoraka.architecturebuilder.util.ByteClassLoader;
+import dvoraka.archbuilder.DirType;
+import dvoraka.archbuilder.Directory;
+import dvoraka.archbuilder.service.DirService;
+import dvoraka.archbuilder.util.ByteClassLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

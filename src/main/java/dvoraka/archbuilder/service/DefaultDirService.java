@@ -1,7 +1,7 @@
-package dvoraka.architecturebuilder.service;
+package dvoraka.archbuilder.service;
 
-import dvoraka.architecturebuilder.DirType;
-import dvoraka.architecturebuilder.Directory;
+import dvoraka.archbuilder.DirType;
+import dvoraka.archbuilder.Directory;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

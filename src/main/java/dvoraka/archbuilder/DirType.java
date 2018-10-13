@@ -1,4 +1,4 @@
-package dvoraka.architecturebuilder;
+package dvoraka.archbuilder;
 
 /**
  * Directory type.

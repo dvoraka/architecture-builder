@@ -1,6 +1,6 @@
-package dvoraka.architecturebuilder.generate;
+package dvoraka.archbuilder.generate;
 
-import dvoraka.architecturebuilder.Directory;
+import dvoraka.archbuilder.Directory;
 
 import java.io.File;
 import java.lang.reflect.GenericArrayType;

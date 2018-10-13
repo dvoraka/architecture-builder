@@ -1,7 +1,7 @@
-package dvoraka.architecturebuilder.generate;
+package dvoraka.archbuilder.generate;
 
-import dvoraka.architecturebuilder.Directory;
-import dvoraka.architecturebuilder.service.DirService;
+import dvoraka.archbuilder.Directory;
+import dvoraka.archbuilder.service.DirService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

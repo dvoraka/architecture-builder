@@ -1,8 +1,8 @@
-package dvoraka.architecturebuilder;
+package dvoraka.archbuilder;
 
-import dvoraka.architecturebuilder.generate.Generator;
-import dvoraka.architecturebuilder.generate.LangGenerator;
-import dvoraka.architecturebuilder.service.DirService;
+import dvoraka.archbuilder.generate.Generator;
+import dvoraka.archbuilder.generate.LangGenerator;
+import dvoraka.archbuilder.service.DirService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -109,13 +109,13 @@ public class App {
             Directory simpleInterface = new Directory.DirectoryBuilder("test")
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
-                    .typeName("dvoraka.architecturebuilder.test.SimpleInterface")
+                    .typeName("dvoraka.archbuilder.test.SimpleInterface")
                     .build();
 
             Directory interface4p = new Directory.DirectoryBuilder("test")
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
-                    .typeName("dvoraka.architecturebuilder.test.Interface4P")
+                    .typeName("dvoraka.archbuilder.test.Interface4P")
                     .build();
 
             Directory mapService = new Directory.DirectoryBuilder("service")
@@ -182,7 +182,7 @@ public class App {
                     .parameterType("java.lang.String")
                     .parameterType("java.lang.Long")
                     .parameterType("java.lang.Boolean")
-                    .parameterType("dvoraka.architecturebuilder.test.SimpleInterface")
+                    .parameterType("dvoraka.archbuilder.test.SimpleInterface")
                     .build();
 
             Directory timerImpl = new Directory.DirectoryBuilder("componentAux")

@@ -1,4 +1,4 @@
-package dvoraka.architecturebuilder.util;
+package dvoraka.archbuilder.util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

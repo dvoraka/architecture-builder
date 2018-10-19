@@ -192,7 +192,7 @@ public class App {
                     .filename("CoolTimer")
                     .build();
 
-            generator.generate(root);
+//            generator.generate(root);
         };
     }
 }

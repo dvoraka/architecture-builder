@@ -122,6 +122,31 @@ class MainGeneratorISpec extends Specification {
             notThrown(Exception)
     }
 
+    def "runnable future service implementation"() {
+        given:
+            Directory abstractRFService = new Directory.DirectoryBuilder("service")
+                    .type(DirType.SERVICE_ABSTRACT)
+                    .parent(srcBaseAbs)
+                    .typeName("java.util.concurrent.RunnableFuture")
+                    .build()
+            Directory rfService = new Directory.DirectoryBuilder("service")
+                    .type(DirType.SERVICE)
+                    .parent(srcBase)
+                    .superType(abstractRFService)
+                    .filename("RFService")
+                    .parameterType("java.lang.String")
+                    .build()
+            Directory rfService1Impl = new Directory.DirectoryBuilder("service2")
+                    .type(DirType.SERVICE_IMPL)
+                    .parent(srcBase)
+                    .superType(rfService)
+                    .build()
+        when:
+            mainGenerator.generate(rfService1Impl)
+        then:
+            notThrown(Exception)
+    }
+
     def "list implementation"() {
         given:
             Directory abstractList = new Directory.DirectoryBuilder("component")
@@ -138,6 +163,26 @@ class MainGeneratorISpec extends Specification {
                     .build()
         when:
             mainGenerator.generate(listImpl)
+        then:
+            notThrown(Exception)
+    }
+
+    def "object implementation"() {
+        given:
+            Directory abstractObject = new Directory.DirectoryBuilder("component")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeName("java.lang.Object")
+                    .build();
+            Directory objectImpl = new Directory.DirectoryBuilder("component")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abstractObject)
+                    .abstractType()
+                    .filename("CoolObject")
+                    .build()
+        when:
+            mainGenerator.generate(objectImpl)
         then:
             notThrown(Exception)
     }

@@ -122,6 +122,26 @@ class MainGeneratorISpec extends Specification {
             notThrown(Exception)
     }
 
+    def "list implementation"() {
+        given:
+            Directory abstractList = new Directory.DirectoryBuilder("component")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeName("java.util.List")
+                    .build()
+            Directory listImpl = new Directory.DirectoryBuilder("component")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abstractList)
+                    .filename("CoolList")
+                    .parameterType("java.lang.Integer")
+                    .build()
+        when:
+            mainGenerator.generate(listImpl)
+        then:
+            notThrown(Exception)
+    }
+
     void removeFiles(String rootDirName) {
         log.debug("Cleaning up...")
 

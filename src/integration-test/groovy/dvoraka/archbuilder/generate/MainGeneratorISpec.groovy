@@ -64,7 +64,7 @@ class MainGeneratorISpec extends Specification {
                     .typeName("java.util.Map")
                     .build()
         when:
-            mainGenerator.generate(abstractMapService)
+            mainGenerator.generate(root)
         then:
             notThrown(Exception)
     }
@@ -77,7 +77,7 @@ class MainGeneratorISpec extends Specification {
                     .typeName("java.util.List")
                     .build()
         when:
-            mainGenerator.generate(abstractList)
+            mainGenerator.generate(root)
         then:
             notThrown(Exception)
     }
@@ -91,7 +91,7 @@ class MainGeneratorISpec extends Specification {
                     .text("prop1=value\nprop2=value2\n")
                     .build()
         when:
-            mainGenerator.generate(srcProps)
+            mainGenerator.generate(root)
         then:
             notThrown(Exception)
     }
@@ -117,7 +117,7 @@ class MainGeneratorISpec extends Specification {
                     .superType(mapService)
                     .build()
         when:
-            mainGenerator.generate(mapService1Impl)
+            mainGenerator.generate(root)
         then:
             notThrown(Exception)
     }
@@ -142,7 +142,7 @@ class MainGeneratorISpec extends Specification {
                     .superType(rfService)
                     .build()
         when:
-            mainGenerator.generate(rfService1Impl)
+            mainGenerator.generate(root)
         then:
             notThrown(Exception)
     }
@@ -162,7 +162,7 @@ class MainGeneratorISpec extends Specification {
                     .parameterType("java.lang.Integer")
                     .build()
         when:
-            mainGenerator.generate(listImpl)
+            mainGenerator.generate(root)
         then:
             notThrown(Exception)
     }
@@ -182,7 +182,27 @@ class MainGeneratorISpec extends Specification {
                     .filename("CoolObject")
                     .build()
         when:
-            mainGenerator.generate(objectImpl)
+            mainGenerator.generate(root)
+        then:
+            notThrown(Exception)
+    }
+
+    def "simple interface implementation"() {
+        given:
+            Directory simpleInterface = new Directory.DirectoryBuilder("test")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeName("dvoraka.archbuilder.test.SimpleInterface")
+                    .build()
+            Directory simpleInterfaceImpl = new Directory.DirectoryBuilder("test")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(simpleInterface)
+                    .abstractType()
+                    .filename("DefaultSimpleInterface")
+                    .build()
+        when:
+            mainGenerator.generate(root)
         then:
             notThrown(Exception)
     }

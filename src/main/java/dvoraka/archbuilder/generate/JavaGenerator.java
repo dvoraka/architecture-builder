@@ -585,7 +585,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
     private int compileSource(String pathString) {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        log.debug("Compiling source: {}...", pathString);
+        log.info("Compiling source: {}...", pathString);
 
         // build a classpath string for the compiler
         URL[] urls = ((URLClassLoader) ClassLoader.getSystemClassLoader()).getURLs();
@@ -604,7 +604,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         );
 
         if (exitCode == 0) {
-            log.debug("Compilation OK");
+            log.info("Compilation OK");
         }
 
         return exitCode;

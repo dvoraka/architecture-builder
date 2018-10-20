@@ -25,6 +25,7 @@ class MainGeneratorISpec extends Specification {
     Directory root
     Directory srcRoot
     Directory srcBase
+    Directory srcBaseAbs
 
 
     def setup() {
@@ -32,31 +33,22 @@ class MainGeneratorISpec extends Specification {
                 .type(DirType.ROOT)
                 .parent(null)
                 .build()
-
         srcRoot = new Directory.DirectoryBuilder("src/main/java")
                 .type(DirType.SRC_ROOT)
                 .parent(root)
                 .build()
-
         srcBase = new Directory.DirectoryBuilder("dvoraka/testapp")
                 .type(DirType.SRC_BASE)
                 .parent(srcRoot)
                 .build()
+        srcBaseAbs = new Directory.DirectoryBuilder("dvoraka/diffapp")
+                .type(DirType.SRC_BASE_ABSTRACT)
+                .parent(root)
+                .build()
     }
 
     def cleanup() {
-        log.debug("Cleaning up...")
-
-        Path path = Paths.get(rootDirName)
-        if (Files.notExists(path)) {
-            return
-        }
-
-        Files.walk(path)
-                .sorted(Comparator.reverseOrder())
-                .map({ p -> p.toFile() })
-                .peek({ p -> log.debug("Deleting: {}", p) })
-                .forEach({ file -> file.delete() })
+        removeFiles(rootDirName)
     }
 
     def "test"() {
@@ -102,5 +94,46 @@ class MainGeneratorISpec extends Specification {
             mainGenerator.generate(srcProps)
         then:
             notThrown(Exception)
+    }
+
+    def "map service implementation"() {
+        given:
+            Directory abstractMapService = new Directory.DirectoryBuilder("service")
+                    .type(DirType.SERVICE_ABSTRACT)
+                    .parent(srcBaseAbs)
+                    .typeName("java.util.Map")
+                    .build()
+            Directory mapService = new Directory.DirectoryBuilder("service")
+                    .type(DirType.SERVICE)
+                    .parent(srcBase)
+                    .superType(abstractMapService)
+                    .filename("CoolMapService")
+                    .parameterType("java.lang.String")
+                    .parameterType("java.lang.Long")
+                    .build()
+            Directory mapService1Impl = new Directory.DirectoryBuilder("service")
+                    .type(DirType.SERVICE_IMPL)
+                    .parent(srcBase)
+                    .superType(mapService)
+                    .build()
+        when:
+            mainGenerator.generate(mapService1Impl)
+        then:
+            notThrown(Exception)
+    }
+
+    void removeFiles(String rootDirName) {
+        log.debug("Cleaning up...")
+
+        Path path = Paths.get(rootDirName)
+        if (Files.notExists(path)) {
+            return
+        }
+
+        Files.walk(path)
+                .sorted(Comparator.reverseOrder())
+                .map({ p -> p.toFile() })
+                .peek({ p -> log.debug("Deleting: {}", p) })
+                .forEach({ file -> file.delete() })
     }
 }

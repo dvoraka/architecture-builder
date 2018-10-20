@@ -595,12 +595,18 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             cp.append(File.pathSeparator);
         }
 
-        return compiler.run(
+        int exitCode = compiler.run(
                 null,
                 null,
                 null,
                 "-cp", cp.toString(),
                 pathString
         );
+
+        if (exitCode == 0) {
+            log.debug("Compilation OK");
+        }
+
+        return exitCode;
     }
 }

@@ -250,6 +250,25 @@ class MainGeneratorISpec extends Specification {
             notThrown(Exception)
     }
 
+    def "timer implementation"() {
+        given:
+            Directory abstractTimer = new Directory.DirectoryBuilder("component")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeName("java.util.Timer")
+                    .build()
+            Directory timerImpl = new Directory.DirectoryBuilder("componentAux")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abstractTimer)
+                    .filename("CoolTimer")
+                    .build()
+        when:
+            mainGenerator.generate(root)
+        then:
+            notThrown(Exception)
+    }
+
     void removeFiles(String rootDirName) {
         log.debug("Cleaning up...")
 

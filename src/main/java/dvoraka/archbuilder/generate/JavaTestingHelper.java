@@ -23,4 +23,12 @@ public interface JavaTestingHelper {
     default boolean isPublicNotAbstract(Class<?> clazz) {
         return isPublic(clazz) && !isAbstract(clazz);
     }
+
+    default boolean hasTypeParameters(Class<?> clazz) {
+        return clazz.getTypeParameters().length > 0;
+    }
+
+    default boolean hasNoTypeParameters(Class<?> clazz) {
+        return !hasTypeParameters(clazz);
+    }
 }

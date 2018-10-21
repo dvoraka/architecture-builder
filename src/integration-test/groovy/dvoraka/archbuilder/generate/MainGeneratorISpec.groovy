@@ -226,8 +226,11 @@ class MainGeneratorISpec extends Specification implements JavaHelper, JavaTestin
                     .build()
         when:
             mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(interface4pImpl))
         then:
             notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
     }
 
     def "interface with 4 parameters abstract implementation"() {
@@ -269,6 +272,7 @@ class MainGeneratorISpec extends Specification implements JavaHelper, JavaTestin
         then:
             notThrown(Exception)
             isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
             clazz.getSuperclass() == Timer.class
     }
 

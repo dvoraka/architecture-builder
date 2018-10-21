@@ -8,14 +8,13 @@ import org.springframework.boot.test.context.SpringBootTest
 import spock.lang.Shared
 import spock.lang.Specification
 
-import java.lang.reflect.Modifier
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
 @Slf4j
 @SpringBootTest
-class MainGeneratorISpec extends Specification implements JavaHelper {
+class MainGeneratorISpec extends Specification implements JavaHelper, JavaTestingHelper {
 
     @Autowired
     Generator mainGenerator
@@ -267,11 +266,9 @@ class MainGeneratorISpec extends Specification implements JavaHelper {
         when:
             mainGenerator.generate(root)
             Class<?> clazz = loadClass(getClassName(timerImpl))
-            int modifiers = clazz.getModifiers()
         then:
             notThrown(Exception)
-            !Modifier.isAbstract(modifiers)
-            Modifier.isPublic(modifiers)
+            isPublicNotAbstract(clazz)
             clazz.getSuperclass() == Timer.class
     }
 

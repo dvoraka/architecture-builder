@@ -230,6 +230,26 @@ class MainGeneratorISpec extends Specification {
             notThrown(Exception)
     }
 
+    def "interface with 4 parameters abstract implementation"() {
+        given:
+            Directory interface4p = new Directory.DirectoryBuilder("test")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeName("dvoraka.archbuilder.test.Interface4P")
+                    .build()
+            Directory interface4pImpl = new Directory.DirectoryBuilder("test")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(interface4p)
+                    .filename("DefaultInterface4P")
+                    .abstractType()
+                    .build()
+        when:
+            mainGenerator.generate(root)
+        then:
+            notThrown(Exception)
+    }
+
     void removeFiles(String rootDirName) {
         log.debug("Cleaning up...")
 

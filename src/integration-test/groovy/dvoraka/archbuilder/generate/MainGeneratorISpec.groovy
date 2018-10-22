@@ -163,17 +163,20 @@ class MainGeneratorISpec extends Specification implements JavaHelper, JavaTestin
                     .build()
         when:
             mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(listImpl))
         then:
             notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
     }
 
-    def "object implementation"() {
+    def "abstract object implementation"() {
         given:
             Directory abstractObject = new Directory.DirectoryBuilder("component")
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeName("java.lang.Object")
-                    .build();
+                    .build()
             Directory objectImpl = new Directory.DirectoryBuilder("component")
                     .type(DirType.IMPL)
                     .parent(srcBase)
@@ -183,8 +186,11 @@ class MainGeneratorISpec extends Specification implements JavaHelper, JavaTestin
                     .build()
         when:
             mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(objectImpl))
         then:
             notThrown(Exception)
+            isPublicAbstract(clazz)
+            hasNoTypeParameters(clazz)
     }
 
     def "simple interface implementation"() {
@@ -198,13 +204,15 @@ class MainGeneratorISpec extends Specification implements JavaHelper, JavaTestin
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(simpleInterface)
-                    .abstractType()
                     .filename("DefaultSimpleInterface")
                     .build()
         when:
             mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(simpleInterfaceImpl))
         then:
             notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
     }
 
     def "interface with 4 parameters implementation"() {

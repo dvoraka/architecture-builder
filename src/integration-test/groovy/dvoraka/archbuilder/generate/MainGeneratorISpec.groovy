@@ -177,11 +177,33 @@ class MainGeneratorISpec extends Specification implements JavaHelper, JavaTestin
                     .parent(srcBase)
                     .typeName("java.lang.Object")
                     .build()
-            Directory objectImpl = new Directory.DirectoryBuilder("component")
+            Directory absObjectImpl = new Directory.DirectoryBuilder("component")
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(abstractObject)
                     .abstractType()
+                    .filename("AbstractCoolObject")
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(absObjectImpl))
+        then:
+            notThrown(Exception)
+            isPublicAbstract(clazz)
+            hasNoTypeParameters(clazz)
+    }
+
+    def "object implementation"() {
+        given:
+            Directory abstractObject = new Directory.DirectoryBuilder("component")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeName("java.lang.Object")
+                    .build()
+            Directory objectImpl = new Directory.DirectoryBuilder("component")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abstractObject)
                     .filename("CoolObject")
                     .build()
         when:
@@ -189,7 +211,7 @@ class MainGeneratorISpec extends Specification implements JavaHelper, JavaTestin
             Class<?> clazz = loadClass(getClassName(objectImpl))
         then:
             notThrown(Exception)
-            isPublicAbstract(clazz)
+            isPublicNotAbstract(clazz)
             hasNoTypeParameters(clazz)
     }
 

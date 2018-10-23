@@ -76,7 +76,9 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         checkImplementation();
         processedDirs = new HashSet<>();
 
-        addClassPath(Paths.get("rootDir/src/main/java"));
+        //TODO
+//        addClassPath(Paths.get("rootDir/src/main/java"));
+//        addClassPath(Paths.get("testRootDir/src/main/java"));
     }
 
     private void checkImplementation() {
@@ -96,6 +98,9 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
         log.debug("Generating code for: {}", directory.getType());
         processedDirs.add(directory);
+
+        //TODO
+        addClassPath(Paths.get("testRootDir/src/main/java"));
 
         if (conf.containsKey(directory.getType())) {
             conf.get(directory.getType()).accept(directory);

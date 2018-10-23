@@ -72,13 +72,10 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         conf.put(DirType.SERVICE, this::genServiceSafe);
         conf.put(DirType.SERVICE_IMPL, this::genServiceImplSafe);
         conf.put(DirType.SRC_PROPERTIES, this::genSrcProps);
+        conf.put(DirType.SRC_ROOT, this::processSrcRoot);
 
         checkImplementation();
         processedDirs = new HashSet<>();
-
-        //TODO
-//        addClassPath(Paths.get("rootDir/src/main/java"));
-//        addClassPath(Paths.get("testRootDir/src/main/java"));
     }
 
     private void checkImplementation() {
@@ -99,12 +96,13 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         log.debug("Generating code for: {}", directory.getType());
         processedDirs.add(directory);
 
-        //TODO
-        addClassPath(Paths.get("testRootDir/src/main/java"));
-
         if (conf.containsKey(directory.getType())) {
             conf.get(directory.getType()).accept(directory);
         }
+    }
+
+    private void processSrcRoot(Directory directory) {
+        addClassPath(Paths.get(directory.getPath()));
     }
 
     private void genImplSafe(Directory directory) {

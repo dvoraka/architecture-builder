@@ -544,7 +544,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             TypeVariable<? extends Class<?>>[] typeVariables
     ) throws ClassNotFoundException {
 
-        if (typeVariables.length != directory.getParameters().size()) {
+        if (typeVariables.length != directory.getParameters().size() && !directory.isAbstractType()) {
             throw new RuntimeException("Bad type parameter count.");
         }
 

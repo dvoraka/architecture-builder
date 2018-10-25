@@ -237,6 +237,29 @@ class MainGeneratorISpec extends Specification implements JavaHelper, JavaTestin
             hasNoTypeParameters(clazz)
     }
 
+    def "simple interface abstract implementation"() {
+        given:
+            Directory simpleInterface = new Directory.DirectoryBuilder("test")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeName("dvoraka.archbuilder.test.SimpleInterface")
+                    .build()
+            Directory simpleInterfaceImpl = new Directory.DirectoryBuilder("test")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(simpleInterface)
+                    .abstractType()
+                    .filename("AbstractSimpleInterface")
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(simpleInterfaceImpl))
+        then:
+            notThrown(Exception)
+            isPublicAbstract(clazz)
+            hasNoTypeParameters(clazz)
+    }
+
     def "interface with 4 parameters implementation"() {
         given:
             Directory interface4p = new Directory.DirectoryBuilder("test")
@@ -274,7 +297,7 @@ class MainGeneratorISpec extends Specification implements JavaHelper, JavaTestin
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(interface4p)
-                    .filename("DefaultInterface4P")
+                    .filename("AbstractInterface4P")
                     .abstractType()
                     .build()
         when:

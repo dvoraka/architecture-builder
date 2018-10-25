@@ -44,6 +44,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.lang.reflect.Modifier.isAbstract;
 import static java.lang.reflect.Modifier.isFinal;
@@ -155,7 +157,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 }
 
                 ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName
-                        .get(superType, types.toArray(new Class[0]));
+                        .get(superType, types.toArray(new Type[0]));
 
                 implementationBuilder = implementationBuilder.addSuperinterface(parameterizedTypeName);
             }
@@ -164,10 +166,18 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                     .superclass(superType);
         }
 
-        // should be implementation abstract
+        // abstract implementation
         if (directory.isAbstractType()) {
             implementationBuilder = implementationBuilder
                     .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
+
+            // we need to add type variables
+            if (directory.getParameters().isEmpty()) {
+                implementationBuilder
+                        .addTypeVariables(Stream.of(superType.getTypeParameters())
+                                .map(TypeVariableName::get)
+                                .collect(Collectors.toList()));
+            }
         } else {
             implementationBuilder = implementationBuilder
                     .addModifiers(Modifier.PUBLIC);
@@ -549,12 +559,19 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         }
 
         Map<TypeVariable, Type> typeMapping = new HashMap<>();
-        for (int index = 0; index < typeVariables.length; index++) {
+        if (directory.isAbstractType() && directory.getParameters().isEmpty()) {
 
-            String className = directory.getParameters().get(index);
-            Type type = loadClass(className);
+            for (TypeVariable<? extends Class<?>> typeVariable : typeVariables) {
+                typeMapping.put(typeVariable, typeVariable);
+            }
+        } else {
+            for (int index = 0; index < typeVariables.length; index++) {
 
-            typeMapping.put(typeVariables[index], type);
+                String className = directory.getParameters().get(index);
+                Type type = loadClass(className);
+
+                typeMapping.put(typeVariables[index], type);
+            }
         }
 
         return typeMapping;

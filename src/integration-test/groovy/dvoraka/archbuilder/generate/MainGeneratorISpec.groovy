@@ -302,8 +302,12 @@ class MainGeneratorISpec extends Specification implements JavaHelper, JavaTestin
                     .build()
         when:
             mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(interface4pImpl))
         then:
             notThrown(Exception)
+            isPublicAbstract(clazz)
+            hasTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
     }
 
     def "timer implementation"() {

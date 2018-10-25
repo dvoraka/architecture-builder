@@ -31,4 +31,12 @@ public interface JavaTestingHelper {
     default boolean hasNoTypeParameters(Class<?> clazz) {
         return !hasTypeParameters(clazz);
     }
+
+    default boolean hasDeclaredMethods(Class<?> clazz) {
+        return clazz.getDeclaredMethods().length > 0;
+    }
+
+    default boolean hasNoDeclaredMethods(Class<?> clazz) {
+        return !hasDeclaredMethods(clazz);
+    }
 }

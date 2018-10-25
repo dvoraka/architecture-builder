@@ -37,6 +37,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -130,7 +131,12 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             typeMapping = getTypeVarMapping(directory, superType.getTypeParameters());
         }
 
-        List<Method> allMethods = findMethods(superType);
+        List<Method> allMethods;
+        if (directory.isAbstractType()) {
+            allMethods = Collections.emptyList();
+        } else {
+            allMethods = findMethods(superType);
+        }
 
         List<MethodSpec> methodSpecs = genMethodSpecs(allMethods, typeMapping);
 

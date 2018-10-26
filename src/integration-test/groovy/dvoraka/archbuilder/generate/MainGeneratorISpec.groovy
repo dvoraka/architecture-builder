@@ -118,8 +118,17 @@ class MainGeneratorISpec extends Specification implements JavaHelper, JavaTestin
                     .build()
         when:
             mainGenerator.generate(root)
+            Class<?> clazz = loadClass(
+                    mapService1Impl.getPackageName()
+                            + "."
+                            + "Default" + mapService.getFilename()
+                            .orElseThrow({ new RuntimeException() })
+            )
         then:
             notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasDeclaredMethods(clazz)
     }
 
     def "runnable future service implementation"() {

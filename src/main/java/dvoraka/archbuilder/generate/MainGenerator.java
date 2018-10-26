@@ -1,5 +1,6 @@
 package dvoraka.archbuilder.generate;
 
+import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;
 import dvoraka.archbuilder.service.DirService;
 import org.slf4j.Logger;
@@ -42,6 +43,10 @@ public class MainGenerator implements Generator {
 
         // print nodes
 //        dirService.processDirNodes(directory, System.out::println);
+
+        // start with SRC_ROOT
+        dirService.findByType(DirType.SRC_ROOT, directory)
+                .ifPresent(langGenerator::generate);
 
         // build the dependency data structure and then call generate in the right order
         Map<Directory, List<Directory>> dependencies = new HashMap<>();

@@ -155,15 +155,8 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             } else { // parametrized type
                 TypeVariable<? extends Class<?>>[] typeParameters = superType.getTypeParameters();
 
-                // load parameter types
-                List<Type> types = new ArrayList<>();
-                for (TypeVariable<? extends Class<?>> typeVariable : typeParameters) {
-                    Type realType = typeMapping.get(typeVariable);
-                    types.add(realType);
-                }
-
                 ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName
-                        .get(superType, types.toArray(new Type[0]));
+                        .get(superType, buildTypeArray(typeParameters, typeMapping));
 
                 implementationBuilder = implementationBuilder
                         .addSuperinterface(parameterizedTypeName);
@@ -175,15 +168,8 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             } else {
                 TypeVariable<? extends Class<?>>[] typeParameters = superType.getTypeParameters();
 
-                // load parameter types
-                List<Type> types = new ArrayList<>();
-                for (TypeVariable<? extends Class<?>> typeVariable : typeParameters) {
-                    Type realType = typeMapping.get(typeVariable);
-                    types.add(realType);
-                }
-
                 ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName
-                        .get(superType, types.toArray(new Type[0]));
+                        .get(superType, buildTypeArray(typeParameters, typeMapping));
 
                 implementationBuilder = implementationBuilder
                         .superclass(parameterizedTypeName);
@@ -571,6 +557,19 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         );
 
         return parameterizedTypeName;
+    }
+
+    private Type[] buildTypeArray(
+            TypeVariable<? extends Class<?>>[] typeParameters,
+            Map<TypeVariable, Type> typeMapping
+    ) {
+        List<Type> types = new ArrayList<>();
+        for (TypeVariable<? extends Class<?>> typeVariable : typeParameters) {
+            Type realType = typeMapping.get(typeVariable);
+            types.add(realType);
+        }
+
+        return types.toArray(new Type[0]);
     }
 
     private Map<TypeVariable, Type> getTypeVarMapping(

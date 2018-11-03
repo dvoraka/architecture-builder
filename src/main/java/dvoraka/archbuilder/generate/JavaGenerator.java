@@ -600,6 +600,8 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
     }
 
     private void save(Directory directory, String source, String filename) throws IOException {
+        log.debug("Saving source:\n{}", source);
+
         Files.write(
                 Paths.get(directory.getPath() + File.separator + filename),
                 source.getBytes(StandardCharsets.UTF_8),

@@ -244,6 +244,7 @@ class MainGeneratorISpec extends Specification implements JavaHelper, JavaTestin
             notThrown(Exception)
             isPublicNotAbstract(clazz)
             hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
     }
 
     def "simple interface abstract implementation"() {
@@ -267,6 +268,7 @@ class MainGeneratorISpec extends Specification implements JavaHelper, JavaTestin
             notThrown(Exception)
             isPublicAbstract(clazz)
             hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
     }
 
     def "interface with 4 parameters implementation"() {
@@ -293,6 +295,7 @@ class MainGeneratorISpec extends Specification implements JavaHelper, JavaTestin
             notThrown(Exception)
             isPublicNotAbstract(clazz)
             hasNoTypeParameters(clazz)
+            hasDeclaredMethods(clazz)
     }
 
     def "interface with 4 parameters abstract implementation"() {

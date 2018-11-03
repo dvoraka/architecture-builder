@@ -322,6 +322,75 @@ class MainGeneratorISpec extends Specification implements JavaHelper, JavaTestin
             hasNoDeclaredMethods(clazz)
     }
 
+    def "simple class extension"() {
+        given:
+            Directory simpleClass = new Directory.DirectoryBuilder("test")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeName("dvoraka.archbuilder.test.SimpleClass")
+                    .build()
+            Directory ext = new Directory.DirectoryBuilder("test")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(simpleClass)
+                    .filename("BetterSimpleClass")
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(ext))
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
+    }
+
+    def "class 1M extension"() {
+        given:
+            Directory class1m = new Directory.DirectoryBuilder("test")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeName("dvoraka.archbuilder.test.Class1M")
+                    .build()
+            Directory ext = new Directory.DirectoryBuilder("test")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(class1m)
+                    .filename("BetterClass1M")
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(ext))
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
+    }
+
+    def "abstract class 1M extension"() {
+        given:
+            Directory abstractClass1m = new Directory.DirectoryBuilder("test")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeName("dvoraka.archbuilder.test.AbstractClass1M")
+                    .build()
+            Directory ext = new Directory.DirectoryBuilder("test")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abstractClass1m)
+                    .filename("ImplementedAbstractClass1M")
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(ext))
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasDeclaredMethods(clazz)
+    }
+
     def "timer implementation"() {
         given:
             Directory abstractTimer = new Directory.DirectoryBuilder("component")

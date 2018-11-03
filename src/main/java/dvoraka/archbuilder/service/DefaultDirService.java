@@ -1,14 +1,20 @@
 package dvoraka.archbuilder.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.Optional;
 import java.util.function.Consumer;
 
 @Service
 public class DefaultDirService implements DirService {
+
+    private ObjectMapper objectMapper;
+
 
     @Override
     public void processDirs(Directory root, Consumer<Directory> nodeProcessor, Consumer<Directory> leafProcessor) {
@@ -76,6 +82,23 @@ public class DefaultDirService implements DirService {
             return directory;
         } else {
             return getRoot(directory.getParent());
+        }
+    }
+
+    @Override
+    public String toJson(Directory directory) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(directory);
+    }
+
+    @Override
+    public Directory fromJson(String json) throws JsonProcessingException {
+        try {
+            return objectMapper.readValue(json, Directory.class);
+        } catch (JsonProcessingException e) {
+            throw e;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

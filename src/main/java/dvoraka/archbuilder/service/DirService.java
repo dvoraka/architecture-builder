@@ -1,5 +1,6 @@
 package dvoraka.archbuilder.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;
 
@@ -41,4 +42,20 @@ public interface DirService {
      * @return the root
      */
     Directory getRoot(Directory directory);
+
+    /**
+     * Converts a directory into JSON.
+     *
+     * @param directory the directory
+     * @return the JSON
+     */
+    String toJson(Directory directory) throws JsonProcessingException;
+
+    /**
+     * Loads a directory form JSON.
+     *
+     * @param json the JSON
+     * @return the directory
+     */
+    Directory fromJson(String json) throws JsonProcessingException;
 }

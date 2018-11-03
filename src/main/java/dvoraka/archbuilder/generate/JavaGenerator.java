@@ -151,12 +151,13 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         if (superType.isInterface()) {
 
             if (superType.getTypeParameters().length == 0) {
-                implementationBuilder = implementationBuilder.addSuperinterface(superType);
+                implementationBuilder = implementationBuilder
+                        .addSuperinterface(superType);
             } else { // parametrized type
-                TypeVariable<? extends Class<?>>[] typeParameters = superType.getTypeParameters();
-
-                ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName
-                        .get(superType, buildTypeArray(typeParameters, typeMapping));
+                ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(
+                        superType,
+                        buildTypeArray(superType.getTypeParameters(), typeMapping)
+                );
 
                 implementationBuilder = implementationBuilder
                         .addSuperinterface(parameterizedTypeName);
@@ -166,10 +167,10 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 implementationBuilder = implementationBuilder
                         .superclass(superType);
             } else {
-                TypeVariable<? extends Class<?>>[] typeParameters = superType.getTypeParameters();
-
-                ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName
-                        .get(superType, buildTypeArray(typeParameters, typeMapping));
+                ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(
+                        superType,
+                        buildTypeArray(superType.getTypeParameters(), typeMapping)
+                );
 
                 implementationBuilder = implementationBuilder
                         .superclass(parameterizedTypeName);
@@ -181,12 +182,10 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             implementationBuilder = implementationBuilder
                     .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
 
-            // we need to add type variables
+            // we need to add type variables from supertype
             if (directory.getParameters().isEmpty()) {
                 implementationBuilder
-                        .addTypeVariables(Stream.of(superType.getTypeParameters())
-                                .map(TypeVariableName::get)
-                                .collect(Collectors.toList()));
+                        .addTypeVariables(getTypeVariableNames(superType));
             }
         } else {
             implementationBuilder = implementationBuilder
@@ -599,6 +598,13 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         }
 
         return typeMapping;
+    }
+
+    private List<TypeVariableName> getTypeVariableNames(Class<?> clazz) {
+
+        return Stream.of(clazz.getTypeParameters())
+                .map(TypeVariableName::get)
+                .collect(Collectors.toList());
     }
 
     private void genSrcProps(Directory directory) {

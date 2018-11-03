@@ -165,11 +165,29 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName
                         .get(superType, types.toArray(new Type[0]));
 
-                implementationBuilder = implementationBuilder.addSuperinterface(parameterizedTypeName);
+                implementationBuilder = implementationBuilder
+                        .addSuperinterface(parameterizedTypeName);
             }
         } else { // supertype is class
-            implementationBuilder = implementationBuilder
-                    .superclass(superType);
+            if (superType.getTypeParameters().length == 0) {
+                implementationBuilder = implementationBuilder
+                        .superclass(superType);
+            } else {
+                TypeVariable<? extends Class<?>>[] typeParameters = superType.getTypeParameters();
+
+                // load parameter types
+                List<Type> types = new ArrayList<>();
+                for (TypeVariable<? extends Class<?>> typeVariable : typeParameters) {
+                    Type realType = typeMapping.get(typeVariable);
+                    types.add(realType);
+                }
+
+                ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName
+                        .get(superType, types.toArray(new Type[0]));
+
+                implementationBuilder = implementationBuilder
+                        .superclass(parameterizedTypeName);
+            }
         }
 
         // abstract implementation

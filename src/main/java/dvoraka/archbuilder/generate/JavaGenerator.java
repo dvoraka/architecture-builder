@@ -232,27 +232,17 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                         .build();
             } else {
                 TypeVariable<? extends Class<?>>[] typeParameters = superClass.getTypeParameters();
+
                 Map<TypeVariable, Type> typeMapping = getTypeVarMapping(directory, typeParameters);
 
-                // load parameter types
-                List<Type> types = new ArrayList<>();
-                for (TypeVariable<? extends Class<?>> typeVariable : typeParameters) {
-                    Type realType = typeMapping.get(typeVariable);
-                    types.add(realType);
-                }
-
-                ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName
-                        .get(superClass, types.toArray(new Class[0]));
-
-//                List<TypeVariableName> typeVariableNames = new ArrayList<>();
-//                for (TypeName typeArgument : parameterizedTypeName.typeArguments) {
-//                    typeVariableNames.add(TypeVariableName.get(typeArgument.toString()));
-//                }
+                ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(
+                        superClass,
+                        buildTypeArray(typeParameters, typeMapping)
+                );
 
                 serviceInterface = TypeSpec.interfaceBuilder(interfaceName)
                         .addModifiers(Modifier.PUBLIC)
                         .addSuperinterface(parameterizedTypeName)
-//                        .addTypeVariables(typeVariableNames)
                         .build();
             }
 

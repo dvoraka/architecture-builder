@@ -52,7 +52,7 @@ public interface DirService {
     String toJson(Directory directory) throws JsonProcessingException;
 
     /**
-     * Loads a directory form JSON.
+     * Loads a directory from JSON.
      *
      * @param json the JSON
      * @return the directory

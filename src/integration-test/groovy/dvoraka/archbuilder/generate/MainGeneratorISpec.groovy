@@ -373,7 +373,7 @@ class MainGeneratorISpec extends Specification implements JavaHelper, JavaTestin
             Directory abstractClass1m = new Directory.DirectoryBuilder("test")
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
-                    .typeName("dvoraka.archbuilder.test.AbstractClass1M")
+                    .typeName("dvoraka.archbuilder.test.AbstractClass1AM")
                     .build()
             Directory ext = new Directory.DirectoryBuilder("test")
                     .type(DirType.IMPL)

@@ -1,6 +1,6 @@
 package dvoraka.archbuilder.test;
 
-public abstract class AbstractClass1AM1M {
+public abstract class AbstractClass1am1m {
 
     public abstract int getData();
 

@@ -16,6 +16,9 @@ import java.nio.file.Paths
 @SpringBootTest
 class MainGeneratorISpec extends Specification implements JavaHelper, JavaTestingHelper {
 
+    //TODO: split to implementation, extension, ...
+    //TODO: create common base class
+
     @Autowired
     Generator mainGenerator
 

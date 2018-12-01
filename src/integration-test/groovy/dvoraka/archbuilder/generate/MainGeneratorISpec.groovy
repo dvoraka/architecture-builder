@@ -4,11 +4,6 @@ import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
-import spock.lang.Shared
-
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.Paths
 
 @Slf4j
 class MainGeneratorISpec extends BaseISpec {
@@ -18,37 +13,6 @@ class MainGeneratorISpec extends BaseISpec {
     @Autowired
     Generator mainGenerator
 
-    @Shared
-    String rootDirName = "testRootDir"
-
-    Directory root
-    Directory srcRoot
-    Directory srcBase
-    Directory srcBaseAbs
-
-
-    def setup() {
-        root = new Directory.DirectoryBuilder(rootDirName)
-                .type(DirType.ROOT)
-                .parent(null)
-                .build()
-        srcRoot = new Directory.DirectoryBuilder("src/main/java")
-                .type(DirType.SRC_ROOT)
-                .parent(root)
-                .build()
-        srcBase = new Directory.DirectoryBuilder("dvoraka/testapp")
-                .type(DirType.SRC_BASE)
-                .parent(srcRoot)
-                .build()
-        srcBaseAbs = new Directory.DirectoryBuilder("dvoraka/diffapp")
-                .type(DirType.SRC_BASE_ABSTRACT)
-                .parent(root)
-                .build()
-    }
-
-    def cleanup() {
-        removeFiles(rootDirName)
-    }
 
     def "test"() {
         expect:
@@ -435,20 +399,5 @@ class MainGeneratorISpec extends BaseISpec {
             isPublicNotAbstract(clazz)
             hasNoTypeParameters(clazz)
             clazz.getSuperclass() == Timer.class
-    }
-
-    void removeFiles(String rootDirName) {
-        log.debug("Cleaning up...")
-
-        Path path = Paths.get(rootDirName)
-        if (Files.notExists(path)) {
-            return
-        }
-
-        Files.walk(path)
-                .sorted(Comparator.reverseOrder())
-                .map({ p -> p.toFile() })
-                .peek({ p -> log.debug("Deleting: {}", p) })
-                .forEach({ file -> file.delete() })
     }
 }

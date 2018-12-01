@@ -4,20 +4,16 @@ import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
 import spock.lang.Shared
-import spock.lang.Specification
 
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
 @Slf4j
-@SpringBootTest
-class MainGeneratorISpec extends Specification implements JavaHelper, JavaTestingHelper {
+class MainGeneratorISpec extends BaseISpec {
 
     //TODO: split to implementation, extension, ...
-    //TODO: create common base class
 
     @Autowired
     Generator mainGenerator

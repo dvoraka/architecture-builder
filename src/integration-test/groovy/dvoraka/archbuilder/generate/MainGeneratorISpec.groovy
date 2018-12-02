@@ -285,51 +285,7 @@ class MainGeneratorISpec extends BaseISpec {
             hasNoDeclaredMethods(clazz)
     }
 
-    def "class 1M extension"() {
-        given:
-            Directory class1m = new Directory.DirectoryBuilder("test")
-                    .type(DirType.ABSTRACT)
-                    .parent(srcBase)
-                    .typeName("dvoraka.archbuilder.test.Class1m")
-                    .build()
-            Directory ext = new Directory.DirectoryBuilder("test")
-                    .type(DirType.IMPL)
-                    .parent(srcBase)
-                    .superType(class1m)
-                    .filename("BetterClass1M")
-                    .build()
-        when:
-            mainGenerator.generate(root)
-            Class<?> clazz = loadClass(getClassName(ext))
-        then:
-            notThrown(Exception)
-            isPublicNotAbstract(clazz)
-            hasNoTypeParameters(clazz)
-            hasNoDeclaredMethods(clazz)
-    }
 
-    def "abstract class 1M extension"() {
-        given:
-            Directory abstractClass1m = new Directory.DirectoryBuilder("test")
-                    .type(DirType.ABSTRACT)
-                    .parent(srcBase)
-                    .typeName("dvoraka.archbuilder.test.AbstractClass1am")
-                    .build()
-            Directory ext = new Directory.DirectoryBuilder("test")
-                    .type(DirType.IMPL)
-                    .parent(srcBase)
-                    .superType(abstractClass1m)
-                    .filename("AbstractClass1MImpl")
-                    .build()
-        when:
-            mainGenerator.generate(root)
-            Class<?> clazz = loadClass(getClassName(ext))
-        then:
-            notThrown(Exception)
-            isPublicNotAbstract(clazz)
-            hasNoTypeParameters(clazz)
-            hasDeclaredMethods(clazz)
-    }
 
     def "abstract class 1P1M extension"() {
         given:

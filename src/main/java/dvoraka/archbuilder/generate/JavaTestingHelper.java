@@ -39,4 +39,8 @@ public interface JavaTestingHelper {
     default boolean hasNoDeclaredMethods(Class<?> clazz) {
         return !hasDeclaredMethods(clazz);
     }
+
+    default int declaredMethodCount(Class<?> clazz) {
+        return clazz.getDeclaredMethods().length;
+    }
 }

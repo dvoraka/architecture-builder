@@ -107,4 +107,29 @@ class ExtensionISpec extends BaseISpec {
             hasNoTypeParameters(clazz)
             declaredMethodCount(clazz) == 1
     }
+
+    def "abstract class 1p1am abstract extension"() {
+        given:
+            Directory abs = new Directory.DirectoryBuilder("test")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeName("dvoraka.archbuilder.test.AbstractClass1p1am")
+                    .build()
+            Directory ext = new Directory.DirectoryBuilder("test")
+                    .type(DirType.IMPL)
+                    .abstractType()
+                    .parent(srcBase)
+                    .superType(abs)
+                    .parameterType("java.lang.String")
+                    .filename("AbstractClass1p1amAbs")
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(ext))
+        then:
+            notThrown(Exception)
+            isPublicAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
+    }
 }

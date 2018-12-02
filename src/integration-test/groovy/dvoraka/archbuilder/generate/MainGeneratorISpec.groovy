@@ -285,29 +285,6 @@ class MainGeneratorISpec extends BaseISpec {
             hasNoDeclaredMethods(clazz)
     }
 
-    def "simple class extension"() {
-        given:
-            Directory simpleClass = new Directory.DirectoryBuilder("test")
-                    .type(DirType.ABSTRACT)
-                    .parent(srcBase)
-                    .typeName("dvoraka.archbuilder.test.SimpleClass")
-                    .build()
-            Directory ext = new Directory.DirectoryBuilder("test")
-                    .type(DirType.IMPL)
-                    .parent(srcBase)
-                    .superType(simpleClass)
-                    .filename("BetterSimpleClass")
-                    .build()
-        when:
-            mainGenerator.generate(root)
-            Class<?> clazz = loadClass(getClassName(ext))
-        then:
-            notThrown(Exception)
-            isPublicNotAbstract(clazz)
-            hasNoTypeParameters(clazz)
-            hasNoDeclaredMethods(clazz)
-    }
-
     def "class 1M extension"() {
         given:
             Directory class1m = new Directory.DirectoryBuilder("test")

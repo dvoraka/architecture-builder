@@ -3,6 +3,7 @@ package dvoraka.archbuilder;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import dvoraka.archbuilder.generate.JavaUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -52,7 +53,7 @@ public class Directory {
             return getName();
         } else {
             String path = getParent().getPackageName() + File.separatorChar + getName();
-            return path2pkg(path);
+            return JavaUtils.path2pkg(path);
         }
     }
 
@@ -119,14 +120,6 @@ public class Directory {
 
     public String getText() {
         return text;
-    }
-
-    private String pkg2path(String packageName) {
-        return packageName.replace('.', File.separatorChar);
-    }
-
-    private String path2pkg(String packageName) {
-        return packageName.replace(File.separatorChar, '.');
     }
 
     @Override

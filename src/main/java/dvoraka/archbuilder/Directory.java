@@ -167,6 +167,10 @@ public class Directory {
             return this;
         }
 
+        public DirectoryBuilder typeClass(Class<?> clazz) {
+            return typeName(clazz.getName());
+        }
+
         public DirectoryBuilder abstractType() {
             this.abstractType = true;
             return this;

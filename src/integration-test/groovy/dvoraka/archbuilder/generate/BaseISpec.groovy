@@ -47,6 +47,11 @@ class BaseISpec extends Specification implements JavaHelper, JavaTestingHelper {
         removeFiles(rootDirName)
     }
 
+    def "test"() {
+        expect:
+            true
+    }
+
     void removeFiles(String rootDirName) {
         log.debug("Cleaning up...")
 

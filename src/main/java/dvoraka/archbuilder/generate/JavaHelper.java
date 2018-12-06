@@ -80,6 +80,16 @@ public interface JavaHelper {
         return directory.getPath() + File.separator + filename;
     }
 
+    default String defaultServiceImplName(Directory serviceImpl) {
+        return new StringBuilder()
+                .append(serviceImpl.getPackageName())
+                .append(".")
+                .append("Default")
+                .append(serviceImpl.getFilename()
+                        .orElseThrow(() -> new RuntimeException("No filename specified!")))
+                .toString();
+    }
+
     default void addClassPath(Path path) {
         try {
             Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);

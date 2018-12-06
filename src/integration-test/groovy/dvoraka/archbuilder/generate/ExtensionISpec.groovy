@@ -10,11 +10,6 @@ class ExtensionISpec extends BaseISpec {
     Generator mainGenerator
 
 
-    def "test"() {
-        expect:
-            true
-    }
-
     def "simple class extension"() {
         given:
             Directory simpleClass = new Directory.DirectoryBuilder("test")

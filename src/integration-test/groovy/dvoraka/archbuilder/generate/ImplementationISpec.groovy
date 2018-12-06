@@ -10,11 +10,6 @@ class ImplementationISpec extends BaseISpec {
     Generator mainGenerator
 
 
-    def "test"() {
-        expect:
-            true
-    }
-
     def "List implementation"() {
         given:
             Directory abstractList = new Directory.DirectoryBuilder("component")

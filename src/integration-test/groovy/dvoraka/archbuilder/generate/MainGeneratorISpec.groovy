@@ -2,6 +2,7 @@ package dvoraka.archbuilder.generate
 
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
+import dvoraka.archbuilder.test.SimpleInterface
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
 
@@ -113,6 +114,29 @@ class MainGeneratorISpec extends BaseISpec {
                     .parent(srcBase)
                     .superType(simpleInterface)
                     .filename("DefaultSimpleInterface")
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(simpleInterfaceImpl))
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
+    }
+
+    def "simple interface implementation with type class"() {
+        given:
+            Directory simpleInterface = new Directory.DirectoryBuilder("test")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeClass(SimpleInterface.class)
+                    .build()
+            Directory simpleInterfaceImpl = new Directory.DirectoryBuilder("test")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(simpleInterface)
+                    .filename("DefaultSimpleInterface2")
                     .build()
         when:
             mainGenerator.generate(root)

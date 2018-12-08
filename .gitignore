@@ -4,8 +4,4 @@ build/
 
 # IDEA
 .idea/
-*.iml
 out/
-
-# testing directory
-rootDir/

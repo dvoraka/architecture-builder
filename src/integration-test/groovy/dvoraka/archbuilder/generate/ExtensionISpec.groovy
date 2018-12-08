@@ -33,6 +33,53 @@ class ExtensionISpec extends BaseISpec {
             hasNoDeclaredMethods(clazz)
     }
 
+    def "Object abstract extension"() {
+        given:
+            Directory abstractObject = new Directory.DirectoryBuilder("component")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeName("java.lang.Object")
+                    .build()
+            Directory absObjectImpl = new Directory.DirectoryBuilder("component")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abstractObject)
+                    .abstractType()
+                    .filename("AbstractCoolObject")
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(absObjectImpl))
+        then:
+            notThrown(Exception)
+            isPublicAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
+    }
+
+    def "Object extension"() {
+        given:
+            Directory abstractObject = new Directory.DirectoryBuilder("component")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeName("java.lang.Object")
+                    .build()
+            Directory objectImpl = new Directory.DirectoryBuilder("component")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abstractObject)
+                    .filename("CoolObject")
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(objectImpl))
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
+    }
+
     def "class 1m extension"() {
         given:
             Directory class1m = new Directory.DirectoryBuilder("test")

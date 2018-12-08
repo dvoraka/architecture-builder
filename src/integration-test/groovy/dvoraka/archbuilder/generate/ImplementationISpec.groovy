@@ -2,6 +2,7 @@ package dvoraka.archbuilder.generate
 
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
+import dvoraka.archbuilder.test.SimpleInterface
 import org.springframework.beans.factory.annotation.Autowired
 
 class ImplementationISpec extends BaseISpec {
@@ -34,46 +35,22 @@ class ImplementationISpec extends BaseISpec {
             hasDeclaredMethods(clazz)
     }
 
-    def "Object abstract implementation"() {
+    def "simple interface implementation"() {
         given:
-            Directory abstractObject = new Directory.DirectoryBuilder("component")
+            Directory simpleInterface = new Directory.DirectoryBuilder("test")
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
-                    .typeName("java.lang.Object")
+                    .typeClass(SimpleInterface.class)
                     .build()
-            Directory absObjectImpl = new Directory.DirectoryBuilder("component")
+            Directory simpleInterfaceImpl = new Directory.DirectoryBuilder("test")
                     .type(DirType.IMPL)
                     .parent(srcBase)
-                    .superType(abstractObject)
-                    .abstractType()
-                    .filename("AbstractCoolObject")
+                    .superType(simpleInterface)
+                    .filename("DefaultSimpleInterface")
                     .build()
         when:
             mainGenerator.generate(root)
-            Class<?> clazz = loadClass(getClassName(absObjectImpl))
-        then:
-            notThrown(Exception)
-            isPublicAbstract(clazz)
-            hasNoTypeParameters(clazz)
-            hasNoDeclaredMethods(clazz)
-    }
-
-    def "Object implementation"() {
-        given:
-            Directory abstractObject = new Directory.DirectoryBuilder("component")
-                    .type(DirType.ABSTRACT)
-                    .parent(srcBase)
-                    .typeName("java.lang.Object")
-                    .build()
-            Directory objectImpl = new Directory.DirectoryBuilder("component")
-                    .type(DirType.IMPL)
-                    .parent(srcBase)
-                    .superType(abstractObject)
-                    .filename("CoolObject")
-                    .build()
-        when:
-            mainGenerator.generate(root)
-            Class<?> clazz = loadClass(getClassName(objectImpl))
+            Class<?> clazz = loadClass(getClassName(simpleInterfaceImpl))
         then:
             notThrown(Exception)
             isPublicNotAbstract(clazz)

@@ -55,29 +55,6 @@ class MainGeneratorISpec extends BaseISpec {
             notThrown(Exception)
     }
 
-    def "simple interface implementation"() {
-        given:
-            Directory simpleInterface = new Directory.DirectoryBuilder("test")
-                    .type(DirType.ABSTRACT)
-                    .parent(srcBase)
-                    .typeName("dvoraka.archbuilder.test.SimpleInterface")
-                    .build()
-            Directory simpleInterfaceImpl = new Directory.DirectoryBuilder("test")
-                    .type(DirType.IMPL)
-                    .parent(srcBase)
-                    .superType(simpleInterface)
-                    .filename("DefaultSimpleInterface")
-                    .build()
-        when:
-            mainGenerator.generate(root)
-            Class<?> clazz = loadClass(getClassName(simpleInterfaceImpl))
-        then:
-            notThrown(Exception)
-            isPublicNotAbstract(clazz)
-            hasNoTypeParameters(clazz)
-            hasNoDeclaredMethods(clazz)
-    }
-
     def "simple interface implementation with type class"() {
         given:
             Directory simpleInterface = new Directory.DirectoryBuilder("test")

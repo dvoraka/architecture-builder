@@ -90,7 +90,7 @@ class ExtensionISpec extends BaseISpec {
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
-                    .parameterType("java.lang.String")
+                    .parameterTypeName("java.lang.String")
                     .filename("AbstractClass1p1amImpl")
                     .build()
         when:
@@ -115,7 +115,7 @@ class ExtensionISpec extends BaseISpec {
                     .abstractType()
                     .parent(srcBase)
                     .superType(abs)
-                    .parameterType("java.lang.String")
+                    .parameterTypeName("java.lang.String")
                     .filename("AbstractClass1p1amAbs")
                     .build()
         when:

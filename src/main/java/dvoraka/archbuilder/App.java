@@ -123,8 +123,8 @@ public class App {
                     .parent(srcBase)
                     .superType(abstractMapService)
                     .filename("CoolMapService")
-                    .parameterType("java.lang.String")
-                    .parameterType("java.lang.Long")
+                    .parameterTypeName("java.lang.String")
+                    .parameterTypeName("java.lang.Long")
                     .build();
 
             Directory rfService = new Directory.DirectoryBuilder("service")
@@ -132,7 +132,7 @@ public class App {
                     .parent(srcBase)
                     .superType(abstractRFService)
                     .filename("RFService")
-                    .parameterType("java.lang.String")
+                    .parameterTypeName("java.lang.String")
                     .build();
 
             //
@@ -155,7 +155,7 @@ public class App {
                     .parent(srcBase)
                     .superType(abstractList)
                     .filename("CoolList")
-                    .parameterType("java.lang.Integer")
+                    .parameterTypeName("java.lang.Integer")
                     .build();
 
             Directory objectImpl = new Directory.DirectoryBuilder("component")
@@ -179,10 +179,10 @@ public class App {
                     .parent(srcBase)
                     .superType(interface4p)
                     .filename("DefaultInterface4P")
-                    .parameterType("java.lang.String")
-                    .parameterType("java.lang.Long")
-                    .parameterType("java.lang.Boolean")
-                    .parameterType("dvoraka.archbuilder.test.SimpleInterface")
+                    .parameterTypeName("java.lang.String")
+                    .parameterTypeName("java.lang.Long")
+                    .parameterTypeName("java.lang.Boolean")
+                    .parameterTypeName("dvoraka.archbuilder.test.SimpleInterface")
                     .build();
 
             Directory timerImpl = new Directory.DirectoryBuilder("componentAux")

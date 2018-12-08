@@ -202,9 +202,13 @@ public class Directory {
             return this;
         }
 
-        public DirectoryBuilder parameterType(String className) {
+        public DirectoryBuilder parameterTypeName(String className) {
             parameters.add(className);
             return this;
+        }
+
+        public DirectoryBuilder parameterTypeClass(Class<?> clazz) {
+            return parameterTypeName(clazz.getName());
         }
 
         public Directory build() {

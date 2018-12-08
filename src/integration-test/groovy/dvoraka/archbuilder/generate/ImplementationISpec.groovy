@@ -22,7 +22,7 @@ class ImplementationISpec extends BaseISpec {
                     .parent(srcBase)
                     .superType(abstractList)
                     .filename("CoolList")
-                    .parameterType("java.lang.Integer")
+                    .parameterTypeName("java.lang.Integer")
                     .build()
         when:
             mainGenerator.generate(root)

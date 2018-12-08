@@ -14,7 +14,9 @@ public class MicroserviceTemplate {
 
     public MicroserviceTemplate(
             String rootDirName,
-            String packageName // example.something with later substitution
+            String packageName,// example.something with later substitution
+            Class<?> superService,
+            String serviceName
     ) {
         root = new Directory.DirectoryBuilder(rootDirName)
                 .type(DirType.ROOT)
@@ -41,16 +43,16 @@ public class MicroserviceTemplate {
         Directory abstractService = new Directory.DirectoryBuilder("service")
                 .type(DirType.SERVICE_ABSTRACT)
                 .parent(srcBaseAbs)
-                .typeName("java.util.Map")
+                .typeClass(superService)
                 .build();
 
         Directory service = new Directory.DirectoryBuilder("service")
                 .type(DirType.SERVICE)
                 .parent(srcBase)
                 .superType(abstractService)
-                .filename("CoolMapService")
-                .parameterType("java.lang.String")
-                .parameterType("java.lang.Long")
+                .filename(serviceName)
+                .parameterTypeName("java.lang.String")
+                .parameterTypeName("java.lang.Long")
                 .build();
 
         Directory serviceImpl = new Directory.DirectoryBuilder("service")

@@ -55,53 +55,6 @@ class MainGeneratorISpec extends BaseISpec {
             notThrown(Exception)
     }
 
-    def "runnable future service implementation"() {
-        given:
-            Directory abstractRFService = new Directory.DirectoryBuilder("service")
-                    .type(DirType.SERVICE_ABSTRACT)
-                    .parent(srcBaseAbs)
-                    .typeName("java.util.concurrent.RunnableFuture")
-                    .build()
-            Directory rfService = new Directory.DirectoryBuilder("service")
-                    .type(DirType.SERVICE)
-                    .parent(srcBase)
-                    .superType(abstractRFService)
-                    .filename("RFService")
-                    .parameterTypeName("java.lang.String")
-                    .build()
-            Directory rfService1Impl = new Directory.DirectoryBuilder("service2")
-                    .type(DirType.SERVICE_IMPL)
-                    .parent(srcBase)
-                    .superType(rfService)
-                    .build()
-        when:
-            mainGenerator.generate(root)
-        then:
-            notThrown(Exception)
-    }
-
-    def "object implementation"() {
-        given:
-            Directory abstractObject = new Directory.DirectoryBuilder("component")
-                    .type(DirType.ABSTRACT)
-                    .parent(srcBase)
-                    .typeName("java.lang.Object")
-                    .build()
-            Directory objectImpl = new Directory.DirectoryBuilder("component")
-                    .type(DirType.IMPL)
-                    .parent(srcBase)
-                    .superType(abstractObject)
-                    .filename("CoolObject")
-                    .build()
-        when:
-            mainGenerator.generate(root)
-            Class<?> clazz = loadClass(getClassName(objectImpl))
-        then:
-            notThrown(Exception)
-            isPublicNotAbstract(clazz)
-            hasNoTypeParameters(clazz)
-    }
-
     def "simple interface implementation"() {
         given:
             Directory simpleInterface = new Directory.DirectoryBuilder("test")

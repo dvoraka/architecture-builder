@@ -7,6 +7,8 @@ import dvoraka.archbuilder.Directory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -100,5 +102,13 @@ public class DefaultDirService implements DirService {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public Path getFilePath(Directory directory) {
+        return Paths.get(directory.getPath()
+                + "/"
+                + directory.getFilename().orElseThrow(RuntimeException::new)
+        );
     }
 }

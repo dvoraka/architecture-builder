@@ -2,10 +2,10 @@ package dvoraka.archbuilder.generate
 
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
+import dvoraka.archbuilder.service.DirService
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
 
-import static dvoraka.archbuilder.generate.JavaUtils.getFilePath
 import static java.nio.file.Files.exists
 
 @Slf4j
@@ -13,6 +13,8 @@ class MainGeneratorISpec extends BaseISpec {
 
     @Autowired
     Generator mainGenerator
+    @Autowired
+    DirService dirService
 
 
     def "abstract Map service"() {
@@ -53,6 +55,6 @@ class MainGeneratorISpec extends BaseISpec {
             mainGenerator.generate(root)
         then:
             notThrown(Exception)
-            exists(getFilePath(srcProps))
+            exists(dirService.getFilePath(srcProps))
     }
 }

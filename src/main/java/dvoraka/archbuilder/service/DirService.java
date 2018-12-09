@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;
 
+import java.nio.file.Path;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -58,4 +59,6 @@ public interface DirService {
      * @return the directory
      */
     Directory fromJson(String json) throws JsonProcessingException;
+
+    Path getFilePath(Directory directory);
 }

@@ -1,10 +1,6 @@
 package dvoraka.archbuilder.generate;
 
-import dvoraka.archbuilder.Directory;
-
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public final class JavaUtils {
 
@@ -23,12 +19,5 @@ public final class JavaUtils {
 
     public static String path2pkg(String path) {
         return path.replace(File.separatorChar, '.');
-    }
-
-    public static Path getFilePath(Directory directory) {
-        return Paths.get(directory.getPath()
-                + "/"
-                + directory.getFilename().orElseThrow(RuntimeException::new)
-        );
     }
 }

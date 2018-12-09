@@ -2,14 +2,11 @@ package dvoraka.archbuilder.generate
 
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
-import dvoraka.archbuilder.test.SimpleInterface
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
 
 @Slf4j
 class MainGeneratorISpec extends BaseISpec {
-
-    //TODO: split to implementation, extension, ...
 
     @Autowired
     Generator mainGenerator
@@ -53,80 +50,6 @@ class MainGeneratorISpec extends BaseISpec {
             mainGenerator.generate(root)
         then:
             notThrown(Exception)
-    }
-
-    def "simple interface implementation with type class"() {
-        given:
-            Directory simpleInterface = new Directory.DirectoryBuilder("test")
-                    .type(DirType.ABSTRACT)
-                    .parent(srcBase)
-                    .typeClass(SimpleInterface.class)
-                    .build()
-            Directory simpleInterfaceImpl = new Directory.DirectoryBuilder("test")
-                    .type(DirType.IMPL)
-                    .parent(srcBase)
-                    .superType(simpleInterface)
-                    .filename("DefaultSimpleInterface2")
-                    .build()
-        when:
-            mainGenerator.generate(root)
-            Class<?> clazz = loadClass(getClassName(simpleInterfaceImpl))
-        then:
-            notThrown(Exception)
-            isPublicNotAbstract(clazz)
-            hasNoTypeParameters(clazz)
-            hasNoDeclaredMethods(clazz)
-    }
-
-    def "simple interface abstract implementation"() {
-        given:
-            Directory simpleInterface = new Directory.DirectoryBuilder("test")
-                    .type(DirType.ABSTRACT)
-                    .parent(srcBase)
-                    .typeName("dvoraka.archbuilder.test.SimpleInterface")
-                    .build()
-            Directory simpleInterfaceImpl = new Directory.DirectoryBuilder("test")
-                    .type(DirType.IMPL)
-                    .parent(srcBase)
-                    .superType(simpleInterface)
-                    .abstractType()
-                    .filename("AbstractSimpleInterface")
-                    .build()
-        when:
-            mainGenerator.generate(root)
-            Class<?> clazz = loadClass(getClassName(simpleInterfaceImpl))
-        then:
-            notThrown(Exception)
-            isPublicAbstract(clazz)
-            hasNoTypeParameters(clazz)
-            hasNoDeclaredMethods(clazz)
-    }
-
-    def "interface with 4 parameters implementation"() {
-        given:
-            Directory interface4p = new Directory.DirectoryBuilder("test")
-                    .type(DirType.ABSTRACT)
-                    .parent(srcBase)
-                    .typeName("dvoraka.archbuilder.test.Interface4p1m")
-                    .build()
-            Directory interface4pImpl = new Directory.DirectoryBuilder("test")
-                    .type(DirType.IMPL)
-                    .parent(srcBase)
-                    .superType(interface4p)
-                    .filename("DefaultInterface4P")
-                    .parameterTypeName("java.lang.String")
-                    .parameterTypeName("java.lang.Long")
-                    .parameterTypeName("java.lang.Boolean")
-                    .parameterTypeName("dvoraka.archbuilder.test.SimpleInterface")
-                    .build()
-        when:
-            mainGenerator.generate(root)
-            Class<?> clazz = loadClass(getClassName(interface4pImpl))
-        then:
-            notThrown(Exception)
-            isPublicNotAbstract(clazz)
-            hasNoTypeParameters(clazz)
-            hasDeclaredMethods(clazz)
     }
 
     def "interface with 4 parameters abstract implementation"() {

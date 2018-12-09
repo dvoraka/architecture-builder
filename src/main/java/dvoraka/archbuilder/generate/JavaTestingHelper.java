@@ -1,6 +1,7 @@
 package dvoraka.archbuilder.generate;
 
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 
 public interface JavaTestingHelper {
 
@@ -40,7 +41,9 @@ public interface JavaTestingHelper {
         return !hasDeclaredMethods(clazz);
     }
 
-    default int declaredMethodCount(Class<?> clazz) {
-        return clazz.getDeclaredMethods().length;
+    default long declaredMethodCount(Class<?> clazz) {
+        return Arrays.stream(clazz.getDeclaredMethods())
+                .filter(method -> !method.isSynthetic())
+                .count();
     }
 }

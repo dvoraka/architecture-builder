@@ -12,7 +12,7 @@ class MainGeneratorISpec extends BaseISpec {
     Generator mainGenerator
 
 
-    def "abstract map service"() {
+    def "abstract Map service"() {
         given:
             Directory abstractMapService = new Directory.DirectoryBuilder("service")
                     .type(DirType.SERVICE_ABSTRACT)
@@ -25,7 +25,7 @@ class MainGeneratorISpec extends BaseISpec {
             notThrown(Exception)
     }
 
-    def "abstract list"() {
+    def "abstract List"() {
         given:
             Directory abstractList = new Directory.DirectoryBuilder("component")
                     .type(DirType.ABSTRACT)
@@ -50,52 +50,5 @@ class MainGeneratorISpec extends BaseISpec {
             mainGenerator.generate(root)
         then:
             notThrown(Exception)
-    }
-
-    def "interface with 4 parameters abstract implementation"() {
-        given:
-            Directory interface4p = new Directory.DirectoryBuilder("test")
-                    .type(DirType.ABSTRACT)
-                    .parent(srcBase)
-                    .typeName("dvoraka.archbuilder.test.Interface4p1m")
-                    .build()
-            Directory interface4pImpl = new Directory.DirectoryBuilder("test")
-                    .type(DirType.IMPL)
-                    .parent(srcBase)
-                    .superType(interface4p)
-                    .filename("AbstractInterface4P")
-                    .abstractType()
-                    .build()
-        when:
-            mainGenerator.generate(root)
-            Class<?> clazz = loadClass(getClassName(interface4pImpl))
-        then:
-            notThrown(Exception)
-            isPublicAbstract(clazz)
-            hasTypeParameters(clazz)
-            hasNoDeclaredMethods(clazz)
-    }
-
-    def "timer implementation"() {
-        given:
-            Directory abstractTimer = new Directory.DirectoryBuilder("component")
-                    .type(DirType.ABSTRACT)
-                    .parent(srcBase)
-                    .typeName("java.util.Timer")
-                    .build()
-            Directory timerImpl = new Directory.DirectoryBuilder("componentAux")
-                    .type(DirType.IMPL)
-                    .parent(srcBase)
-                    .superType(abstractTimer)
-                    .filename("CoolTimer")
-                    .build()
-        when:
-            mainGenerator.generate(root)
-            Class<?> clazz = loadClass(getClassName(timerImpl))
-        then:
-            notThrown(Exception)
-            isPublicNotAbstract(clazz)
-            hasNoTypeParameters(clazz)
-            clazz.getSuperclass() == Timer.class
     }
 }

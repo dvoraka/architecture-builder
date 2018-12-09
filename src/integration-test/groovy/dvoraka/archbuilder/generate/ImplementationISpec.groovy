@@ -131,4 +131,28 @@ class ImplementationISpec extends BaseISpec {
             hasNoTypeParameters(clazz)
             hasDeclaredMethods(clazz)
     }
+
+    def "interface with 4 parameters abstract implementation"() {
+        given:
+            Directory interface4p = new Directory.DirectoryBuilder("test")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeName("dvoraka.archbuilder.test.Interface4p1m")
+                    .build()
+            Directory interface4pImpl = new Directory.DirectoryBuilder("test")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(interface4p)
+                    .filename("AbstractInterface4P")
+                    .abstractType()
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(interface4pImpl))
+        then:
+            notThrown(Exception)
+            isPublicAbstract(clazz)
+            hasTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
+    }
 }

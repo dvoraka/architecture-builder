@@ -80,6 +80,30 @@ class ExtensionISpec extends BaseISpec {
             hasNoDeclaredMethods(clazz)
     }
 
+    def "Timer extension"() {
+        given:
+            Directory abstractTimer = new Directory.DirectoryBuilder("component")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeName("java.util.Timer")
+                    .build()
+            Directory timerImpl = new Directory.DirectoryBuilder("componentAux")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abstractTimer)
+                    .filename("CoolTimer")
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(timerImpl))
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
+            clazz.getSuperclass() == Timer.class
+    }
+
     def "class 1m extension"() {
         given:
             Directory class1m = new Directory.DirectoryBuilder("test")

@@ -5,6 +5,8 @@ import dvoraka.archbuilder.Directory
 import dvoraka.archbuilder.test.SimpleInterface
 import org.springframework.beans.factory.annotation.Autowired
 
+import java.util.concurrent.RunnableFuture
+
 class ImplementationISpec extends BaseISpec {
 
     @Autowired
@@ -33,6 +35,31 @@ class ImplementationISpec extends BaseISpec {
             isPublicNotAbstract(clazz)
             hasNoTypeParameters(clazz)
             hasDeclaredMethods(clazz)
+    }
+
+    def "RunnableFuture abstract implementation"() {
+        given:
+            Directory abstractRF = new Directory.DirectoryBuilder("component")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeClass(RunnableFuture.class)
+                    .build()
+            Directory rfImpl = new Directory.DirectoryBuilder("component")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .abstractType()
+                    .superType(abstractRF)
+                    .filename("AbstractRFImpl")
+                    .parameterTypeClass(Integer.class)
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(rfImpl))
+        then:
+            notThrown(Exception)
+            isPublicAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
     }
 
     def "simple interface implementation"() {

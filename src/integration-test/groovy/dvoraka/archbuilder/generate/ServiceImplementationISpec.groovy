@@ -25,14 +25,14 @@ class ServiceImplementationISpec extends BaseISpec {
                     .parameterTypeName("java.lang.String")
                     .parameterTypeName("java.lang.Long")
                     .build()
-            Directory mapService1Impl = new Directory.DirectoryBuilder("service")
+            Directory mapServiceImpl = new Directory.DirectoryBuilder("service")
                     .type(DirType.SERVICE_IMPL)
                     .parent(srcBase)
                     .superType(mapService)
                     .build()
         when:
             mainGenerator.generate(root)
-            Class<?> clazz = loadClass(defaultServiceImplName(mapService1Impl))
+            Class<?> clazz = loadClass(defaultServiceImplName(mapService))
         then:
             notThrown(Exception)
             isPublicNotAbstract(clazz)

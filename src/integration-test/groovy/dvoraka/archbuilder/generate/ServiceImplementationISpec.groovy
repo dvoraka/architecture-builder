@@ -40,7 +40,7 @@ class ServiceImplementationISpec extends BaseISpec {
             hasDeclaredMethods(clazz)
     }
 
-    def "runnable future service implementation"() {
+    def "RunnableFuture service implementation"() {
         given:
             Directory abstractRFService = new Directory.DirectoryBuilder("service")
                     .type(DirType.SERVICE_ABSTRACT)

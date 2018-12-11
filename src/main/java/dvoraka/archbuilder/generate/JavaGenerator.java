@@ -585,6 +585,17 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
                 typeMapping.put(typeVariables[index], type);
             }
+
+            // RunnableFuture test fix (it needs to map all type variables)
+//            Class<?> future = loadClass("java.util.concurrent.Future");
+//            typeVariables = future.getTypeParameters();
+//            for (int index = 0; index < typeVariables.length; index++) { // index won't work
+//
+//                String className = directory.getParameters().get(index);
+//                Type type = loadClass(className);
+//
+//                typeMapping.put(typeVariables[index], type);
+//            }
         }
 
         return typeMapping;

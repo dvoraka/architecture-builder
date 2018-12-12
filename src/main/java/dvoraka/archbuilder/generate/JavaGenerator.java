@@ -586,6 +586,9 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 //TODO:
                 // we need to find all interfaces and add them to mapping as well
                 //
+                if (directory.getSuperType().isPresent()) {
+                    Directory superDir = directory.getSuperType().get();
+                }
 
                 typeMapping.put(typeVariables[index], clazz);
             }

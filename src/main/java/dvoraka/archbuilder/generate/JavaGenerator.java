@@ -128,7 +128,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         if (superType.getTypeParameters().length == 0) {
             typeMapping = new HashMap<>();
         } else {
-            typeMapping = getTypeVarMapping(directory, superType.getTypeParameters());
+            typeMapping = getTypeVarMapping(directory, superType);
         }
 
         List<Method> allMethods;
@@ -233,7 +233,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             } else {
                 TypeVariable<? extends Class<?>>[] typeParameters = superClass.getTypeParameters();
 
-                Map<TypeVariable, Type> typeMapping = getTypeVarMapping(directory, typeParameters);
+                Map<TypeVariable, Type> typeMapping = getTypeVarMapping(directory, superClass);
 
                 ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(
                         superClass,
@@ -288,10 +288,10 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         Directory paramDir;
         if (directory.getParameters().isEmpty()) {
             paramDir = superDir;
-            typeMapping = getTypeVarMapping(paramDir, superSuperClass.getTypeParameters());
+            typeMapping = getTypeVarMapping(paramDir, superSuperClass);
         } else {
             paramDir = directory;
-            typeMapping = getTypeVarMapping(paramDir, superClass.getTypeParameters());
+            typeMapping = getTypeVarMapping(paramDir, superClass);
         }
 
         // find all methods from the super type
@@ -561,10 +561,10 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         return types.toArray(new Type[0]);
     }
 
-    private Map<TypeVariable, Type> getTypeVarMapping(
-            Directory directory,
-            TypeVariable<? extends Class<?>>[] typeVariables
-    ) throws ClassNotFoundException {
+    private Map<TypeVariable, Type> getTypeVarMapping(Directory directory, Class<?> clazz)
+            throws ClassNotFoundException {
+
+        TypeVariable<? extends Class<?>>[] typeVariables = clazz.getTypeParameters();
 
         // check type variable and parameter counts
         if (typeVariables.length != directory.getParameters().size() && !directory.isAbstractType()) {
@@ -581,7 +581,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             for (int index = 0; index < typeVariables.length; index++) {
 
                 String className = directory.getParameters().get(index);
-                Class<?> clazz = loadClass(className);
+                Class<?> varClass = loadClass(className);
 
                 //TODO:
                 // we need to find all interfaces and add them to mapping as well
@@ -590,7 +590,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                     Directory superDir = directory.getSuperType().get();
                 }
 
-                typeMapping.put(typeVariables[index], clazz);
+                typeMapping.put(typeVariables[index], varClass);
             }
 
             // RunnableFuture test fix (it needs to map all type variables)

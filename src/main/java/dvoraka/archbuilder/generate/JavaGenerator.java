@@ -581,9 +581,13 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             for (int index = 0; index < typeVariables.length; index++) {
 
                 String className = directory.getParameters().get(index);
-                Type type = loadClass(className);
+                Class<?> clazz = loadClass(className);
 
-                typeMapping.put(typeVariables[index], type);
+                //TODO:
+                // we need to find all interfaces and add them to mapping as well
+                //
+
+                typeMapping.put(typeVariables[index], clazz);
             }
 
             // RunnableFuture test fix (it needs to map all type variables)

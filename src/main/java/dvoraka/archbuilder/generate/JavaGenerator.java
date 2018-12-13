@@ -586,8 +586,25 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 //TODO:
                 // we need to find all interfaces and add them to mapping as well
                 //
-                if (directory.getSuperType().isPresent()) {
-                    Directory superDir = directory.getSuperType().get();
+                if (clazz.getGenericInterfaces().length != 0) {
+                    Type[] interfaces = clazz.getGenericInterfaces();
+                    for (Type iface : interfaces) {
+
+                        if (iface instanceof ParameterizedType) {
+
+                            ParameterizedType parType = ((ParameterizedType) iface);
+
+                            Type[] actualTypeArguments = parType.getActualTypeArguments();
+
+                            Type rawType = parType.getRawType();
+                            if (rawType instanceof Class) {
+
+                                Class<?> rawClass = ((Class) rawType);
+
+                                TypeVariable<? extends Class<?>>[] srcTypeParameters = rawClass.getTypeParameters();
+                            }
+                        }
+                    }
                 }
 
                 typeMapping.put(typeVariables[index], varClass);

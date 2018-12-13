@@ -591,37 +591,25 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 if (iface instanceof ParameterizedType) {
                     ParameterizedType paramType = ((ParameterizedType) iface);
 
-                    Type[] actualTypeArguments = paramType.getActualTypeArguments();
-                    for (Type actualArg : actualTypeArguments) {
+                    Type[] actualTypeArgs = paramType.getActualTypeArguments();
+                    for (Type actualTypeArg : actualTypeArgs) {
 
-                        if (actualArg instanceof TypeVariable) {
-                            TypeVariable typeVariable = (TypeVariable) actualArg;
+                        if (actualTypeArg instanceof TypeVariable) {
+                            TypeVariable actualVar = (TypeVariable) actualTypeArg;
 
                             Type rawType = paramType.getRawType();
                             if (rawType instanceof Class) {
                                 Class<?> rawClass = ((Class) rawType);
 
-                                TypeVariable<? extends Class<?>>[] srcTypeParameters = rawClass.getTypeParameters();
-                                for (TypeVariable<? extends Class<?>> srcTypeParameter : srcTypeParameters) {
-                                    Type type = typeMapping.get(typeVariable);
-                                    typeMapping.put(srcTypeParameter, type);
+                                TypeVariable<? extends Class<?>>[] srcTypeParams = rawClass.getTypeParameters();
+                                for (TypeVariable<? extends Class<?>> srcTypeParam : srcTypeParams) {
+                                    typeMapping.put(srcTypeParam, typeMapping.get(actualVar));
                                 }
                             }
                         }
                     }
                 }
             }
-
-            // RunnableFuture test fix (it needs to map all type variables)
-//            Class<?> future = loadClass("java.util.concurrent.Future");
-//            typeVariables = future.getTypeParameters();
-//            for (int index = 0; index < typeVariables.length; index++) { // index won't work
-//
-//                String className = directory.getParameters().get(index);
-//                Type type = loadClass(className);
-//
-//                typeMapping.put(typeVariables[index], type);
-//            }
         }
 
         return typeMapping;

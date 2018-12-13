@@ -583,31 +583,37 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 String className = directory.getParameters().get(index);
                 Class<?> varClass = loadClass(className);
 
-                //TODO:
-                // we need to find all interfaces and add them to mapping as well
-                //
-                if (clazz.getGenericInterfaces().length != 0) {
-                    Type[] interfaces = clazz.getGenericInterfaces();
-                    for (Type iface : interfaces) {
+                typeMapping.put(typeVariables[index], varClass);
+            }
 
-                        if (iface instanceof ParameterizedType) {
+            //TODO:
+            if (clazz.getGenericInterfaces().length != 0) {
 
-                            ParameterizedType parType = ((ParameterizedType) iface);
+                Type[] interfaces = clazz.getGenericInterfaces();
+                for (Type iface : interfaces) {
 
-                            Type[] actualTypeArguments = parType.getActualTypeArguments();
+                    if (iface instanceof ParameterizedType) {
+                        ParameterizedType paramType = ((ParameterizedType) iface);
 
-                            Type rawType = parType.getRawType();
-                            if (rawType instanceof Class) {
+                        Type[] actualTypeArguments = paramType.getActualTypeArguments();
+                        for (Type arg : actualTypeArguments) {
 
-                                Class<?> rawClass = ((Class) rawType);
+                            if (arg instanceof TypeVariable) {
+                                TypeVariable typeVariable = (TypeVariable) arg;
 
-                                TypeVariable<? extends Class<?>>[] srcTypeParameters = rawClass.getTypeParameters();
+                                Type rawType = paramType.getRawType();
+                                if (rawType instanceof Class) {
+                                    Class<?> rawClass = ((Class) rawType);
+
+                                    TypeVariable<? extends Class<?>>[] srcTypeParameters = rawClass.getTypeParameters();
+
+                                    Type type = typeMapping.get(arg);
+                                    typeMapping.put(srcTypeParameters[0], type);
+                                }
                             }
                         }
                     }
                 }
-
-                typeMapping.put(typeVariables[index], varClass);
             }
 
             // RunnableFuture test fix (it needs to map all type variables)

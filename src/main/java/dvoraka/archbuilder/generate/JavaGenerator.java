@@ -586,29 +586,25 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 typeMapping.put(typeVariables[index], varClass);
             }
 
-            //TODO:
-            if (clazz.getGenericInterfaces().length != 0) {
+            for (Type iface : clazz.getGenericInterfaces()) {
 
-                Type[] interfaces = clazz.getGenericInterfaces();
-                for (Type iface : interfaces) {
+                if (iface instanceof ParameterizedType) {
+                    ParameterizedType paramType = ((ParameterizedType) iface);
 
-                    if (iface instanceof ParameterizedType) {
-                        ParameterizedType paramType = ((ParameterizedType) iface);
+                    Type[] actualTypeArguments = paramType.getActualTypeArguments();
+                    for (Type actualArg : actualTypeArguments) {
 
-                        Type[] actualTypeArguments = paramType.getActualTypeArguments();
-                        for (Type arg : actualTypeArguments) {
+                        if (actualArg instanceof TypeVariable) {
+                            TypeVariable typeVariable = (TypeVariable) actualArg;
 
-                            if (arg instanceof TypeVariable) {
-                                TypeVariable typeVariable = (TypeVariable) arg;
+                            Type rawType = paramType.getRawType();
+                            if (rawType instanceof Class) {
+                                Class<?> rawClass = ((Class) rawType);
 
-                                Type rawType = paramType.getRawType();
-                                if (rawType instanceof Class) {
-                                    Class<?> rawClass = ((Class) rawType);
-
-                                    TypeVariable<? extends Class<?>>[] srcTypeParameters = rawClass.getTypeParameters();
-
-                                    Type type = typeMapping.get(arg);
-                                    typeMapping.put(srcTypeParameters[0], type);
+                                TypeVariable<? extends Class<?>>[] srcTypeParameters = rawClass.getTypeParameters();
+                                for (TypeVariable<? extends Class<?>> srcTypeParameter : srcTypeParameters) {
+                                    Type type = typeMapping.get(typeVariable);
+                                    typeMapping.put(srcTypeParameter, type);
                                 }
                             }
                         }

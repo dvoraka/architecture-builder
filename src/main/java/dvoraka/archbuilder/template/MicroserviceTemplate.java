@@ -60,5 +60,12 @@ public class MicroserviceTemplate {
                 .parent(srcBase)
                 .superType(service)
                 .build();
+
+        Directory srcProps = new Directory.DirectoryBuilder("src/main/resources")
+                .type(DirType.SRC_PROPERTIES)
+                .parent(root)
+                .filename("application.properties")
+                .text("prop1=value\nprop2=value2\n")
+                .build();
     }
 }

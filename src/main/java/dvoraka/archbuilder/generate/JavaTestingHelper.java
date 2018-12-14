@@ -1,7 +1,13 @@
 package dvoraka.archbuilder.generate;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Modifier;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Comparator;
 
 public interface JavaTestingHelper {
 
@@ -45,5 +51,20 @@ public interface JavaTestingHelper {
         return Arrays.stream(clazz.getDeclaredMethods())
                 .filter(method -> !method.isSynthetic())
                 .count();
+    }
+
+    default void removeFiles(String rootDirName) throws IOException {
+//        log.debug("Cleaning up...");
+
+        Path path = Paths.get(rootDirName);
+        if (Files.notExists(path)) {
+            return;
+        }
+
+        Files.walk(path)
+                .sorted(Comparator.reverseOrder())
+                .map(Path::toFile)
+//                .peek(p -> log.debug("Deleting: {}", p))
+                .forEach(File::delete);
     }
 }

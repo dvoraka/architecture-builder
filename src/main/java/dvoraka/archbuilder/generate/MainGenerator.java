@@ -35,6 +35,8 @@ public class MainGenerator implements Generator {
     @Override
     public void generate(Directory directory) {
 
+        //TODO: remove compiled classes after generation
+
 //        dirService.findByType(DirType.IMPL, directory).ifPresent(langGenerator::generate);
 //        System.exit(0);
 

@@ -22,25 +22,29 @@ class MicroserviceTemplateISpec extends Specification implements JavaTestingHelp
     def setup() {
     }
 
-    def cleanup() {
-//        removeFiles(rootDirName)
-    }
-
     def "test"() {
         expect:
             true
     }
 
     def "create microservice"() {
-        setup:
+        given:
+            String rootDirName = "testing-service"
             MicroserviceTemplate template = new MicroserviceTemplate(
-                    "testing-service",
-                    "test.service",
+                    rootDirName,
+                    "test.testservice",
                     ServiceInterface2p.class,
                     "TestingService"
             )
 
-        expect:
+        when:
+            mainGenerator.generate(template.getRootDirectory())
+
+        then:
+            true
+
+        cleanup:
+            removeFiles(rootDirName)
             true
     }
 }

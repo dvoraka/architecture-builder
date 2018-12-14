@@ -4,7 +4,7 @@ import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;
 import dvoraka.archbuilder.generate.JavaUtils;
 
-public class MicroserviceTemplate {
+public class MicroserviceTemplate implements Template {
 
     private Directory root;
     private Directory srcRoot;
@@ -67,5 +67,10 @@ public class MicroserviceTemplate {
                 .filename("application.properties")
                 .text("prop1=value\nprop2=value2\n")
                 .build();
+    }
+
+    @Override
+    public Directory getRootDirectory() {
+        return root;
     }
 }

@@ -1,6 +1,9 @@
 package dvoraka.archbuilder.template
 
+import dvoraka.archbuilder.DirType
+import dvoraka.archbuilder.Directory
 import dvoraka.archbuilder.generate.Generator
+import dvoraka.archbuilder.generate.JavaHelper
 import dvoraka.archbuilder.generate.JavaTestingHelper
 import dvoraka.archbuilder.service.DirService
 import dvoraka.archbuilder.test.ServiceInterface2p
@@ -11,7 +14,7 @@ import spock.lang.Specification
 
 @Slf4j
 @SpringBootTest
-class MicroserviceTemplateISpec extends Specification implements JavaTestingHelper {
+class MicroserviceTemplateISpec extends Specification implements JavaHelper, JavaTestingHelper {
 
     @Autowired
     Generator mainGenerator
@@ -29,19 +32,36 @@ class MicroserviceTemplateISpec extends Specification implements JavaTestingHelp
 
     def "create microservice"() {
         given:
-            String rootDirName = "testing-service"
+            String rootDirName = 'testing-service'
+            String serviceName = 'TestingService'
+
             MicroserviceTemplate template = new MicroserviceTemplate(
                     rootDirName,
                     "test.testservice",
                     ServiceInterface2p.class,
-                    "TestingService"
+                    serviceName
             )
+            Directory rootDir = template.getRootDirectory()
 
         when:
             mainGenerator.generate(template.getRootDirectory())
 
         then:
-            true
+            exists(DirType.SERVICE, rootDir, dirService)
+            exists(DirType.SERVICE_ABSTRACT, rootDir, dirService)
+            exists(DirType.SERVICE_IMPL, rootDir, dirService)
+
+            exists(DirType.SRC_PROPERTIES, rootDir, dirService)
+
+        when:
+            Directory serviceImplDir = dirService.findByType(DirType.SERVICE_IMPL, rootDir)
+                    .get()
+            Directory serviceDir = dirService.findByType(DirType.SERVICE, rootDir)
+                    .get()
+            Class<?> serviceImplClass = loadClass(defaultServiceImplName(serviceDir))
+
+        then:
+            serviceImplClass.getSimpleName() == 'Default' + serviceName
 
         cleanup:
             removeFiles(rootDirName)

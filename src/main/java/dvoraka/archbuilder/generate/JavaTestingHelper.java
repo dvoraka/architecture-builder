@@ -1,5 +1,9 @@
 package dvoraka.archbuilder.generate;
 
+import dvoraka.archbuilder.DirType;
+import dvoraka.archbuilder.Directory;
+import dvoraka.archbuilder.service.DirService;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
@@ -66,5 +70,10 @@ public interface JavaTestingHelper {
                 .map(Path::toFile)
 //                .peek(p -> log.debug("Deleting: {}", p))
                 .forEach(File::delete);
+    }
+
+    default boolean exists(DirType dirType, Directory directory, DirService dirService) {
+        return dirService.findByType(dirType, directory)
+                .isPresent();
     }
 }

@@ -33,11 +33,12 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
     def "create microservice"() {
         given:
             String rootDirName = 'testing-service'
+            String packageName = 'test.abcd'
             String serviceName = 'TestingService'
 
             MicroserviceTemplate template = new MicroserviceTemplate(
                     rootDirName,
-                    "test.testservice",
+                    packageName,
                     ServiceInterface2p.class,
                     serviceName
             )
@@ -62,6 +63,7 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
 
         then:
             serviceImplClass.getSimpleName() == 'Default' + serviceName
+            serviceImplClass.getName() == defaultServiceImplName(serviceDir)
 
         cleanup:
             removeFiles(rootDirName)

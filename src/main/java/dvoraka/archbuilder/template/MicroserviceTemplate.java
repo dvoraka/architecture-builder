@@ -4,6 +4,8 @@ import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;
 import dvoraka.archbuilder.generate.JavaUtils;
 
+import java.util.List;
+
 public class MicroserviceTemplate implements Template {
 
     private Directory root;
@@ -14,8 +16,9 @@ public class MicroserviceTemplate implements Template {
 
     public MicroserviceTemplate(
             String rootDirName,
-            String packageName,// example.something with later substitution
+            String packageName,
             Class<?> superService,
+            List<Class> typeArguments,
             String serviceName
     ) {
         root = new Directory.DirectoryBuilder(rootDirName)
@@ -46,13 +49,15 @@ public class MicroserviceTemplate implements Template {
                 .typeClass(superService)
                 .build();
 
-        Directory service = new Directory.DirectoryBuilder("service")
+        Directory.DirectoryBuilder serviceBuilder = new Directory.DirectoryBuilder("service")
                 .type(DirType.SERVICE)
                 .parent(srcBase)
                 .superType(abstractService)
-                .filename(serviceName)
-                .parameterTypeName("java.lang.String")
-                .parameterTypeName("java.lang.Long")
+                .filename(serviceName);
+        for (Class<?> typeArgument : typeArguments) {
+            serviceBuilder.parameterTypeClass(typeArgument);
+        }
+        Directory service = serviceBuilder
                 .build();
 
         Directory serviceImpl = new Directory.DirectoryBuilder("service")

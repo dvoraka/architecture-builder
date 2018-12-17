@@ -40,7 +40,8 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
                     rootDirName,
                     packageName,
                     ServiceInterface2p.class,
-                    serviceName
+                    Arrays.asList(String.class, Long.class),
+                    serviceName,
             )
             Directory rootDir = template.getRootDirectory()
 

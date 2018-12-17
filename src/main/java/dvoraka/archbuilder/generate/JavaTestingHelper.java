@@ -6,6 +6,7 @@ import dvoraka.archbuilder.service.DirService;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -75,5 +76,16 @@ public interface JavaTestingHelper {
     default boolean exists(DirType dirType, Directory directory, DirService dirService) {
         return dirService.findByType(dirType, directory)
                 .isPresent();
+    }
+
+    /**
+     * For a simple no-arg constructor and method.
+     */
+    default Object runMethod(Class<?> clazz, String methodName)
+            throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+
+        Object instance = clazz.newInstance();
+
+        return clazz.getDeclaredMethod(methodName).invoke(instance);
     }
 }

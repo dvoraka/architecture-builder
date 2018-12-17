@@ -30,13 +30,12 @@ class ImplementationISpec extends BaseISpec {
         when:
             mainGenerator.generate(root)
             Class<?> clazz = loadClass(getClassName(listImpl))
-            Object instance = clazz.newInstance()
         then:
             notThrown(Exception)
             isPublicNotAbstract(clazz)
             hasNoTypeParameters(clazz)
             hasDeclaredMethods(clazz)
-            clazz.getDeclaredMethod("size").invoke(instance) == 0
+            runMethod(clazz, "size") == 0
     }
 
     def "RunnableFuture abstract implementation"() {

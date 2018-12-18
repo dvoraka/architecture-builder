@@ -8,6 +8,8 @@ import java.util.List;
 
 public class MicroserviceTemplate implements Template {
 
+    public static final String JAVA_SRC_DIR = "src/main/java";
+
     private Directory root;
     private Directory srcRoot;
     private Directory srcBase;
@@ -26,7 +28,7 @@ public class MicroserviceTemplate implements Template {
                 .parent(null)
                 .build();
 
-        srcRoot = new Directory.DirectoryBuilder("src/main/java") // replace
+        srcRoot = new Directory.DirectoryBuilder(JAVA_SRC_DIR)
                 .type(DirType.SRC_ROOT)
                 .parent(root)
                 .build();

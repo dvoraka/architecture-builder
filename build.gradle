@@ -35,6 +35,10 @@ dependencies {
     // JavaPoet
     compile('com.squareup:javapoet:1.11.1')
 
+    // Lombok
+    compileOnly('org.projectlombok:lombok')
+    annotationProcessor('org.projectlombok:lombok')
+
     // Testing
     // Spring testing
     testCompile('org.springframework.boot:spring-boot-starter-test')

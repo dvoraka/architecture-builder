@@ -58,6 +58,7 @@ public interface JavaTestingHelper {
                 .count();
     }
 
+    //TODO: move to anywhere with a logger (JavaTestingUtils?)
     default void removeFiles(String rootDirName) throws IOException {
 //        log.debug("Cleaning up...");
 

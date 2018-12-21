@@ -76,6 +76,10 @@ task integrationTest(type: Test) {
     mustRunAfter test
 }
 
+tasks.withType(JavaCompile) {
+    options.compilerArgs << "-Xlint:all"
+}
+
 wrapper {
     gradleVersion = '5.0'
     distributionType = Wrapper.DistributionType.ALL

@@ -7,10 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import spock.lang.Shared
 import spock.lang.Specification
 
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.Paths
-
 @Slf4j
 @SpringBootTest
 class BaseISpec extends Specification implements JavaHelper, JavaTestingHelper {
@@ -53,17 +49,6 @@ class BaseISpec extends Specification implements JavaHelper, JavaTestingHelper {
     }
 
     void removeFiles(String rootDirName) {
-        log.debug("Cleaning up...")
-
-        Path path = Paths.get(rootDirName)
-        if (Files.notExists(path)) {
-            return
-        }
-
-        Files.walk(path)
-                .sorted(Comparator.reverseOrder())
-                .map({ p -> p.toFile() })
-                .peek({ p -> log.debug("Deleting: {}", p) })
-                .forEach({ file -> file.delete() })
+        Utils.removeFiles(rootDirName)
     }
 }

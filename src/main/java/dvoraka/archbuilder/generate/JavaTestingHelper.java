@@ -63,7 +63,7 @@ public interface JavaTestingHelper {
     default Object runMethod(Class<?> clazz, String methodName)
             throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
 
-        Object instance = clazz.newInstance();
+        Object instance = clazz.getConstructor().newInstance();
 
         return clazz.getDeclaredMethod(methodName).invoke(instance);
     }

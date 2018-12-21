@@ -1,0 +1,26 @@
+@startuml
+
+title Microservice with a broker
+
+interface "message broker" as broker
+database DB as db
+
+package "microservice" {
+    [server] as server
+    [service] as service
+    [data service] as dservice
+    [network component] as ncomponent
+}
+
+broker -- ncomponent
+ncomponent <--> server
+
+server <-left-> service
+server --> dservice
+
+service <- dservice
+
+service -- db
+dservice -- db
+
+@enduml

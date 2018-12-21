@@ -20,7 +20,7 @@ public class MicroserviceTemplate implements Template {
             String rootDirName,
             String packageName,
             Class<?> superService,
-            List<Class> typeArguments,
+            List<Class<?>> typeArguments,
             String serviceName
     ) {
         root = new Directory.DirectoryBuilder(rootDirName)

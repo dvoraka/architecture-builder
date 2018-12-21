@@ -124,7 +124,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 .getTypeName());
 
         // check type parameters
-        Map<TypeVariable, Type> typeMapping;
+        Map<TypeVariable<?>, Type> typeMapping;
         if (superType.getTypeParameters().length == 0) {
             typeMapping = new HashMap<>();
         } else {
@@ -233,7 +233,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             } else {
                 TypeVariable<? extends Class<?>>[] typeParameters = superClass.getTypeParameters();
 
-                Map<TypeVariable, Type> typeMapping = getTypeVarMapping(directory, superClass);
+                Map<TypeVariable<?>, Type> typeMapping = getTypeVarMapping(directory, superClass);
 
                 ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(
                         superClass,
@@ -284,7 +284,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         Class<?> superClass = loadClass(getClassName(superDir));
 
         // check parameter count and save type parameters
-        Map<TypeVariable, Type> typeMapping;
+        Map<TypeVariable<?>, Type> typeMapping;
         Directory paramDir;
         if (directory.getParameters().isEmpty()) {
             paramDir = superDir;
@@ -326,7 +326,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         }
     }
 
-    private List<MethodSpec> genMethodSpecs(List<Method> methods, Map<TypeVariable, Type> typeMapping) {
+    private List<MethodSpec> genMethodSpecs(List<Method> methods, Map<TypeVariable<?>, Type> typeMapping) {
 
         List<MethodSpec> methodSpecs = new ArrayList<>();
 
@@ -406,7 +406,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 ParameterSpec parameterSpec;
                 if (parameter.getParameterizedType() instanceof TypeVariable) {
 
-                    TypeVariable typeVar = ((TypeVariable) parameter.getParameterizedType());
+                    TypeVariable<?> typeVar = ((TypeVariable) parameter.getParameterizedType());
                     Type realType = typeMapping.get(typeVar);
                     parameterSpec = ParameterSpec.builder(realType, parameter.getName())
                             .build();
@@ -475,7 +475,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
     private ParameterizedTypeName resolveParametrizedType(
             ParameterizedType type,
-            Map<TypeVariable, Type> varTypeMapping
+            Map<TypeVariable<?>, Type> varTypeMapping
     ) {
         Class<?> rawClass = (Class) type.getRawType();
 
@@ -550,7 +550,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
     private Type[] buildTypeArray(
             TypeVariable<? extends Class<?>>[] typeParameters,
-            Map<TypeVariable, Type> typeMapping
+            Map<TypeVariable<?>, Type> typeMapping
     ) {
         List<Type> types = new ArrayList<>();
         for (TypeVariable<? extends Class<?>> typeVariable : typeParameters) {
@@ -561,7 +561,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         return types.toArray(new Type[0]);
     }
 
-    private Map<TypeVariable, Type> getTypeVarMapping(Directory directory, Class<?> clazz)
+    private Map<TypeVariable<?>, Type> getTypeVarMapping(Directory directory, Class<?> clazz)
             throws ClassNotFoundException {
 
         TypeVariable<? extends Class<?>>[] typeVariables = clazz.getTypeParameters();
@@ -571,7 +571,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             throw new RuntimeException("Bad type parameter count.");
         }
 
-        Map<TypeVariable, Type> typeMapping = new HashMap<>();
+        Map<TypeVariable<?>, Type> typeMapping = new HashMap<>();
         if (directory.isAbstractType() && directory.getParameters().isEmpty()) {
             // just copy type variables
             for (TypeVariable<? extends Class<?>> typeVariable : typeVariables) {
@@ -595,7 +595,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                     for (Type actualTypeArg : actualTypeArgs) {
 
                         if (actualTypeArg instanceof TypeVariable) {
-                            TypeVariable actualVar = (TypeVariable) actualTypeArg;
+                            TypeVariable<?> actualVar = (TypeVariable) actualTypeArg;
 
                             Type rawType = paramType.getRawType();
                             if (rawType instanceof Class) {

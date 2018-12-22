@@ -37,8 +37,8 @@ dependencies {
     compile('com.squareup:javapoet:1.11.1')
 
     // Lombok
-    compileOnly('org.projectlombok:lombok')
-    annotationProcessor('org.projectlombok:lombok')
+//    compileOnly('org.projectlombok:lombok')
+//    annotationProcessor('org.projectlombok:lombok')
 
     // Testing
     // Spring testing
@@ -86,4 +86,5 @@ wrapper {
     distributionType = Wrapper.DistributionType.ALL
 }
 
+//check.dependsOn integrationTest
 check.dependsOn jacocoTestReport

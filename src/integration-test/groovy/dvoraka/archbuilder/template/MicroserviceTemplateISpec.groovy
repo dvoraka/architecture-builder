@@ -5,6 +5,7 @@ import dvoraka.archbuilder.Directory
 import dvoraka.archbuilder.generate.Generator
 import dvoraka.archbuilder.generate.JavaHelper
 import dvoraka.archbuilder.generate.JavaTestingHelper
+import dvoraka.archbuilder.generate.Utils
 import dvoraka.archbuilder.service.DirService
 import dvoraka.archbuilder.test.ServiceInterface2p
 import groovy.util.logging.Slf4j
@@ -67,7 +68,7 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
             serviceImplClass.getName() == defaultServiceImplName(serviceDir)
 
         cleanup:
-            removeFiles(rootDirName)
+            Utils.removeFiles(rootDirName)
             true
     }
 }

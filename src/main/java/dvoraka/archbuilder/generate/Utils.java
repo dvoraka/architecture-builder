@@ -1,6 +1,7 @@
 package dvoraka.archbuilder.generate;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,8 +10,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
 
-@Slf4j
 public final class Utils {
+
+    private final static Logger log = LoggerFactory.getLogger(Utils.class);
+
 
     private Utils() {
     }

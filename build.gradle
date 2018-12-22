@@ -81,6 +81,14 @@ tasks.withType(JavaCompile) {
     options.compilerArgs << "-Xlint:all"
 }
 
+jacocoTestReport {
+    getExecutionData().setFrom(fileTree(dir: 'build/jacoco', include: '**/*.exec'))
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+}
+
 wrapper {
     gradleVersion = '5.0'
     distributionType = Wrapper.DistributionType.ALL

@@ -86,5 +86,5 @@ wrapper {
     distributionType = Wrapper.DistributionType.ALL
 }
 
-//check.dependsOn integrationTest
+check.dependsOn integrationTest
 check.dependsOn jacocoTestReport

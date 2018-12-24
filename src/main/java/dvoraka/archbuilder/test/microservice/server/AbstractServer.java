@@ -1,4 +1,6 @@
-package dvoraka.archbuilder.test.microservice;
+package dvoraka.archbuilder.test.microservice.server;
+
+import dvoraka.archbuilder.test.microservice.Management;
 
 public abstract class AbstractServer implements Management {
 

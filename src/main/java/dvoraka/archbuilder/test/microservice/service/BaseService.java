@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.test.microservice;
+package dvoraka.archbuilder.test.microservice.service;
 
 public interface BaseService {
 

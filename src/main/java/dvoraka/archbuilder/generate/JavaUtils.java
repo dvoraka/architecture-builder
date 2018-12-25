@@ -1,5 +1,7 @@
 package dvoraka.archbuilder.generate;
 
+import dvoraka.archbuilder.Directory;
+
 import java.io.File;
 
 public final class JavaUtils {
@@ -19,5 +21,10 @@ public final class JavaUtils {
 
     public static String path2pkg(String path) {
         return path.replace(File.separatorChar, '.');
+    }
+
+    public static String getClassName(Directory directory) {
+        return directory.getPackageName() + "." + directory.getFilename()
+                .orElseThrow(() -> new RuntimeException("No filename!"));
     }
 }

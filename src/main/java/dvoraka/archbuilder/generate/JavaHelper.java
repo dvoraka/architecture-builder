@@ -72,8 +72,7 @@ public interface JavaHelper {
     }
 
     default String getClassName(Directory directory) {
-        return directory.getPackageName() + "." + directory.getFilename()
-                .orElseThrow(() -> new RuntimeException("No filename!"));
+        return JavaUtils.getClassName(directory);
     }
 
     default String getPathString(Directory directory, String filename) {

@@ -7,7 +7,7 @@ import dvoraka.archbuilder.generate.JavaHelper
 import dvoraka.archbuilder.generate.JavaTestingHelper
 import dvoraka.archbuilder.generate.Utils
 import dvoraka.archbuilder.service.DirService
-import dvoraka.archbuilder.test.ServiceInterface2p
+import dvoraka.archbuilder.test.microservice.service.BaseService
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -34,14 +34,14 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
     def "create microservice"() {
         given:
             String rootDirName = 'testing-service'
-            String packageName = 'test.abcd'
+            String packageName = 'test.microservice'
             String serviceName = 'TestingService'
 
             MicroserviceTemplate template = new MicroserviceTemplate(
                     rootDirName,
                     packageName,
-                    ServiceInterface2p.class,
-                    Arrays.asList(String.class, Long.class),
+                    BaseService.class,
+                    Collections.emptyList(),
                     serviceName,
             )
             Directory rootDir = template.getRootDirectory()

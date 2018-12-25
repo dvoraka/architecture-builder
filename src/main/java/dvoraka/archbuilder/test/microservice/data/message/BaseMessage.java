@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.test.microservice.data;
+package dvoraka.archbuilder.test.microservice.data.message;
 
 import java.time.Instant;
 import java.util.UUID;

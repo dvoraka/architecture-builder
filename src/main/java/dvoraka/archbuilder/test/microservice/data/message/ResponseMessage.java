@@ -1,6 +1,7 @@
-package dvoraka.archbuilder.test.microservice.data;
+package dvoraka.archbuilder.test.microservice.data.message;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import dvoraka.archbuilder.test.microservice.data.ResultData;
 
 import static java.util.Objects.requireNonNull;
 

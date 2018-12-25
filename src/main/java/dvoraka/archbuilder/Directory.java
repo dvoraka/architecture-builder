@@ -211,6 +211,11 @@ public class Directory {
             return parameterTypeName(clazz.getName());
         }
 
+        public DirectoryBuilder parameterTypeDir(Directory directory) {
+            dependsOn(directory);
+            return parameterTypeName(JavaUtils.getClassName(directory));
+        }
+
         public Directory build() {
             Directory directory = new Directory();
             directory.name = this.name;

@@ -80,9 +80,8 @@ public class MicroserviceTemplate implements Template {
                 .type(DirType.IMPL)
                 .parent(srcBase)
                 .superType(requestMessageAbs)
-                .parameterTypeName(JavaUtils.getClassName(service))
+                .parameterTypeDir(service)
                 .filename(messageName)
-                .dependsOn(service)
                 .build();
 
         Directory srcProps = new Directory.DirectoryBuilder("src/main/resources")

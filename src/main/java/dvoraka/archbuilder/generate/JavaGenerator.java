@@ -23,7 +23,6 @@ import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
@@ -38,6 +37,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -636,13 +636,8 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
     private boolean isConstructorNeeded(Class<?> superClass) {
 
-        for (Constructor<?> declaredConstructor : superClass.getDeclaredConstructors()) {
-            if (declaredConstructor.getParameterCount() == 0) {
-                return false;
-            }
-        }
-
-        return true;
+        return Arrays.stream(superClass.getDeclaredConstructors())
+                .noneMatch(constructor -> constructor.getParameterCount() == 0);
     }
 
     private Class<?> loadNonCpClass(Path path) {

@@ -23,6 +23,7 @@ import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
@@ -631,6 +632,17 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean isConstructorNeeded(Class<?> superClass) {
+
+        for (Constructor<?> declaredConstructor : superClass.getDeclaredConstructors()) {
+            if (declaredConstructor.getParameterCount() == 0) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private Class<?> loadNonCpClass(Path path) {

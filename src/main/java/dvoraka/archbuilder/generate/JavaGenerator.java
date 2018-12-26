@@ -12,6 +12,7 @@ import com.squareup.javapoet.WildcardTypeName;
 import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;
 import dvoraka.archbuilder.service.DirService;
+import dvoraka.archbuilder.test.microservice.data.ResultData;
 import dvoraka.archbuilder.util.ByteClassLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -140,6 +141,17 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         }
 
         List<MethodSpec> methodSpecs = genMethodSpecs(allMethods, typeMapping);
+        //TODO
+        if (isConstructorNeeded(superType)) {
+            MethodSpec constructor = MethodSpec.constructorBuilder()
+                    .addModifiers(Modifier.PUBLIC)
+                    .addParameter(String.class, "a")
+                    .addParameter(ResultData.class, "b")
+                    .addStatement("super(a, b)")
+                    .build();
+
+//            methodSpecs.add(constructor);
+        }
 
         String name = directory.getFilename()
                 .orElse(superType.getSimpleName() + "Impl");
@@ -178,8 +190,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             }
         }
 
-        // abstract implementation
-        if (directory.isAbstractType()) {
+        if (directory.isAbstractType()) { // abstract
             implementationBuilder = implementationBuilder
                     .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
 
@@ -188,7 +199,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 implementationBuilder
                         .addTypeVariables(getTypeVariableNames(superType));
             }
-        } else {
+        } else { // not abstract
             implementationBuilder = implementationBuilder
                     .addModifiers(Modifier.PUBLIC);
         }

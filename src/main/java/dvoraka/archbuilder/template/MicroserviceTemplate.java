@@ -3,7 +3,9 @@ package dvoraka.archbuilder.template;
 import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;
 import dvoraka.archbuilder.generate.JavaUtils;
+import dvoraka.archbuilder.test.microservice.data.ResultData;
 import dvoraka.archbuilder.test.microservice.data.message.RequestMessage;
+import dvoraka.archbuilder.test.microservice.data.message.ResponseMessage;
 
 import java.util.List;
 
@@ -75,13 +77,29 @@ public class MicroserviceTemplate implements Template {
                 .typeClass(RequestMessage.class)
                 .build();
 
-        String messageName = "TestMessage";
+        String requestMessageName = serviceName + "Message";
         Directory requestMessage = new Directory.DirectoryBuilder("data/message")
                 .type(DirType.IMPL)
                 .parent(srcBase)
                 .superType(requestMessageAbs)
                 .parameterTypeDir(service)
-                .filename(messageName)
+                .filename(requestMessageName)
+                .build();
+
+        Directory responseMessageAbs = new Directory.DirectoryBuilder("")
+                .type(DirType.ABSTRACT)
+                .parent(srcBase)
+                .typeClass(ResponseMessage.class)
+                .build();
+
+        String responseMessageName = serviceName + "ResponseMessage";
+        //TODO: constructor generation
+        Directory responseMessage = new Directory.DirectoryBuilder("data/message")
+                .type(DirType.IMPL)
+                .parent(srcBase)
+                .superType(responseMessageAbs)
+                .parameterTypeClass(ResultData.class)
+                .filename(responseMessageName)
                 .build();
 
         Directory srcProps = new Directory.DirectoryBuilder("src/main/resources")

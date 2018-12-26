@@ -3,6 +3,7 @@ package dvoraka.archbuilder.generate;
 import dvoraka.archbuilder.Directory;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -104,5 +105,16 @@ public interface JavaHelper {
 
     default RuntimeException noSuperTypeException() {
         return new RuntimeException("No super type specified!");
+    }
+
+    default boolean isConstructorNeeded(Class<?> superClass) {
+
+        Constructor<?>[] declaredConstructors = superClass.getDeclaredConstructors();
+        if (declaredConstructors.length == 0) {
+            return false;
+        }
+
+        return Arrays.stream(declaredConstructors)
+                .noneMatch(constructor -> constructor.getParameterCount() == 0);
     }
 }

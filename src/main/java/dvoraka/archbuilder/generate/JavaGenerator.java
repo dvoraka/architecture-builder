@@ -645,12 +645,6 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         }
     }
 
-    private boolean isConstructorNeeded(Class<?> superClass) {
-
-        return Arrays.stream(superClass.getDeclaredConstructors())
-                .noneMatch(constructor -> constructor.getParameterCount() == 0);
-    }
-
     private Class<?> loadNonCpClass(Path path) {
         return new ByteClassLoader(this.getClass().getClassLoader()).loadClass(path);
     }

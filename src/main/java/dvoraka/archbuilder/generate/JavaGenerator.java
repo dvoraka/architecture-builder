@@ -24,6 +24,7 @@ import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
@@ -38,7 +39,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -143,14 +143,8 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         List<MethodSpec> methodSpecs = genMethodSpecs(allMethods, typeMapping);
         //TODO
         if (isConstructorNeeded(superType)) {
-            MethodSpec constructor = MethodSpec.constructorBuilder()
-                    .addModifiers(Modifier.PUBLIC)
-                    .addParameter(String.class, "a")
-                    .addParameter(ResultData.class, "b")
-                    .addStatement("super(a, b)")
-                    .build();
+            List<MethodSpec> constructorSpecs = genConstructorSpecs(superType, typeMapping);
 
-//            methodSpecs.add(constructor);
         }
 
         String name = directory.getFilename()
@@ -483,6 +477,28 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         }
 
         return methodSpecs;
+    }
+
+    private List<MethodSpec> genConstructorSpecs(Class<?> superClass, Map<TypeVariable<?>, Type> typeMapping) {
+
+        Constructor<?>[] declaredConstructors = superClass.getDeclaredConstructors();
+        List<MethodSpec> constructorSpecs = new ArrayList<>();
+        for (Constructor<?> constructor : declaredConstructors) {
+
+            int modifiers = constructor.getModifiers();
+            Type[] genericParameterTypes = constructor.getGenericParameterTypes();
+
+            MethodSpec constructorSpec = MethodSpec.constructorBuilder()
+                    .addModifiers(Modifier.PUBLIC)
+                    .addParameter(String.class, "a")
+                    .addParameter(ResultData.class, "b")
+                    .addStatement("super(a, b)")
+                    .build();
+
+            constructorSpecs.add(constructorSpec);
+        }
+
+        return constructorSpecs;
     }
 
     private ParameterizedTypeName resolveParametrizedType(

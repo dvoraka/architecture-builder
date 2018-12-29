@@ -405,33 +405,8 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             }
 
             // parameters
-            List<ParameterSpec> parameterSpecs = new ArrayList<>();
-            Parameter[] parameters = method.getParameters();
-            for (Parameter parameter : parameters) {
-
-                ParameterSpec parameterSpec;
-                if (parameter.getParameterizedType() instanceof TypeVariable) {
-
-                    TypeVariable<?> typeVar = ((TypeVariable) parameter.getParameterizedType());
-                    Type realType = typeMapping.get(typeVar);
-                    parameterSpec = ParameterSpec.builder(realType, parameter.getName())
-                            .build();
-                } else if (parameter.getParameterizedType() instanceof ParameterizedType) {
-
-                    ParameterizedTypeName parameterizedTypeName = resolveParametrizedType(
-                            ((ParameterizedType) parameter.getParameterizedType()),
-                            typeMapping
-                    );
-                    parameterSpec = ParameterSpec.builder(parameterizedTypeName, parameter.getName())
-                            .build();
-                } else {
-
-                    parameterSpec = ParameterSpec.builder(parameter.getParameterizedType(), parameter.getName())
-                            .build();
-                }
-
-                parameterSpecs.add(parameterSpec);
-            }
+            List<ParameterSpec> parameterSpecs =
+                    genParameterSpecs(method.getParameters(), typeMapping);
 
             // exceptions
             Type[] exceptions = method.getGenericExceptionTypes();
@@ -514,9 +489,35 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         return constructorSpecs;
     }
 
-    private List<ParameterSpec> genParameterSpecs(Type[] parameterTypes, Map<TypeVariable<?>, Type> typeMapping) {
-        //TODO
-        return null;
+    private List<ParameterSpec> genParameterSpecs(Parameter[] parameters, Map<TypeVariable<?>, Type> typeMapping) {
+
+        List<ParameterSpec> parameterSpecs = new ArrayList<>();
+        for (Parameter parameter : parameters) {
+
+            ParameterSpec parameterSpec;
+            if (parameter.getParameterizedType() instanceof TypeVariable) {
+
+                TypeVariable<?> typeVar = ((TypeVariable) parameter.getParameterizedType());
+                Type realType = typeMapping.get(typeVar);
+                parameterSpec = ParameterSpec.builder(realType, parameter.getName())
+                        .build();
+            } else if (parameter.getParameterizedType() instanceof ParameterizedType) {
+
+                ParameterizedTypeName parameterizedTypeName = resolveParametrizedType(
+                        ((ParameterizedType) parameter.getParameterizedType()),
+                        typeMapping
+                );
+                parameterSpec = ParameterSpec.builder(parameterizedTypeName, parameter.getName())
+                        .build();
+            } else {
+                parameterSpec = ParameterSpec.builder(parameter.getParameterizedType(), parameter.getName())
+                        .build();
+            }
+
+            parameterSpecs.add(parameterSpec);
+        }
+
+        return parameterSpecs;
     }
 
     private ParameterizedTypeName resolveParametrizedType(

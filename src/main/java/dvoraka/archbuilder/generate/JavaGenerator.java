@@ -12,7 +12,6 @@ import com.squareup.javapoet.WildcardTypeName;
 import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;
 import dvoraka.archbuilder.service.DirService;
-import dvoraka.archbuilder.test.microservice.data.ResultData;
 import dvoraka.archbuilder.util.ByteClassLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -141,10 +140,10 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         }
 
         List<MethodSpec> methodSpecs = genMethodSpecs(allMethods, typeMapping);
-        //TODO
+
         if (isConstructorNeeded(superType)) {
             List<MethodSpec> constructorSpecs = genConstructorSpecs(superType, typeMapping);
-
+            methodSpecs.addAll(constructorSpecs);
         }
 
         String name = directory.getFilename()
@@ -470,17 +469,17 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 constructorModifier = Modifier.DEFAULT;
             }
 
-            //TODO: same code as for method specs
-            Type[] genericParameterTypes = constructor.getGenericParameterTypes();
-            List<ParameterSpec> parameterSpecs = new ArrayList<>();
-            for (Type genericParameterType : genericParameterTypes) {
-            }
+            Parameter[] parameters = constructor.getParameters();
+            List<ParameterSpec> parameterSpecs = genParameterSpecs(parameters, typeMapping);
+
+            String[] argNames = parameterSpecs.stream()
+                    .map(parameterSpec -> parameterSpec.name)
+                    .toArray(String[]::new);
 
             MethodSpec constructorSpec = MethodSpec.constructorBuilder()
                     .addModifiers(constructorModifier)
-                    .addParameter(String.class, "a")
-                    .addParameter(ResultData.class, "b")
-                    .addStatement("super(a, b)")
+                    .addParameters(parameterSpecs)
+                    .addStatement(String.format("super(%s, %s)", argNames))
                     .build();
 
             constructorSpecs.add(constructorSpec);

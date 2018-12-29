@@ -486,10 +486,23 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         for (Constructor<?> constructor : declaredConstructors) {
 
             int modifiers = constructor.getModifiers();
+            Modifier constructorModifier;
+            if (isPublic(modifiers)) {
+                constructorModifier = Modifier.PUBLIC;
+            } else if (isProtected(modifiers)) {
+                constructorModifier = Modifier.PROTECTED;
+            } else {
+                constructorModifier = Modifier.DEFAULT;
+            }
+
+            //TODO: same code as for method specs
             Type[] genericParameterTypes = constructor.getGenericParameterTypes();
+            List<ParameterSpec> parameterSpecs = new ArrayList<>();
+            for (Type genericParameterType : genericParameterTypes) {
+            }
 
             MethodSpec constructorSpec = MethodSpec.constructorBuilder()
-                    .addModifiers(Modifier.PUBLIC)
+                    .addModifiers(constructorModifier)
                     .addParameter(String.class, "a")
                     .addParameter(ResultData.class, "b")
                     .addStatement("super(a, b)")
@@ -499,6 +512,11 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         }
 
         return constructorSpecs;
+    }
+
+    private List<ParameterSpec> genParameterSpecs(Type[] parameterTypes, Map<TypeVariable<?>, Type> typeMapping) {
+        //TODO
+        return null;
     }
 
     private ParameterizedTypeName resolveParametrizedType(

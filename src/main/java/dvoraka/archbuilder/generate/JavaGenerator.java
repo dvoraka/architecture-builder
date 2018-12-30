@@ -19,8 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.lang.model.element.Modifier;
-import javax.tools.JavaCompiler;
-import javax.tools.ToolProvider;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -30,8 +28,6 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -46,8 +42,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.lang.reflect.Modifier.isAbstract;
 import static java.lang.reflect.Modifier.isFinal;
@@ -488,25 +482,6 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         return constructorSpecs;
     }
 
-    private String buildSuperString(String[] argNames) {
-        if (argNames == null || argNames.length == 0) {
-            throw new IllegalArgumentException();
-        }
-
-        StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append("super(");
-        for (int i = 0; i < argNames.length; i++) {
-            stringBuilder.append("%s");
-            if (i != (argNames.length - 1)) { // not last
-                stringBuilder.append(", ");
-            }
-        }
-        stringBuilder.append(")");
-
-        return stringBuilder.toString();
-    }
-
     private List<ParameterSpec> genParameterSpecs(Parameter[] parameters, Map<TypeVariable<?>, Type> typeMapping) {
 
         List<ParameterSpec> parameterSpecs = new ArrayList<>();
@@ -613,19 +588,6 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         return parameterizedTypeName;
     }
 
-    private Type[] buildTypeArray(
-            TypeVariable<? extends Class<?>>[] typeParameters,
-            Map<TypeVariable<?>, Type> typeMapping
-    ) {
-        List<Type> types = new ArrayList<>();
-        for (TypeVariable<? extends Class<?>> typeVariable : typeParameters) {
-            Type realType = typeMapping.get(typeVariable);
-            types.add(realType);
-        }
-
-        return types.toArray(new Type[0]);
-    }
-
     private Map<TypeVariable<?>, Type> getTypeVarMapping(Directory directory, Class<?> clazz)
             throws ClassNotFoundException {
 
@@ -680,13 +642,6 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         return typeMapping;
     }
 
-    private List<TypeVariableName> getTypeVariableNames(Class<?> clazz) {
-
-        return Stream.of(clazz.getTypeParameters())
-                .map(TypeVariableName::get)
-                .collect(Collectors.toList());
-    }
-
     private void genSrcProps(Directory directory) {
         String filename = directory.getFilename()
                 .orElseThrow(() -> new RuntimeException("No filename for source properties!"));
@@ -711,34 +666,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
         if (filename.endsWith(".java")) {
-            compileSource(getPathString(directory, filename));
+            JavaUtils.compileSource(getPathString(directory, filename));
         }
-    }
-
-    private int compileSource(String pathString) {
-        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        log.info("Compiling source: {}...", pathString);
-
-        // build a classpath string for the compiler
-        URL[] urls = ((URLClassLoader) ClassLoader.getSystemClassLoader()).getURLs();
-        StringBuilder cp = new StringBuilder();
-        for (URL url : urls) {
-            cp.append(url.getPath());
-            cp.append(File.pathSeparator);
-        }
-
-        int exitCode = compiler.run(
-                null,
-                null,
-                null,
-                "-cp", cp.toString(),
-                pathString
-        );
-
-        if (exitCode == 0) {
-            log.info("Compilation OK");
-        }
-
-        return exitCode;
     }
 }

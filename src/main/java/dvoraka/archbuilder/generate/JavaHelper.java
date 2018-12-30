@@ -1,5 +1,6 @@
 package dvoraka.archbuilder.generate;
 
+import com.squareup.javapoet.TypeVariableName;
 import dvoraka.archbuilder.Directory;
 
 import java.io.File;
@@ -14,8 +15,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public interface JavaHelper {
 
@@ -116,5 +121,44 @@ public interface JavaHelper {
 
         return Arrays.stream(declaredConstructors)
                 .noneMatch(constructor -> constructor.getParameterCount() == 0);
+    }
+
+    default List<TypeVariableName> getTypeVariableNames(Class<?> clazz) {
+
+        return Stream.of(clazz.getTypeParameters())
+                .map(TypeVariableName::get)
+                .collect(Collectors.toList());
+    }
+
+    default String buildSuperString(String[] argNames) {
+        if (argNames == null || argNames.length == 0) {
+            throw new IllegalArgumentException();
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("super(");
+        for (int i = 0; i < argNames.length; i++) {
+            stringBuilder.append("%s");
+            if (i != (argNames.length - 1)) { // not last
+                stringBuilder.append(", ");
+            }
+        }
+        stringBuilder.append(")");
+
+        return stringBuilder.toString();
+    }
+
+    default Type[] buildTypeArray(
+            TypeVariable<? extends Class<?>>[] typeParameters,
+            Map<TypeVariable<?>, Type> typeMapping
+    ) {
+        List<Type> types = new ArrayList<>();
+        for (TypeVariable<? extends Class<?>> typeVariable : typeParameters) {
+            Type realType = typeMapping.get(typeVariable);
+            types.add(realType);
+        }
+
+        return types.toArray(new Type[0]);
     }
 }

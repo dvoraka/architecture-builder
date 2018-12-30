@@ -479,7 +479,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             MethodSpec constructorSpec = MethodSpec.constructorBuilder()
                     .addModifiers(constructorModifier)
                     .addParameters(parameterSpecs)
-                    .addStatement(String.format("super(%s, %s)", argNames))
+                    .addStatement(String.format("super(%s, %s)", (Object[]) argNames))
                     .build();
 
             constructorSpecs.add(constructorSpec);

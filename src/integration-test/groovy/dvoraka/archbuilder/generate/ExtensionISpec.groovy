@@ -5,7 +5,6 @@ import dvoraka.archbuilder.Directory
 import dvoraka.archbuilder.test.Class1p2c1am1m
 import dvoraka.archbuilder.test.Class1p2c1m
 import org.springframework.beans.factory.annotation.Autowired
-import spock.lang.Ignore
 
 class ExtensionISpec extends BaseISpec {
 
@@ -226,7 +225,6 @@ class ExtensionISpec extends BaseISpec {
             hasNoDeclaredMethods(clazz)
     }
 
-    @Ignore("WIP")
     def "class 1p2c1am1m extension"() {
         given:
             Directory abs = new Directory.DirectoryBuilder("test")
@@ -248,6 +246,6 @@ class ExtensionISpec extends BaseISpec {
             notThrown(Exception)
             isPublic(clazz)
             hasNoTypeParameters(clazz)
-            hasNoDeclaredMethods(clazz)
+            hasDeclaredMethods(clazz)
     }
 }

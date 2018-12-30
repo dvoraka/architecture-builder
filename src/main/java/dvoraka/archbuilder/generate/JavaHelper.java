@@ -8,6 +8,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -26,7 +27,21 @@ public interface JavaHelper {
 
     default List<Method> findMethods(Class<?> clazz) {
 
-        return Arrays.asList(clazz.getMethods());
+        // find protected methods
+        List<Method> protectedMethods = Arrays.stream(clazz.getDeclaredMethods())
+                .filter(method -> Modifier.isProtected(method.getModifiers()))
+                .collect(Collectors.toList());
+
+        // find public methods
+        List<Method> publicMethods = Arrays.asList(clazz.getMethods());
+
+        List<Method> allMethods = new ArrayList<>();
+        allMethods.addAll(protectedMethods);
+        allMethods.addAll(publicMethods);
+
+        return allMethods;
+
+//        return Arrays.asList(clazz.getMethods());
 
 //        if (clazz.getInterfaces().length == 0) {
 //            return Arrays.asList(clazz.getDeclaredMethods());

@@ -479,13 +479,32 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             MethodSpec constructorSpec = MethodSpec.constructorBuilder()
                     .addModifiers(constructorModifier)
                     .addParameters(parameterSpecs)
-                    .addStatement(String.format("super(%s, %s)", (Object[]) argNames))
+                    .addStatement(String.format(buildSuperString(argNames), (Object[]) argNames))
                     .build();
 
             constructorSpecs.add(constructorSpec);
         }
 
         return constructorSpecs;
+    }
+
+    private String buildSuperString(String[] argNames) {
+        if (argNames == null || argNames.length == 0) {
+            throw new IllegalArgumentException();
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("super(");
+        for (int i = 0; i < argNames.length; i++) {
+            stringBuilder.append("%s");
+            if (i != (argNames.length - 1)) { // not last
+                stringBuilder.append(", ");
+            }
+        }
+        stringBuilder.append(")");
+
+        return stringBuilder.toString();
     }
 
     private List<ParameterSpec> genParameterSpecs(Parameter[] parameters, Map<TypeVariable<?>, Type> typeMapping) {

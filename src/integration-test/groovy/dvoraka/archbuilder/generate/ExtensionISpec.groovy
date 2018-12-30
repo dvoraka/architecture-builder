@@ -128,7 +128,7 @@ class ExtensionISpec extends BaseISpec {
             hasNoDeclaredMethods(clazz)
     }
 
-    def "abstract class 1m extension"() {
+    def "abstract class 1am extension"() {
         given:
             Directory abstractClass1m = new Directory.DirectoryBuilder("test")
                     .type(DirType.ABSTRACT)
@@ -139,7 +139,7 @@ class ExtensionISpec extends BaseISpec {
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(abstractClass1m)
-                    .filename("AbstractClass1mImpl")
+                    .filename("TestAbstractClass1am")
                     .build()
         when:
             mainGenerator.generate(root)

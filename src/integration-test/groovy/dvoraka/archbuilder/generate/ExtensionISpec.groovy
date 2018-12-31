@@ -223,6 +223,7 @@ class ExtensionISpec extends BaseISpec {
             isPublic(clazz)
             hasNoTypeParameters(clazz)
             hasNoDeclaredMethods(clazz)
+            declaredConstructorCount(clazz) == 2
     }
 
     def "class 1p2c1am1m extension"() {
@@ -247,5 +248,6 @@ class ExtensionISpec extends BaseISpec {
             isPublic(clazz)
             hasNoTypeParameters(clazz)
             hasDeclaredMethods(clazz)
+            declaredConstructorCount(clazz) == 2
     }
 }

@@ -6,6 +6,7 @@ import dvoraka.archbuilder.generate.JavaUtils;
 import dvoraka.archbuilder.test.microservice.data.ResultData;
 import dvoraka.archbuilder.test.microservice.data.message.RequestMessage;
 import dvoraka.archbuilder.test.microservice.data.message.ResponseMessage;
+import dvoraka.archbuilder.test.microservice.server.AbstractServer;
 
 import java.util.List;
 
@@ -48,6 +49,7 @@ public class MicroserviceTemplate implements Template {
                 .parent(root)
                 .build();
 
+        // service
         Directory abstractService = new Directory.DirectoryBuilder("service")
                 .type(DirType.SERVICE_ABSTRACT)
                 .parent(srcBaseAbs)
@@ -71,6 +73,7 @@ public class MicroserviceTemplate implements Template {
                 .superType(service)
                 .build();
 
+        // messages
         Directory requestMessageAbs = new Directory.DirectoryBuilder("")
                 .type(DirType.ABSTRACT)
                 .parent(srcBase)
@@ -93,7 +96,6 @@ public class MicroserviceTemplate implements Template {
                 .build();
 
         String responseMessageName = serviceName + "ResponseMessage";
-        //TODO: constructor generation
         Directory responseMessage = new Directory.DirectoryBuilder("data/message")
                 .type(DirType.IMPL)
                 .parent(srcBase)
@@ -102,6 +104,22 @@ public class MicroserviceTemplate implements Template {
                 .filename(responseMessageName)
                 .build();
 
+        // server
+        Directory serverAbs = new Directory.DirectoryBuilder("")
+                .type(DirType.ABSTRACT)
+                .parent(srcBase)
+                .typeClass(AbstractServer.class)
+                .build();
+
+        String serverName = serviceName + "Server";
+        Directory server = new Directory.DirectoryBuilder("server")
+                .type(DirType.IMPL)
+                .parent(srcBase)
+                .superType(serverAbs)
+                .filename(serverName)
+                .build();
+
+        // application properties
         Directory srcProps = new Directory.DirectoryBuilder("src/main/resources")
                 .type(DirType.SRC_PROPERTIES)
                 .parent(root)

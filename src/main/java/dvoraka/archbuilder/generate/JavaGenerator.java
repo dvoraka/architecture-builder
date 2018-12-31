@@ -455,13 +455,17 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         for (Constructor<?> constructor : declaredConstructors) {
 
             int modifiers = constructor.getModifiers();
+
+            // skip private constructors
+            if (isPrivate(modifiers)) {
+                continue;
+            }
+
             Modifier constructorModifier;
             if (isPublic(modifiers)) {
                 constructorModifier = Modifier.PUBLIC;
             } else if (isProtected(modifiers)) {
                 constructorModifier = Modifier.PROTECTED;
-            } else if (isPrivate(modifiers)) {
-                constructorModifier = Modifier.PRIVATE;
             } else {
                 constructorModifier = null;
             }

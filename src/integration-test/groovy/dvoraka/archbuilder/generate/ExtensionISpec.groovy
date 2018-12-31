@@ -5,6 +5,7 @@ import dvoraka.archbuilder.Directory
 import dvoraka.archbuilder.test.AbstractClass1p1am
 import dvoraka.archbuilder.test.Class1p2c1am1m
 import dvoraka.archbuilder.test.Class1p2c1m
+import dvoraka.archbuilder.test.SimpleClass
 import org.springframework.beans.factory.annotation.Autowired
 
 class ExtensionISpec extends BaseISpec {
@@ -15,16 +16,64 @@ class ExtensionISpec extends BaseISpec {
 
     def "simple class extension"() {
         given:
-            Directory simpleClass = new Directory.DirectoryBuilder("test")
+            Directory abs = new Directory.DirectoryBuilder("test")
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
-                    .typeName("dvoraka.archbuilder.test.SimpleClass")
+                    .typeClass(SimpleClass.class)
                     .build()
             Directory ext = new Directory.DirectoryBuilder("test")
                     .type(DirType.IMPL)
                     .parent(srcBase)
-                    .superType(simpleClass)
-                    .filename("BetterSimpleClass")
+                    .superType(abs)
+                    .filename("TestSimpleClass")
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(ext))
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
+            declaredConstructorCount(clazz) == 1
+    }
+
+    def "Object abstract extension"() {
+        given:
+            Directory abs = new Directory.DirectoryBuilder("component")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeClass(Object.class)
+                    .build()
+            Directory ext = new Directory.DirectoryBuilder("component")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abs)
+                    .abstractType()
+                    .filename("AbstractTestObject")
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(ext))
+        then:
+            notThrown(Exception)
+            isPublicAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
+    }
+
+    def "Object extension"() {
+        given:
+            Directory abs = new Directory.DirectoryBuilder("component")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeClass(Object.class)
+                    .build()
+            Directory ext = new Directory.DirectoryBuilder("component")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abs)
+                    .filename("TestObject")
                     .build()
         when:
             mainGenerator.generate(root)
@@ -36,69 +85,22 @@ class ExtensionISpec extends BaseISpec {
             hasNoDeclaredMethods(clazz)
     }
 
-    def "Object abstract extension"() {
-        given:
-            Directory abstractObject = new Directory.DirectoryBuilder("component")
-                    .type(DirType.ABSTRACT)
-                    .parent(srcBase)
-                    .typeName("java.lang.Object")
-                    .build()
-            Directory absObjectImpl = new Directory.DirectoryBuilder("component")
-                    .type(DirType.IMPL)
-                    .parent(srcBase)
-                    .superType(abstractObject)
-                    .abstractType()
-                    .filename("AbstractCoolObject")
-                    .build()
-        when:
-            mainGenerator.generate(root)
-            Class<?> clazz = loadClass(getClassName(absObjectImpl))
-        then:
-            notThrown(Exception)
-            isPublicAbstract(clazz)
-            hasNoTypeParameters(clazz)
-            hasNoDeclaredMethods(clazz)
-    }
-
-    def "Object extension"() {
-        given:
-            Directory abstractObject = new Directory.DirectoryBuilder("component")
-                    .type(DirType.ABSTRACT)
-                    .parent(srcBase)
-                    .typeName("java.lang.Object")
-                    .build()
-            Directory objectImpl = new Directory.DirectoryBuilder("component")
-                    .type(DirType.IMPL)
-                    .parent(srcBase)
-                    .superType(abstractObject)
-                    .filename("CoolObject")
-                    .build()
-        when:
-            mainGenerator.generate(root)
-            Class<?> clazz = loadClass(getClassName(objectImpl))
-        then:
-            notThrown(Exception)
-            isPublicNotAbstract(clazz)
-            hasNoTypeParameters(clazz)
-            hasNoDeclaredMethods(clazz)
-    }
-
     def "Timer extension"() {
         given:
-            Directory abstractTimer = new Directory.DirectoryBuilder("component")
+            Directory abs = new Directory.DirectoryBuilder("component")
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeName("java.util.Timer")
                     .build()
-            Directory timerImpl = new Directory.DirectoryBuilder("componentAux")
+            Directory ext = new Directory.DirectoryBuilder("componentAux")
                     .type(DirType.IMPL)
                     .parent(srcBase)
-                    .superType(abstractTimer)
+                    .superType(abs)
                     .filename("CoolTimer")
                     .build()
         when:
             mainGenerator.generate(root)
-            Class<?> clazz = loadClass(getClassName(timerImpl))
+            Class<?> clazz = loadClass(getClassName(ext))
         then:
             notThrown(Exception)
             isPublicNotAbstract(clazz)
@@ -109,7 +111,7 @@ class ExtensionISpec extends BaseISpec {
 
     def "class 1m extension"() {
         given:
-            Directory class1m = new Directory.DirectoryBuilder("test")
+            Directory abs = new Directory.DirectoryBuilder("test")
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeName("dvoraka.archbuilder.test.Class1m")
@@ -117,8 +119,8 @@ class ExtensionISpec extends BaseISpec {
             Directory ext = new Directory.DirectoryBuilder("test")
                     .type(DirType.IMPL)
                     .parent(srcBase)
-                    .superType(class1m)
-                    .filename("BetterClass1m")
+                    .superType(abs)
+                    .filename("TestClass1m")
                     .build()
         when:
             mainGenerator.generate(root)
@@ -132,7 +134,7 @@ class ExtensionISpec extends BaseISpec {
 
     def "abstract class 1am extension"() {
         given:
-            Directory abstractClass1m = new Directory.DirectoryBuilder("test")
+            Directory abs = new Directory.DirectoryBuilder("test")
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeName("dvoraka.archbuilder.test.AbstractClass1am")
@@ -140,7 +142,7 @@ class ExtensionISpec extends BaseISpec {
             Directory ext = new Directory.DirectoryBuilder("test")
                     .type(DirType.IMPL)
                     .parent(srcBase)
-                    .superType(abstractClass1m)
+                    .superType(abs)
                     .filename("TestAbstractClass1am")
                     .build()
         when:

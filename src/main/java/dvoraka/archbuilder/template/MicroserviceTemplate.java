@@ -4,9 +4,7 @@ import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;
 import dvoraka.archbuilder.generate.JavaUtils;
 import dvoraka.archbuilder.test.microservice.data.ResultData;
-import dvoraka.archbuilder.test.microservice.data.message.RequestMessage;
 import dvoraka.archbuilder.test.microservice.data.message.ResponseMessage;
-import dvoraka.archbuilder.test.microservice.server.AbstractServer;
 
 import java.util.List;
 
@@ -25,7 +23,9 @@ public class MicroserviceTemplate implements Template {
             String packageName,
             Class<?> superService,
             List<Class<?>> typeArguments,
-            String serviceName
+            String serviceName,
+            Class<?> superServer,
+            Class<?> requestSuperMessage
     ) {
         root = new Directory.DirectoryBuilder(rootDirName)
                 .type(DirType.ROOT)
@@ -77,7 +77,7 @@ public class MicroserviceTemplate implements Template {
         Directory requestMessageAbs = new Directory.DirectoryBuilder("")
                 .type(DirType.ABSTRACT)
                 .parent(srcBase)
-                .typeClass(RequestMessage.class)
+                .typeClass(requestSuperMessage)
                 .build();
 
         String requestMessageName = serviceName + "Message";
@@ -108,7 +108,7 @@ public class MicroserviceTemplate implements Template {
         Directory serverAbs = new Directory.DirectoryBuilder("")
                 .type(DirType.ABSTRACT)
                 .parent(srcBase)
-                .typeClass(AbstractServer.class)
+                .typeClass(superServer)
                 .build();
 
         String serverName = serviceName + "Server";

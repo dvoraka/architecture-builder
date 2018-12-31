@@ -7,6 +7,8 @@ import dvoraka.archbuilder.generate.JavaHelper
 import dvoraka.archbuilder.generate.JavaTestingHelper
 import dvoraka.archbuilder.generate.Utils
 import dvoraka.archbuilder.service.DirService
+import dvoraka.archbuilder.test.microservice.data.message.RequestMessage
+import dvoraka.archbuilder.test.microservice.server.AbstractServer
 import dvoraka.archbuilder.test.microservice.service.BaseService
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
@@ -43,6 +45,8 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
                     BaseService.class,
                     Collections.emptyList(),
                     serviceName,
+                    AbstractServer.class,
+                    RequestMessage.class,
             )
             Directory rootDir = template.getRootDirectory()
 

@@ -2,6 +2,7 @@ package dvoraka.archbuilder.generate
 
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
+import dvoraka.archbuilder.test.AbstractClass1p1am
 import dvoraka.archbuilder.test.Class1p2c1am1m
 import dvoraka.archbuilder.test.Class1p2c1m
 import org.springframework.beans.factory.annotation.Autowired
@@ -157,13 +158,13 @@ class ExtensionISpec extends BaseISpec {
             Directory abs = new Directory.DirectoryBuilder("test")
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
-                    .typeName("dvoraka.archbuilder.test.AbstractClass1p1am")
+                    .typeClass(AbstractClass1p1am)
                     .build()
             Directory ext = new Directory.DirectoryBuilder("test")
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
-                    .parameterTypeName("java.lang.String")
+                    .parameterTypeClass(String.class)
                     .filename("AbstractClass1p1amImpl")
                     .build()
         when:
@@ -181,14 +182,14 @@ class ExtensionISpec extends BaseISpec {
             Directory abs = new Directory.DirectoryBuilder("test")
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
-                    .typeName("dvoraka.archbuilder.test.AbstractClass1p1am")
+                    .typeClass(AbstractClass1p1am)
                     .build()
             Directory ext = new Directory.DirectoryBuilder("test")
                     .type(DirType.IMPL)
                     .abstractType()
                     .parent(srcBase)
                     .superType(abs)
-                    .parameterTypeName("java.lang.String")
+                    .parameterTypeClass(String.class)
                     .filename("AbstractClass1p1amAbs")
                     .build()
         when:
@@ -248,6 +249,7 @@ class ExtensionISpec extends BaseISpec {
             isPublic(clazz)
             hasNoTypeParameters(clazz)
             hasDeclaredMethods(clazz)
+            declaredMethodCount(clazz) == 1
             declaredConstructorCount(clazz) == 2
     }
 }

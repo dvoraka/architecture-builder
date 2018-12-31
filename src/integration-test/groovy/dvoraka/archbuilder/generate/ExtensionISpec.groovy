@@ -2,11 +2,9 @@ package dvoraka.archbuilder.generate
 
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
-import dvoraka.archbuilder.test.AbstractClass1p1am
-import dvoraka.archbuilder.test.Class1p2c1am1m
-import dvoraka.archbuilder.test.Class1p2c1m
-import dvoraka.archbuilder.test.SimpleClass
+import dvoraka.archbuilder.test.*
 import org.springframework.beans.factory.annotation.Autowired
+import spock.lang.Ignore
 
 class ExtensionISpec extends BaseISpec {
 
@@ -253,5 +251,29 @@ class ExtensionISpec extends BaseISpec {
             hasDeclaredMethods(clazz)
             declaredMethodCount(clazz) == 1
             declaredConstructorCount(clazz) == 2
+    }
+
+    @Ignore("WIP")
+    def "class 4c1m extension"() {
+        given:
+            Directory abs = new Directory.DirectoryBuilder("test")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeClass(Class4c1m.class)
+                    .build()
+            Directory ext = new Directory.DirectoryBuilder("test")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abs)
+                    .filename("TestClass4c1m")
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(ext))
+        then:
+            notThrown(Exception)
+            isPublic(clazz)
+            hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
     }
 }

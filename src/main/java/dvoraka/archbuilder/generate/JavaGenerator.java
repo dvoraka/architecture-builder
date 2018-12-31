@@ -460,8 +460,10 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 constructorModifier = Modifier.PUBLIC;
             } else if (isProtected(modifiers)) {
                 constructorModifier = Modifier.PROTECTED;
+            } else if (isPrivate(modifiers)) {
+                constructorModifier = Modifier.PRIVATE;
             } else {
-                constructorModifier = Modifier.DEFAULT;
+                constructorModifier = null;
             }
 
             Parameter[] parameters = constructor.getParameters();
@@ -471,11 +473,19 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                     .map(parameterSpec -> parameterSpec.name)
                     .toArray(String[]::new);
 
-            MethodSpec constructorSpec = MethodSpec.constructorBuilder()
-                    .addModifiers(constructorModifier)
-                    .addParameters(parameterSpecs)
-                    .addStatement(String.format(buildSuperString(argNames), (Object[]) argNames))
-                    .build();
+            MethodSpec constructorSpec;
+            if (constructorModifier != null) {
+                constructorSpec = MethodSpec.constructorBuilder()
+                        .addModifiers(constructorModifier)
+                        .addParameters(parameterSpecs)
+                        .addStatement(String.format(buildSuperString(argNames), (Object[]) argNames))
+                        .build();
+            } else {
+                constructorSpec = MethodSpec.constructorBuilder()
+                        .addParameters(parameterSpecs)
+                        .addStatement(String.format(buildSuperString(argNames), (Object[]) argNames))
+                        .build();
+            }
 
             constructorSpecs.add(constructorSpec);
         }
@@ -533,6 +543,11 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
                 TypeName paramTypeName = resolveParametrizedType(((ParameterizedType) actualTypeArgument), varTypeMapping);
                 typeNames.add(paramTypeName);
+
+            } else if (actualTypeArgument instanceof Class) {
+
+                TypeName typeName = TypeName.get(actualTypeArgument);
+                typeNames.add(typeName);
 
             } else if (actualTypeArgument instanceof WildcardType) {
 

@@ -329,7 +329,16 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
     private void genCustomType(Directory directory) {
         log.debug("Generating custom type: {}", directory);
-        //TODO
+
+        String source = directory.getText();
+        String filename = javaSuffix(directory.getFilename()
+                .orElseThrow(RuntimeException::new));
+
+        try {
+            save(directory, source, filename);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private List<MethodSpec> genMethodSpecs(List<Method> methods, Map<TypeVariable<?>, Type> typeMapping) {

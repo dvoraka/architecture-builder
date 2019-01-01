@@ -66,6 +66,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         this.dirService = requireNonNull(dirService);
 
         conf = new EnumMap<>(DirType.class);
+        conf.put(DirType.CUSTOM_TYPE, this::genCustomType);
         conf.put(DirType.IMPL, this::genImplSafe);
         conf.put(DirType.SERVICE, this::genServiceSafe);
         conf.put(DirType.SERVICE_IMPL, this::genServiceImplSafe);
@@ -324,6 +325,11 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void genCustomType(Directory directory) {
+        log.debug("Generating custom type: {}", directory);
+        //TODO
     }
 
     private List<MethodSpec> genMethodSpecs(List<Method> methods, Map<TypeVariable<?>, Type> typeMapping) {

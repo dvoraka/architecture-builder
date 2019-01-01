@@ -21,6 +21,8 @@ public enum DirType {
     SERVICE,
     SERVICE_IMPL,
 
+    CUSTOM_TYPE,
+
     ABSTRACT(true, false),
     IMPL;
 

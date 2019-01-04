@@ -52,8 +52,11 @@ public class Directory {
         if (isBase()) {
             return getName();
         } else {
-            String path = getParent().getPackageName() + File.separatorChar + getName();
-            return JavaUtils.path2pkg(path);
+            String packagePath = getParent().getPackageName();
+            if (!getName().isEmpty()) {
+                packagePath += File.separatorChar + getName();
+            }
+            return JavaUtils.path2pkg(packagePath);
         }
     }
 

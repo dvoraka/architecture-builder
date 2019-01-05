@@ -2,6 +2,8 @@ package dvoraka.archbuilder.template;
 
 import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;
+import dvoraka.archbuilder.SourceTemplate;
+import dvoraka.archbuilder.SpringBootApplicationTemplate;
 import dvoraka.archbuilder.generate.JavaUtils;
 import dvoraka.archbuilder.test.microservice.data.ResultData;
 import dvoraka.archbuilder.test.microservice.data.message.ResponseMessage;
@@ -125,6 +127,16 @@ public class MicroserviceTemplate implements Template {
                 .parent(root)
                 .filename("application.properties")
                 .text("prop1=value\nprop2=value2\n")
+                .build();
+
+        // application
+        String appClassName = serviceName + "App";
+        SourceTemplate template = new SpringBootApplicationTemplate(appClassName, packageName);
+        Directory application = new Directory.DirectoryBuilder("")
+                .type(DirType.CUSTOM_TYPE)
+                .parent(srcBase)
+                .filename(appClassName)
+                .text(template.getSource())
                 .build();
     }
 

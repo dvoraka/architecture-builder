@@ -63,7 +63,6 @@ class CustomTypeISpec extends BaseISpec {
             String className = 'CoolApplication'
             String path = srcBase.getPackageName()
             String packageName = JavaUtils.path2pkg(path)
-            String argsName = 'args'
 
             SourceTemplate template = new SpringBootApplicationTemplate(
                     className,

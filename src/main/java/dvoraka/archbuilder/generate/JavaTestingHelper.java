@@ -5,6 +5,7 @@ import dvoraka.archbuilder.Directory;
 import dvoraka.archbuilder.service.DirService;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
@@ -70,5 +71,12 @@ public interface JavaTestingHelper {
         Object instance = clazz.getConstructor().newInstance();
 
         return clazz.getDeclaredMethod(methodName).invoke(instance);
+    }
+
+    default void runMainMethod(Class<?> clazz, String[] args)
+            throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+
+        Method mainMethod = clazz.getDeclaredMethod("main", String[].class);
+        mainMethod.invoke(null, new Object[]{args});
     }
 }

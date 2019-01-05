@@ -83,5 +83,10 @@ class CustomTypeISpec extends BaseISpec {
             isPublicNotAbstract(clazz)
             hasNoTypeParameters(clazz)
             declaredMethodCount(clazz) == 1
+
+        when:
+            runMainMethod(clazz, new String[0])
+        then:
+            notThrown(Exception)
     }
 }

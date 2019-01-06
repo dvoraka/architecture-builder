@@ -4,7 +4,6 @@ import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
 import dvoraka.archbuilder.test.*
 import org.springframework.beans.factory.annotation.Autowired
-import spock.lang.Ignore
 
 class ExtensionISpec extends BaseISpec {
 
@@ -130,7 +129,6 @@ class ExtensionISpec extends BaseISpec {
             hasNoDeclaredMethods(clazz)
     }
 
-    @Ignore("WIP")
     def "class 1p extension"() {
         given:
             Directory abs = new Directory.DirectoryBuilder("test")

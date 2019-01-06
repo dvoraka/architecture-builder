@@ -630,11 +630,12 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
         // check type variable and parameter counts
         if (typeVariables.length != directory.getParameters().size() && !directory.isAbstractType()) {
-            throw new RuntimeException("Bad type parameter count.");
+//            throw new RuntimeException("Bad type parameter count.");
         }
 
         Map<TypeVariable<?>, Type> typeMapping = new HashMap<>();
-        if (directory.isAbstractType() && directory.getParameters().isEmpty()) {
+//        if (directory.isAbstractType() && directory.getParameters().isEmpty()) {
+        if (directory.getParameters().isEmpty()) {
             // just copy type variables
             for (TypeVariable<? extends Class<?>> typeVariable : typeVariables) {
                 typeMapping.put(typeVariable, typeVariable);

@@ -66,6 +66,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         this.dirService = requireNonNull(dirService);
 
         conf = new EnumMap<>(DirType.class);
+        conf.put(DirType.BUILD_CONFIG, this::genBuildConfig);
         conf.put(DirType.CUSTOM_TYPE, this::genCustomType);
         conf.put(DirType.IMPL, this::genImplSafe);
         conf.put(DirType.SERVICE, this::genServiceSafe);
@@ -102,6 +103,20 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
     private void processSrcRoot(Directory directory) {
         addClassPath(Paths.get(directory.getPath()));
+    }
+
+    private void genBuildConfig(Directory directory) {
+        log.debug("Generating build config: {}", directory);
+
+        String configuration = directory.getText();
+        String filename = directory.getFilename()
+                .orElseThrow(RuntimeException::new);
+
+        try {
+            save(directory, configuration, filename);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void genImplSafe(Directory directory) {

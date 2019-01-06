@@ -6,8 +6,8 @@ import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeSpec
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
-import dvoraka.archbuilder.SourceTemplate
-import dvoraka.archbuilder.SpringBootApplicationTemplate
+import dvoraka.archbuilder.template.source.SourceTemplate
+import dvoraka.archbuilder.template.source.SpringBootApplicationTemplate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication

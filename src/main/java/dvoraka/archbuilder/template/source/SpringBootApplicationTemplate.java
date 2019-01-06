@@ -1,4 +1,4 @@
-package dvoraka.archbuilder;
+package dvoraka.archbuilder.template.source;
 
 import com.squareup.javapoet.ArrayTypeName;
 import com.squareup.javapoet.JavaFile;

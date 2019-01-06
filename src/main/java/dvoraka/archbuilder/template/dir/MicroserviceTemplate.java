@@ -1,16 +1,16 @@
-package dvoraka.archbuilder.template;
+package dvoraka.archbuilder.template.dir;
 
 import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;
-import dvoraka.archbuilder.SourceTemplate;
-import dvoraka.archbuilder.SpringBootApplicationTemplate;
 import dvoraka.archbuilder.generate.JavaUtils;
+import dvoraka.archbuilder.template.source.SourceTemplate;
+import dvoraka.archbuilder.template.source.SpringBootApplicationTemplate;
 import dvoraka.archbuilder.test.microservice.data.ResultData;
 import dvoraka.archbuilder.test.microservice.data.message.ResponseMessage;
 
 import java.util.List;
 
-public class MicroserviceTemplate implements Template {
+public class MicroserviceTemplate implements DirectoryTemplate {
 
     public static final String JAVA_SRC_DIR = "src/main/java";
 

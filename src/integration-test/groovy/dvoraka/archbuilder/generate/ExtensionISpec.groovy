@@ -152,7 +152,7 @@ class ExtensionISpec extends BaseISpec {
             hasNoDeclaredMethods(clazz)
     }
 
-    def "class 1p1m extension"() {
+    def "class 1p1m extension without parameters"() {
         given:
             Directory abs = new Directory.DirectoryBuilder("test")
                     .type(DirType.ABSTRACT)
@@ -163,7 +163,7 @@ class ExtensionISpec extends BaseISpec {
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
-                    .filename("TestClass1p1m")
+                    .filename("TestWClass1p1m")
                     .build()
         when:
             mainGenerator.generate(root)
@@ -210,7 +210,7 @@ class ExtensionISpec extends BaseISpec {
                     .parent(srcBase)
                     .superType(abs)
                     .parameterTypeClass(String.class)
-                    .filename("AbstractClass1p1amImpl")
+                    .filename("TestAbstractClass1p1am")
                     .build()
         when:
             mainGenerator.generate(root)
@@ -219,6 +219,29 @@ class ExtensionISpec extends BaseISpec {
             notThrown(Exception)
             isPublicNotAbstract(clazz)
             hasNoTypeParameters(clazz)
+            declaredMethodCount(clazz) == 1
+    }
+
+    def "abstract class 1p1am extension without parameters"() {
+        given:
+            Directory abs = new Directory.DirectoryBuilder("test")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeClass(AbstractClass1p1am)
+                    .build()
+            Directory ext = new Directory.DirectoryBuilder("test")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abs)
+                    .filename("TestWAbstractClass1p1am")
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(ext))
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasTypeParameters(clazz)
             declaredMethodCount(clazz) == 1
     }
 

@@ -5,6 +5,8 @@ import java.util.Set;
 
 public class BuildGradleTemplate implements ConfigurationTemplate {
 
+    private final String FILENAME = "build.gradle";
+
     private Set<String> plugins;
 
 
@@ -17,7 +19,33 @@ public class BuildGradleTemplate implements ConfigurationTemplate {
     }
 
     @Override
+    public String getFilename() {
+        return FILENAME;
+    }
+
+    @Override
     public String getConfig() {
-        return null;
+
+        StringBuilder sb = new StringBuilder();
+
+        for (String plugin : plugins) {
+            sb.append("apply plugin: ");
+            sb.append("'");
+            sb.append(plugin);
+            sb.append("'");
+            sb.append("\n");
+        }
+
+        sb.append("\n");
+
+        return sb.toString();
+    }
+
+    public Set<String> getPlugins() {
+        return plugins;
+    }
+
+    public void setPlugins(Set<String> plugins) {
+        this.plugins = plugins;
     }
 }

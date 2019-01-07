@@ -3,6 +3,8 @@ package dvoraka.archbuilder.template.dir;
 import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;
 import dvoraka.archbuilder.generate.JavaUtils;
+import dvoraka.archbuilder.template.config.BuildGradleTemplate;
+import dvoraka.archbuilder.template.config.ConfigurationTemplate;
 import dvoraka.archbuilder.template.source.SourceTemplate;
 import dvoraka.archbuilder.template.source.SpringBootApplicationTemplate;
 import dvoraka.archbuilder.test.microservice.data.ResultData;
@@ -131,12 +133,21 @@ public class MicroserviceTemplate implements DirectoryTemplate {
 
         // application
         String appClassName = serviceName + "App";
-        SourceTemplate template = new SpringBootApplicationTemplate(appClassName, packageName);
+        SourceTemplate sourceTemplate = new SpringBootApplicationTemplate(appClassName, packageName);
         Directory application = new Directory.DirectoryBuilder("")
                 .type(DirType.CUSTOM_TYPE)
                 .parent(srcBase)
                 .filename(appClassName)
-                .text(template.getSource())
+                .text(sourceTemplate.getSource())
+                .build();
+
+        // build configuration
+        ConfigurationTemplate configurationTemplate = new BuildGradleTemplate();
+        Directory gradleConfig = new Directory.DirectoryBuilder("")
+                .type(DirType.BUILD_CONFIG)
+                .parent(root)
+                .filename(configurationTemplate.getFilename())
+                .text(configurationTemplate.getConfig())
                 .build();
     }
 

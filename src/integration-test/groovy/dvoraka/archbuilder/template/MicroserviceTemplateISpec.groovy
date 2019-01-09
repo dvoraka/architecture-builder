@@ -7,7 +7,7 @@ import dvoraka.archbuilder.generate.JavaHelper
 import dvoraka.archbuilder.generate.JavaTestingHelper
 import dvoraka.archbuilder.generate.Utils
 import dvoraka.archbuilder.service.DirService
-import dvoraka.archbuilder.template.dir.MicroserviceTemplate
+import dvoraka.archbuilder.template.arch.MicroserviceTemplate
 import dvoraka.archbuilder.test.microservice.data.message.RequestMessage
 import dvoraka.archbuilder.test.microservice.server.AbstractServer
 import dvoraka.archbuilder.test.microservice.service.BaseService

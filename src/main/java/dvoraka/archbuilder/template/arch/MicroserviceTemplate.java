@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.template.dir;
+package dvoraka.archbuilder.template.arch;
 
 import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;
@@ -12,7 +12,7 @@ import dvoraka.archbuilder.test.microservice.data.message.ResponseMessage;
 
 import java.util.List;
 
-public class MicroserviceTemplate implements DirectoryTemplate {
+public class MicroserviceTemplate implements ArchitectureTemplate {
 
     public static final String JAVA_SRC_DIR = "src/main/java";
 

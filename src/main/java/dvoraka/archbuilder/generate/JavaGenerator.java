@@ -130,6 +130,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
     private void genImpl(Directory directory) throws ClassNotFoundException {
         log.debug("Generating implementation: {}", directory);
 
+        // load supertype
         Class<?> superType = loadClass(directory.getSuperType()
                 .orElseThrow(this::noSuperTypeException)
                 .getTypeName());
@@ -137,28 +138,30 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         // check type parameters
         Map<TypeVariable<?>, Type> typeMapping;
         if (superType.getTypeParameters().length == 0) {
-            typeMapping = new HashMap<>();
+            typeMapping = Collections.emptyMap();
         } else {
             typeMapping = getTypeVarMapping(directory, superType);
         }
 
+        // find methods and gen specs
         List<Method> allMethods;
         if (directory.isAbstractType()) {
             allMethods = Collections.emptyList();
         } else {
             allMethods = findMethods(superType);
         }
-
         List<MethodSpec> methodSpecs = genMethodSpecs(allMethods, typeMapping);
-
+        // add constructor specs if necessary
         if (isConstructorNeeded(superType)) {
             List<MethodSpec> constructorSpecs = genConstructorSpecs(superType, typeMapping);
             methodSpecs.addAll(constructorSpecs);
         }
 
+        // prepare final filename
         String name = directory.getFilename()
                 .orElse(superType.getSimpleName() + "Impl");
 
+        // spec builder
         TypeSpec implementation;
         TypeSpec.Builder implementationBuilder = directory.isInterfaceType()
                 ? TypeSpec.interfaceBuilder(name)

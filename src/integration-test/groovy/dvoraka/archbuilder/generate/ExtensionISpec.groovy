@@ -4,6 +4,7 @@ import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
 import dvoraka.archbuilder.test.*
 import org.springframework.beans.factory.annotation.Autowired
+import spock.lang.Ignore
 
 class ExtensionISpec extends BaseISpec {
 
@@ -343,5 +344,34 @@ class ExtensionISpec extends BaseISpec {
             hasNoTypeParameters(clazz)
             hasNoDeclaredMethods(clazz)
             declaredConstructorCount(clazz) == 2
+    }
+
+    @Ignore("WIP")
+    def "interface with 4 parameters extension"() {
+        given:
+            Directory interface4p = new Directory.DirectoryBuilder("test")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeClass(Interface4p1m.class)
+                    .build()
+            Directory interface4pImpl = new Directory.DirectoryBuilder("test")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(interface4p)
+//                  .interface()
+                    .filename("CoolInterface4P")
+                    .parameterTypeName("java.lang.String")
+                    .parameterTypeClass(Long.class)
+                    .parameterTypeName("java.lang.Boolean")
+                    .parameterTypeClass(SimpleInterface.class)
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(interface4pImpl))
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasDeclaredMethods(clazz)
     }
 }

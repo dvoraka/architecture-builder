@@ -4,7 +4,6 @@ import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
 import dvoraka.archbuilder.test.*
 import org.springframework.beans.factory.annotation.Autowired
-import spock.lang.Ignore
 
 class ExtensionISpec extends BaseISpec {
 
@@ -34,6 +33,30 @@ class ExtensionISpec extends BaseISpec {
             hasNoTypeParameters(clazz)
             hasNoDeclaredMethods(clazz)
             declaredConstructorCount(clazz) == 1
+    }
+
+    def "simple interface extension"() {
+        given:
+            Directory abs = new Directory.DirectoryBuilder("test")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeClass(SimpleInterface.class)
+                    .build()
+            Directory ext = new Directory.DirectoryBuilder("test")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abs)
+                    .interfaceType()
+                    .filename("TestSimpleInterface")
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(ext))
+        then:
+            notThrown(Exception)
+            isPublicAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
     }
 
     def "Object abstract extension"() {
@@ -369,7 +392,6 @@ class ExtensionISpec extends BaseISpec {
             declaredConstructorCount(clazz) == 2
     }
 
-    @Ignore("WIP")
     def "interface with 4 parameters extension"() {
         given:
             Directory interface4p = new Directory.DirectoryBuilder("test")
@@ -381,8 +403,8 @@ class ExtensionISpec extends BaseISpec {
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(interface4p)
-//                  .interface()
-                    .filename("CoolInterface4P")
+                    .interfaceType()
+                    .filename("TestInterface4p1m")
                     .parameterTypeName("java.lang.String")
                     .parameterTypeClass(Long.class)
                     .parameterTypeName("java.lang.Boolean")
@@ -393,8 +415,8 @@ class ExtensionISpec extends BaseISpec {
             Class<?> clazz = loadClass(getClassName(interface4pImpl))
         then:
             notThrown(Exception)
-            isPublicNotAbstract(clazz)
+            isPublicAbstract(clazz)
             hasNoTypeParameters(clazz)
-            hasDeclaredMethods(clazz)
+            hasNoDeclaredMethods(clazz)
     }
 }

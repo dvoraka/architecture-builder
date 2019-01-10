@@ -160,7 +160,11 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 .orElse(superType.getSimpleName() + "Impl");
 
         TypeSpec implementation;
-        TypeSpec.Builder implementationBuilder = TypeSpec.classBuilder(name)
+        TypeSpec.Builder implementationBuilder = directory.isInterfaceType()
+                ? TypeSpec.interfaceBuilder(name)
+                : TypeSpec.classBuilder(name);
+
+        implementationBuilder
                 .addMethods(methodSpecs);
 
         if (superType.isInterface()) {
@@ -199,10 +203,13 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                     .addTypeVariables(getTypeVariableNames(superType));
         }
 
-        if (directory.isAbstractType()) { // abstract
+        // modifiers
+        if (directory.isInterfaceType()) { // interface
+            implementationBuilder = implementationBuilder
+                    .addModifiers(Modifier.PUBLIC);
+        } else if (directory.isAbstractType()) { // abstract
             implementationBuilder = implementationBuilder
                     .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
-
         } else { // not abstract
             implementationBuilder = implementationBuilder
                     .addModifiers(Modifier.PUBLIC);

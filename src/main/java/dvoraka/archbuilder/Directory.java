@@ -19,7 +19,9 @@ public class Directory {
     private String name;
     private String filename;
     private String typeName;
+
     private boolean abstractType;
+    private boolean interfaceType;
 
     private DirType type;
 
@@ -97,6 +99,10 @@ public class Directory {
         return abstractType;
     }
 
+    public boolean isInterfaceType() {
+        return interfaceType;
+    }
+
     public DirType getType() {
         return type;
     }
@@ -141,7 +147,9 @@ public class Directory {
         private String name;
         private String filename;
         private String typeName;
+
         private boolean abstractType;
+        private boolean interfaceType;
 
         private DirType type;
         private Directory parent;
@@ -176,6 +184,12 @@ public class Directory {
 
         public DirectoryBuilder abstractType() {
             this.abstractType = true;
+            return this;
+        }
+
+        public DirectoryBuilder interfaceType() {
+            abstractType();
+            this.interfaceType = true;
             return this;
         }
 
@@ -224,7 +238,9 @@ public class Directory {
             directory.name = this.name;
             directory.filename = this.filename;
             directory.typeName = this.typeName;
+
             directory.abstractType = this.abstractType;
+            directory.interfaceType = this.interfaceType;
 
             directory.type = this.type;
             directory.parent = this.parent;

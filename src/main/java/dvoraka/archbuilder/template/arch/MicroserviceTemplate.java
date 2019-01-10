@@ -8,7 +8,9 @@ import dvoraka.archbuilder.template.config.ConfigurationTemplate;
 import dvoraka.archbuilder.template.source.SourceTemplate;
 import dvoraka.archbuilder.template.source.SpringBootApplicationTemplate;
 import dvoraka.archbuilder.test.microservice.data.ResultData;
+import dvoraka.archbuilder.test.microservice.data.message.Message;
 import dvoraka.archbuilder.test.microservice.data.message.ResponseMessage;
+import dvoraka.archbuilder.test.microservice.net.NetworkComponent;
 
 import java.util.List;
 
@@ -121,6 +123,22 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .parent(srcBase)
                 .superType(serverAbs)
                 .filename(serverName)
+                .build();
+        // network component
+        Directory networkComponentAbs = new Directory.DirectoryBuilder("")
+                .type(DirType.ABSTRACT)
+                .parent(srcBase)
+                .typeClass(NetworkComponent.class)
+                .build();
+
+        String networkComponentName = serviceName + "NetworkComponent";
+        Directory networkComponent = new Directory.DirectoryBuilder("server")
+                .type(DirType.IMPL)
+                .parent(srcBase)
+                .superType(networkComponentAbs)
+                .parameterTypeClass(Message.class)
+                .parameterTypeClass(Message.class)
+                .filename(networkComponentName)
                 .build();
 
         // application properties

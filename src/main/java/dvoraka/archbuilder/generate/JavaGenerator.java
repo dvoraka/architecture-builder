@@ -162,7 +162,6 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 .orElse(superType.getSimpleName() + "Impl");
 
         // spec builder
-        TypeSpec implementation;
         TypeSpec.Builder implementationBuilder = directory.isInterfaceType()
                 ? TypeSpec.interfaceBuilder(name)
                 : TypeSpec.classBuilder(name);
@@ -218,7 +217,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                     .addModifiers(Modifier.PUBLIC);
         }
 
-        implementation = implementationBuilder.build();
+        TypeSpec implementation = implementationBuilder.build();
 
         JavaFile javaFile = JavaFile.builder(directory.getPackageName(), implementation)
                 .build();
@@ -653,11 +652,6 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
         TypeVariable<? extends Class<?>>[] typeVariables = clazz.getTypeParameters();
 
-        // check type variable and parameter counts
-        if (typeVariables.length != directory.getParameters().size() && !directory.isAbstractType()) {
-//            throw new RuntimeException("Bad type parameter count.");
-        }
-
         Map<TypeVariable<?>, Type> typeMapping = new HashMap<>();
         if (directory.getParameters().isEmpty()) {
             // just copy type variables
@@ -674,12 +668,12 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             }
         }
 
-        addAllTypeVarsMapping(clazz, typeMapping);
+        addAllTypeVarMappings(clazz, typeMapping);
 
         return typeMapping;
     }
 
-    private void addAllTypeVarsMapping(Class<?> clazz, Map<TypeVariable<?>, Type> typeMapping) {
+    private void addAllTypeVarMappings(Class<?> clazz, Map<TypeVariable<?>, Type> typeMapping) {
         for (Type iface : clazz.getGenericInterfaces()) {
 
             if (iface instanceof ParameterizedType) {

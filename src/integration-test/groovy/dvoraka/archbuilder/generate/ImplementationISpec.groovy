@@ -2,8 +2,10 @@ package dvoraka.archbuilder.generate
 
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
+import dvoraka.archbuilder.test.InterfaceE1pb
 import dvoraka.archbuilder.test.SimpleInterface
 import org.springframework.beans.factory.annotation.Autowired
+import spock.lang.Ignore
 
 import java.util.concurrent.RunnableFuture
 
@@ -126,6 +128,31 @@ class ImplementationISpec extends BaseISpec {
         when:
             mainGenerator.generate(root)
             Class<?> clazz = loadClass(getClassName(simpleInterfaceImpl))
+        then:
+            notThrown(Exception)
+            isPublicAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
+    }
+
+    @Ignore("WIP")
+    def "interface E1pb implementation NP"() {
+        given:
+            Class<?> cls = InterfaceE1pb.class
+            Directory abs = new Directory.DirectoryBuilder("test")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeClass(cls)
+                    .build()
+            Directory impl = new Directory.DirectoryBuilder("test")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abs)
+                    .filename("Test" + cls.getSimpleName())
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(impl))
         then:
             notThrown(Exception)
             isPublicAbstract(clazz)

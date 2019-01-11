@@ -1,6 +1,6 @@
 package dvoraka.archbuilder.test;
 
-public interface Interface1p1m<C> {
+public interface Interface1p1am<C> {
 
     C get();
 }

@@ -546,7 +546,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             if (parameter.getParameterizedType() instanceof TypeVariable) {
 
                 TypeVariable<?> typeVar = ((TypeVariable) parameter.getParameterizedType());
-                Type realType = typeMapping.get(typeVar);
+                Type realType = typeMapping.getOrDefault(typeVar, typeVar);
                 parameterSpec = ParameterSpec.builder(realType, parameter.getName())
                         .build();
             } else if (parameter.getParameterizedType() instanceof ParameterizedType) {

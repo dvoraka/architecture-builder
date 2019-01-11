@@ -5,7 +5,6 @@ import dvoraka.archbuilder.Directory
 import dvoraka.archbuilder.test.InterfaceE1pb
 import dvoraka.archbuilder.test.SimpleInterface
 import org.springframework.beans.factory.annotation.Autowired
-import spock.lang.Ignore
 
 import java.util.concurrent.RunnableFuture
 
@@ -135,7 +134,6 @@ class ImplementationISpec extends BaseISpec {
             hasNoDeclaredMethods(clazz)
     }
 
-    @Ignore("WIP")
     def "interface E1pb implementation NP"() {
         given:
             Class<?> cls = InterfaceE1pb.class
@@ -155,9 +153,9 @@ class ImplementationISpec extends BaseISpec {
             Class<?> clazz = loadClass(getClassName(impl))
         then:
             notThrown(Exception)
-            isPublicAbstract(clazz)
-            hasNoTypeParameters(clazz)
-            hasNoDeclaredMethods(clazz)
+            isPublicNotAbstract(clazz)
+            hasTypeParameters(clazz)
+            hasDeclaredMethods(clazz)
     }
 
     def "interface with 4 parameters implementation"() {

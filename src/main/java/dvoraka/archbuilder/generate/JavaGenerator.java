@@ -659,7 +659,6 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         }
 
         Map<TypeVariable<?>, Type> typeMapping = new HashMap<>();
-//        if (directory.isAbstractType() && directory.getParameters().isEmpty()) {
         if (directory.getParameters().isEmpty()) {
             // just copy type variables
             for (TypeVariable<? extends Class<?>> typeVariable : typeVariables) {
@@ -673,34 +672,38 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
                 typeMapping.put(typeVariables[index], varClass);
             }
+        }
 
-            for (Type iface : clazz.getGenericInterfaces()) {
+        addAllTypeVarsMapping(clazz, typeMapping);
 
-                if (iface instanceof ParameterizedType) {
-                    ParameterizedType paramType = ((ParameterizedType) iface);
+        return typeMapping;
+    }
 
-                    Type[] actualTypeArgs = paramType.getActualTypeArguments();
-                    for (Type actualTypeArg : actualTypeArgs) {
+    private void addAllTypeVarsMapping(Class<?> clazz, Map<TypeVariable<?>, Type> typeMapping) {
+        for (Type iface : clazz.getGenericInterfaces()) {
 
-                        if (actualTypeArg instanceof TypeVariable) {
-                            TypeVariable<?> actualVar = (TypeVariable) actualTypeArg;
+            if (iface instanceof ParameterizedType) {
+                ParameterizedType paramType = ((ParameterizedType) iface);
 
-                            Type rawType = paramType.getRawType();
-                            if (rawType instanceof Class) {
-                                Class<?> rawClass = ((Class) rawType);
+                Type[] actualTypeArgs = paramType.getActualTypeArguments();
+                for (Type actualTypeArg : actualTypeArgs) {
 
-                                TypeVariable<? extends Class<?>>[] srcTypeParams = rawClass.getTypeParameters();
-                                for (TypeVariable<? extends Class<?>> srcTypeParam : srcTypeParams) {
-                                    typeMapping.put(srcTypeParam, typeMapping.get(actualVar));
-                                }
+                    if (actualTypeArg instanceof TypeVariable) {
+                        TypeVariable<?> actualVar = (TypeVariable) actualTypeArg;
+
+                        Type rawType = paramType.getRawType();
+                        if (rawType instanceof Class) {
+                            Class<?> rawClass = ((Class) rawType);
+
+                            TypeVariable<? extends Class<?>>[] srcTypeParams = rawClass.getTypeParameters();
+                            for (TypeVariable<? extends Class<?>> srcTypeParam : srcTypeParams) {
+                                typeMapping.put(srcTypeParam, typeMapping.get(actualVar));
                             }
                         }
                     }
                 }
             }
         }
-
-        return typeMapping;
     }
 
     private void genSrcProps(Directory directory) {

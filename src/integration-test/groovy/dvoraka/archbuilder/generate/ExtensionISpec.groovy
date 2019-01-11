@@ -439,19 +439,20 @@ class ExtensionISpec extends BaseISpec {
             declaredConstructorCount(clazz) == 2
     }
 
-    def "interface with 4 parameters extension"() {
+    def "interface 4p1am extension"() {
+        Class<?> cls = Interface4p1m.class
         given:
             Directory interface4p = new Directory.DirectoryBuilder("test")
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
-                    .typeClass(Interface4p1m.class)
+                    .typeClass(cls)
                     .build()
             Directory interface4pImpl = new Directory.DirectoryBuilder("test")
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(interface4p)
                     .interfaceType()
-                    .filename("TestInterface4p1m")
+                    .filename("Test" + cls.getSimpleName())
                     .parameterTypeName("java.lang.String")
                     .parameterTypeClass(Long.class)
                     .parameterTypeName("java.lang.Boolean")
@@ -464,6 +465,31 @@ class ExtensionISpec extends BaseISpec {
             notThrown(Exception)
             isPublicAbstract(clazz)
             hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
+    }
+
+    def "interface 4p1am extension NP"() {
+        Class<?> cls = Interface4p1m.class
+        given:
+            Directory interface4p = new Directory.DirectoryBuilder("test")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeClass(cls)
+                    .build()
+            Directory interface4pImpl = new Directory.DirectoryBuilder("test")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(interface4p)
+                    .interfaceType()
+                    .filename("TestNP" + cls.getSimpleName())
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(interface4pImpl))
+        then:
+            notThrown(Exception)
+            isPublicAbstract(clazz)
+            hasTypeParameters(clazz)
             hasNoDeclaredMethods(clazz)
     }
 }

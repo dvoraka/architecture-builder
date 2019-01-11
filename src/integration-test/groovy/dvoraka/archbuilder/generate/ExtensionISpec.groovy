@@ -292,6 +292,29 @@ class ExtensionISpec extends BaseISpec {
             declaredMethodCount(clazz) == 1
     }
 
+    def "abstract class 1pb1am extension without parameters"() {
+        given:
+            Directory abs = new Directory.DirectoryBuilder("test")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeClass(AbstractClass1pb1am.class)
+                    .build()
+            Directory ext = new Directory.DirectoryBuilder("test")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abs)
+                    .filename("TestWAbstractClass1pb1am")
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(ext))
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasTypeParameters(clazz)
+            hasDeclaredMethods(clazz)
+    }
+
     def "abstract class 1p1am abstract extension"() {
         given:
             Directory abs = new Directory.DirectoryBuilder("test")

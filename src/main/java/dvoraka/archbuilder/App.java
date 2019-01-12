@@ -27,8 +27,7 @@ public class App {
     @Bean
     public CommandLineRunner runner() {
         return args -> {
-
-//            generator.generate(root);
+            System.out.println("App");
         };
     }
 }

@@ -14,7 +14,10 @@ public class GradleToolingApiApp {
     public static void main(String[] args) {
 
         try (ProjectConnection connection = GradleConnector.newConnector()
-                .forProjectDirectory(new File("."))
+                // gradle root of the new project (with settings.gradle file)
+                .forProjectDirectory(new File("testRoot"))
+                // you can set Gradle version, default is current project's version
+//                .useDistribution(URI.create("https://services.gradle.org/distributions/gradle-5.0-all.zip"))
                 .connect()) {
 
             GradleProject project = connection.getModel(GradleProject.class);
@@ -25,7 +28,7 @@ public class GradleToolingApiApp {
             BuildLauncher buildLauncher = connection.newBuild();
 //                buildLauncher.addProgressListener((ProgressListener) System.out::println);
             buildLauncher.setStandardOutput(System.out);
-            buildLauncher.forTasks("integrationTest");
+            buildLauncher.forTasks("wrapper");
 
             buildLauncher.run();
         }

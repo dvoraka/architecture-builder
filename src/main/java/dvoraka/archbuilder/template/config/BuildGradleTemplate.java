@@ -5,7 +5,7 @@ import java.util.Set;
 
 public class BuildGradleTemplate implements ConfigurationTemplate {
 
-    private final String FILENAME = "build.gradle";
+    private static final String FILENAME = "build.gradle";
 
     private Set<String> plugins;
 

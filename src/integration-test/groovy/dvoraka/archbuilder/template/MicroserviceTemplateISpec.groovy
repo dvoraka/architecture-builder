@@ -1,7 +1,9 @@
 package dvoraka.archbuilder.template
 
+import dvoraka.archbuilder.BuildTool
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
+import dvoraka.archbuilder.GradleBuildTool
 import dvoraka.archbuilder.generate.Generator
 import dvoraka.archbuilder.generate.JavaHelper
 import dvoraka.archbuilder.generate.JavaTestingHelper
@@ -72,6 +74,20 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
         then:
             serviceImplClass.getSimpleName() == 'Default' + serviceName
             serviceImplClass.getName() == defaultServiceImplName(serviceDir)
+
+        when:
+            BuildTool buildTool = new GradleBuildTool(new File(rootDirName))
+            buildTool.prepareEnv()
+
+        then:
+            notThrown(Exception)
+
+        when:
+            true
+//            buildTool.build()
+
+        then:
+            notThrown(Exception)
 
         cleanup:
             Utils.removeFiles(rootDirName)

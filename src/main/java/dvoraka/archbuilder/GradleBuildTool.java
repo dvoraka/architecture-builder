@@ -11,6 +11,7 @@ import static java.util.Objects.requireNonNull;
 public class GradleBuildTool implements BuildTool {
 
     public static final String PREPARE_ENV_CMD = "wrapper";
+    public static final String BUILD_CMD = "build";
 
     private final File path;
 
@@ -21,24 +22,17 @@ public class GradleBuildTool implements BuildTool {
 
     @Override
     public void prepareEnv() {
-        ProjectConnection connection = createProjectConnection();
-
-        BuildLauncher buildLauncher = connection.newBuild();
-        buildLauncher.setStandardOutput(System.out);
-        buildLauncher.forTasks(PREPARE_ENV_CMD);
-        buildLauncher.run();
-
-        connection.close();
+        runTasks(PREPARE_ENV_CMD);
     }
 
     @Override
     public void build() {
-
+        runTasks(BUILD_CMD);
     }
 
     @Override
     public void prepareEnvAndBuild() {
-
+        runTasks(PREPARE_ENV_CMD, BUILD_CMD);
     }
 
     public File getPath() {
@@ -49,5 +43,16 @@ public class GradleBuildTool implements BuildTool {
         return GradleConnector.newConnector()
                 .forProjectDirectory(getPath())
                 .connect();
+    }
+
+    private void runTasks(String... tasks) {
+        ProjectConnection connection = createProjectConnection();
+
+        BuildLauncher buildLauncher = connection.newBuild();
+        buildLauncher.setStandardOutput(System.out);
+        buildLauncher.forTasks(tasks);
+        buildLauncher.run();
+
+        connection.close();
     }
 }

@@ -35,6 +35,16 @@ public class BuildGradleTemplate implements ConfigurationTemplate {
             sb.append("'");
             sb.append("\n");
         }
+        sb.append("\n");
+
+        sb.append("repositories {\n");
+        sb.append("    jcenter()\n");
+        sb.append("    maven { url 'https://jitpack.io' }\n");
+        sb.append("}\n\n");
+
+        sb.append("dependencies {\n");
+        sb.append("    implementation 'com.github.dvoraka:architecture-builder:master-SNAPSHOT'\n");
+        sb.append("}\n\n");
 
         sb.append("\n");
 

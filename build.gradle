@@ -45,6 +45,7 @@ dependencies {
 
     // Gradle tooling API
     implementation group: 'org.gradle', name: 'gradle-tooling-api', version: '5.0'
+    testCompile group: 'org.gradle', name: 'gradle-tooling-api', version: '5.0'
 
     // Testing
     // Spring testing

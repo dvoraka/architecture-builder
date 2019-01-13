@@ -5,6 +5,7 @@ import dvoraka.archbuilder.Directory;
 import dvoraka.archbuilder.generate.JavaUtils;
 import dvoraka.archbuilder.template.config.BuildGradleTemplate;
 import dvoraka.archbuilder.template.config.ConfigurationTemplate;
+import dvoraka.archbuilder.template.config.SettingsGradleTemplate;
 import dvoraka.archbuilder.template.source.SourceTemplate;
 import dvoraka.archbuilder.template.source.SpringBootApplicationTemplate;
 import dvoraka.archbuilder.test.microservice.data.ResultData;
@@ -160,12 +161,19 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .build();
 
         // build configuration
-        ConfigurationTemplate configurationTemplate = new BuildGradleTemplate();
-        Directory gradleConfig = new Directory.DirectoryBuilder("")
+        ConfigurationTemplate buildGradleTemplate = new BuildGradleTemplate();
+        Directory buildGradle = new Directory.DirectoryBuilder("")
                 .type(DirType.BUILD_CONFIG)
                 .parent(root)
-                .filename(configurationTemplate.getFilename())
-                .text(configurationTemplate.getConfig())
+                .filename(buildGradleTemplate.getFilename())
+                .text(buildGradleTemplate.getConfig())
+                .build();
+        ConfigurationTemplate settingsGradleTemplate = new SettingsGradleTemplate("Project1");
+        Directory settingsGradle = new Directory.DirectoryBuilder("")
+                .type(DirType.BUILD_CONFIG)
+                .parent(root)
+                .filename(settingsGradleTemplate.getFilename())
+                .text(settingsGradleTemplate.getConfig())
                 .build();
     }
 

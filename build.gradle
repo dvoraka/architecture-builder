@@ -104,3 +104,4 @@ wrapper {
 
 check.dependsOn integrationTest
 check.dependsOn jacocoTestReport
+install.dependsOn build

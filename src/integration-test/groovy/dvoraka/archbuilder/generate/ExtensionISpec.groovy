@@ -35,30 +35,6 @@ class ExtensionISpec extends BaseISpec {
             declaredConstructorCount(clazz) == 1
     }
 
-    def "simple interface extension"() {
-        given:
-            Directory abs = new Directory.DirectoryBuilder("test")
-                    .type(DirType.ABSTRACT)
-                    .parent(srcBase)
-                    .typeClass(SimpleInterface.class)
-                    .build()
-            Directory ext = new Directory.DirectoryBuilder("test")
-                    .type(DirType.IMPL)
-                    .parent(srcBase)
-                    .superType(abs)
-                    .interfaceType()
-                    .filename("TestSimpleInterface")
-                    .build()
-        when:
-            mainGenerator.generate(root)
-            Class<?> clazz = loadClass(getClassName(ext))
-        then:
-            notThrown(Exception)
-            isPublicAbstract(clazz)
-            hasNoTypeParameters(clazz)
-            hasNoDeclaredMethods(clazz)
-    }
-
     def "Object abstract extension"() {
         given:
             Directory abs = new Directory.DirectoryBuilder("component")
@@ -437,6 +413,31 @@ class ExtensionISpec extends BaseISpec {
             hasNoTypeParameters(clazz)
             hasNoDeclaredMethods(clazz)
             declaredConstructorCount(clazz) == 2
+    }
+
+    def "simple interface extension"() {
+        given:
+            Class<?> cls = SimpleInterface.class
+            Directory abs = new Directory.DirectoryBuilder("test")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeClass(cls)
+                    .build()
+            Directory ext = new Directory.DirectoryBuilder("test")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abs)
+                    .interfaceType()
+                    .filename("Test" + cls.getSimpleName())
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(ext))
+        then:
+            notThrown(Exception)
+            isPublicAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
     }
 
     def "interface 4p1am extension"() {

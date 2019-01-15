@@ -152,7 +152,7 @@ class ExtensionISpec extends BaseISpec {
             hasNoDeclaredMethods(clazz)
     }
 
-    def "class 1p1m extension without parameters"() {
+    def "class 1p1m extension NP"() {
         given:
             Directory abs = new Directory.DirectoryBuilder("test")
                     .type(DirType.ABSTRACT)
@@ -163,7 +163,7 @@ class ExtensionISpec extends BaseISpec {
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
-                    .filename("TestWClass1p1m")
+                    .filename("TestNPClass1p1m")
                     .build()
         when:
             mainGenerator.generate(root)
@@ -175,7 +175,7 @@ class ExtensionISpec extends BaseISpec {
             hasNoDeclaredMethods(clazz)
     }
 
-    def "class 1pb1m extension without parameters"() {
+    def "class 1pb1m extension NP"() {
         given:
             Directory abs = new Directory.DirectoryBuilder("test")
                     .type(DirType.ABSTRACT)
@@ -186,7 +186,7 @@ class ExtensionISpec extends BaseISpec {
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
-                    .filename("TestWClass1pb1m")
+                    .filename("TestNPClass1pb1m")
                     .build()
         when:
             mainGenerator.generate(root)
@@ -245,7 +245,7 @@ class ExtensionISpec extends BaseISpec {
             declaredMethodCount(clazz) == 1
     }
 
-    def "abstract class 1p1am extension without parameters"() {
+    def "abstract class 1p1am extension NP"() {
         given:
             Directory abs = new Directory.DirectoryBuilder("test")
                     .type(DirType.ABSTRACT)
@@ -256,7 +256,7 @@ class ExtensionISpec extends BaseISpec {
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
-                    .filename("TestWAbstractClass1p1am")
+                    .filename("TestNPAbstractClass1p1am")
                     .build()
         when:
             mainGenerator.generate(root)
@@ -268,7 +268,7 @@ class ExtensionISpec extends BaseISpec {
             declaredMethodCount(clazz) == 1
     }
 
-    def "abstract class 1pb1am extension without parameters"() {
+    def "abstract class 1pb1am extension NP"() {
         given:
             Directory abs = new Directory.DirectoryBuilder("test")
                     .type(DirType.ABSTRACT)
@@ -279,7 +279,7 @@ class ExtensionISpec extends BaseISpec {
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
-                    .filename("TestWAbstractClass1pb1am")
+                    .filename("TestNPAbstractClass1pb1am")
                     .build()
         when:
             mainGenerator.generate(root)
@@ -291,7 +291,7 @@ class ExtensionISpec extends BaseISpec {
             hasDeclaredMethods(clazz)
     }
 
-    def "abstract class 1pb1am2 extension without parameters"() {
+    def "abstract class 1pb1am2 extension NP"() {
         given:
             Class<?> cls = AbstractClass1pb1am2.class
             Directory abs = new Directory.DirectoryBuilder("test")
@@ -303,7 +303,7 @@ class ExtensionISpec extends BaseISpec {
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
-                    .filename("TestW" + cls.getSimpleName())
+                    .filename("TestNP" + cls.getSimpleName())
                     .build()
         when:
             mainGenerator.generate(root)
@@ -487,6 +487,57 @@ class ExtensionISpec extends BaseISpec {
         when:
             mainGenerator.generate(root)
             Class<?> clazz = loadClass(getClassName(interface4pImpl))
+        then:
+            notThrown(Exception)
+            isPublicAbstract(clazz)
+            hasTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
+    }
+
+    def "interface E1pb extension"() {
+        given:
+            Class<?> cls = InterfaceE1pb.class
+            Directory abs = new Directory.DirectoryBuilder("test")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeClass(cls)
+                    .build()
+            Directory impl = new Directory.DirectoryBuilder("extension")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abs)
+                    .interfaceType()
+                    .parameterTypeClass(Long.class)
+                    .filename("Test" + cls.getSimpleName())
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(impl))
+        then:
+            notThrown(Exception)
+            isPublicAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
+    }
+
+    def "interface E1pb extension NP"() {
+        given:
+            Class<?> cls = InterfaceE1pb.class
+            Directory abs = new Directory.DirectoryBuilder("test")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeClass(cls)
+                    .build()
+            Directory impl = new Directory.DirectoryBuilder("extension")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abs)
+                    .interfaceType()
+                    .filename("TestNP" + cls.getSimpleName())
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(impl))
         then:
             notThrown(Exception)
             isPublicAbstract(clazz)

@@ -64,7 +64,7 @@ class ImplementationISpec extends BaseISpec {
             hasNoDeclaredMethods(clazz)
     }
 
-    def "simple interface implementation"() {
+    def "simple interface implementation (with type name)"() {
         given:
             Directory simpleInterface = new Directory.DirectoryBuilder("test")
                     .type(DirType.ABSTRACT)
@@ -87,7 +87,7 @@ class ImplementationISpec extends BaseISpec {
             hasNoDeclaredMethods(clazz)
     }
 
-    def "simple interface implementation with type class"() {
+    def "simple interface implementation (with type class)"() {
         given:
             Directory simpleInterface = new Directory.DirectoryBuilder("test")
                     .type(DirType.ABSTRACT)
@@ -146,7 +146,7 @@ class ImplementationISpec extends BaseISpec {
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
-                    .filename("Test" + cls.getSimpleName())
+                    .filename("TestNP" + cls.getSimpleName())
                     .build()
         when:
             mainGenerator.generate(root)

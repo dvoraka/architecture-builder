@@ -19,7 +19,7 @@ build configuration and many other situations.
 
 ### Architecture template
 
-Architecture template uses directory tree and encapsulate it. It's used for defining a concrete architecture and
+Architecture template uses **Directory** tree and encapsulates it. It's used for defining a concrete architecture and
 making it configurable, like name of the base package, main abstract class, etc.
 
 ### Source template

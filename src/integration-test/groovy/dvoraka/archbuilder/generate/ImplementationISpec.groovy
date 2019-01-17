@@ -134,6 +134,37 @@ class ImplementationISpec extends BaseISpec {
             hasNoDeclaredMethods(clazz)
     }
 
+    def "simple interface abstract implementation implementation"() {
+        given:
+            Class<?> cls = SimpleInterface.class
+            Directory abs = new Directory.DirectoryBuilder("test")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeClass(cls)
+                    .build()
+            Directory impl1 = new Directory.DirectoryBuilder("test")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abs)
+                    .abstractType()
+                    .filename('TestAbstract1' + cls.getSimpleName())
+                    .build()
+            Directory impl2 = new Directory.DirectoryBuilder("test")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(impl1)
+                    .filename('Test2' + cls.getSimpleName())
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(impl2))
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
+    }
+
     def "interface E1pb implementation NP"() {
         given:
             Class<?> cls = InterfaceE1pb.class

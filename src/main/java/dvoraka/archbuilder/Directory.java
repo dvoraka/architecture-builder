@@ -253,6 +253,11 @@ public class Directory {
                 parent.addChildren(directory);
             }
 
+            // generate typename if necessary
+            if (directory.type == DirType.IMPL && directory.typeName == null) {
+                directory.typeName = directory.getPackageName() + "." + filename;
+            }
+
             return directory;
         }
     }

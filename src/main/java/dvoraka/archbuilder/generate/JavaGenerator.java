@@ -579,7 +579,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
             if (actualTypeArgument instanceof TypeVariable) {
 
-                TypeName typeVariableName = TypeName.get(varTypeMapping.get(actualTypeArgument));
+                TypeName typeVariableName = TypeName.get(varTypeMapping.getOrDefault(actualTypeArgument, type));
                 typeNames.add(typeVariableName);
 
             } else if (actualTypeArgument instanceof ParameterizedType) {
@@ -674,26 +674,37 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
     }
 
     private void addAllTypeVarMappings(Class<?> clazz, Map<TypeVariable<?>, Type> typeMapping) {
+        // from interfaces
         for (Type iface : clazz.getGenericInterfaces()) {
-
             if (iface instanceof ParameterizedType) {
                 ParameterizedType paramType = ((ParameterizedType) iface);
+                addTypeVarsForType(paramType, typeMapping);
+            }
+        }
 
-                Type[] actualTypeArgs = paramType.getActualTypeArguments();
-                for (Type actualTypeArg : actualTypeArgs) {
+        // from superclass
+        Type superClass = clazz.getGenericSuperclass();
+        if (superClass instanceof ParameterizedType) {
+            ParameterizedType paramType = ((ParameterizedType) superClass);
+            addTypeVarsForType(paramType, typeMapping);
+        }
+    }
 
-                    if (actualTypeArg instanceof TypeVariable) {
-                        TypeVariable<?> actualVar = (TypeVariable) actualTypeArg;
+    private void addTypeVarsForType(ParameterizedType paramType, Map<TypeVariable<?>, Type> typeMapping) {
 
-                        Type rawType = paramType.getRawType();
-                        if (rawType instanceof Class) {
-                            Class<?> rawClass = ((Class) rawType);
+        Type[] actualTypeArgs = paramType.getActualTypeArguments();
+        for (Type actualTypeArg : actualTypeArgs) {
 
-                            TypeVariable<? extends Class<?>>[] srcTypeParams = rawClass.getTypeParameters();
-                            for (TypeVariable<? extends Class<?>> srcTypeParam : srcTypeParams) {
-                                typeMapping.put(srcTypeParam, typeMapping.get(actualVar));
-                            }
-                        }
+            if (actualTypeArg instanceof TypeVariable) {
+                TypeVariable<?> actualVar = (TypeVariable) actualTypeArg;
+
+                Type rawType = paramType.getRawType();
+                if (rawType instanceof Class) {
+                    Class<?> rawClass = ((Class) rawType);
+
+                    TypeVariable<? extends Class<?>>[] srcTypeParams = rawClass.getTypeParameters();
+                    for (TypeVariable<? extends Class<?>> srcTypeParam : srcTypeParams) {
+                        typeMapping.put(srcTypeParam, typeMapping.get(actualVar));
                     }
                 }
             }

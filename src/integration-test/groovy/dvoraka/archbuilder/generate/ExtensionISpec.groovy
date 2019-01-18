@@ -4,6 +4,7 @@ import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
 import dvoraka.archbuilder.sample.*
 import org.springframework.beans.factory.annotation.Autowired
+import spock.lang.Ignore
 
 class ExtensionISpec extends BaseISpec {
 
@@ -509,6 +510,38 @@ class ExtensionISpec extends BaseISpec {
             hasNoTypeParameters(clazz)
             declaredMethodCount(clazz) == 1
             declaredConstructorCount(clazz) == 2
+    }
+
+    @Ignore('WIP')
+    def "abstract class E1pb2am abstract extension extension NP"() {
+        given:
+            Class<?> cls = AbstractClassE1pb2am.class
+            Directory abs = new Directory.DirectoryBuilder('test')
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeClass(cls)
+                    .build()
+            Directory ext1 = new Directory.DirectoryBuilder('ext')
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abs)
+                    .abstractType()
+                    .filename('Test1' + cls.getSimpleName())
+                    .build()
+            Directory ext2 = new Directory.DirectoryBuilder('ext')
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(ext1)
+                    .filename('Test2' + cls.getSimpleName())
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(ext2))
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasTypeParameters(clazz)
+            declaredMethodCount(clazz) == 2
     }
 
     def "simple interface extension"() {

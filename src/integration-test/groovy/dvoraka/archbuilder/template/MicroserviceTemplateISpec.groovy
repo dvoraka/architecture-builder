@@ -8,11 +8,11 @@ import dvoraka.archbuilder.generate.Generator
 import dvoraka.archbuilder.generate.JavaHelper
 import dvoraka.archbuilder.generate.JavaTestingHelper
 import dvoraka.archbuilder.generate.Utils
+import dvoraka.archbuilder.sample.microservice.data.message.RequestMessage
+import dvoraka.archbuilder.sample.microservice.server.AbstractServer
+import dvoraka.archbuilder.sample.microservice.service.BaseService
 import dvoraka.archbuilder.service.DirService
 import dvoraka.archbuilder.template.arch.MicroserviceTemplate
-import dvoraka.archbuilder.test.microservice.data.message.RequestMessage
-import dvoraka.archbuilder.test.microservice.server.AbstractServer
-import dvoraka.archbuilder.test.microservice.service.BaseService
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

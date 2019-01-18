@@ -3,14 +3,14 @@ package dvoraka.archbuilder.template.arch;
 import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;
 import dvoraka.archbuilder.generate.JavaUtils;
+import dvoraka.archbuilder.sample.microservice.data.ResultData;
+import dvoraka.archbuilder.sample.microservice.data.message.ResponseMessage;
+import dvoraka.archbuilder.sample.microservice.net.NetworkComponent;
 import dvoraka.archbuilder.template.config.BuildGradleTemplate;
 import dvoraka.archbuilder.template.config.ConfigurationTemplate;
 import dvoraka.archbuilder.template.config.SettingsGradleTemplate;
 import dvoraka.archbuilder.template.source.SourceTemplate;
 import dvoraka.archbuilder.template.source.SpringBootApplicationTemplate;
-import dvoraka.archbuilder.test.microservice.data.ResultData;
-import dvoraka.archbuilder.test.microservice.data.message.ResponseMessage;
-import dvoraka.archbuilder.test.microservice.net.NetworkComponent;
 
 import java.util.List;
 

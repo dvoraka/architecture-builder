@@ -2,7 +2,7 @@ package dvoraka.archbuilder.generate
 
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
-import dvoraka.archbuilder.test.*
+import dvoraka.archbuilder.sample.*
 import org.springframework.beans.factory.annotation.Autowired
 
 class ExtensionISpec extends BaseISpec {

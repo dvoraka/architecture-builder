@@ -2,9 +2,9 @@ package dvoraka.archbuilder.generate
 
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
-import dvoraka.archbuilder.test.Interface4p1m
-import dvoraka.archbuilder.test.InterfaceE1pb
-import dvoraka.archbuilder.test.SimpleInterface
+import dvoraka.archbuilder.sample.Interface4p1m
+import dvoraka.archbuilder.sample.InterfaceE1pb
+import dvoraka.archbuilder.sample.SimpleInterface
 import org.springframework.beans.factory.annotation.Autowired
 
 import java.util.concurrent.RunnableFuture
@@ -70,7 +70,7 @@ class ImplementationISpec extends BaseISpec {
             Directory simpleInterface = new Directory.DirectoryBuilder("test")
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
-                    .typeName("dvoraka.archbuilder.test.SimpleInterface")
+                    .typeName("dvoraka.archbuilder.sample.SimpleInterface")
                     .build()
             Directory simpleInterfaceImpl = new Directory.DirectoryBuilder("test")
                     .type(DirType.IMPL)
@@ -111,12 +111,12 @@ class ImplementationISpec extends BaseISpec {
             hasNoDeclaredMethods(clazz)
     }
 
-    def "simple interface abstract implementation"() {
+    def "simple interface abstract implementation (with type name)"() {
         given:
             Directory simpleInterface = new Directory.DirectoryBuilder("test")
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
-                    .typeName("dvoraka.archbuilder.test.SimpleInterface")
+                    .typeName("dvoraka.archbuilder.sample.SimpleInterface")
                     .build()
             Directory simpleInterfaceImpl = new Directory.DirectoryBuilder("test")
                     .type(DirType.IMPL)
@@ -257,7 +257,7 @@ class ImplementationISpec extends BaseISpec {
             Directory interface4p = new Directory.DirectoryBuilder("test")
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
-                    .typeName("dvoraka.archbuilder.test.Interface4p1m")
+                    .typeClass(Interface4p1m)
                     .build()
             Directory interface4pImpl = new Directory.DirectoryBuilder("test")
                     .type(DirType.IMPL)

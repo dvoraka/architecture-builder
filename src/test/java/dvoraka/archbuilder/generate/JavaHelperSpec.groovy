@@ -1,6 +1,6 @@
 package dvoraka.archbuilder.generate
 
-import dvoraka.archbuilder.test.microservice.data.message.ResponseMessage
+import dvoraka.archbuilder.sample.microservice.data.message.ResponseMessage
 import spock.lang.Specification
 
 class JavaHelperSpec extends Specification {

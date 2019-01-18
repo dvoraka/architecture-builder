@@ -479,6 +479,38 @@ class ExtensionISpec extends BaseISpec {
             declaredConstructorCount(clazz) == 2
     }
 
+    def "abstract class E3c1m abstract extension extension"() {
+        given:
+            Class<?> cls = AbstractClassE3c1am1m.class
+            Directory abs = new Directory.DirectoryBuilder('test')
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeClass(cls)
+                    .build()
+            Directory ext1 = new Directory.DirectoryBuilder('ext')
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abs)
+                    .abstractType()
+                    .filename('Test1' + cls.getSimpleName())
+                    .build()
+            Directory ext2 = new Directory.DirectoryBuilder('ext')
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(ext1)
+                    .filename('Test2' + cls.getSimpleName())
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(ext2))
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            declaredMethodCount(clazz) == 1
+            declaredConstructorCount(clazz) == 2
+    }
+
     def "simple interface extension"() {
         given:
             Class<?> cls = SimpleInterface.class

@@ -419,7 +419,7 @@ class ExtensionISpec extends BaseISpec {
     def "class 3c1m extension extension"() {
         given:
             Class<?> cls = Class3c1m.class
-            Directory abs = new Directory.DirectoryBuilder("test")
+            Directory abs = new Directory.DirectoryBuilder('test')
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
@@ -447,10 +447,42 @@ class ExtensionISpec extends BaseISpec {
             declaredConstructorCount(clazz) == 2
     }
 
+    def "class 3c1m abstract extension extension"() {
+        given:
+            Class<?> cls = Class3c1m.class
+            Directory abs = new Directory.DirectoryBuilder('test')
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeClass(cls)
+                    .build()
+            Directory ext1 = new Directory.DirectoryBuilder('ext')
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abs)
+                    .abstractType()
+                    .filename('Test1' + cls.getSimpleName())
+                    .build()
+            Directory ext2 = new Directory.DirectoryBuilder('ext')
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(ext1)
+                    .filename('Test2' + cls.getSimpleName())
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(ext2))
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
+            declaredConstructorCount(clazz) == 2
+    }
+
     def "simple interface extension"() {
         given:
             Class<?> cls = SimpleInterface.class
-            Directory abs = new Directory.DirectoryBuilder("test")
+            Directory abs = new Directory.DirectoryBuilder('test')
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
@@ -460,7 +492,7 @@ class ExtensionISpec extends BaseISpec {
                     .parent(srcBase)
                     .superType(abs)
                     .interfaceType()
-                    .filename("Test" + cls.getSimpleName())
+                    .filename('Test' + cls.getSimpleName())
                     .build()
         when:
             mainGenerator.generate(root)

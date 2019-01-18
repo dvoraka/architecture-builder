@@ -473,27 +473,27 @@ class ExtensionISpec extends BaseISpec {
     }
 
     def "interface 4p1am extension"() {
-        Class<?> cls = Interface4p1m.class
         given:
-            Directory interface4p = new Directory.DirectoryBuilder("test")
+            Class<?> cls = Interface4p1m.class
+            Directory abs = new Directory.DirectoryBuilder('test')
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory interface4pImpl = new Directory.DirectoryBuilder("test")
+            Directory ext = new Directory.DirectoryBuilder('ext')
                     .type(DirType.IMPL)
                     .parent(srcBase)
-                    .superType(interface4p)
+                    .superType(abs)
                     .interfaceType()
-                    .filename("Test" + cls.getSimpleName())
-                    .parameterTypeName("java.lang.String")
+                    .filename('Test' + cls.getSimpleName())
+                    .parameterTypeName('java.lang.String')
                     .parameterTypeClass(Long.class)
-                    .parameterTypeName("java.lang.Boolean")
+                    .parameterTypeName('java.lang.Boolean')
                     .parameterTypeClass(SimpleInterface.class)
                     .build()
         when:
             mainGenerator.generate(root)
-            Class<?> clazz = loadClass(getClassName(interface4pImpl))
+            Class<?> clazz = loadClass(getClassName(ext))
         then:
             notThrown(Exception)
             isPublicAbstract(clazz)
@@ -502,8 +502,8 @@ class ExtensionISpec extends BaseISpec {
     }
 
     def "interface 4p1am extension NP"() {
-        Class<?> cls = Interface4p1m.class
         given:
+            Class<?> cls = Interface4p1m.class
             Directory interface4p = new Directory.DirectoryBuilder("test")
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
@@ -514,7 +514,7 @@ class ExtensionISpec extends BaseISpec {
                     .parent(srcBase)
                     .superType(interface4p)
                     .interfaceType()
-                    .filename("TestNP" + cls.getSimpleName())
+                    .filename('TestNP' + cls.getSimpleName())
                     .build()
         when:
             mainGenerator.generate(root)
@@ -529,18 +529,18 @@ class ExtensionISpec extends BaseISpec {
     def "interface E1pb extension"() {
         given:
             Class<?> cls = InterfaceE1pb.class
-            Directory abs = new Directory.DirectoryBuilder("test")
+            Directory abs = new Directory.DirectoryBuilder('test')
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory impl = new Directory.DirectoryBuilder("extension")
+            Directory impl = new Directory.DirectoryBuilder('ext')
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .interfaceType()
                     .parameterTypeClass(Long.class)
-                    .filename("Test" + cls.getSimpleName())
+                    .filename('Test' + cls.getSimpleName())
                     .build()
         when:
             mainGenerator.generate(root)
@@ -560,7 +560,7 @@ class ExtensionISpec extends BaseISpec {
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory impl = new Directory.DirectoryBuilder("extension")
+            Directory impl = new Directory.DirectoryBuilder("ext")
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)

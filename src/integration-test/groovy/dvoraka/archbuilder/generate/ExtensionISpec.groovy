@@ -3,6 +3,9 @@ package dvoraka.archbuilder.generate
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
 import dvoraka.archbuilder.sample.*
+import dvoraka.archbuilder.sample.generic.AbstractClass1p1am
+import dvoraka.archbuilder.sample.generic.Class1p
+import dvoraka.archbuilder.sample.generic.Class1p1m
 import dvoraka.archbuilder.sample.generic.Interface4p1m
 import org.springframework.beans.factory.annotation.Autowired
 import spock.lang.Ignore
@@ -133,16 +136,17 @@ class ExtensionISpec extends BaseISpec {
 
     def "class 1p extension"() {
         given:
+            Class<?> cls = Class1p
             Directory abs = new Directory.DirectoryBuilder("test")
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
-                    .typeClass(Class1p.class)
+                    .typeClass(cls)
                     .build()
             Directory ext = new Directory.DirectoryBuilder('ext')
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
-                    .filename("TestClass1p")
+                    .filename('Test' + cls.getSimpleName())
                     .build()
         when:
             mainGenerator.generate(root)
@@ -156,16 +160,17 @@ class ExtensionISpec extends BaseISpec {
 
     def "class 1p1m extension NP"() {
         given:
+            Class<?> cls = Class1p1m
             Directory abs = new Directory.DirectoryBuilder("test")
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
-                    .typeClass(Class1p1m.class)
+                    .typeClass(cls)
                     .build()
             Directory ext = new Directory.DirectoryBuilder('ext')
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
-                    .filename("TestNPClass1p1m")
+                    .filename('TestNP' + cls.getSimpleName())
                     .build()
         when:
             mainGenerator.generate(root)

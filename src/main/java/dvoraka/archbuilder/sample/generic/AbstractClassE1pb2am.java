@@ -1,6 +1,4 @@
-package dvoraka.archbuilder.sample;
-
-import dvoraka.archbuilder.sample.generic.Interface1pb1am;
+package dvoraka.archbuilder.sample.generic;
 
 import java.util.List;
 

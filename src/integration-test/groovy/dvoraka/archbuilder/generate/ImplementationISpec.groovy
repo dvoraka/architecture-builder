@@ -2,9 +2,9 @@ package dvoraka.archbuilder.generate
 
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
-import dvoraka.archbuilder.sample.InterfaceE1pb
 import dvoraka.archbuilder.sample.SimpleInterface
 import dvoraka.archbuilder.sample.generic.Interface4p1m
+import dvoraka.archbuilder.sample.generic.InterfaceE1pb
 import org.springframework.beans.factory.annotation.Autowired
 
 import java.util.concurrent.RunnableFuture
@@ -168,7 +168,7 @@ class ImplementationISpec extends BaseISpec {
 
     def "interface E1pb implementation NP"() {
         given:
-            Class<?> cls = InterfaceE1pb.class
+            Class<?> cls = InterfaceE1pb
             Directory abs = new Directory.DirectoryBuilder("test")
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)

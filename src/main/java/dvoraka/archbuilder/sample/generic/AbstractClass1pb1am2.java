@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.sample;
+package dvoraka.archbuilder.sample.generic;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.sample;
+package dvoraka.archbuilder.sample.generic;
 
 public abstract class AbstractClass1pb1am<T extends Number> {
 

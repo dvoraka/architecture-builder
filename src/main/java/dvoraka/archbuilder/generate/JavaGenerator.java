@@ -579,7 +579,8 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
             if (actualTypeArgument instanceof TypeVariable) {
 
-                TypeName typeVariableName = TypeName.get(varTypeMapping.getOrDefault(actualTypeArgument, type));
+                Type typeVar = varTypeMapping.getOrDefault(actualTypeArgument, actualTypeArgument);
+                TypeName typeVariableName = TypeName.get(typeVar);
                 typeNames.add(typeVariableName);
 
             } else if (actualTypeArgument instanceof ParameterizedType) {
@@ -705,7 +706,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
                     TypeVariable<? extends Class<?>>[] srcTypeParams = rawClass.getTypeParameters();
                     for (TypeVariable<? extends Class<?>> srcTypeParam : srcTypeParams) {
-                        typeMapping.put(srcTypeParam, typeMapping.get(actualVar));
+                        typeMapping.put(srcTypeParam, typeMapping.getOrDefault(actualVar, actualVar));
                     }
                 }
             }

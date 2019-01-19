@@ -2,7 +2,7 @@ package dvoraka.archbuilder.generate
 
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
-import dvoraka.archbuilder.sample.ServiceInterface2p
+import dvoraka.archbuilder.sample.generic.ServiceInterface2p
 import org.springframework.beans.factory.annotation.Autowired
 
 class ServiceImplementationISpec extends BaseISpec {
@@ -68,10 +68,11 @@ class ServiceImplementationISpec extends BaseISpec {
 
     def "ServiceInterface2p service implementation"() {
         given:
+            Class<?> cls = ServiceInterface2p.class
             Directory baseService = new Directory.DirectoryBuilder("service")
                     .type(DirType.SERVICE_ABSTRACT)
                     .parent(srcBaseAbs)
-                    .typeClass(ServiceInterface2p)
+                    .typeClass(cls)
                     .build()
             Directory service = new Directory.DirectoryBuilder("service")
                     .type(DirType.SERVICE)

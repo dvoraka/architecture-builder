@@ -3,6 +3,7 @@ package dvoraka.archbuilder.generate
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
 import dvoraka.archbuilder.sample.*
+import dvoraka.archbuilder.sample.generic.Interface4p1m
 import org.springframework.beans.factory.annotation.Autowired
 import spock.lang.Ignore
 

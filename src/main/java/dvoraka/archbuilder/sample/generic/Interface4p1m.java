@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.sample;
+package dvoraka.archbuilder.sample.generic;
 
 public interface Interface4p1m<T, U, V, W> {
 

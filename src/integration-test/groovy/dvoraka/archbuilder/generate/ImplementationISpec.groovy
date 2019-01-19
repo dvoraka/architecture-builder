@@ -2,9 +2,9 @@ package dvoraka.archbuilder.generate
 
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
-import dvoraka.archbuilder.sample.Interface4p1m
 import dvoraka.archbuilder.sample.InterfaceE1pb
 import dvoraka.archbuilder.sample.SimpleInterface
+import dvoraka.archbuilder.sample.generic.Interface4p1m
 import org.springframework.beans.factory.annotation.Autowired
 
 import java.util.concurrent.RunnableFuture
@@ -254,16 +254,17 @@ class ImplementationISpec extends BaseISpec {
 
     def "interface with 4 parameters abstract implementation"() {
         given:
+            Class<?> cls = Interface4p1m.class
             Directory interface4p = new Directory.DirectoryBuilder("test")
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
-                    .typeClass(Interface4p1m)
+                    .typeClass(cls)
                     .build()
-            Directory interface4pImpl = new Directory.DirectoryBuilder("test")
+            Directory interface4pImpl = new Directory.DirectoryBuilder('impl')
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(interface4p)
-                    .filename("AbstractInterface4P")
+                    .filename('Test' + cls.getSimpleName())
                     .abstractType()
                     .build()
         when:

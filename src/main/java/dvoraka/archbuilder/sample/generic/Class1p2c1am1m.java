@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.sample;
+package dvoraka.archbuilder.sample.generic;
 
 public abstract class Class1p2c1am1m<T> {
 

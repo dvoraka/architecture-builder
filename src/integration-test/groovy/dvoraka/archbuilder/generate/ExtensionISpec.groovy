@@ -3,10 +3,7 @@ package dvoraka.archbuilder.generate
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
 import dvoraka.archbuilder.sample.*
-import dvoraka.archbuilder.sample.generic.AbstractClass1p1am
-import dvoraka.archbuilder.sample.generic.Class1p
-import dvoraka.archbuilder.sample.generic.Class1p1m
-import dvoraka.archbuilder.sample.generic.Interface4p1m
+import dvoraka.archbuilder.sample.generic.*
 import org.springframework.beans.factory.annotation.Autowired
 import spock.lang.Ignore
 
@@ -184,16 +181,17 @@ class ExtensionISpec extends BaseISpec {
 
     def "class 1pb1m extension NP"() {
         given:
+            Class<?> cls = Class1pb1m
             Directory abs = new Directory.DirectoryBuilder("test")
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
-                    .typeClass(Class1pb1m.class)
+                    .typeClass(cls)
                     .build()
             Directory ext = new Directory.DirectoryBuilder('ext')
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
-                    .filename("TestNPClass1pb1m")
+                    .filename('TestNP' + cls.getSimpleName())
                     .build()
         when:
             mainGenerator.generate(root)
@@ -352,7 +350,7 @@ class ExtensionISpec extends BaseISpec {
             Directory abs = new Directory.DirectoryBuilder("test")
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
-                    .typeClass(Class1p2c1m.class)
+                    .typeClass(Class1p2c1m)
                     .build()
             Directory ext = new Directory.DirectoryBuilder('ext')
                     .type(DirType.IMPL)
@@ -374,17 +372,18 @@ class ExtensionISpec extends BaseISpec {
 
     def "class 1p2c1am1m extension"() {
         given:
+            Class<?> cls = Class1p2c1am1m
             Directory abs = new Directory.DirectoryBuilder("test")
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
-                    .typeClass(Class1p2c1am1m.class)
+                    .typeClass(cls)
                     .build()
             Directory ext = new Directory.DirectoryBuilder('ext')
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .parameterTypeClass(Long.class)
-                    .filename("TestClass1p2c1am1m")
+                    .filename('Test' + cls.getSimpleName())
                     .build()
         when:
             mainGenerator.generate(root)

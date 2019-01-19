@@ -36,4 +36,28 @@ class GenericsISpec extends BaseISpec {
             hasNoTypeParameters(clazz)
             declaredMethodCount(clazz) == 2
     }
+
+    def "interface 2p2am implementation NP"() {
+        given:
+            Class<?> cls = Interface2p2am
+            Directory abs = new Directory.DirectoryBuilder('test')
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeClass(cls)
+                    .build()
+            Directory impl = new Directory.DirectoryBuilder('generics')
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abs)
+                    .filename('TestNP' + cls.getSimpleName())
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(impl))
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasTypeParameters(clazz)
+            declaredMethodCount(clazz) == 2
+    }
 }

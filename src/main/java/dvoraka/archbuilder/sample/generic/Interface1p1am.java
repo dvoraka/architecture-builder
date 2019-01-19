@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.sample;
+package dvoraka.archbuilder.sample.generic;
 
 public interface Interface1p1am<C> {
 

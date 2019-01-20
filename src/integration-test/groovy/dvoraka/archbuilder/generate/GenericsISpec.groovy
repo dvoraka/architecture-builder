@@ -115,7 +115,6 @@ class GenericsISpec extends BaseISpec {
             declaredMethodCount(clazz) == 2
     }
 
-    @Ignore('WIP')
     def "interface EE2p2am implementation"() {
         given:
             Class<?> cls = InterfaceEE2p2am

@@ -7,7 +7,6 @@ import dvoraka.archbuilder.sample.generic.Interface2pb2am
 import dvoraka.archbuilder.sample.generic.InterfaceE2p2am
 import dvoraka.archbuilder.sample.generic.InterfaceEE2p2am
 import org.springframework.beans.factory.annotation.Autowired
-import spock.lang.Ignore
 
 class GenericsISpec extends BaseISpec {
 
@@ -141,7 +140,6 @@ class GenericsISpec extends BaseISpec {
             declaredMethodCount(clazz) == 2
     }
 
-    @Ignore('WIP')
     def "interface EE2p2am implementation NP"() {
         given:
             Class<?> cls = InterfaceEE2p2am

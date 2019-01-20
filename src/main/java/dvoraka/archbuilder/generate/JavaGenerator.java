@@ -681,7 +681,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 ParameterizedType paramType = ((ParameterizedType) iface);
                 // find vars for interface
                 addTypeVarsForType(paramType, typeMapping);
-                // find vars for all sub-interfaces
+                // find vars for all super-interfaces
                 addAllTypeVarMappings((Class<?>) paramType.getRawType(), typeMapping);
             }
         }

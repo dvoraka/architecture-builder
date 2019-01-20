@@ -690,8 +690,17 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         Type superClass = clazz.getGenericSuperclass();
         if (superClass instanceof ParameterizedType) {
             ParameterizedType paramType = ((ParameterizedType) superClass);
+
+            //TODO: generalize
+            // add new mapping to bridge the mapping gap
+            Class<?> cls = (Class<?>) paramType.getRawType();
+            typeMapping.put(
+                    cls.getTypeParameters()[0],
+                    typeMapping.get(clazz.getTypeParameters()[0])
+            );
+
             // TODO: find all interfaces and use them the same as above
-            addTypeVarsForType((ParameterizedType) ((Class) paramType.getRawType()).getGenericInterfaces()[0], typeMapping);
+            addTypeVarsForType((ParameterizedType) cls.getGenericInterfaces()[0], typeMapping);
         }
     }
 

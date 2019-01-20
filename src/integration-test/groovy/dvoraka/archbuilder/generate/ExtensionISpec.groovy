@@ -5,7 +5,6 @@ import dvoraka.archbuilder.Directory
 import dvoraka.archbuilder.sample.*
 import dvoraka.archbuilder.sample.generic.*
 import org.springframework.beans.factory.annotation.Autowired
-import spock.lang.Ignore
 
 class ExtensionISpec extends BaseISpec {
 
@@ -549,10 +548,10 @@ class ExtensionISpec extends BaseISpec {
             declaredMethodCount(clazz) == 2
     }
 
-    @Ignore('WIP')
+//    @Ignore('WIP')
     def "abstract class E1pb2am abstract extension extension"() {
         given:
-            Class<?> cls = AbstractClassE1pb2am.class
+            Class<?> cls = AbstractClassE1pb2am
             Directory abs = new Directory.DirectoryBuilder('test')
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
@@ -563,14 +562,14 @@ class ExtensionISpec extends BaseISpec {
                     .parent(srcBase)
                     .superType(abs)
                     .abstractType()
-                    .filename('Test1' + cls.getSimpleName())
+                    .filename('Test10' + cls.getSimpleName())
                     .build()
             Directory ext2 = new Directory.DirectoryBuilder('ext')
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(ext1)
                     .parameterTypeClass(Long.class)
-                    .filename('Test2' + cls.getSimpleName())
+                    .filename('Test20' + cls.getSimpleName())
                     .build()
         when:
             mainGenerator.generate(root)
@@ -578,7 +577,7 @@ class ExtensionISpec extends BaseISpec {
         then:
             notThrown(Exception)
             isPublicNotAbstract(clazz)
-            hasTypeParameters(clazz)
+            hasNoTypeParameters(clazz)
             declaredMethodCount(clazz) == 2
     }
 

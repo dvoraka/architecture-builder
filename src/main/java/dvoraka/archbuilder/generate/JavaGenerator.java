@@ -11,6 +11,7 @@ import com.squareup.javapoet.TypeVariableName;
 import com.squareup.javapoet.WildcardTypeName;
 import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;
+import dvoraka.archbuilder.TypeVarMappingException;
 import dvoraka.archbuilder.service.DirService;
 import dvoraka.archbuilder.util.ByteClassLoader;
 import org.slf4j.Logger;
@@ -718,7 +719,12 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
                     TypeVariable<? extends Class<?>>[] srcTypeParams = rawClass.getTypeParameters();
                     for (TypeVariable<? extends Class<?>> srcTypeParam : srcTypeParams) {
-                        typeMapping.put(srcTypeParam, typeMapping.getOrDefault(actualVar, actualVar));
+
+                        if (typeMapping.containsKey(actualVar)) {
+                            typeMapping.put(srcTypeParam, typeMapping.get(actualVar));
+                        } else {
+                            throw new TypeVarMappingException();
+                        }
                     }
                 }
             }

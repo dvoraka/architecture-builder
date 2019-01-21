@@ -11,9 +11,9 @@ class GenericsISpec extends BaseISpec {
     Generator mainGenerator
 
 
-    def "abstract class EE2pb2am extension"() {
+    def "abstract class EE2pb3am extension"() {
         given:
-            Class<?> cls = AbstractClassEE2pb2am
+            Class<?> cls = AbstractClassEE2pb3am
             Directory abs = new Directory.DirectoryBuilder('test')
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)

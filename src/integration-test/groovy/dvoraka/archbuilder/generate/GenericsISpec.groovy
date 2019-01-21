@@ -27,6 +27,7 @@ class GenericsISpec extends BaseISpec {
                     .superType(abs)
                     .filename('Test' + cls.getSimpleName())
                     .parameterTypeClass(Long.class)
+                    .parameterTypeClass(Double.class)
                     .build()
         when:
             mainGenerator.generate(root)

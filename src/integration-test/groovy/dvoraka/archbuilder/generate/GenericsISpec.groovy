@@ -2,17 +2,41 @@ package dvoraka.archbuilder.generate
 
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
-import dvoraka.archbuilder.sample.generic.Interface2p2am
-import dvoraka.archbuilder.sample.generic.Interface2pb2am
-import dvoraka.archbuilder.sample.generic.InterfaceE2p2am
-import dvoraka.archbuilder.sample.generic.InterfaceEE2p2am
+import dvoraka.archbuilder.sample.generic.*
 import org.springframework.beans.factory.annotation.Autowired
+import spock.lang.Ignore
 
 class GenericsISpec extends BaseISpec {
 
     @Autowired
     Generator mainGenerator
 
+
+    @Ignore('WIP')
+    def "abstract class EE2pb2am extension"() {
+        given:
+            Class<?> cls = AbstractClassEE2pb2am
+            Directory abs = new Directory.DirectoryBuilder('test')
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeClass(cls)
+                    .build()
+            Directory ext = new Directory.DirectoryBuilder('generics')
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abs)
+                    .filename('Test' + cls.getSimpleName())
+                    .parameterTypeClass(Long.class)
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(ext))
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            declaredMethodCount(clazz) == 3
+    }
 
     def "interface 2p2am implementation"() {
         given:

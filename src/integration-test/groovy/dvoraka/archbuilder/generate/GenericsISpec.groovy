@@ -4,7 +4,6 @@ import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
 import dvoraka.archbuilder.sample.generic.*
 import org.springframework.beans.factory.annotation.Autowired
-import spock.lang.Ignore
 
 class GenericsISpec extends BaseISpec {
 
@@ -12,7 +11,6 @@ class GenericsISpec extends BaseISpec {
     Generator mainGenerator
 
 
-    @Ignore('WIP')
     def "abstract class EE2pb2am extension"() {
         given:
             Class<?> cls = AbstractClassEE2pb2am

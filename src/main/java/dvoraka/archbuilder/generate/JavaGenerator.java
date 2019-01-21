@@ -698,7 +698,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             for (int i = 0; i < superRawClass.getTypeParameters().length; i++) {
                 typeMapping.put(
                         superRawClass.getTypeParameters()[i],
-                        typeMapping.get(clazz.getTypeParameters()[i])
+                        typeMapping.get(paramSuperType.getActualTypeArguments()[i])
                 );
             }
 

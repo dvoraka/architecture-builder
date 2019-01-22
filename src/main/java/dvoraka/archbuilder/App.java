@@ -1,5 +1,6 @@
 package dvoraka.archbuilder;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dvoraka.archbuilder.generate.Generator;
 import dvoraka.archbuilder.generate.LangGenerator;
 import dvoraka.archbuilder.service.DirService;
@@ -29,5 +30,10 @@ public class App {
         return args -> {
             System.out.println("App");
         };
+    }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
     }
 }

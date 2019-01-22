@@ -676,14 +676,15 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
     }
 
     private void addAllTypeVarMappings(Class<?> clazz, Map<TypeVariable<?>, Type> typeMapping) {
-        // from interfaces
+
+        // from implemented interfaces
         for (Type iface : clazz.getGenericInterfaces()) {
             if (iface instanceof ParameterizedType) {
-                ParameterizedType paramType = ((ParameterizedType) iface);
+                ParameterizedType paramIface = ((ParameterizedType) iface);
                 // find vars for interface
-                addTypeVarsForType(paramType, typeMapping);
+                addTypeVarsForType(paramIface, typeMapping);
                 // find vars for all super-interfaces
-                addAllTypeVarMappings((Class<?>) paramType.getRawType(), typeMapping);
+                addAllTypeVarMappings((Class<?>) paramIface.getRawType(), typeMapping);
             }
         }
 
@@ -702,8 +703,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 );
             }
 
-            // TODO: find all interfaces and use them the same as above
-            addTypeVarsForType((ParameterizedType) superRawClass.getGenericInterfaces()[0], typeMapping);
+            addAllTypeVarMappings(superRawClass, typeMapping);
         }
     }
 

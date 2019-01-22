@@ -37,6 +37,32 @@ class GenericsISpec extends BaseISpec {
             declaredMethodCount(clazz) == 3
     }
 
+    def "abstract class EE2p4am extension"() {
+        given:
+            Class<?> cls = AbstractClassEE2p4am
+            Directory abs = new Directory.DirectoryBuilder('test')
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeClass(cls)
+                    .build()
+            Directory ext = new Directory.DirectoryBuilder('generics')
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abs)
+                    .filename('Test' + cls.getSimpleName())
+                    .parameterTypeClass(String.class)
+                    .parameterTypeClass(Double.class)
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(ext))
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            declaredMethodCount(clazz) == 4
+    }
+
     def "interface 2p2am implementation"() {
         given:
             Class<?> cls = Interface2p2am

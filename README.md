@@ -30,3 +30,67 @@ is usually very similar and you only need to choose the name of the application.
 ### Configuration template
 
 It's a template for any configuration, like build configuration. The templates are used in Directories.
+
+## Examples
+
+### Micro-service template
+
+It creates the whole micro-service skeleton based on known abstraction.
+
+Starting abstraction is (from sample package in the project):
+```
+microservice/
+├── data
+│   ├── message
+│   │   ├── BaseMessage.java
+│   │   ├── Message.java
+│   │   ├── RequestMessage.java
+│   │   ├── ResponseMessage.java
+│   │   └── ResultMessage.java
+│   └── ResultData.java
+├── Management.java
+├── net
+│   ├── Acknowledgment.java
+│   ├── NetworkComponent.java
+│   ├── NetworkMessageListener.java
+│   ├── Receiver.java
+│   └── Sender.java
+├── server
+│   └── AbstractServer.java
+└── service
+    └── BaseService.java
+```
+
+And generated project structure:
+
+```
+project/
+├── build.gradle
+├── gradle
+│   └── wrapper
+│       ├── gradle-wrapper.jar
+│       └── gradle-wrapper.properties
+├── gradlew
+├── gradlew.bat
+├── settings.gradle
+└── src
+    └── main
+        ├── java
+        │   └── test
+        │       └── microservice
+        │           ├── data
+        │           │   └── message
+        │           │       ├── TestingServiceMessage.java
+        │           │       └── TestingServiceResponseMessage.java
+        │           ├── server
+        │           │   ├── TestingServiceNetworkComponent.java
+        │           │   └── TestingServiceServer.java
+        │           ├── service
+        │           │   ├── DefaultTestingService.java
+        │           │   └── TestingService.java
+        │           └── TestingServiceApp.java
+        └── resources
+            └── application.properties
+```
+
+And then you can insert your logic easily into prepared structure.

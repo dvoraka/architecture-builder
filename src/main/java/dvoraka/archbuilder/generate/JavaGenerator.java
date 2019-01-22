@@ -680,7 +680,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         // from implemented interfaces
         for (Type iface : clazz.getGenericInterfaces()) {
             if (iface instanceof ParameterizedType) {
-                ParameterizedType paramIface = ((ParameterizedType) iface);
+                ParameterizedType paramIface = (ParameterizedType) iface;
                 // find vars for interface
                 addTypeVarsForType(paramIface, typeMapping);
                 // find vars for all super-interfaces
@@ -691,15 +691,15 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         // from superclass
         Type superClass = clazz.getGenericSuperclass();
         if (superClass instanceof ParameterizedType) {
-            ParameterizedType paramSuperType = ((ParameterizedType) superClass);
+            ParameterizedType paramSuperClass = (ParameterizedType) superClass;
 
             //TODO: check with complex test
             // add new mapping to bridge the mapping gap
-            Class<?> superRawClass = (Class<?>) paramSuperType.getRawType();
+            Class<?> superRawClass = (Class<?>) paramSuperClass.getRawType();
             for (int i = 0; i < superRawClass.getTypeParameters().length; i++) {
                 typeMapping.put(
                         superRawClass.getTypeParameters()[i],
-                        typeMapping.get(paramSuperType.getActualTypeArguments()[i])
+                        typeMapping.get(paramSuperClass.getActualTypeArguments()[i])
                 );
             }
 

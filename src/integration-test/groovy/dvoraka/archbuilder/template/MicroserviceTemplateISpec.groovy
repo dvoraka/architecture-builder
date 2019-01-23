@@ -98,8 +98,30 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
             true
     }
 
+    def "micro-service directory serialization"() {
+        given:
+            String rootDirName = 'testing-service'
+            String packageName = 'test.microservice'
+            String serviceName = 'TestingService'
+
+            MicroserviceTemplate template = new MicroserviceTemplate(
+                    rootDirName,
+                    packageName,
+                    BaseService.class,
+                    Collections.emptyList(),
+                    serviceName,
+                    AbstractServer.class,
+                    RequestMessage.class,
+            )
+            Directory rootDir = template.getRootDirectory()
+        when:
+            String json = objectMapper.writeValueAsString(rootDir)
+        then:
+            notThrown(Exception)
+    }
+
     @Ignore('WIP')
-    def "micro-service template serialization"() {
+    def "micro-service directory deserialization"() {
         given:
             String rootDirName = 'testing-service'
             String packageName = 'test.microservice'

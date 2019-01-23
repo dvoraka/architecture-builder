@@ -71,10 +71,12 @@ public class Directory {
         }
     }
 
+    @JsonIgnore
     public boolean isRoot() {
         return getParent() == null;
     }
 
+    @JsonIgnore
     boolean isBase() {
         return type.isBase();
     }

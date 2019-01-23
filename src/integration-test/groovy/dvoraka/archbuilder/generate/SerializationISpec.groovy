@@ -3,7 +3,6 @@ package dvoraka.archbuilder.generate
 import com.fasterxml.jackson.databind.ObjectMapper
 import dvoraka.archbuilder.Directory
 import org.springframework.beans.factory.annotation.Autowired
-import spock.lang.Ignore
 
 class SerializationISpec extends BaseISpec {
 
@@ -11,7 +10,6 @@ class SerializationISpec extends BaseISpec {
     ObjectMapper objectMapper
 
 
-    @Ignore('WIP')
     def "simple directory tree deserialization"() {
         when:
             String json = objectMapper.writeValueAsString(srcRoot)

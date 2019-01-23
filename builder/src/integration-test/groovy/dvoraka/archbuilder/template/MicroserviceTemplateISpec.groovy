@@ -87,8 +87,7 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
             notThrown(Exception)
 
         when:
-            true
-//            buildTool.build()
+            buildTool.build()
 
         then:
             notThrown(Exception)

@@ -1,4 +1,4 @@
 rootProject.name = 'architecture-builder'
 
+include 'builder'
 include 'data'
-include 'generator'

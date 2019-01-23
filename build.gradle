@@ -1,110 +1,111 @@
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 plugins {
-    id 'org.springframework.boot' version '2.1.0.RELEASE'
+    id 'org.springframework.boot' version '2.1.0.RELEASE' apply false
 }
 
-apply plugin: 'java'
-apply plugin: 'groovy'
-apply plugin: 'io.spring.dependency-management'
-apply plugin: 'idea'
-apply plugin: 'maven'
-apply plugin: 'jacoco'
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'groovy'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'idea'
+    apply plugin: 'maven'
+    apply plugin: 'jacoco'
 
+    version = '0.1-SNAPSHOT'
+    sourceCompatibility = 1.8
 
-version = '0.1-SNAPSHOT'
-sourceCompatibility = 1.8
-
-repositories {
-    mavenCentral()
-    maven {
-        url 'https://repo.gradle.org/gradle/libs-releases'
+    repositories {
+        mavenCentral()
+        maven {
+            url 'https://repo.gradle.org/gradle/libs-releases'
+        }
     }
-}
 
-dependencyManagement {
-    imports {
-        mavenBom SpringBootPlugin.BOM_COORDINATES
+    dependencyManagement {
+        imports {
+            mavenBom SpringBootPlugin.BOM_COORDINATES
+        }
     }
-}
 
-dependencies {
-    // Spring Boot starter
-    compile('org.springframework.boot:spring-boot-starter')
-    // Spring logging
-    compile('org.springframework.boot:spring-boot-starter-logging')
+    dependencies {
+        // Spring Boot starter
+        compile('org.springframework.boot:spring-boot-starter')
+        // Spring logging
+        compile('org.springframework.boot:spring-boot-starter-logging')
 
-    // Jackson
-    compile('com.fasterxml.jackson.core:jackson-databind')
-    compile('com.fasterxml.jackson.datatype:jackson-datatype-jdk8')
+        // Jackson
+        compile('com.fasterxml.jackson.core:jackson-databind')
+        compile('com.fasterxml.jackson.datatype:jackson-datatype-jdk8')
 
-    // JavaPoet
-    compile('com.squareup:javapoet:1.11.1')
+        // JavaPoet
+        compile('com.squareup:javapoet:1.11.1')
 
-    // Lombok
+        // Lombok
 //    compileOnly('org.projectlombok:lombok')
 //    annotationProcessor('org.projectlombok:lombok')
 
-    // Gradle tooling API
-    implementation group: 'org.gradle', name: 'gradle-tooling-api', version: '5.0'
-    testCompile group: 'org.gradle', name: 'gradle-tooling-api', version: '5.0'
-    // Gradle source
-    runtimeOnly group: 'org.gradle', name: 'gradle-core', version: '5.0'
+        // Gradle tooling API
+        implementation group: 'org.gradle', name: 'gradle-tooling-api', version: '5.0'
+        testCompile group: 'org.gradle', name: 'gradle-tooling-api', version: '5.0'
+        // Gradle source
+        runtimeOnly group: 'org.gradle', name: 'gradle-core', version: '5.0'
 
-    // Testing
-    // Spring testing
-    testCompile('org.springframework.boot:spring-boot-starter-test')
-    // Spock
-    testCompile('org.spockframework:spock-core:1.1-groovy-2.4')
-    testCompile('org.spockframework:spock-spring:1.1-groovy-2.4')
+        // Testing
+        // Spring testing
+        testCompile('org.springframework.boot:spring-boot-starter-test')
+        // Spock
+        testCompile('org.spockframework:spock-core:1.1-groovy-2.4')
+        testCompile('org.spockframework:spock-spring:1.1-groovy-2.4')
 
-    // Development tools
-    compile('org.springframework.boot:spring-boot-configuration-processor')
-    compile('org.springframework.boot:spring-boot-devtools')
-}
+        // Development tools
+        compile('org.springframework.boot:spring-boot-configuration-processor')
+        compile('org.springframework.boot:spring-boot-devtools')
+    }
 
-sourceSets {
-    // integration tests
-    integrationTest {
-        groovy {
-            compileClasspath += main.output + test.output
-            runtimeClasspath += main.output + test.output
-            srcDir file('src/integration-test/groovy')
+    sourceSets {
+        // integration tests
+        integrationTest {
+            groovy {
+                compileClasspath += main.output + test.output
+                runtimeClasspath += main.output + test.output
+                srcDir file('src/integration-test/groovy')
+            }
+            resources.srcDir file('src/integration-test/resources')
         }
-        resources.srcDir file('src/integration-test/resources')
     }
-}
 
-configurations {
-    // IT
-    integrationTestCompile.extendsFrom testCompile
-    integrationTestRuntime.extendsFrom testRuntime
-}
-
-task integrationTest(type: Test) {
-    testClassesDirs = sourceSets.integrationTest.output.classesDirs
-    classpath = sourceSets.integrationTest.runtimeClasspath
-
-    mustRunAfter test
-}
-
-tasks.withType(JavaCompile) {
-    options.compilerArgs << "-Xlint:all"
-}
-
-jacocoTestReport {
-    getExecutionData().setFrom(fileTree(dir: 'build/jacoco', include: '**/*.exec'))
-    reports {
-        xml.enabled = true
-        html.enabled = true
+    configurations {
+        // IT
+        integrationTestCompile.extendsFrom testCompile
+        integrationTestRuntime.extendsFrom testRuntime
     }
+
+    task integrationTest(type: Test) {
+        testClassesDirs = sourceSets.integrationTest.output.classesDirs
+        classpath = sourceSets.integrationTest.runtimeClasspath
+
+        mustRunAfter test
+    }
+
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:all"
+    }
+
+    jacocoTestReport {
+        getExecutionData().setFrom(fileTree(dir: 'build/jacoco', include: '**/*.exec'))
+        reports {
+            xml.enabled = true
+            html.enabled = true
+        }
+    }
+
+    check.dependsOn integrationTest
+    check.dependsOn jacocoTestReport
+    install.dependsOn build
 }
 
 wrapper {
     gradleVersion = '5.0'
     distributionType = Wrapper.DistributionType.ALL
 }
-
-check.dependsOn integrationTest
-check.dependsOn jacocoTestReport
-install.dependsOn build

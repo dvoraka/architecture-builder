@@ -36,6 +36,7 @@ dependencies {
 
     // Jackson
     compile('com.fasterxml.jackson.core:jackson-databind')
+    compile('com.fasterxml.jackson.datatype:jackson-datatype-jdk8')
 
     // JavaPoet
     compile('com.squareup:javapoet:1.11.1')

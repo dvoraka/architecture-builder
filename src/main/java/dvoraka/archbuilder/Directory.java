@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -131,6 +132,33 @@ public class Directory {
 
     public String getText() {
         return text;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Directory directory = (Directory) o;
+        return abstractType == directory.abstractType &&
+                interfaceType == directory.interfaceType &&
+                id.equals(directory.id) &&
+                name.equals(directory.name) &&
+                Objects.equals(filename, directory.filename) &&
+                Objects.equals(typeName, directory.typeName) &&
+                type == directory.type &&
+                //TODO: check parent
+//                Objects.equals(parent, directory.parent) &&
+                Objects.equals(children, directory.children) &&
+                Objects.equals(superType, directory.superType) &&
+                Objects.equals(dependencies, directory.dependencies) &&
+                Objects.equals(parameters, directory.parameters) &&
+                Objects.equals(text, directory.text);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, filename, typeName, abstractType, interfaceType, type,
+                children, superType, dependencies, parameters, text);
     }
 
     @Override

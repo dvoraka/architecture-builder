@@ -17,7 +17,6 @@ import dvoraka.archbuilder.template.arch.MicroserviceTemplate
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import spock.lang.Ignore
 import spock.lang.Specification
 
 @Slf4j
@@ -120,7 +119,6 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
             notThrown(Exception)
     }
 
-    @Ignore('WIP')
     def "micro-service directory deserialization"() {
         given:
             String rootDirName = 'testing-service'
@@ -145,5 +143,6 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
             Directory loadedDir = objectMapper.readValue(json, Directory)
         then:
             notThrown(Exception)
+            loadedDir == rootDir
     }
 }

@@ -8,6 +8,8 @@ dynamically (generate source code and all other stuff). There are high-level Jav
 project. For instance, micro-service template is for building new micro-service with known architecture. It possible
 to use your own abstract types with the template or build your own template.
 
+Prototype currently works with Java 8 only.
+
 ## Building blocks
 
 Description of main building blocks you can use.

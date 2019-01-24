@@ -66,12 +66,13 @@ subprojects {
     sourceSets {
         // integration tests
         integrationTest {
-            groovy {
-                compileClasspath += main.output + test.output
-                runtimeClasspath += main.output + test.output
-                srcDir file('src/integration-test/groovy')
-            }
+            groovy.srcDir file('src/integration-test/groovy')
             resources.srcDir file('src/integration-test/resources')
+
+//            compileClasspath += main.output + test.output
+//            runtimeClasspath += main.output + test.output
+            compileClasspath += sourceSets.main.output + configurations.testRuntimeClasspath
+            runtimeClasspath += output + compileClasspath
         }
     }
 

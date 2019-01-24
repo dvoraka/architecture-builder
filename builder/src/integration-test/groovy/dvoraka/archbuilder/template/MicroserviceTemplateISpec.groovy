@@ -17,6 +17,7 @@ import dvoraka.archbuilder.template.arch.MicroserviceTemplate
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import spock.lang.Ignore
 import spock.lang.Specification
 
 @Slf4j
@@ -57,7 +58,7 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
             Directory rootDir = template.getRootDirectory()
 
         when:
-            mainGenerator.generate(template.getRootDirectory())
+            mainGenerator.generate(rootDir)
 
         then:
             exists(DirType.SERVICE, rootDir, dirService)
@@ -88,6 +89,48 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
         when:
 //            buildTool.build()
             true
+
+        then:
+            notThrown(Exception)
+
+        cleanup:
+            Utils.removeFiles(rootDirName)
+            true
+    }
+
+    @Ignore("needs working repository")
+    def "create micro-service with build"() {
+        given:
+            String rootDirName = 'testing-service'
+            String packageName = 'test.microservice'
+            String serviceName = 'TestingService'
+
+            MicroserviceTemplate template = new MicroserviceTemplate(
+                    rootDirName,
+                    packageName,
+                    BaseService.class,
+                    Collections.emptyList(),
+                    serviceName,
+                    AbstractServer.class,
+                    RequestMessage.class,
+            )
+            Directory rootDir = template.getRootDirectory()
+
+        when:
+            mainGenerator.generate(rootDir)
+
+        then:
+            notThrown(Exception)
+
+        when:
+            BuildTool buildTool = new GradleBuildTool(new File(rootDirName))
+            buildTool.prepareEnv()
+
+        then:
+            notThrown(Exception)
+
+        when:
+            buildTool.build()
 
         then:
             notThrown(Exception)

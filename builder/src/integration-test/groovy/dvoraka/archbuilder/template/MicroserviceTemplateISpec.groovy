@@ -14,6 +14,7 @@ import dvoraka.archbuilder.sample.microservice.server.AbstractServer
 import dvoraka.archbuilder.sample.microservice.service.BaseService
 import dvoraka.archbuilder.service.DirService
 import dvoraka.archbuilder.template.arch.MicroserviceTemplate
+import groovy.json.JsonOutput
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -31,32 +32,30 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
     @Autowired
     ObjectMapper objectMapper
 
+    String rootDirName = 'testing-service'
+    String packageName = 'test.microservice'
+    String serviceName = 'TestingService'
+
+    MicroserviceTemplate template
+    Directory rootDir
+
 
     def setup() {
-    }
 
-    def "test"() {
-        expect:
-            true
+        template = new MicroserviceTemplate(
+                rootDirName,
+                packageName,
+                BaseService.class,
+                Collections.emptyList(),
+                serviceName,
+                AbstractServer.class,
+                RequestMessage.class,
+        )
+
+        rootDir = template.getRootDirectory()
     }
 
     def "create micro-service"() {
-        given:
-            String rootDirName = 'testing-service'
-            String packageName = 'test.microservice'
-            String serviceName = 'TestingService'
-
-            MicroserviceTemplate template = new MicroserviceTemplate(
-                    rootDirName,
-                    packageName,
-                    BaseService.class,
-                    Collections.emptyList(),
-                    serviceName,
-                    AbstractServer.class,
-                    RequestMessage.class,
-            )
-            Directory rootDir = template.getRootDirectory()
-
         when:
             mainGenerator.generate(rootDir)
 
@@ -86,36 +85,12 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
         then:
             notThrown(Exception)
 
-        when:
-//            buildTool.build()
-            true
-
-        then:
-            notThrown(Exception)
-
         cleanup:
             Utils.removeFiles(rootDirName)
-            true
     }
 
     @Ignore("needs working repository")
     def "create micro-service with build"() {
-        given:
-            String rootDirName = 'testing-service'
-            String packageName = 'test.microservice'
-            String serviceName = 'TestingService'
-
-            MicroserviceTemplate template = new MicroserviceTemplate(
-                    rootDirName,
-                    packageName,
-                    BaseService.class,
-                    Collections.emptyList(),
-                    serviceName,
-                    AbstractServer.class,
-                    RequestMessage.class,
-            )
-            Directory rootDir = template.getRootDirectory()
-
         when:
             mainGenerator.generate(rootDir)
 
@@ -141,49 +116,24 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
     }
 
     def "micro-service directory serialization"() {
-        given:
-            String rootDirName = 'testing-service'
-            String packageName = 'test.microservice'
-            String serviceName = 'TestingService'
-
-            MicroserviceTemplate template = new MicroserviceTemplate(
-                    rootDirName,
-                    packageName,
-                    BaseService.class,
-                    Collections.emptyList(),
-                    serviceName,
-                    AbstractServer.class,
-                    RequestMessage.class,
-            )
-            Directory rootDir = template.getRootDirectory()
         when:
             String json = objectMapper.writeValueAsString(rootDir)
+            println JsonOutput.prettyPrint(json)
+
         then:
             notThrown(Exception)
     }
 
     def "micro-service directory deserialization"() {
-        given:
-            String rootDirName = 'testing-service'
-            String packageName = 'test.microservice'
-            String serviceName = 'TestingService'
-
-            MicroserviceTemplate template = new MicroserviceTemplate(
-                    rootDirName,
-                    packageName,
-                    BaseService.class,
-                    Collections.emptyList(),
-                    serviceName,
-                    AbstractServer.class,
-                    RequestMessage.class,
-            )
-            Directory rootDir = template.getRootDirectory()
         when:
             String json = objectMapper.writeValueAsString(rootDir)
+
         then:
             notThrown(Exception)
+
         when:
             Directory loadedDir = objectMapper.readValue(json, Directory)
+
         then:
             notThrown(Exception)
             loadedDir == rootDir

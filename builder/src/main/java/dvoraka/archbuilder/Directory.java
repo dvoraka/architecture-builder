@@ -1,8 +1,10 @@
 package dvoraka.archbuilder;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import dvoraka.archbuilder.generate.JavaUtils;
 
 import java.io.File;
@@ -13,6 +15,10 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)
 public class Directory {
 
     private String id;

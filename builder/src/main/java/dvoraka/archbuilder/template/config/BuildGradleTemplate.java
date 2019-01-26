@@ -53,8 +53,6 @@ public class BuildGradleTemplate implements ConfigurationTemplate {
         sb.append("    implementation 'com.github.dvoraka:architecture-builder:master-SNAPSHOT'\n");
         sb.append("}\n\n");
 
-        sb.append("\n");
-
         return sb.toString();
     }
 

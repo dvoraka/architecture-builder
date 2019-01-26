@@ -661,6 +661,11 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 typeMapping.put(typeVariable, typeVariable);
             }
         } else {
+
+            if (directory.getParameters().size() != typeVariables.length) {
+                throw new RuntimeException("Type parameter counts do not match.");
+            }
+
             for (int index = 0; index < typeVariables.length; index++) {
 
                 String className = directory.getParameters().get(index);

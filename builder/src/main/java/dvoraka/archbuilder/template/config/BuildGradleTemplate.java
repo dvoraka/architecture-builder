@@ -26,8 +26,14 @@ public class BuildGradleTemplate implements ConfigurationTemplate {
     @Override
     public String getConfig() {
 
+        // POC stuff only
+
         StringBuilder sb = new StringBuilder();
 
+        // Spring Boot plugin
+        sb.append("plugins { id 'org.springframework.boot' version '2.1.0.RELEASE' }\n\n");
+
+        // plugins
         for (String plugin : plugins) {
             sb.append("apply plugin: ");
             sb.append("'");
@@ -40,6 +46,7 @@ public class BuildGradleTemplate implements ConfigurationTemplate {
         sb.append("repositories {\n");
         sb.append("    jcenter()\n");
         sb.append("    maven { url 'https://jitpack.io' }\n");
+        sb.append("    maven { url 'https://repo.gradle.org/gradle/libs-releases' }\n");
         sb.append("}\n\n");
 
         sb.append("dependencies {\n");

@@ -663,7 +663,8 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         } else {
 
             if (directory.getParameters().size() != typeVariables.length) {
-                throw new RuntimeException("Type parameter counts do not match.");
+                throw new RuntimeException("Type parameter counts do not match for: "
+                        + directory.getFilename().orElse("unknown"));
             }
 
             for (int index = 0; index < typeVariables.length; index++) {

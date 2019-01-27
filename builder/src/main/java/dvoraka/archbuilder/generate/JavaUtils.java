@@ -33,8 +33,12 @@ public final class JavaUtils {
     }
 
     public static String getClassName(Directory directory) {
-        return directory.getPackageName() + "." + directory.getFilename()
-                .orElseThrow(() -> new RuntimeException("No filename!"));
+        if (directory.getTypeName() != null) {
+            return directory.getTypeName();
+        } else {
+            return directory.getPackageName() + "." + directory.getFilename()
+                    .orElseThrow(() -> new RuntimeException("No filename!"));
+        }
     }
 
     public static int compileSource(String pathString) {

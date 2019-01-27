@@ -3,6 +3,7 @@ package dvoraka.archbuilder.template.arch;
 import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;
 import dvoraka.archbuilder.generate.JavaUtils;
+import dvoraka.archbuilder.sample.microservice.data.BaseException;
 import dvoraka.archbuilder.sample.microservice.data.ResultData;
 import dvoraka.archbuilder.sample.microservice.data.message.ResponseMessage;
 import dvoraka.archbuilder.sample.microservice.net.ServiceNetworkComponent;
@@ -79,6 +80,14 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .superType(service)
                 .build();
 
+        // data
+        Directory dataAbs = new Directory.DirectoryBuilder("")
+                .type(DirType.ABSTRACT)
+                .parent(srcBase)
+                .typeClass(ResultData.class)
+                .parameterTypeClass(BaseException.class)
+                .build();
+
         // messages
         Directory requestMessageAbs = new Directory.DirectoryBuilder("")
                 .type(DirType.ABSTRACT)
@@ -106,7 +115,8 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .type(DirType.IMPL)
                 .parent(srcBase)
                 .superType(responseMessageAbs)
-                .parameterTypeClass(ResultData.class)
+                .parameterTypeDir(dataAbs)
+                .parameterTypeClass(BaseException.class)
                 .filename(responseMessageName)
                 .build();
 

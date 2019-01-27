@@ -33,6 +33,10 @@ public final class JavaUtils {
     }
 
     public static String getClassName(Directory directory) {
+        //TODO
+//        return directory.getTypeName();
+
+        // remove
         if (directory.getTypeName() != null) {
             return directory.getTypeName();
         } else {

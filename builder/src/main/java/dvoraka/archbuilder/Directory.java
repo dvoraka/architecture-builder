@@ -290,7 +290,8 @@ public class Directory {
             }
 
             // generate typename if necessary
-            if (directory.type == DirType.IMPL && directory.typeName == null) {
+            if ((directory.type == DirType.IMPL || directory.type == DirType.CUSTOM_TYPE)
+                    && directory.typeName == null) {
                 directory.typeName = directory.getPackageName() + "." + filename;
             }
 

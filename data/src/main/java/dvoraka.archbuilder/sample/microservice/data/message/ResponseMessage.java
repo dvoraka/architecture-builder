@@ -10,7 +10,8 @@ import static java.util.Objects.requireNonNull;
 public abstract class ResponseMessage<
         D extends ResultData<E>,
         E extends BaseException>
-        extends BaseMessage implements ResultMessage<D, E> {
+        extends BaseMessage
+        implements ResultMessage<D, E> {
 
     protected String corrId;
     protected D resultData;

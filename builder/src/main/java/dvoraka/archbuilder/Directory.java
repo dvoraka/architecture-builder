@@ -290,12 +290,17 @@ public class Directory {
             }
 
             // generate typename if necessary
-            if ((directory.type == DirType.IMPL || directory.type == DirType.CUSTOM_TYPE)
-                    && directory.typeName == null) {
+            if (isTypenameNecessary(directory) && directory.typeName == null) {
                 directory.typeName = directory.getPackageName() + "." + filename;
             }
 
             return directory;
+        }
+
+        private boolean isTypenameNecessary(Directory directory) {
+            return directory.type == DirType.IMPL
+                    || directory.type == DirType.CUSTOM_TYPE
+                    || directory.type == DirType.SERVICE;
         }
     }
 }

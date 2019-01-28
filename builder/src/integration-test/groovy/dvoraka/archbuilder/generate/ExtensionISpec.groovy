@@ -10,6 +10,7 @@ import dvoraka.archbuilder.sample.*
 import dvoraka.archbuilder.sample.generic.*
 import dvoraka.archbuilder.sample.microservice.data.BaseException
 import dvoraka.archbuilder.sample.microservice.data.ResultData
+import dvoraka.archbuilder.sample.microservice.data.message.ResponseMessage
 import org.springframework.beans.factory.annotation.Autowired
 import spock.lang.Ignore
 
@@ -429,7 +430,6 @@ class ExtensionISpec extends BaseISpec {
             declaredConstructorCount(clazz) == 2
     }
 
-    @Ignore('WIP - throws')
     def "class 2pp extension"() {
         given:
             Class<?> cls = Class2pp
@@ -452,6 +452,36 @@ class ExtensionISpec extends BaseISpec {
             // but it would be great to have options to build a complete type programmatically
                     .parameterTypeClass(TestingResultData)
                     .parameterTypeClass(BaseException)
+                    .filename('Test' + cls.getSimpleName())
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(ext))
+        then:
+            notThrown(Exception)
+    }
+
+    @Ignore('WIP - throws')
+    def "ResponseMessage extension"() {
+        given:
+            Class<?> cls = ResponseMessage
+            Directory dataAbs = new Directory.DirectoryBuilder('')
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeClass(TestingResultData.class)
+                    .parameterTypeClass(BaseException.class)
+                    .build()
+            Directory abs = new Directory.DirectoryBuilder('')
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeClass(cls)
+                    .build()
+            Directory ext = new Directory.DirectoryBuilder('ext')
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abs)
+                    .parameterTypeDir(dataAbs)
+                    .parameterTypeClass(BaseException.class)
                     .filename('Test' + cls.getSimpleName())
                     .build()
         when:

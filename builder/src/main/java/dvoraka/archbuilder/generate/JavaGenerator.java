@@ -411,25 +411,8 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             }
 
             // return type
-            //TODO: abstract out for all other cases like exceptions
             Type returnType = method.getGenericReturnType();
-            TypeName returnTypeName;
-            if (returnType instanceof TypeVariable) {
-
-                returnTypeName = TypeName.get(typeMapping.get(returnType));
-
-            } else if (returnType instanceof ParameterizedType) {
-
-                ParameterizedType type = ((ParameterizedType) returnType);
-                returnTypeName = resolveParametrizedType(type, typeMapping);
-
-//            } else if (returnType instanceof GenericArrayType) {
-//
-//                returnTypeName = ArrayTypeName.get(returnType);
-
-            } else {
-                returnTypeName = TypeName.get(returnType);
-            }
+            TypeName returnTypeName = resolveTypeName(returnType, typeMapping);
 
             // return value
             String retValue;
@@ -440,19 +423,14 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             }
 
             // parameters
-            List<ParameterSpec> parameterSpecs =
-                    genParameterSpecs(method.getParameters(), typeMapping);
+            Parameter[] parameters = method.getParameters();
+            List<ParameterSpec> parameterSpecs = genParameterSpecs(parameters, typeMapping);
 
             // exceptions
             Type[] exceptions = method.getGenericExceptionTypes();
             List<TypeName> exceptionTypes = new ArrayList<>();
             for (Type type : exceptions) {
-                //TODO: all cases
-                if (type instanceof TypeVariable) {
-                    exceptionTypes.add(TypeName.get(typeMapping.get(type)));
-                } else {
-                    exceptionTypes.add(TypeName.get(type));
-                }
+                exceptionTypes.add(resolveTypeName(type, typeMapping));
             }
 
             // modifiers
@@ -492,6 +470,30 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         }
 
         return methodSpecs;
+    }
+
+    private TypeName resolveTypeName(Type type, Map<TypeVariable<?>, Type> typeMapping) {
+
+        TypeName typeName;
+        if (type instanceof TypeVariable) {
+
+            typeName = TypeName.get(typeMapping.get(type));
+
+        } else if (type instanceof ParameterizedType) {
+
+            ParameterizedType parameterizedType = (ParameterizedType) type;
+            typeName = resolveParametrizedType(parameterizedType, typeMapping);
+
+            //TODO: all cases
+//            } else if (returnType instanceof GenericArrayType) {
+//
+//                typeName = ArrayTypeName.get(returnType);
+
+        } else {
+            typeName = TypeName.get(type);
+        }
+
+        return typeName;
     }
 
     private List<MethodSpec> genConstructorSpecs(Class<?> superClass, Map<TypeVariable<?>, Type> typeMapping) {

@@ -4,7 +4,10 @@ import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
 import dvoraka.archbuilder.sample.*
 import dvoraka.archbuilder.sample.generic.*
+import dvoraka.archbuilder.sample.microservice.data.BaseException
+import dvoraka.archbuilder.sample.microservice.data.ResultData
 import org.springframework.beans.factory.annotation.Autowired
+import spock.lang.Ignore
 
 class ExtensionISpec extends BaseISpec {
 
@@ -399,7 +402,7 @@ class ExtensionISpec extends BaseISpec {
 
     def "class 3c1m extension"() {
         given:
-            Class<?> cls = Class3c1m.class
+            Class<?> cls = Class3c1m
             Directory abs = new Directory.DirectoryBuilder("test")
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
@@ -422,9 +425,38 @@ class ExtensionISpec extends BaseISpec {
             declaredConstructorCount(clazz) == 2
     }
 
+    @Ignore('WIP')
+    def "class 2pp extension"() {
+        given:
+            Class<?> cls = Class2pp
+            Directory abs = new Directory.DirectoryBuilder('test')
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeClass(cls)
+                    .build()
+            Directory dataAbs = new Directory.DirectoryBuilder('test')
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeClass(ResultData)
+                    .build()
+            Directory ext = new Directory.DirectoryBuilder('ext')
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abs)
+                    .parameterTypeDir(dataAbs)
+                    .parameterTypeClass(BaseException)
+                    .filename('Test' + cls.getSimpleName())
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(ext))
+        then:
+            notThrown(Exception)
+    }
+
     def "class 3c1m extension extension"() {
         given:
-            Class<?> cls = Class3c1m.class
+            Class<?> cls = Class3c1m
             Directory abs = new Directory.DirectoryBuilder('test')
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
@@ -455,7 +487,7 @@ class ExtensionISpec extends BaseISpec {
 
     def "class 3c1m abstract extension extension"() {
         given:
-            Class<?> cls = Class3c1m.class
+            Class<?> cls = Class3c1m
             Directory abs = new Directory.DirectoryBuilder('test')
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)

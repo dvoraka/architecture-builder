@@ -12,7 +12,6 @@ import dvoraka.archbuilder.sample.microservice.data.BaseException
 import dvoraka.archbuilder.sample.microservice.data.ResultData
 import dvoraka.archbuilder.sample.microservice.data.message.ResponseMessage
 import org.springframework.beans.factory.annotation.Autowired
-import spock.lang.Ignore
 
 class ExtensionISpec extends BaseISpec {
 
@@ -461,7 +460,6 @@ class ExtensionISpec extends BaseISpec {
             notThrown(Exception)
     }
 
-    @Ignore('WIP - throws')
     def "ResponseMessage extension"() {
         given:
             Class<?> cls = ResponseMessage

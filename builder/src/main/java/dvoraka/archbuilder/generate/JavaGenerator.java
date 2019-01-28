@@ -411,6 +411,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             }
 
             // return type
+            //TODO: abstract out for all other cases like exceptions
             Type returnType = method.getGenericReturnType();
             TypeName returnTypeName;
             if (returnType instanceof TypeVariable) {
@@ -446,7 +447,12 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             Type[] exceptions = method.getGenericExceptionTypes();
             List<TypeName> exceptionTypes = new ArrayList<>();
             for (Type type : exceptions) {
-                exceptionTypes.add(TypeName.get(type));
+                //TODO: all cases
+                if (type instanceof TypeVariable) {
+                    exceptionTypes.add(TypeName.get(typeMapping.get(type)));
+                } else {
+                    exceptionTypes.add(TypeName.get(type));
+                }
             }
 
             // modifiers

@@ -1,6 +1,8 @@
 package dvoraka.archbuilder.generate
 
+import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.JavaFile
+import com.squareup.javapoet.ParameterizedTypeName
 import com.squareup.javapoet.TypeSpec
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
@@ -456,13 +458,21 @@ class ExtensionISpec extends BaseISpec {
             notThrown(Exception)
     }
 
-    @Ignore('WIP')
+    //TODO: move
     def "JavaPoet test"() {
         setup:
-            // build parametrized type name
+            ParameterizedTypeName resultData = ParameterizedTypeName.get(
+                    ResultData,
+                    BaseException
+            )
+            ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(
+                    ClassName.get(Class2pp),
+                    resultData,
+                    ClassName.get(BaseException)
+            )
 
-            TypeSpec spec = TypeSpec.classBuilder('Test')
-                    .superclass(Class2pp)
+            TypeSpec spec = TypeSpec.classBuilder('JavaPoetTest')
+                    .superclass(parameterizedTypeName)
                     .build()
             JavaFile javaFile = JavaFile.builder('', spec)
                     .build()

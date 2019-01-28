@@ -429,7 +429,7 @@ class ExtensionISpec extends BaseISpec {
             declaredConstructorCount(clazz) == 2
     }
 
-    @Ignore('WIP')
+    @Ignore('WIP - throws')
     def "class 2pp extension"() {
         given:
             Class<?> cls = Class2pp
@@ -447,7 +447,10 @@ class ExtensionISpec extends BaseISpec {
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
-                    .parameterTypeDir(dataAbs)
+//                    .parameterTypeDir(dataAbs)
+            // for current implementation is's possible to use already parametrized type
+            // but it would be great to have options to build a complete type programmatically
+                    .parameterTypeClass(TestingResultData)
                     .parameterTypeClass(BaseException)
                     .filename('Test' + cls.getSimpleName())
                     .build()

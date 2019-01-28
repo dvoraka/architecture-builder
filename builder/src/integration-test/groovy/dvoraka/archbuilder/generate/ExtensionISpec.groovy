@@ -1,5 +1,7 @@
 package dvoraka.archbuilder.generate
 
+import com.squareup.javapoet.JavaFile
+import com.squareup.javapoet.TypeSpec
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
 import dvoraka.archbuilder.sample.*
@@ -452,6 +454,20 @@ class ExtensionISpec extends BaseISpec {
             Class<?> clazz = loadClass(getClassName(ext))
         then:
             notThrown(Exception)
+    }
+
+    @Ignore('WIP')
+    def "JavaPoet test"() {
+        setup:
+            // build parametrized type name
+
+            TypeSpec spec = TypeSpec.classBuilder('Test')
+                    .superclass(Class2pp)
+                    .build()
+            JavaFile javaFile = JavaFile.builder('', spec)
+                    .build()
+        expect:
+            println javaFile.toString()
     }
 
     def "class 3c1m extension extension"() {

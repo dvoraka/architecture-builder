@@ -637,7 +637,6 @@ class ExtensionISpec extends BaseISpec {
             declaredMethodCount(clazz) == 2
     }
 
-//    @Ignore('WIP')
     def "abstract class E1pb2am abstract extension extension"() {
         given:
             Class<?> cls = AbstractClassE1pb2am

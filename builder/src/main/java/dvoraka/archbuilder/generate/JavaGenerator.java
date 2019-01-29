@@ -415,14 +415,14 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             TypeName returnTypeName = resolveTypeName(returnType, typeMapping);
 
             // return value
-            String retValue;
+            String returnValue;
             if (returnType == Void.TYPE) {
-                retValue = null;
+                returnValue = null;
             } else {
-                retValue = getReturnValue(returnType);
+                returnValue = getReturnValue(returnType);
             }
 
-            // parameters
+            // parameters (generic parameters are not used because of parameter names)
             Parameter[] parameters = method.getParameters();
             List<ParameterSpec> parameterSpecs = genParameterSpecs(parameters, typeMapping);
 
@@ -442,7 +442,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             }
 
             MethodSpec spec;
-            if (retValue == null) {
+            if (returnValue == null) {
                 spec = MethodSpec.methodBuilder(method.getName())
                         .addAnnotation(Override.class)
                         .returns(returnTypeName)
@@ -457,7 +457,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                         .addModifiers(modifiers)
                         .addParameters(parameterSpecs)
                         .addExceptions(exceptionTypes)
-                        .addStatement("return " + retValue);
+                        .addStatement("return " + returnValue);
 
                 if (typeVariableName != null) {
                     builder.addTypeVariable(typeVariableName);

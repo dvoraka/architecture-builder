@@ -266,7 +266,10 @@ public class Directory {
 
         public DirectoryBuilder parameterTypeDir(Directory directory) {
             dependsOn(directory);
-            return parameterTypeName(JavaUtils.getClassName(directory));
+
+            directory.getFilename().orElseThrow(() -> noFilenameException(directory));
+
+            return parameterTypeName(directory.getTypeName());
         }
 
         public Directory build() {
@@ -291,6 +294,9 @@ public class Directory {
 
             // generate typename if necessary
             if (isTypenameNecessary(directory) && directory.typeName == null) {
+                if (filename == null || filename.isEmpty()) {
+                    throw noFilenameException(directory);
+                }
                 directory.typeName = directory.getPackageName() + "." + filename;
             }
 
@@ -301,6 +307,10 @@ public class Directory {
             return directory.type == DirType.IMPL
                     || directory.type == DirType.CUSTOM_TYPE
                     || directory.type == DirType.SERVICE;
+        }
+
+        private RuntimeException noFilenameException(Directory directory) {
+            return new RuntimeException("No filename for: " + directory);
         }
     }
 }

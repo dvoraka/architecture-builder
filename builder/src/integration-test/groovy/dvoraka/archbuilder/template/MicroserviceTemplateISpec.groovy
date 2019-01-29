@@ -34,7 +34,7 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
 
     String rootDirName = 'testing-service'
     String packageName = 'test.microservice'
-    String serviceName = 'TestingService'
+    String serviceName = 'Budget'
 
     MicroserviceTemplate template
     Directory rootDir
@@ -55,7 +55,7 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
         rootDir = template.getRootDirectory()
     }
 
-    def "create micro-service"() {
+    def "create micro-service - budget service"() {
         when:
             mainGenerator.generate(rootDir)
 
@@ -75,7 +75,7 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
             Class<?> serviceImplClass = loadClass(defaultServiceImplName(serviceDir))
 
         then:
-            serviceImplClass.getSimpleName() == 'Default' + serviceName
+            serviceImplClass.getSimpleName() == 'Default' + serviceName + 'Service'
             serviceImplClass.getName() == defaultServiceImplName(serviceDir)
 
         when:

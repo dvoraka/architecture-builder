@@ -63,11 +63,12 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .typeClass(superService)
                 .build();
 
+        String serviceFullName = serviceName + "Service";
         Directory.DirectoryBuilder serviceBuilder = new Directory.DirectoryBuilder("service")
                 .type(DirType.SERVICE)
                 .parent(srcBase)
                 .superType(abstractService)
-                .filename(serviceName);
+                .filename(serviceFullName);
         for (Class<?> typeArgument : typeArguments) {
             serviceBuilder.parameterTypeClass(typeArgument);
         }
@@ -87,7 +88,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .typeClass(BaseException.class)
                 .build();
 
-        String exceptionName = "TestingException";
+        String exceptionName = serviceName + "Exception";
         Directory exception = new Directory.DirectoryBuilder("exception")
                 .type(DirType.IMPL)
                 .parent(srcBase)
@@ -102,7 +103,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .typeClass(ResultData.class)
                 .build();
 
-        String dataName = "TestingData";
+        String dataName = serviceName + "Data";
         Directory data = new Directory.DirectoryBuilder("data")
                 .type(DirType.IMPL)
                 .parent(srcBase)

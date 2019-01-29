@@ -55,7 +55,6 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
         rootDir = template.getRootDirectory()
     }
 
-    @Ignore('WIP - throws')
     def "create micro-service"() {
         when:
             mainGenerator.generate(rootDir)

@@ -3,8 +3,8 @@ package dvoraka.archbuilder.template.arch;
 import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;
 import dvoraka.archbuilder.generate.JavaUtils;
-import dvoraka.archbuilder.sample.generic.TestingResultData;
 import dvoraka.archbuilder.sample.microservice.data.BaseException;
+import dvoraka.archbuilder.sample.microservice.data.ResultData;
 import dvoraka.archbuilder.sample.microservice.data.message.ResponseMessage;
 import dvoraka.archbuilder.sample.microservice.net.ServiceNetworkComponent;
 import dvoraka.archbuilder.template.config.BuildGradleTemplate;
@@ -84,7 +84,15 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
         Directory dataAbs = new Directory.DirectoryBuilder("")
                 .type(DirType.ABSTRACT)
                 .parent(srcBase)
-                .typeClass(TestingResultData.class)
+                .typeClass(ResultData.class)
+                .build();
+
+        String dataName = "TestingData";
+        Directory data = new Directory.DirectoryBuilder("data")
+                .type(DirType.IMPL)
+                .parent(srcBase)
+                .superType(dataAbs)
+                .filename(dataName)
                 .parameterTypeClass(BaseException.class)
                 .build();
 
@@ -115,7 +123,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .type(DirType.IMPL)
                 .parent(srcBase)
                 .superType(responseMessageAbs)
-                .parameterTypeDir(dataAbs)
+                .parameterTypeDir(data)
                 .parameterTypeClass(BaseException.class)
                 .filename(responseMessageName)
                 .build();

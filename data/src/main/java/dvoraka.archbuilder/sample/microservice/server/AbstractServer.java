@@ -8,10 +8,6 @@ public abstract class AbstractServer implements Management {
     private volatile boolean running;
 
 
-    public abstract void start();
-
-    public abstract void stop();
-
     @Override
     public boolean isRunning() {
         return running;

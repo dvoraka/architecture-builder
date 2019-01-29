@@ -80,6 +80,21 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .superType(service)
                 .build();
 
+        // exception
+        Directory exceptionAbs = new Directory.DirectoryBuilder("")
+                .type(DirType.ABSTRACT)
+                .parent(srcBase)
+                .typeClass(BaseException.class)
+                .build();
+
+        String exceptionName = "TestingException";
+        Directory exception = new Directory.DirectoryBuilder("exception")
+                .type(DirType.IMPL)
+                .parent(srcBase)
+                .superType(exceptionAbs)
+                .filename(exceptionName)
+                .build();
+
         // data
         Directory dataAbs = new Directory.DirectoryBuilder("")
                 .type(DirType.ABSTRACT)
@@ -93,7 +108,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .parent(srcBase)
                 .superType(dataAbs)
                 .filename(dataName)
-                .parameterTypeClass(BaseException.class)
+                .parameterTypeDir(exception)
                 .build();
 
         // messages
@@ -124,7 +139,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .parent(srcBase)
                 .superType(responseMessageAbs)
                 .parameterTypeDir(data)
-                .parameterTypeClass(BaseException.class)
+                .parameterTypeDir(exception)
                 .filename(responseMessageName)
                 .build();
 
@@ -142,6 +157,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .superType(serverAbs)
                 .filename(serverName)
                 .build();
+
         // network component
         Directory networkComponentAbs = new Directory.DirectoryBuilder("")
                 .type(DirType.ABSTRACT)
@@ -186,6 +202,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .filename(buildGradleTemplate.getFilename())
                 .text(buildGradleTemplate.getConfig())
                 .build();
+
         ConfigurationTemplate settingsGradleTemplate = new SettingsGradleTemplate("Project1");
         Directory settingsGradle = new Directory.DirectoryBuilder("")
                 .type(DirType.BUILD_CONFIG)

@@ -441,32 +441,23 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 modifiers.add(Modifier.PROTECTED);
             }
 
-            MethodSpec spec;
-            if (returnValue == null) {
-                spec = MethodSpec.methodBuilder(method.getName())
-                        .addAnnotation(Override.class)
-                        .returns(returnTypeName)
-                        .addModifiers(modifiers)
-                        .addParameters(parameterSpecs)
-                        .addExceptions(exceptionTypes)
-                        .build();
-            } else {
-                MethodSpec.Builder builder = MethodSpec.methodBuilder(method.getName())
-                        .addAnnotation(Override.class)
-                        .returns(returnTypeName)
-                        .addModifiers(modifiers)
-                        .addParameters(parameterSpecs)
-                        .addExceptions(exceptionTypes)
-                        .addStatement("return " + returnValue);
+            MethodSpec methodSpec;
+            MethodSpec.Builder methodSpecBuilder = MethodSpec.methodBuilder(method.getName())
+                    .addAnnotation(Override.class)
+                    .returns(returnTypeName)
+                    .addModifiers(modifiers)
+                    .addParameters(parameterSpecs)
+                    .addExceptions(exceptionTypes);
 
-                if (typeVariableName != null) {
-                    builder.addTypeVariable(typeVariableName);
-                }
-
-                spec = builder.build();
+            if (returnValue != null) {
+                methodSpecBuilder.addStatement("return " + returnValue);
+            }
+            if (typeVariableName != null) {
+                methodSpecBuilder.addTypeVariable(typeVariableName);
             }
 
-            methodSpecs.add(spec);
+            methodSpec = methodSpecBuilder.build();
+            methodSpecs.add(methodSpec);
         }
 
         return methodSpecs;

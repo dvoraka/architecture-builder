@@ -7,14 +7,14 @@ import org.slf4j.LoggerFactory;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-public abstract class AbstractReceiver<M extends Message> implements Receiver<M> {
+public abstract class AbstractNetReceiver<M extends Message> implements NetReceiver<M> {
 
     protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final Set<NetMessageListener<M>> listeners;
 
 
-    public AbstractReceiver() {
+    public AbstractNetReceiver() {
         listeners = new CopyOnWriteArraySet<>();
     }
 

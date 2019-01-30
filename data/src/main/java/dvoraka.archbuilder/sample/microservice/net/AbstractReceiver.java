@@ -11,7 +11,7 @@ public abstract class AbstractReceiver<M extends Message> implements Receiver<M>
 
     protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    private final Set<NetworkMessageListener<M>> listeners;
+    private final Set<NetMessageListener<M>> listeners;
 
 
     public AbstractReceiver() {
@@ -33,12 +33,12 @@ public abstract class AbstractReceiver<M extends Message> implements Receiver<M>
     }
 
     @Override
-    public void addMessageListener(NetworkMessageListener<M> listener) {
+    public void addMessageListener(NetMessageListener<M> listener) {
         listeners.add(listener);
     }
 
     @Override
-    public void removeMessageListener(NetworkMessageListener<M> listener) {
+    public void removeMessageListener(NetMessageListener<M> listener) {
         listeners.remove(listener);
     }
 }

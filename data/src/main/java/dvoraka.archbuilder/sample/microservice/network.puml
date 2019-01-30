@@ -5,10 +5,10 @@ title Network component types
 interface "message broker" as broker
 
 
-package "send and receive" {
-    [sender] as sender
-    [receiver] as receiver
-    [network component] as ncomponent
+package "send and receive messages" {
+    [network sender] as sender
+    [network receiver] as receiver
+    [service network component] as ncomponent
 }
 
 broker <-up- sender
@@ -18,23 +18,17 @@ ncomponent --> sender
 ncomponent <-- receiver
 
 
-package "send" {
-    [sender] as sender2
-    [network component] as ncomponent2
+package "receive messages" {
+    [network receiver] as receiver2
 }
 
-broker <-left- sender2
-
-ncomponent2 --> sender2
+broker -up-> receiver2
 
 
-package "receive" {
-    [receiver] as receiver3
-    [network component] as ncomponent3
+package "receive response messages" {
+    [network receiver] as receiver3
 }
 
-broker -right-> receiver3
-
-ncomponent3 <-- receiver3
+broker -up-> receiver3
 
 @enduml

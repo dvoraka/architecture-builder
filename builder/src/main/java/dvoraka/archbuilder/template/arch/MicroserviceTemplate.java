@@ -6,6 +6,7 @@ import dvoraka.archbuilder.generate.JavaUtils;
 import dvoraka.archbuilder.sample.microservice.data.BaseException;
 import dvoraka.archbuilder.sample.microservice.data.ResultData;
 import dvoraka.archbuilder.sample.microservice.data.message.ResponseMessage;
+import dvoraka.archbuilder.sample.microservice.net.NetReceiver;
 import dvoraka.archbuilder.sample.microservice.net.ServiceNetComponent;
 import dvoraka.archbuilder.template.config.BuildGradleTemplate;
 import dvoraka.archbuilder.template.config.ConfigurationTemplate;
@@ -159,14 +160,20 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .filename(serverName)
                 .build();
 
-        // network component
+        // network components
         Directory networkComponentAbs = new Directory.DirectoryBuilder("")
                 .type(DirType.ABSTRACT)
                 .parent(srcBase)
                 .typeClass(ServiceNetComponent.class)
                 .build();
 
-        String networkComponentName = serviceName + "NetworkComponent";
+        Directory networkReceiverAbs = new Directory.DirectoryBuilder("")
+                .type(DirType.ABSTRACT)
+                .parent(srcBase)
+                .typeClass(NetReceiver.class)
+                .build();
+
+        String networkComponentName = serviceName + "NetComponent";
         Directory networkComponent = new Directory.DirectoryBuilder("server")
                 .type(DirType.IMPL)
                 .parent(srcBase)
@@ -175,6 +182,26 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .parameterTypeDir(requestMessage)
                 .parameterTypeDir(responseMessage)
                 .filename(networkComponentName)
+                .build();
+
+        String networkReceiverName = serviceName + "NetReceiver";
+        Directory networkReceiver = new Directory.DirectoryBuilder("server")
+                .type(DirType.IMPL)
+                .parent(srcBase)
+                .superType(networkReceiverAbs)
+                .interfaceType()
+                .parameterTypeDir(requestMessage)
+                .filename(networkReceiverName)
+                .build();
+
+        String networkResponseReceiverName = serviceName + "NetResponseReceiver";
+        Directory networkResponseReceiver = new Directory.DirectoryBuilder("server")
+                .type(DirType.IMPL)
+                .parent(srcBase)
+                .superType(networkReceiverAbs)
+                .interfaceType()
+                .parameterTypeDir(responseMessage)
+                .filename(networkResponseReceiverName)
                 .build();
 
         // application properties

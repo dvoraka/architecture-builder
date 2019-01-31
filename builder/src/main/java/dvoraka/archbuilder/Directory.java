@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
@@ -43,6 +44,7 @@ public class Directory {
     private List<String> parameters;
 
     private String text;
+    private Supplier<String> textSupplier;
 
 
     private Directory() {
@@ -194,6 +196,7 @@ public class Directory {
         private List<Directory> dependencies;
         private List<String> parameters;
         private String text;
+        private Supplier<String> textSupplier;
 
 
         public DirectoryBuilder(String name) {
@@ -250,6 +253,11 @@ public class Directory {
             return this;
         }
 
+        public DirectoryBuilder textSupplier(Supplier<String> supplier) {
+            this.textSupplier = supplier;
+            return this;
+        }
+
         public DirectoryBuilder dependsOn(Directory directory) {
             dependencies.add(directory);
             return this;
@@ -286,7 +294,9 @@ public class Directory {
             directory.superType = this.superType;
             directory.dependencies = this.dependencies;
             directory.parameters = this.parameters;
+
             directory.text = this.text;
+            directory.textSupplier = this.textSupplier;
 
             if (parent != null) {
                 parent.addChildren(directory);

@@ -4,6 +4,8 @@ import com.squareup.javapoet.*
 import dvoraka.archbuilder.sample.generic.Class2pp
 import dvoraka.archbuilder.sample.microservice.data.BaseException
 import dvoraka.archbuilder.sample.microservice.data.ResultData
+import dvoraka.archbuilder.springconfing.BeanMapping
+import dvoraka.archbuilder.springconfing.BeanParameter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import spock.lang.Specification
@@ -42,12 +44,22 @@ class CodeGenerationSpec extends Specification {
             Class<?> parameter1 = String
             String parameterName1 = 'value'
 
-            MethodSpec methodSpec = MethodSpec.methodBuilder(name)
+            BeanParameter parameter = new BeanParameter()
+            parameter.setType(parameter1)
+            parameter.setName(parameterName1)
+
+            BeanMapping mapping = new BeanMapping()
+            mapping.setType(type)
+            mapping.setName(name)
+            mapping.addParameter(parameter)
+            mapping.setCode(body)
+
+            MethodSpec methodSpec = MethodSpec.methodBuilder(mapping.getName())
                     .addAnnotation(Bean)
                     .addModifiers(Modifier.PUBLIC)
-                    .returns(type)
+                    .returns(mapping.getType())
                     .addParameter(parameter1, parameterName1)
-                    .addStatement(body, parameterName1)
+                    .addStatement(mapping.getCode(), parameterName1)
                     .build()
             TypeSpec spec = TypeSpec.classBuilder('SpringConfig')
                     .addAnnotation(Configuration)

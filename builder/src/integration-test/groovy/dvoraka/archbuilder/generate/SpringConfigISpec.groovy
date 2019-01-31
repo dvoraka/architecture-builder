@@ -24,47 +24,64 @@ class SpringConfigISpec extends BaseISpec {
 
     def "Spring config"() {
         setup:
-            Directory param1 = new Directory.DirectoryBuilder("test")
+            Directory abs = new Directory.DirectoryBuilder('test')
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(SimpleClass.class)
                     .build()
+            Directory ext = new Directory.DirectoryBuilder('config')
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abs)
+                    .filename('TestSimpleClass')
+                    .build()
 
             Supplier<String> callback = {
-                'test'
+
+                Directory param1 = ext
+
+                Class<?> type = String
+                String name = 'string'
+                String body = 'return new String($L)'
+
+                Class<?> parameter1 = String
+                String parameterName1 = 'value'
+
+                BeanParameter parameter = new BeanParameter()
+                parameter.setType(parameter1)
+                parameter.setName(parameterName1)
+
+                BeanMapping mapping = new BeanMapping()
+                mapping.setType(type)
+                mapping.setName(name)
+                mapping.addParameter(parameter)
+                mapping.setCode(body)
+
+                MethodSpec methodSpec = MethodSpec.methodBuilder(mapping.getName())
+                        .addAnnotation(Bean)
+                        .addModifiers(Modifier.PUBLIC)
+                        .returns(mapping.getType())
+                        .addParameter(parameter1, parameterName1)
+                        .addStatement(mapping.getCode(), parameterName1)
+                        .build()
+                TypeSpec spec = TypeSpec.classBuilder('SpringConfig')
+                        .addAnnotation(Configuration)
+                        .addMethod(methodSpec)
+                        .build()
+                JavaFile javaFile = JavaFile.builder('', spec)
+                        .build()
+
+                return javaFile.toString()
             }
 
-            Class<?> type = String
-            String name = 'string'
-            String body = 'return new String($L)'
-
-            Class<?> parameter1 = String
-            String parameterName1 = 'value'
-
-            BeanParameter parameter = new BeanParameter()
-            parameter.setType(parameter1)
-            parameter.setName(parameterName1)
-
-            BeanMapping mapping = new BeanMapping()
-            mapping.setType(type)
-            mapping.setName(name)
-            mapping.addParameter(parameter)
-            mapping.setCode(body)
-
-            MethodSpec methodSpec = MethodSpec.methodBuilder(mapping.getName())
-                    .addAnnotation(Bean)
-                    .addModifiers(Modifier.PUBLIC)
-                    .returns(mapping.getType())
-                    .addParameter(parameter1, parameterName1)
-                    .addStatement(mapping.getCode(), parameterName1)
+            Directory configuration = new Directory.DirectoryBuilder('config')
+                    .type(DirType.SPRING_CONFIG)
+                    .parent(srcBase)
+                    .filename('SpringConfig')
+                    .textSupplier(callback)
                     .build()
-            TypeSpec spec = TypeSpec.classBuilder('SpringConfig')
-                    .addAnnotation(Configuration)
-                    .addMethod(methodSpec)
-                    .build()
-            JavaFile javaFile = JavaFile.builder('', spec)
-                    .build()
+
         expect:
-            println javaFile.toString()
+            mainGenerator.generate(configuration)
     }
 }

@@ -82,6 +82,6 @@ class SpringConfigISpec extends BaseISpec {
                     .build()
 
         expect:
-            mainGenerator.generate(configuration)
+            mainGenerator.generate(root)
     }
 }

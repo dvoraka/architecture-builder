@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -57,8 +59,14 @@ public class MainGenerator implements Generator {
             generateDependencies(dependencies, dir);
         }
 
-        // generate code
-        dirService.processDirs(directory, langGenerator::generate);
+        // generate code (generate Spring configurations last)
+        Collection<Directory> configurations = new HashSet<>();
+        if (directory.getType() == DirType.SPRING_CONFIG) {
+            configurations.add(directory);
+        } else {
+            dirService.processDirs(directory, langGenerator::generate);
+        }
+        configurations.forEach(config -> dirService.processDirs(config, langGenerator::generate));
     }
 
     private void generateDependencies(Map<Directory, List<Directory>> dependencies, Directory directory) {

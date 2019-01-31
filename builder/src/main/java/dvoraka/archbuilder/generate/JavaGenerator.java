@@ -69,10 +69,10 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         conf = new EnumMap<>(DirType.class);
         conf.put(DirType.BUILD_CONFIG, this::genBuildConfig);
         conf.put(DirType.CUSTOM_TYPE, this::genCustomType);
-        conf.put(DirType.SPRING_CONFIG, this::genSpringConfigType);
         conf.put(DirType.IMPL, this::genImplSafe);
         conf.put(DirType.SERVICE, this::genServiceSafe);
         conf.put(DirType.SERVICE_IMPL, this::genServiceImplSafe);
+        conf.put(DirType.SPRING_CONFIG, this::genSpringConfigType);
         conf.put(DirType.SRC_PROPERTIES, this::genSrcProps);
         conf.put(DirType.SRC_ROOT, this::processSrcRoot);
 

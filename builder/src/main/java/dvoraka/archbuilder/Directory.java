@@ -263,6 +263,9 @@ public class Directory {
         }
 
         public DirectoryBuilder dependsOn(Directory directory) {
+            if (type == DirType.SPRING_CONFIG || directory.getType() == DirType.SPRING_CONFIG) {
+                throw new RuntimeException("Spring config must not have any dependencies.");
+            }
             dependencies.add(directory);
             return this;
         }

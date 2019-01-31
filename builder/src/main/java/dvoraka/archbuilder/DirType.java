@@ -22,6 +22,7 @@ public enum DirType {
     SERVICE_IMPL,
 
     CUSTOM_TYPE,
+    SPRING_CONFIG,
 
     ABSTRACT(true, false),
     IMPL;

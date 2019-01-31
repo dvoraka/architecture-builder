@@ -69,6 +69,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         conf = new EnumMap<>(DirType.class);
         conf.put(DirType.BUILD_CONFIG, this::genBuildConfig);
         conf.put(DirType.CUSTOM_TYPE, this::genCustomType);
+        conf.put(DirType.SPRING_CONFIG, this::genSpringConfigType);
         conf.put(DirType.IMPL, this::genImplSafe);
         conf.put(DirType.SERVICE, this::genServiceSafe);
         conf.put(DirType.SERVICE_IMPL, this::genServiceImplSafe);
@@ -356,6 +357,30 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         log.debug("Generating custom type: {}", directory);
 
         String source = directory.getText();
+        String filename = javaSuffix(directory.getFilename()
+                .orElseThrow(RuntimeException::new));
+
+        try {
+            save(directory, source, filename);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void genSpringConfigType(Directory directory) {
+        log.debug("Generating Spring config type: {}", directory);
+
+        String source;
+        if (directory.getTextSupplier() != null) {
+            source = directory.getTextSupplier().get();
+        } else {
+            source = directory.getText();
+        }
+
+        if (source == null || source.isEmpty()) {
+            throw new RuntimeException("No text");
+        }
+
         String filename = javaSuffix(directory.getFilename()
                 .orElseThrow(RuntimeException::new));
 

@@ -142,6 +142,10 @@ public class Directory {
         return text;
     }
 
+    public Supplier<String> getTextSupplier() {
+        return textSupplier;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

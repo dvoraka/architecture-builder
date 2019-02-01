@@ -4,8 +4,8 @@ import com.squareup.javapoet.*
 import dvoraka.archbuilder.sample.generic.Class2pp
 import dvoraka.archbuilder.sample.microservice.data.BaseException
 import dvoraka.archbuilder.sample.microservice.data.ResultData
-import dvoraka.archbuilder.springconfing.BeanMapping
-import dvoraka.archbuilder.springconfing.BeanParameter
+import dvoraka.archbuilder.springconfig.BeanMapping
+import dvoraka.archbuilder.springconfig.BeanParameter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import spock.lang.Specification

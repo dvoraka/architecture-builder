@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.springconfing;
+package dvoraka.archbuilder.springconfig;
 
 import dvoraka.archbuilder.Directory;
 

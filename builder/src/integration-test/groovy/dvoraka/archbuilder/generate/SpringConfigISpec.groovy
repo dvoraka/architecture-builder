@@ -6,8 +6,8 @@ import com.squareup.javapoet.TypeSpec
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
 import dvoraka.archbuilder.sample.SimpleClass
-import dvoraka.archbuilder.springconfing.BeanMapping
-import dvoraka.archbuilder.springconfing.BeanParameter
+import dvoraka.archbuilder.springconfig.BeanMapping
+import dvoraka.archbuilder.springconfig.BeanParameter
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

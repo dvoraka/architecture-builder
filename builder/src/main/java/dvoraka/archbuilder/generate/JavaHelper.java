@@ -84,6 +84,7 @@ public interface JavaHelper {
         return returnValue;
     }
 
+    //TODO: translate to GeneratorException
     default Class<?> loadClass(String className) throws ClassNotFoundException {
         return Class.forName(className);
     }

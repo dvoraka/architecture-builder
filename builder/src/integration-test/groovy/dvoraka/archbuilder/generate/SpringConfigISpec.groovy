@@ -1,25 +1,22 @@
 package dvoraka.archbuilder.generate
 
-import com.squareup.javapoet.JavaFile
-import com.squareup.javapoet.MethodSpec
-import com.squareup.javapoet.TypeSpec
+
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
 import dvoraka.archbuilder.sample.SimpleClass
 import dvoraka.archbuilder.springconfig.BeanMapping
 import dvoraka.archbuilder.springconfig.BeanParameter
+import dvoraka.archbuilder.springconfig.SpringConfigGenerator
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
 
-import javax.lang.model.element.Modifier
 import java.util.function.Supplier
-
 
 class SpringConfigISpec extends BaseISpec {
 
     @Autowired
     Generator mainGenerator
+    @Autowired
+    SpringConfigGenerator springConfigGenerator
 
 
     def "Spring config"() {
@@ -53,7 +50,7 @@ class SpringConfigISpec extends BaseISpec {
             beanMappings.add(mapping)
 
             Supplier<String> callback = {
-                return genConfiguration(beanMappings)
+                return springConfigGenerator.genConfiguration(beanMappings)
             }
 
             Directory configuration = new Directory.DirectoryBuilder('config')
@@ -66,34 +63,5 @@ class SpringConfigISpec extends BaseISpec {
             mainGenerator.generate(root)
         then:
             notThrown(Exception)
-    }
-
-    String genConfiguration(List<BeanMapping> beanMappings) {
-
-        BeanMapping mapping = beanMappings.get(0)
-        Class<?> mappingClass = mapping.getTypeDir() != null
-                ? loadClass(mapping.getTypeDir().getTypeName())
-                : mapping.getType()
-
-        BeanParameter parameter = mapping.getParameters().get(0)
-        Class<?> parameterClass = parameter.getTypeDir() != null
-                ? loadClass(parameter.getTypeDir().getTypeName())
-                : parameter.getType()
-
-        MethodSpec methodSpec = MethodSpec.methodBuilder(mapping.getName())
-                .addAnnotation(Bean)
-                .addModifiers(Modifier.PUBLIC)
-                .returns(mappingClass)
-                .addParameter(parameterClass, parameter.getName())
-                .addStatement(mapping.getCode(), parameterClass)
-                .build()
-        TypeSpec spec = TypeSpec.classBuilder('SpringConfig')
-                .addAnnotation(Configuration)
-                .addMethod(methodSpec)
-                .build()
-        JavaFile javaFile = JavaFile.builder('', spec)
-                .build()
-
-        return javaFile.toString()
     }
 }

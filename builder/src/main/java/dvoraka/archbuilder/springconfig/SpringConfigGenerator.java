@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface SpringConfigGenerator {
 
-    String genConfiguration(List<BeanMapping> beanMappings);
+    String genConfiguration(List<BeanMapping> beanMappings) throws ClassNotFoundException;
 }

@@ -1,11 +1,14 @@
 package dvoraka.archbuilder.springconfing;
 
+import dvoraka.archbuilder.Directory;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class BeanMapping {
 
     private Class<?> type;
+    private Directory typeDir;
     private String name;
     private List<BeanParameter> parameters;
     private String code;
@@ -25,6 +28,14 @@ public class BeanMapping {
 
     public void setType(Class<?> type) {
         this.type = type;
+    }
+
+    public Directory getTypeDir() {
+        return typeDir;
+    }
+
+    public void setTypeDir(Directory typeDir) {
+        this.typeDir = typeDir;
     }
 
     public String getName() {

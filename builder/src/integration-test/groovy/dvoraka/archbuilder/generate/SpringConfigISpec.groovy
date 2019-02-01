@@ -42,9 +42,9 @@ class SpringConfigISpec extends BaseISpec {
             parameter.setName("param1")
 
             // mappings
-            String body = 'return new String($L.toString())'
+            String body = 'return new $T()'
             BeanMapping mapping = new BeanMapping()
-            mapping.setType(SimpleClass)
+            mapping.setTypeDir(abs)
             mapping.setName('getBean')
             mapping.addParameter(parameter)
             mapping.setCode(body)
@@ -71,18 +71,21 @@ class SpringConfigISpec extends BaseISpec {
     String genConfiguration(List<BeanMapping> beanMappings) {
 
         BeanMapping mapping = beanMappings.get(0)
-        BeanParameter parameter = mapping.getParameters().get(0)
+        Class<?> mappingClass = mapping.getTypeDir() != null
+                ? loadClass(mapping.getTypeDir().getTypeName())
+                : mapping.getType()
 
-        Class<?> parameterClass = parameter.getType() != null
-                ? parameter.getType()
-                : loadClass(parameter.getTypeDir().getTypeName())
+        BeanParameter parameter = mapping.getParameters().get(0)
+        Class<?> parameterClass = parameter.getTypeDir() != null
+                ? loadClass(parameter.getTypeDir().getTypeName())
+                : parameter.getType()
 
         MethodSpec methodSpec = MethodSpec.methodBuilder(mapping.getName())
                 .addAnnotation(Bean)
                 .addModifiers(Modifier.PUBLIC)
-                .returns(mapping.getType())
+                .returns(mappingClass)
                 .addParameter(parameterClass, parameter.getName())
-                .addStatement(mapping.getCode(), parameter.getName())
+                .addStatement(mapping.getCode(), parameterClass)
                 .build()
         TypeSpec spec = TypeSpec.classBuilder('SpringConfig')
                 .addAnnotation(Configuration)

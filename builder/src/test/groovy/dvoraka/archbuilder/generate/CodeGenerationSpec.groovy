@@ -44,9 +44,9 @@ class CodeGenerationSpec extends Specification {
             Class<?> parameter1 = String
             String parameterName1 = 'value'
 
-            BeanParameter parameter = new BeanParameter()
-            parameter.setType(parameter1)
-            parameter.setName(parameterName1)
+            BeanParameter parameter = new BeanParameter.Builder(parameterName1)
+                    .type(parameter1)
+                    .build()
 
             BeanMapping mapping = new BeanMapping()
             mapping.setType(type)

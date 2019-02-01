@@ -34,9 +34,9 @@ class SpringConfigISpec extends BaseISpec {
                     .build()
 
             // parameters
-            BeanParameter parameter = new BeanParameter()
-            parameter.setTypeDir(ext)
-            parameter.setName("param1")
+            BeanParameter parameter = new BeanParameter.Builder('param1')
+                    .typeDir(ext)
+                    .build()
 
             // mappings
             String body = 'return new $T()'

@@ -42,14 +42,14 @@ class SpringConfigISpec extends BaseISpec {
 
                 Class<?> type = String
                 String name = 'string'
-                String body = 'return new String($L)'
+                String body = 'return new String($L.toString())'
 
-                Class<?> parameter1 = String
-                String parameterName1 = 'value'
+                Class<?> parameterClass = loadClass(param1.getTypeName())
+                String parameterName = 'value'
 
                 BeanParameter parameter = new BeanParameter()
-                parameter.setType(parameter1)
-                parameter.setName(parameterName1)
+                parameter.setType(parameterClass)
+                parameter.setName(parameterName)
 
                 BeanMapping mapping = new BeanMapping()
                 mapping.setType(type)
@@ -61,8 +61,8 @@ class SpringConfigISpec extends BaseISpec {
                         .addAnnotation(Bean)
                         .addModifiers(Modifier.PUBLIC)
                         .returns(mapping.getType())
-                        .addParameter(parameter1, parameterName1)
-                        .addStatement(mapping.getCode(), parameterName1)
+                        .addParameter(parameter.getType(), parameter.getName())
+                        .addStatement(mapping.getCode(), parameterName)
                         .build()
                 TypeSpec spec = TypeSpec.classBuilder('SpringConfig')
                         .addAnnotation(Configuration)

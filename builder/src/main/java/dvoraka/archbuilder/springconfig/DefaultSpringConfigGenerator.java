@@ -2,6 +2,7 @@ package dvoraka.archbuilder.springconfig;
 
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.TypeSpec;
 import dvoraka.archbuilder.exception.GeneratorException;
 import dvoraka.archbuilder.generate.JavaHelper;
@@ -10,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
 import javax.lang.model.element.Modifier;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,30 +20,44 @@ public class DefaultSpringConfigGenerator implements SpringConfigGenerator, Java
     @Override
     public String genConfiguration(List<BeanMapping> beanMappings) throws GeneratorException, ClassNotFoundException {
 
-        BeanMapping mapping = beanMappings.get(0);
-        Class<?> mappingClass = mapping.getTypeDir() != null
-                ? loadClass(mapping.getTypeDir().getTypeName())
-                : mapping.getType();
+        List<MethodSpec> methodSpecs = new ArrayList<>();
+        for (BeanMapping mapping : beanMappings) {
 
-        String code = mapping.getCodeTemplate() != null
-                ? mapping.getCodeTemplate().apply(mapping)
-                : mapping.getCode();
+            Class<?> mappingClass = mapping.getTypeDir() != null
+                    ? loadClass(mapping.getTypeDir().getTypeName())
+                    : mapping.getType();
 
-        BeanParameter parameter = mapping.getParameters().get(0);
-        Class<?> parameterClass = parameter.getTypeDir() != null
-                ? loadClass(parameter.getTypeDir().getTypeName())
-                : parameter.getType();
+            String code = mapping.getCodeTemplate() != null
+                    ? mapping.getCodeTemplate().apply(mapping)
+                    : mapping.getCode();
 
-        MethodSpec methodSpec = MethodSpec.methodBuilder(mapping.getName())
-                .addAnnotation(Bean.class)
-                .addModifiers(Modifier.PUBLIC)
-                .returns(mappingClass)
-                .addParameter(parameterClass, parameter.getName())
-                .addStatement(code)
-                .build();
+            List<ParameterSpec> parameterSpecs = new ArrayList<>();
+            for (BeanParameter parameter : mapping.getParameters()) {
+                Class<?> parameterClass = parameter.getTypeDir() != null
+                        ? loadClass(parameter.getTypeDir().getTypeName())
+                        : parameter.getType();
+
+                parameterSpecs.add(ParameterSpec.builder(
+                        parameterClass,
+                        parameter.getName())
+                        .build()
+                );
+            }
+
+            MethodSpec methodSpec = MethodSpec.methodBuilder(mapping.getName())
+                    .addAnnotation(Bean.class)
+                    .addModifiers(Modifier.PUBLIC)
+                    .returns(mappingClass)
+                    .addParameters(parameterSpecs)
+                    .addStatement(code)
+                    .build();
+
+            methodSpecs.add(methodSpec);
+        }
+
         TypeSpec spec = TypeSpec.classBuilder("SpringConfig")
                 .addAnnotation(Configuration.class)
-                .addMethod(methodSpec)
+                .addMethods(methodSpecs)
                 .build();
         JavaFile javaFile = JavaFile.builder("", spec)
                 .build();

@@ -1,5 +1,6 @@
 package dvoraka.archbuilder.springconfig;
 
+import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
@@ -31,6 +32,14 @@ public class DefaultSpringConfigGenerator implements SpringConfigGenerator, Java
                     ? mapping.getCodeTemplate().apply(mapping)
                     : mapping.getCode();
 
+            //TODO: add String code
+            CodeBlock codeBlock;
+            if (code instanceof CodeBlock) {
+                codeBlock = (CodeBlock) code;
+            } else {
+                throw new GeneratorException("Code template must has type CodeBlock.");
+            }
+
             List<ParameterSpec> parameterSpecs = new ArrayList<>();
             for (BeanParameter parameter : mapping.getParameters()) {
                 Class<?> parameterClass = parameter.getTypeDir() != null
@@ -49,7 +58,7 @@ public class DefaultSpringConfigGenerator implements SpringConfigGenerator, Java
                     .addModifiers(Modifier.PUBLIC)
                     .returns(mappingClass)
                     .addParameters(parameterSpecs)
-                    .addStatement("return null")
+                    .addStatement(codeBlock)
                     .build();
 
             methodSpecs.add(methodSpec);

@@ -1,6 +1,6 @@
 package dvoraka.archbuilder.generate
 
-
+import com.squareup.javapoet.CodeBlock
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
 import dvoraka.archbuilder.sample.SimpleClass
@@ -9,6 +9,7 @@ import dvoraka.archbuilder.springconfig.BeanParameter
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator
 import org.springframework.beans.factory.annotation.Autowired
 
+import java.util.function.Function
 import java.util.function.Supplier
 
 class SpringConfigISpec extends BaseISpec {
@@ -33,6 +34,16 @@ class SpringConfigISpec extends BaseISpec {
                     .filename('TestSimpleClass')
                     .build()
 
+            Function<BeanMapping, CodeBlock> codeTemplate = { mapping ->
+
+                CodeBlock returnCode = CodeBlock.of('return new $T($L)',
+                        loadClass(mapping.getTypeDir().getTypeName()),
+                        mapping.getParameters().get(0).getName()
+                )
+
+                return returnCode
+            }
+
             // parameters
             BeanParameter parameter = new BeanParameter.Builder('param1')
                     .typeDir(ext)
@@ -43,7 +54,7 @@ class SpringConfigISpec extends BaseISpec {
             BeanMapping mapping = new BeanMapping.Builder('getBean')
                     .typeDir(abs)
                     .addParameter(parameter)
-                    .code(body)
+                    .codeTemplate(codeTemplate)
                     .build()
 
             List<BeanMapping> beanMappings = new ArrayList<>()

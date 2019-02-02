@@ -6,24 +6,34 @@ import dvoraka.archbuilder.exception.GeneratorException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 
 import static java.util.Objects.requireNonNull;
 
 public final class BeanMapping {
 
-    private Class<?> type;
-    private Directory typeDir;
-    private String name;
-    private List<BeanParameter> parameters;
-    private String code;
+    private final Class<?> type;
+    private final Directory typeDir;
+    private final String name;
+    private final List<BeanParameter> parameters;
+    private final String code;
+    private final Function<BeanMapping, String> codeTemplate;
 
 
-    private BeanMapping(Class<?> type, Directory typeDir, String name, List<BeanParameter> parameters, String code) {
+    private BeanMapping(
+            Class<?> type,
+            Directory typeDir,
+            String name,
+            List<BeanParameter> parameters,
+            String code,
+            Function<BeanMapping, String> codeTemplate
+    ) {
         this.type = type;
         this.typeDir = typeDir;
         this.name = name;
         this.parameters = parameters;
         this.code = code;
+        this.codeTemplate = codeTemplate;
     }
 
     public Class<?> getType() {
@@ -64,6 +74,7 @@ public final class BeanMapping {
         private String name;
         private List<BeanParameter> parameters;
         private String code;
+        private Function<BeanMapping, String> codeTemplate;
 
 
         public Builder(String name) {
@@ -100,8 +111,13 @@ public final class BeanMapping {
             return this;
         }
 
+        public Builder codeTemplate(Function<BeanMapping, String> template) {
+            this.codeTemplate = template;
+            return this;
+        }
+
         public BeanMapping build() {
-            return new BeanMapping(type, typeDir, name, parameters, code);
+            return new BeanMapping(type, typeDir, name, parameters, code, codeTemplate);
         }
     }
 }

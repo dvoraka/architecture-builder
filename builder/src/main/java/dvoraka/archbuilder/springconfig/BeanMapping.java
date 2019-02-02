@@ -17,7 +17,7 @@ public final class BeanMapping {
     private final String name;
     private final List<BeanParameter> parameters;
     private final String code;
-    private final Function<BeanMapping, String> codeTemplate;
+    private final Function<BeanMapping, Object> codeTemplate;
 
 
     private BeanMapping(
@@ -26,7 +26,7 @@ public final class BeanMapping {
             String name,
             List<BeanParameter> parameters,
             String code,
-            Function<BeanMapping, String> codeTemplate
+            Function<BeanMapping, Object> codeTemplate
     ) {
         this.type = type;
         this.typeDir = typeDir;
@@ -56,7 +56,7 @@ public final class BeanMapping {
         return code;
     }
 
-    public Function<BeanMapping, String> getCodeTemplate() {
+    public Function<BeanMapping, Object> getCodeTemplate() {
         return codeTemplate;
     }
 
@@ -78,7 +78,7 @@ public final class BeanMapping {
         private String name;
         private List<BeanParameter> parameters;
         private String code;
-        private Function<BeanMapping, String> codeTemplate;
+        private Function<BeanMapping, Object> codeTemplate;
 
 
         public Builder(String name) {
@@ -115,7 +115,7 @@ public final class BeanMapping {
             return this;
         }
 
-        public Builder codeTemplate(Function<BeanMapping, String> template) {
+        public Builder codeTemplate(Function<BeanMapping, Object> template) {
             this.codeTemplate = template;
             return this;
         }

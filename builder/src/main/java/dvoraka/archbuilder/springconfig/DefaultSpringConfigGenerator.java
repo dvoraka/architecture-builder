@@ -27,7 +27,7 @@ public class DefaultSpringConfigGenerator implements SpringConfigGenerator, Java
                     ? loadClass(mapping.getTypeDir().getTypeName())
                     : mapping.getType();
 
-            String code = mapping.getCodeTemplate() != null
+            Object code = mapping.getCodeTemplate() != null
                     ? mapping.getCodeTemplate().apply(mapping)
                     : mapping.getCode();
 
@@ -49,7 +49,7 @@ public class DefaultSpringConfigGenerator implements SpringConfigGenerator, Java
                     .addModifiers(Modifier.PUBLIC)
                     .returns(mappingClass)
                     .addParameters(parameterSpecs)
-                    .addStatement(code)
+                    .addStatement("return null")
                     .build();
 
             methodSpecs.add(methodSpec);

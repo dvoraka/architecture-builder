@@ -48,7 +48,7 @@ public final class BeanParameter {
 
         public Builder(String name) {
             if (requireNonNull(name).isEmpty()) {
-                throw new GeneratorException("Name is empty");
+                throw new GeneratorException("Name is empty.");
             }
             this.name = name;
         }

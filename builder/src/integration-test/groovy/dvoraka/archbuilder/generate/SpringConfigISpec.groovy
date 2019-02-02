@@ -40,11 +40,11 @@ class SpringConfigISpec extends BaseISpec {
 
             // mappings
             String body = 'return new $T()'
-            BeanMapping mapping = new BeanMapping()
-            mapping.setTypeDir(abs)
-            mapping.setName('getBean')
-            mapping.addParameter(parameter)
-            mapping.setCode(body)
+            BeanMapping mapping = new BeanMapping.Builder('getBean')
+                    .typeDir(abs)
+                    .addParameter(parameter)
+                    .code(body)
+                    .build()
 
             List<BeanMapping> beanMappings = new ArrayList<>()
             beanMappings.add(mapping)

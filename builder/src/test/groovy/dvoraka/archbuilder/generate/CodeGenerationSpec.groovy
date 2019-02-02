@@ -48,11 +48,11 @@ class CodeGenerationSpec extends Specification {
                     .type(parameter1)
                     .build()
 
-            BeanMapping mapping = new BeanMapping()
-            mapping.setType(type)
-            mapping.setName(name)
-            mapping.addParameter(parameter)
-            mapping.setCode(body)
+            BeanMapping mapping = new BeanMapping.Builder(name)
+                    .type(type)
+                    .addParameter(parameter)
+                    .code(body)
+                    .build()
 
             MethodSpec methodSpec = MethodSpec.methodBuilder(mapping.getName())
                     .addAnnotation(Bean)

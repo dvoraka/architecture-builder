@@ -1,11 +1,15 @@
 package dvoraka.archbuilder.springconfig;
 
 import dvoraka.archbuilder.Directory;
+import dvoraka.archbuilder.exception.GeneratorException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class BeanMapping {
+import static java.util.Objects.requireNonNull;
+
+public final class BeanMapping {
 
     private Class<?> type;
     private Directory typeDir;
@@ -14,51 +18,90 @@ public class BeanMapping {
     private String code;
 
 
-    public BeanMapping() {
-        parameters = new ArrayList<>();
-    }
-
-    public void addParameter(BeanParameter parameter) {
-        parameters.add(parameter);
+    private BeanMapping(Class<?> type, Directory typeDir, String name, List<BeanParameter> parameters, String code) {
+        this.type = type;
+        this.typeDir = typeDir;
+        this.name = name;
+        this.parameters = parameters;
+        this.code = code;
     }
 
     public Class<?> getType() {
         return type;
     }
 
-    public void setType(Class<?> type) {
-        this.type = type;
-    }
-
     public Directory getTypeDir() {
         return typeDir;
-    }
-
-    public void setTypeDir(Directory typeDir) {
-        this.typeDir = typeDir;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public List<BeanParameter> getParameters() {
-        return parameters;
-    }
-
-    public void setParameters(List<BeanParameter> parameters) {
-        this.parameters = parameters;
+        return Collections.unmodifiableList(parameters);
     }
 
     public String getCode() {
         return code;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    @Override
+    public String toString() {
+        return "BeanMapping{" +
+                "type=" + type +
+                ", typeDir=" + typeDir +
+                ", name='" + name + '\'' +
+                ", parameters=" + parameters +
+                ", code='" + code + '\'' +
+                '}';
+    }
+
+    public static class Builder {
+
+        private Class<?> type;
+        private Directory typeDir;
+        private String name;
+        private List<BeanParameter> parameters;
+        private String code;
+
+
+        public Builder(String name) {
+            if (requireNonNull(name).isEmpty()) {
+                throw new GeneratorException("Name is empty.");
+            }
+            this.name = name;
+
+            parameters = new ArrayList<>();
+        }
+
+        public Builder type(Class<?> type) {
+            this.type = type;
+            return this;
+        }
+
+        public Builder typeDir(Directory typeDir) {
+            this.typeDir = typeDir;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder addParameter(BeanParameter parameter) {
+            parameters.add(parameter);
+            return this;
+        }
+
+        public Builder code(String code) {
+            this.code = code;
+            return this;
+        }
+
+        public BeanMapping build() {
+            return new BeanMapping(type, typeDir, name, parameters, code);
+        }
     }
 }

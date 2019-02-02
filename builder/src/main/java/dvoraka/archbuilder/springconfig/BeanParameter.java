@@ -47,10 +47,10 @@ public final class BeanParameter {
 
 
         public Builder(String name) {
-            if (name.isEmpty()) {
+            if (requireNonNull(name).isEmpty()) {
                 throw new GeneratorException("Name is empty");
             }
-            this.name = requireNonNull(name);
+            this.name = name;
         }
 
         public Builder type(Class<?> type) {
@@ -69,6 +69,9 @@ public final class BeanParameter {
         }
 
         public BeanParameter build() {
+            if (type == null && typeDir == null) {
+                throw new GeneratorException("Type has to be specified.");
+            }
             return new BeanParameter(type, typeDir, name);
         }
     }

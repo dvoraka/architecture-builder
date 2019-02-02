@@ -56,6 +56,10 @@ public final class BeanMapping {
         return code;
     }
 
+    public Function<BeanMapping, String> getCodeTemplate() {
+        return codeTemplate;
+    }
+
     @Override
     public String toString() {
         return "BeanMapping{" +

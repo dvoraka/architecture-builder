@@ -39,7 +39,7 @@ class SpringConfigISpec extends BaseISpec {
                     .build()
 
             // mappings
-            String body = 'return new $T()'
+            String body = 'return null'
             BeanMapping mapping = new BeanMapping.Builder('getBean')
                     .typeDir(abs)
                     .addParameter(parameter)

@@ -23,6 +23,10 @@ public class DefaultSpringConfigGenerator implements SpringConfigGenerator, Java
                 ? loadClass(mapping.getTypeDir().getTypeName())
                 : mapping.getType();
 
+        String code = mapping.getCodeTemplate() != null
+                ? mapping.getCodeTemplate().apply(mapping)
+                : mapping.getCode();
+
         BeanParameter parameter = mapping.getParameters().get(0);
         Class<?> parameterClass = parameter.getTypeDir() != null
                 ? loadClass(parameter.getTypeDir().getTypeName())
@@ -33,7 +37,7 @@ public class DefaultSpringConfigGenerator implements SpringConfigGenerator, Java
                 .addModifiers(Modifier.PUBLIC)
                 .returns(mappingClass)
                 .addParameter(parameterClass, parameter.getName())
-                .addStatement(mapping.getCode(), parameterClass)
+                .addStatement(code)
                 .build();
         TypeSpec spec = TypeSpec.classBuilder("SpringConfig")
                 .addAnnotation(Configuration.class)

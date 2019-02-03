@@ -12,4 +12,14 @@ public interface Templates {
                 Class.forName(beanMapping.getToTypeDir().getTypeName())
         );
     }
+
+    static CodeBlock paramReturn(BeanMapping beanMapping)
+            throws ClassNotFoundException {
+
+        return CodeBlock.of(
+                "return new $T($L)",
+                Class.forName(beanMapping.getToTypeDir().getTypeName()),
+                beanMapping.getParameters().get(0).getName()
+        );
+    }
 }

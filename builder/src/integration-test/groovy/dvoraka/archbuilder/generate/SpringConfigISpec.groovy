@@ -3,6 +3,7 @@ package dvoraka.archbuilder.generate
 
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
+import dvoraka.archbuilder.sample.Class1c1m
 import dvoraka.archbuilder.sample.SimpleClass
 import dvoraka.archbuilder.springconfig.BeanMapping
 import dvoraka.archbuilder.springconfig.BeanParameter
@@ -22,33 +23,53 @@ class SpringConfigISpec extends BaseISpec {
 
     def "Spring config"() {
         given:
+            Class<?> cls = SimpleClass
             Directory abs = new Directory.DirectoryBuilder('test')
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
-                    .typeClass(SimpleClass.class)
+                    .typeClass(cls)
                     .build()
             Directory ext = new Directory.DirectoryBuilder('config')
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
-                    .filename('TestSimpleClass')
+                    .filename('Test' + cls.getSimpleName())
+                    .build()
+
+            Class<?> cls2 = Class1c1m
+            Directory abs2 = new Directory.DirectoryBuilder('test')
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeClass(cls2)
+                    .build()
+            Directory ext2 = new Directory.DirectoryBuilder('config')
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abs2)
+                    .filename('Test' + cls2.getSimpleName())
                     .build()
 
             // parameters
-            BeanParameter parameter = new BeanParameter.Builder('param1')
-                    .typeDir(ext)
+            BeanParameter strParam = new BeanParameter.Builder('str')
+                    .type(String)
                     .build()
 
             // mappings
             BeanMapping mapping = new BeanMapping.Builder('getBean')
                     .typeDir(abs)
                     .toTypeDir(ext)
-                    .addParameter(parameter)
                     .codeTemplate({ m -> Templates.simpleReturn(m) })
+                    .build()
+            BeanMapping mapping2 = new BeanMapping.Builder('getBean')
+                    .typeDir(abs2)
+                    .toTypeDir(ext2)
+                    .addParameter(strParam)
+                    .codeTemplate({ m -> Templates.paramReturn(m) })
                     .build()
 
             List<BeanMapping> beanMappings = new ArrayList<>()
             beanMappings.add(mapping)
+            beanMappings.add(mapping2)
 
             Supplier<String> callback = {
                 return springConfigGenerator.genConfiguration(beanMappings)

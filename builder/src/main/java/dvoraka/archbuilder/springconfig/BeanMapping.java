@@ -14,6 +14,8 @@ public final class BeanMapping {
 
     private final Class<?> type;
     private final Directory typeDir;
+    private final Class<?> toType;
+    private final Directory toTypeDir;
     private final String name;
     private final List<BeanParameter> parameters;
     private final String code;
@@ -23,6 +25,8 @@ public final class BeanMapping {
     private BeanMapping(
             Class<?> type,
             Directory typeDir,
+            Class<?> toType,
+            Directory toTypeDir,
             String name,
             List<BeanParameter> parameters,
             String code,
@@ -30,6 +34,8 @@ public final class BeanMapping {
     ) {
         this.type = type;
         this.typeDir = typeDir;
+        this.toType = toType;
+        this.toTypeDir = toTypeDir;
         this.name = name;
         this.parameters = parameters;
         this.code = code;
@@ -42,6 +48,14 @@ public final class BeanMapping {
 
     public Directory getTypeDir() {
         return typeDir;
+    }
+
+    public Class<?> getToType() {
+        return toType;
+    }
+
+    public Directory getToTypeDir() {
+        return toTypeDir;
     }
 
     public String getName() {
@@ -65,9 +79,12 @@ public final class BeanMapping {
         return "BeanMapping{" +
                 "type=" + type +
                 ", typeDir=" + typeDir +
+                ", toType=" + toType +
+                ", toTypeDir=" + toTypeDir +
                 ", name='" + name + '\'' +
                 ", parameters=" + parameters +
                 ", code='" + code + '\'' +
+                ", codeTemplate=" + codeTemplate +
                 '}';
     }
 
@@ -75,6 +92,8 @@ public final class BeanMapping {
 
         private Class<?> type;
         private Directory typeDir;
+        private Class<?> toType;
+        private Directory toTypeDir;
         private String name;
         private List<BeanParameter> parameters;
         private String code;
@@ -100,6 +119,16 @@ public final class BeanMapping {
             return this;
         }
 
+        public Builder toType(Class<?> toType) {
+            this.toType = type;
+            return this;
+        }
+
+        public Builder toTypeDir(Directory toTypeDir) {
+            this.toTypeDir = toTypeDir;
+            return this;
+        }
+
         public Builder name(String name) {
             this.name = name;
             return this;
@@ -121,7 +150,7 @@ public final class BeanMapping {
         }
 
         public BeanMapping build() {
-            return new BeanMapping(type, typeDir, name, parameters, code, codeTemplate);
+            return new BeanMapping(type, typeDir, toType, toTypeDir, name, parameters, code, codeTemplate);
         }
     }
 }

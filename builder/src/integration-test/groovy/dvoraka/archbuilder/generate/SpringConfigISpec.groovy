@@ -1,15 +1,15 @@
 package dvoraka.archbuilder.generate
 
-import com.squareup.javapoet.CodeBlock
+
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
 import dvoraka.archbuilder.sample.SimpleClass
 import dvoraka.archbuilder.springconfig.BeanMapping
 import dvoraka.archbuilder.springconfig.BeanParameter
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator
+import dvoraka.archbuilder.springconfig.Templates
 import org.springframework.beans.factory.annotation.Autowired
 
-import java.util.function.Function
 import java.util.function.Supplier
 
 class SpringConfigISpec extends BaseISpec {
@@ -34,37 +34,17 @@ class SpringConfigISpec extends BaseISpec {
                     .filename('TestSimpleClass')
                     .build()
 
-            Function<BeanMapping, CodeBlock> codeTemplate = { mapping ->
-
-                CodeBlock returnCode = CodeBlock.of('return new $T($L)',
-                        loadClass(mapping.getToTypeDir().getTypeName()),
-                        mapping.getParameters().get(0).getName()
-                )
-
-                return returnCode
-            }
-
-            Function<BeanMapping, CodeBlock> simpleReturnTemplate = { mapping ->
-
-                CodeBlock returnCode = CodeBlock.of('return new $T()',
-                        loadClass(mapping.getToTypeDir().getTypeName())
-                )
-
-                return returnCode
-            }
-
             // parameters
             BeanParameter parameter = new BeanParameter.Builder('param1')
                     .typeDir(ext)
                     .build()
 
             // mappings
-            String body = 'return null'
             BeanMapping mapping = new BeanMapping.Builder('getBean')
                     .typeDir(abs)
                     .toTypeDir(ext)
                     .addParameter(parameter)
-                    .codeTemplate(simpleReturnTemplate)
+                    .codeTemplate({ m -> Templates.simpleReturn(m) })
                     .build()
 
             List<BeanMapping> beanMappings = new ArrayList<>()

@@ -1,6 +1,5 @@
 package dvoraka.archbuilder.generate
 
-
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
 import dvoraka.archbuilder.sample.Class1c1m
@@ -8,7 +7,6 @@ import dvoraka.archbuilder.sample.SimpleClass
 import dvoraka.archbuilder.springconfig.BeanMapping
 import dvoraka.archbuilder.springconfig.BeanParameter
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator
-import dvoraka.archbuilder.springconfig.Templates
 import org.springframework.beans.factory.annotation.Autowired
 
 import java.util.function.Supplier
@@ -18,7 +16,7 @@ class SpringConfigISpec extends BaseISpec {
     @Autowired
     Generator mainGenerator
     @Autowired
-    SpringConfigGenerator springConfigGenerator
+    SpringConfigGenerator configGenerator
 
 
     def "Spring config"() {
@@ -58,13 +56,13 @@ class SpringConfigISpec extends BaseISpec {
             BeanMapping mapping = new BeanMapping.Builder('getBean')
                     .typeDir(abs)
                     .toTypeDir(ext)
-                    .codeTemplate({ m -> Templates.simpleReturn(m) })
+                    .codeTemplate({ m -> configGenerator.simpleReturn(m) })
                     .build()
             BeanMapping mapping2 = new BeanMapping.Builder('getBean')
                     .typeDir(abs2)
                     .toTypeDir(ext2)
                     .addParameter(strParam)
-                    .codeTemplate({ m -> Templates.paramReturn(m) })
+                    .codeTemplate({ m -> configGenerator.paramReturn(m) })
                     .build()
 
             List<BeanMapping> beanMappings = new ArrayList<>()
@@ -72,7 +70,7 @@ class SpringConfigISpec extends BaseISpec {
             beanMappings.add(mapping2)
 
             Supplier<String> callback = {
-                return springConfigGenerator.genConfiguration(beanMappings)
+                return configGenerator.genConfiguration(beanMappings)
             }
 
             Directory configuration = new Directory.DirectoryBuilder('config')

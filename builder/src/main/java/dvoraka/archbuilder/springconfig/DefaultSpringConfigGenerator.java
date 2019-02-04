@@ -73,4 +73,32 @@ public class DefaultSpringConfigGenerator implements SpringConfigGenerator, Java
 
         return javaFile.toString();
     }
+
+    @Override
+    public CodeBlock simpleReturn(BeanMapping beanMapping) {
+        try {
+            return CodeBlock.of(
+                    "return new $T()",
+                    loadClass(beanMapping.getToTypeDir().getTypeName())
+            );
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            throw new GeneratorException("Load failed.");
+        }
+    }
+
+    //TODO
+    @Override
+    public Object paramReturn(BeanMapping beanMapping) {
+        try {
+            return CodeBlock.of(
+                    "return new $T($L)",
+                    loadClass(beanMapping.getToTypeDir().getTypeName()),
+                    beanMapping.getParameters().get(0).getName()
+            );
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            throw new GeneratorException("Load failed.");
+        }
+    }
 }

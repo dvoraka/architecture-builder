@@ -3,7 +3,6 @@ package dvoraka.archbuilder.springconfig
 import com.squareup.javapoet.CodeBlock
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
-import spock.lang.Ignore
 import spock.lang.Specification
 
 class DefaultSpringConfigGeneratorSpec extends Specification {
@@ -46,7 +45,6 @@ class DefaultSpringConfigGeneratorSpec extends Specification {
             code.toString() == 'return new java.lang.Long()'
     }
 
-    @Ignore('WIP')
     def "param return"() {
         given:
             Directory fromTypeDir = new Directory.DirectoryBuilder('test')
@@ -81,8 +79,6 @@ class DefaultSpringConfigGeneratorSpec extends Specification {
         when:
             CodeBlock code = generator.paramReturn(mapping)
         then:
-            println code.toString()
-            code.toString() == 'return new java.lang.Long()'
-
+            code.toString() == 'return new java.lang.Long(str, value, obj)'
     }
 }

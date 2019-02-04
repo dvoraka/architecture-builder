@@ -86,29 +86,31 @@ public class DefaultSpringConfigGenerator implements SpringConfigGenerator, Java
         );
     }
 
-    //TODO
     @Override
     public CodeBlock paramReturn(BeanMapping beanMapping) throws ClassNotFoundException {
 
         Class<?> returnClass = getReturnClass(beanMapping);
 
-        StringBuilder builder = new StringBuilder("return new $T(");
-        for (BeanParameter parameter : beanMapping.getParameters()) {
-            builder.append("$L, ");
-        }
-        builder.append(")");
+        StringBuilder templateBuilder = new StringBuilder("return new $T(");
+        List<BeanParameter> parameters = beanMapping.getParameters();
 
-        List<Object> params = new ArrayList<>();
-        params.add(returnClass);
-        params.addAll(beanMapping.getParameters().stream()
+        for (int i = 0; i < parameters.size(); i++) {
+            templateBuilder.append("$L");
+            if (i != parameters.size() - 1) {
+                templateBuilder.append(", ");
+            }
+        }
+        templateBuilder.append(")");
+
+        List<Object> templateParameters = new ArrayList<>();
+        templateParameters.add(returnClass);
+        templateParameters.addAll(parameters.stream()
                 .map(BeanParameter::getName)
                 .collect(Collectors.toList()));
 
-        params.toArray();
-
         return CodeBlock.of(
-                builder.toString(),
-                params
+                templateBuilder.toString(),
+                templateParameters.toArray()
         );
     }
 

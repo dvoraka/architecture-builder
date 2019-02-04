@@ -8,6 +8,7 @@ import dvoraka.archbuilder.springconfig.BeanMapping
 import dvoraka.archbuilder.springconfig.BeanParameter
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator
 import org.springframework.beans.factory.annotation.Autowired
+import spock.lang.Ignore
 
 import java.util.function.Supplier
 
@@ -19,6 +20,7 @@ class SpringConfigISpec extends BaseISpec {
     SpringConfigGenerator configGenerator
 
 
+    @Ignore('WIP')
     def "Spring config"() {
         given:
             Class<?> cls = SimpleClass

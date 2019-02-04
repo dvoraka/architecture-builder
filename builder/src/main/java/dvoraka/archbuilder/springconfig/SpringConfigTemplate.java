@@ -6,5 +6,5 @@ public interface SpringConfigTemplate {
 
     Object simpleReturn(BeanMapping beanMapping) throws ClassNotFoundException;
 
-    Object paramReturn(BeanMapping beanMapping);
+    Object paramReturn(BeanMapping beanMapping) throws ClassNotFoundException;
 }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.lang.model.element.Modifier;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DefaultSpringConfigGenerator implements SpringConfigGenerator, JavaHelper {
@@ -77,9 +78,7 @@ public class DefaultSpringConfigGenerator implements SpringConfigGenerator, Java
     @Override
     public CodeBlock simpleReturn(BeanMapping beanMapping) throws ClassNotFoundException {
 
-        Class<?> returnClass = beanMapping.getToTypeDir() != null
-                ? loadClass(beanMapping.getToTypeDir().getTypeName())
-                : beanMapping.getToType();
+        Class<?> returnClass = getReturnClass(beanMapping);
 
         return CodeBlock.of(
                 "return new $T()",
@@ -89,16 +88,33 @@ public class DefaultSpringConfigGenerator implements SpringConfigGenerator, Java
 
     //TODO
     @Override
-    public Object paramReturn(BeanMapping beanMapping) {
-        try {
-            return CodeBlock.of(
-                    "return new $T($L)",
-                    loadClass(beanMapping.getToTypeDir().getTypeName()),
-                    beanMapping.getParameters().get(0).getName()
-            );
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            throw new GeneratorException("Load failed.");
+    public CodeBlock paramReturn(BeanMapping beanMapping) throws ClassNotFoundException {
+
+        Class<?> returnClass = getReturnClass(beanMapping);
+
+        StringBuilder builder = new StringBuilder("return new $T(");
+        for (BeanParameter parameter : beanMapping.getParameters()) {
+            builder.append("$L, ");
         }
+        builder.append(")");
+
+        List<Object> params = new ArrayList<>();
+        params.add(returnClass);
+        params.addAll(beanMapping.getParameters().stream()
+                .map(BeanParameter::getName)
+                .collect(Collectors.toList()));
+
+        params.toArray();
+
+        return CodeBlock.of(
+                builder.toString(),
+                params
+        );
+    }
+
+    private Class<?> getReturnClass(BeanMapping beanMapping) throws ClassNotFoundException {
+        return beanMapping.getToTypeDir() != null
+                ? loadClass(beanMapping.getToTypeDir().getTypeName())
+                : beanMapping.getToType();
     }
 }

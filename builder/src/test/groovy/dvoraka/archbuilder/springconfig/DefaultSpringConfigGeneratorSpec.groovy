@@ -1,7 +1,8 @@
 package dvoraka.archbuilder.springconfig
 
 import com.squareup.javapoet.CodeBlock
-import spock.lang.Ignore
+import dvoraka.archbuilder.DirType
+import dvoraka.archbuilder.Directory
 import spock.lang.Specification
 
 class DefaultSpringConfigGeneratorSpec extends Specification {
@@ -9,8 +10,7 @@ class DefaultSpringConfigGeneratorSpec extends Specification {
     DefaultSpringConfigGenerator generator = new DefaultSpringConfigGenerator()
 
 
-    @Ignore('WIP')
-    def "simple return"() {
+    def "simple return with class type"() {
         given:
             BeanMapping mapping = new BeanMapping.Builder('getBean')
                     .type(Number)
@@ -19,7 +19,30 @@ class DefaultSpringConfigGeneratorSpec extends Specification {
         when:
             CodeBlock code = generator.simpleReturn(mapping)
         then:
-            println code.toString()
+            code.toString() == 'return new java.lang.Long()'
+    }
+
+    def "simple return with dir type"() {
+        given:
+            Directory fromTypeDir = new Directory.DirectoryBuilder('test')
+                    .type(DirType.ABSTRACT)
+                    .parent(null)
+                    .typeClass(Number)
+                    .build()
+            Directory toTypeDir = new Directory.DirectoryBuilder('test')
+                    .type(DirType.ABSTRACT)
+                    .parent(null)
+                    .typeClass(Long)
+                    .build()
+
+            BeanMapping mapping = new BeanMapping.Builder('getBean')
+                    .typeDir(fromTypeDir)
+                    .toTypeDir(toTypeDir)
+                    .build()
+        when:
+            CodeBlock code = generator.simpleReturn(mapping)
+        then:
+            code.toString() == 'return new java.lang.Long()'
     }
 
     def "param return"() {

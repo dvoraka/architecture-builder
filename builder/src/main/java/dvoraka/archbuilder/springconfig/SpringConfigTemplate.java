@@ -2,7 +2,9 @@ package dvoraka.archbuilder.springconfig;
 
 public interface SpringConfigTemplate {
 
-    Object simpleReturn(BeanMapping beanMapping);
+    //TODO: exceptions
+
+    Object simpleReturn(BeanMapping beanMapping) throws ClassNotFoundException;
 
     Object paramReturn(BeanMapping beanMapping);
 }

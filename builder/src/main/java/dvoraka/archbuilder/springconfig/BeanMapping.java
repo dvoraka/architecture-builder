@@ -120,7 +120,7 @@ public final class BeanMapping {
         }
 
         public Builder toType(Class<?> toType) {
-            this.toType = type;
+            this.toType = toType;
             return this;
         }
 

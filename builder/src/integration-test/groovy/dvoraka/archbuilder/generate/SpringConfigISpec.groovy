@@ -74,7 +74,6 @@ class SpringConfigISpec extends BaseISpec {
                     .parent(srcBase)
                     .filename('SpringConfig')
                     .build()
-
             Supplier<String> callback = {
                 return configGenerator.genConfiguration(beanMappings, configuration)
             }

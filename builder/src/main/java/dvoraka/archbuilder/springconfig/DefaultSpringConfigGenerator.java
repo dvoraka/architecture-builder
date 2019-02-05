@@ -21,15 +21,19 @@ import java.util.stream.Collectors;
 public class DefaultSpringConfigGenerator implements SpringConfigGenerator, JavaHelper {
 
     @Override
-    public String genConfiguration(List<BeanMapping> beanMappings, Directory dir)
-            throws GeneratorException, ClassNotFoundException {
+    public String genConfiguration(List<BeanMapping> beanMappings, Directory dir) {
 
         List<MethodSpec> methodSpecs = new ArrayList<>();
         for (BeanMapping mapping : beanMappings) {
 
-            Class<?> mappingClass = mapping.getTypeDir() != null
-                    ? loadClass(mapping.getTypeDir().getTypeName())
-                    : mapping.getType();
+            Class<?> mappingClass;
+            try {
+                mappingClass = mapping.getTypeDir() != null
+                        ? loadClass(mapping.getTypeDir().getTypeName())
+                        : mapping.getType();
+            } catch (ClassNotFoundException e) {
+                throw new GeneratorException(e);
+            }
 
             Object code = mapping.getCodeTemplate() != null
                     ? mapping.getCodeTemplate().apply(mapping)
@@ -45,9 +49,14 @@ public class DefaultSpringConfigGenerator implements SpringConfigGenerator, Java
 
             List<ParameterSpec> parameterSpecs = new ArrayList<>();
             for (BeanParameter parameter : mapping.getParameters()) {
-                Class<?> parameterClass = parameter.getTypeDir() != null
-                        ? loadClass(parameter.getTypeDir().getTypeName())
-                        : parameter.getType();
+                Class<?> parameterClass;
+                try {
+                    parameterClass = parameter.getTypeDir() != null
+                            ? loadClass(parameter.getTypeDir().getTypeName())
+                            : parameter.getType();
+                } catch (ClassNotFoundException e) {
+                    throw new GeneratorException(e);
+                }
 
                 parameterSpecs.add(ParameterSpec.builder(
                         parameterClass,

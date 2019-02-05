@@ -8,6 +8,7 @@ import dvoraka.archbuilder.sample.microservice.data.ResultData;
 import dvoraka.archbuilder.sample.microservice.data.message.ResponseMessage;
 import dvoraka.archbuilder.sample.microservice.net.NetReceiver;
 import dvoraka.archbuilder.sample.microservice.net.ServiceNetComponent;
+import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
 import dvoraka.archbuilder.template.config.BuildGradleTemplate;
 import dvoraka.archbuilder.template.config.ConfigurationTemplate;
 import dvoraka.archbuilder.template.config.SettingsGradleTemplate;
@@ -33,7 +34,8 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
             List<Class<?>> typeArguments,
             String serviceName,
             Class<?> superServer,
-            Class<?> requestSuperMessage
+            Class<?> requestSuperMessage,
+            SpringConfigGenerator configGenerator
     ) {
         root = new Directory.DirectoryBuilder(rootDirName)
                 .type(DirType.ROOT)
@@ -221,6 +223,18 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .filename(appClassName)
                 .text(sourceTemplate.getSource())
                 .build();
+
+        //TODO
+        // Spring configuration
+//        List<BeanMapping> beanMappings = null;
+//        Directory configuration = new Directory.DirectoryBuilder("configuration")
+//                .type(DirType.SPRING_CONFIG)
+//                .parent(srcBase)
+//                .filename("SpringConfig")
+//                .build();
+//        Supplier<String> callback = () ->
+//                configGenerator.genConfiguration(beanMappings, configuration);
+//        configuration.setTextSupplier(callback);
 
         // build configuration
         ConfigurationTemplate buildGradleTemplate = new BuildGradleTemplate();

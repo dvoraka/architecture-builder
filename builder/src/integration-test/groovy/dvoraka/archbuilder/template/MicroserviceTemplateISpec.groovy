@@ -13,6 +13,7 @@ import dvoraka.archbuilder.sample.microservice.data.message.RequestMessage
 import dvoraka.archbuilder.sample.microservice.server.AbstractServer
 import dvoraka.archbuilder.sample.microservice.service.BaseService
 import dvoraka.archbuilder.service.DirService
+import dvoraka.archbuilder.springconfig.SpringConfigGenerator
 import dvoraka.archbuilder.template.arch.MicroserviceTemplate
 import groovy.json.JsonOutput
 import groovy.util.logging.Slf4j
@@ -31,6 +32,8 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
     DirService dirService
     @Autowired
     ObjectMapper objectMapper
+    @Autowired
+    SpringConfigGenerator configGenerator
 
     String rootDirName = 'testing-service'
     String packageName = 'test.microservice'
@@ -50,6 +53,7 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
                 serviceName,
                 AbstractServer.class,
                 RequestMessage.class,
+                configGenerator
         )
 
         rootDir = template.getRootDirectory()

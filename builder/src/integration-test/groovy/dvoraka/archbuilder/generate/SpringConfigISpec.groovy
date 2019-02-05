@@ -69,19 +69,21 @@ class SpringConfigISpec extends BaseISpec {
             beanMappings.add(mapping)
             beanMappings.add(mapping2)
 
-            Supplier<String> callback = {
-                return configGenerator.genConfiguration(beanMappings)
-            }
-
             Directory configuration = new Directory.DirectoryBuilder('config')
                     .type(DirType.SPRING_CONFIG)
                     .parent(srcBase)
                     .filename('SpringConfig')
-                    .textSupplier(callback)
                     .build()
+
+            Supplier<String> callback = {
+                return configGenerator.genConfiguration(beanMappings, configuration)
+            }
+            configuration.setTextSupplier(callback)
         when:
             mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(configuration))
         then:
             notThrown(Exception)
+            declaredMethodCount(clazz) == 2
     }
 }

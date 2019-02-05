@@ -370,12 +370,9 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
     private void genSpringConfigType(Directory directory) {
         log.debug("Generating Spring config type: {}", directory);
 
-        String source;
-        if (directory.getTextSupplier() != null) {
-            source = directory.getTextSupplier().get();
-        } else {
-            source = directory.getText();
-        }
+        String source = directory.getTextSupplier() != null
+                ? directory.getTextSupplier().get()
+                : directory.getText();
 
         if (source == null || source.isEmpty()) {
             throw new RuntimeException("No text");

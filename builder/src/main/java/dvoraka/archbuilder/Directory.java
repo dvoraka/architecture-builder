@@ -146,6 +146,10 @@ public class Directory {
         return textSupplier;
     }
 
+    public void setTextSupplier(Supplier<String> textSupplier) {
+        this.textSupplier = textSupplier;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -321,9 +325,10 @@ public class Directory {
         }
 
         private boolean isTypenameNecessary(Directory directory) {
-            return directory.type == DirType.IMPL
-                    || directory.type == DirType.CUSTOM_TYPE
-                    || directory.type == DirType.SERVICE;
+            return directory.type == DirType.CUSTOM_TYPE
+                    || directory.type == DirType.IMPL
+                    || directory.type == DirType.SERVICE
+                    || directory.type == DirType.SPRING_CONFIG;
         }
 
         private RuntimeException noFilenameException(Directory directory) {

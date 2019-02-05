@@ -5,6 +5,7 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.TypeSpec;
+import dvoraka.archbuilder.Directory;
 import dvoraka.archbuilder.exception.GeneratorException;
 import dvoraka.archbuilder.generate.JavaHelper;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +21,8 @@ import java.util.stream.Collectors;
 public class DefaultSpringConfigGenerator implements SpringConfigGenerator, JavaHelper {
 
     @Override
-    public String genConfiguration(List<BeanMapping> beanMappings) throws GeneratorException, ClassNotFoundException {
+    public String genConfiguration(List<BeanMapping> beanMappings, Directory dir)
+            throws GeneratorException, ClassNotFoundException {
 
         List<MethodSpec> methodSpecs = new ArrayList<>();
         for (BeanMapping mapping : beanMappings) {
@@ -65,11 +67,14 @@ public class DefaultSpringConfigGenerator implements SpringConfigGenerator, Java
             methodSpecs.add(methodSpec);
         }
 
-        TypeSpec spec = TypeSpec.classBuilder("SpringConfig")
+        String name = dir.getFilename()
+                .orElse("SpringConfig");
+
+        TypeSpec spec = TypeSpec.classBuilder(name)
                 .addAnnotation(Configuration.class)
                 .addMethods(methodSpecs)
                 .build();
-        JavaFile javaFile = JavaFile.builder("", spec)
+        JavaFile javaFile = JavaFile.builder(dir.getPackageName(), spec)
                 .build();
 
         return javaFile.toString();

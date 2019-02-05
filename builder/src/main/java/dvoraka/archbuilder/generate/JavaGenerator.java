@@ -12,6 +12,7 @@ import com.squareup.javapoet.WildcardTypeName;
 import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;
 import dvoraka.archbuilder.TypeVarMappingException;
+import dvoraka.archbuilder.exception.GeneratorException;
 import dvoraka.archbuilder.service.DirService;
 import dvoraka.archbuilder.util.ByteClassLoader;
 import org.slf4j.Logger;
@@ -327,8 +328,8 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         // process all methods
         List<MethodSpec> methodSpecs = genMethodSpecs(allMethods, typeMapping);
 
-        String name = "Default" + superDir.getFilename()
-                .orElse("Service");
+        String name = directory.getFilename()
+                .orElseThrow(() -> new GeneratorException("No filename for service implementation."));
 
         TypeSpec serviceImpl;
         if (superClass.getTypeParameters().length == 0) {

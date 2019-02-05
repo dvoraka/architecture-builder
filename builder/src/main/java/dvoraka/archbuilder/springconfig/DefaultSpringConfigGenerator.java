@@ -90,7 +90,7 @@ public class DefaultSpringConfigGenerator implements SpringConfigGenerator, Java
     }
 
     @Override
-    public CodeBlock simpleReturn(BeanMapping beanMapping) throws ClassNotFoundException {
+    public CodeBlock simpleReturn(BeanMapping beanMapping) {
 
         Class<?> returnClass = getReturnClass(beanMapping);
 
@@ -101,7 +101,7 @@ public class DefaultSpringConfigGenerator implements SpringConfigGenerator, Java
     }
 
     @Override
-    public CodeBlock paramReturn(BeanMapping beanMapping) throws ClassNotFoundException {
+    public CodeBlock paramReturn(BeanMapping beanMapping) {
 
         Class<?> returnClass = getReturnClass(beanMapping);
 
@@ -128,9 +128,13 @@ public class DefaultSpringConfigGenerator implements SpringConfigGenerator, Java
         );
     }
 
-    private Class<?> getReturnClass(BeanMapping beanMapping) throws ClassNotFoundException {
-        return beanMapping.getToTypeDir() != null
-                ? loadClass(beanMapping.getToTypeDir().getTypeName())
-                : beanMapping.getToType();
+    private Class<?> getReturnClass(BeanMapping beanMapping) {
+        try {
+            return beanMapping.getToTypeDir() != null
+                    ? loadClass(beanMapping.getToTypeDir().getTypeName())
+                    : beanMapping.getToType();
+        } catch (ClassNotFoundException e) {
+            throw new GeneratorException(e);
+        }
     }
 }

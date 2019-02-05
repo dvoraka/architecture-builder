@@ -8,6 +8,7 @@ import dvoraka.archbuilder.sample.microservice.data.ResultData;
 import dvoraka.archbuilder.sample.microservice.data.message.ResponseMessage;
 import dvoraka.archbuilder.sample.microservice.net.NetReceiver;
 import dvoraka.archbuilder.sample.microservice.net.ServiceNetComponent;
+import dvoraka.archbuilder.springconfig.BeanMapping;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
 import dvoraka.archbuilder.template.config.BuildGradleTemplate;
 import dvoraka.archbuilder.template.config.ConfigurationTemplate;
@@ -15,7 +16,9 @@ import dvoraka.archbuilder.template.config.SettingsGradleTemplate;
 import dvoraka.archbuilder.template.source.SourceTemplate;
 import dvoraka.archbuilder.template.source.SpringBootApplicationTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class MicroserviceTemplate implements ArchitectureTemplate {
 
@@ -78,10 +81,12 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
         Directory service = serviceBuilder
                 .build();
 
+        String serviceImplFullName = "Default" + serviceFullName;
         Directory serviceImpl = new Directory.DirectoryBuilder("service")
                 .type(DirType.SERVICE_IMPL)
                 .parent(srcBase)
                 .superType(service)
+                .filename(serviceImplFullName)
                 .build();
 
         // exception
@@ -224,17 +229,25 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .text(sourceTemplate.getSource())
                 .build();
 
-        //TODO
         // Spring configuration
-//        List<BeanMapping> beanMappings = null;
-//        Directory configuration = new Directory.DirectoryBuilder("configuration")
-//                .type(DirType.SPRING_CONFIG)
-//                .parent(srcBase)
-//                .filename("SpringConfig")
-//                .build();
-//        Supplier<String> callback = () ->
-//                configGenerator.genConfiguration(beanMappings, configuration);
-//        configuration.setTextSupplier(callback);
+        List<BeanMapping> beanMappings = new ArrayList<>();
+        // service mapping
+        BeanMapping beanMapping = new BeanMapping.Builder("service")
+                .typeDir(service)
+                .toTypeDir(serviceImpl)
+                .codeTemplate(configGenerator::simpleReturn)
+                .build();
+
+        beanMappings.add(beanMapping);
+
+        Directory configuration = new Directory.DirectoryBuilder("configuration")
+                .type(DirType.SPRING_CONFIG)
+                .parent(srcBase)
+                .filename("SpringConfig")
+                .build();
+        Supplier<String> callback = () ->
+                configGenerator.genConfiguration(beanMappings, configuration);
+        configuration.setTextSupplier(callback);
 
         // build configuration
         ConfigurationTemplate buildGradleTemplate = new BuildGradleTemplate();

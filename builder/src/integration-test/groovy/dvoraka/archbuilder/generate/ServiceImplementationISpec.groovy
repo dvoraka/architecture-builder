@@ -30,6 +30,7 @@ class ServiceImplementationISpec extends BaseISpec {
                     .type(DirType.SERVICE_IMPL)
                     .parent(srcBase)
                     .superType(mapService)
+                    .filename('DefaultCoolMapService')
                     .build()
         when:
             mainGenerator.generate(root)
@@ -59,6 +60,7 @@ class ServiceImplementationISpec extends BaseISpec {
                     .type(DirType.SERVICE_IMPL)
                     .parent(srcBase)
                     .superType(rfService)
+                    .filename('DefaultRFService')
                     .build()
         when:
             mainGenerator.generate(root)
@@ -86,6 +88,7 @@ class ServiceImplementationISpec extends BaseISpec {
                     .type(DirType.SERVICE_IMPL)
                     .parent(srcBase)
                     .superType(service)
+                    .filename('DefaultService')
                     .build()
         when:
             mainGenerator.generate(root)

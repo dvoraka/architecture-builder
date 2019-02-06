@@ -2,6 +2,7 @@ package dvoraka.archbuilder.template.arch;
 
 import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;
+import dvoraka.archbuilder.exception.GeneratorException;
 import dvoraka.archbuilder.generate.JavaUtils;
 import dvoraka.archbuilder.sample.microservice.data.BaseException;
 import dvoraka.archbuilder.sample.microservice.data.ResultData;
@@ -15,6 +16,7 @@ import dvoraka.archbuilder.template.config.ConfigurationTemplate;
 import dvoraka.archbuilder.template.config.SettingsGradleTemplate;
 import dvoraka.archbuilder.template.source.SourceTemplate;
 import dvoraka.archbuilder.template.source.SpringBootApplicationTemplate;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -232,22 +234,25 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
         // Spring configuration
         List<BeanMapping> beanMappings = new ArrayList<>();
         // service mapping
-        BeanMapping beanMapping = new BeanMapping.Builder("service")
+        String serviceMappingName = StringUtils.uncapitalize(service.getFilename()
+                .orElseThrow(() -> new GeneratorException("No filename.")));
+        BeanMapping serviceBeanMapping = new BeanMapping.Builder(serviceMappingName)
                 .typeDir(service)
                 .toTypeDir(serviceImpl)
                 .codeTemplate(configGenerator::simpleReturn)
                 .build();
 
-        beanMappings.add(beanMapping);
+        beanMappings.add(serviceBeanMapping);
 
-        Directory configuration = new Directory.DirectoryBuilder("configuration")
+        String springConfigName = serviceName + "Config";
+        Directory springConfig = new Directory.DirectoryBuilder("configuration")
                 .type(DirType.SPRING_CONFIG)
                 .parent(srcBase)
-                .filename("SpringConfig")
+                .filename(springConfigName)
                 .build();
         Supplier<String> callback = () ->
-                configGenerator.genConfiguration(beanMappings, configuration);
-        configuration.setTextSupplier(callback);
+                configGenerator.genConfiguration(beanMappings, springConfig);
+        springConfig.setTextSupplier(callback);
 
         // build configuration
         ConfigurationTemplate buildGradleTemplate = new BuildGradleTemplate();

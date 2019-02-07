@@ -8,7 +8,7 @@ import dvoraka.archbuilder.sample.microservice.data.BaseException;
 import dvoraka.archbuilder.sample.microservice.data.ResultData;
 import dvoraka.archbuilder.sample.microservice.data.message.ResponseMessage;
 import dvoraka.archbuilder.sample.microservice.net.NetReceiver;
-import dvoraka.archbuilder.sample.microservice.net.ServiceNetComponent;
+import dvoraka.archbuilder.sample.microservice.net.GenericNetComponent;
 import dvoraka.archbuilder.springconfig.BeanMapping;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
 import dvoraka.archbuilder.template.config.BuildGradleTemplate;
@@ -173,7 +173,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
         Directory networkComponentAbs = new Directory.DirectoryBuilder("")
                 .type(DirType.ABSTRACT)
                 .parent(srcBase)
-                .typeClass(ServiceNetComponent.class)
+                .typeClass(GenericNetComponent.class)
                 .build();
 
         Directory networkReceiverAbs = new Directory.DirectoryBuilder("")

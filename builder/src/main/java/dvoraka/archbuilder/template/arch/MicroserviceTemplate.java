@@ -9,6 +9,7 @@ import dvoraka.archbuilder.sample.microservice.data.ResultData;
 import dvoraka.archbuilder.sample.microservice.data.message.ResponseMessage;
 import dvoraka.archbuilder.sample.microservice.net.NetReceiver;
 import dvoraka.archbuilder.sample.microservice.net.GenericNetComponent;
+import dvoraka.archbuilder.sample.microservice.net.ServiceNetComponent;
 import dvoraka.archbuilder.springconfig.BeanMapping;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
 import dvoraka.archbuilder.template.config.BuildGradleTemplate;
@@ -173,7 +174,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
         Directory networkComponentAbs = new Directory.DirectoryBuilder("")
                 .type(DirType.ABSTRACT)
                 .parent(srcBase)
-                .typeClass(GenericNetComponent.class)
+                .typeClass(ServiceNetComponent.class)
                 .build();
 
         Directory networkReceiverAbs = new Directory.DirectoryBuilder("")
@@ -183,18 +184,20 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .build();
 
         String networkComponentName = serviceName + "NetComponent";
-        Directory networkComponent = new Directory.DirectoryBuilder("server")
+        Directory serviceNetworkComponent = new Directory.DirectoryBuilder("net")
                 .type(DirType.IMPL)
                 .parent(srcBase)
                 .superType(networkComponentAbs)
                 .interfaceType()
                 .parameterTypeDir(requestMessage)
                 .parameterTypeDir(responseMessage)
+                .parameterTypeDir(data)
+                .parameterTypeDir(exception)
                 .filename(networkComponentName)
                 .build();
 
         String networkReceiverName = serviceName + "NetReceiver";
-        Directory networkReceiver = new Directory.DirectoryBuilder("server")
+        Directory networkReceiver = new Directory.DirectoryBuilder("net")
                 .type(DirType.IMPL)
                 .parent(srcBase)
                 .superType(networkReceiverAbs)
@@ -204,7 +207,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .build();
 
         String networkResponseReceiverName = serviceName + "NetResponseReceiver";
-        Directory networkResponseReceiver = new Directory.DirectoryBuilder("server")
+        Directory networkResponseReceiver = new Directory.DirectoryBuilder("net")
                 .type(DirType.IMPL)
                 .parent(srcBase)
                 .superType(networkReceiverAbs)

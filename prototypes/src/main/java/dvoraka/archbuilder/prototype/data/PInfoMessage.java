@@ -1,15 +1,16 @@
 package dvoraka.archbuilder.prototype.data;
 
-public class PMessage<T> {
+public class PInfoMessage implements PMessageInterface2 {
 
     private String id;
-    private final T data;
+    private final PData data;
 
 
-    public PMessage(T data) {
+    public PInfoMessage(PData data) {
         this.data = data;
     }
 
+    @Override
     public String getId() {
         return id;
     }
@@ -18,7 +19,10 @@ public class PMessage<T> {
         this.id = id;
     }
 
-    public T getData() {
+    public PData getData() {
         return data;
+    }
+
+    public void customMethod() {
     }
 }

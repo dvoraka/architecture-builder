@@ -3,8 +3,12 @@ package dvoraka.archbuilder.prototype.data;
 public class PBudgetMessage implements PMessageInterface<PData> {
 
     private String id;
-    private PData data;
+    private final PData data;
 
+
+    public PBudgetMessage(PData data) {
+        this.data = data;
+    }
 
     @Override
     public String getId() {
@@ -20,7 +24,6 @@ public class PBudgetMessage implements PMessageInterface<PData> {
         this.id = id;
     }
 
-    public void setData(PData data) {
-        this.data = data;
+    public void customMethod() {
     }
 }

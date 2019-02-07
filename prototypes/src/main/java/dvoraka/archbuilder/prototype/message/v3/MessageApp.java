@@ -1,17 +1,17 @@
-package dvoraka.archbuilder.prototype.message.v1;
+package dvoraka.archbuilder.prototype.message.v3;
 
-import dvoraka.archbuilder.prototype.data.PBudgetMessage;
 import dvoraka.archbuilder.prototype.data.PData;
+import dvoraka.archbuilder.prototype.data.PInfoMessage;
 
 public class MessageApp {
 
     public static void main(String[] args) {
-        System.out.println("Message app v1");
+        System.out.println("Message app v3");
 
         PData data = new PData();
         data.setData("DATA");
 
-        PBudgetMessage message = new PBudgetMessage(data);
+        PInfoMessage message = new PInfoMessage(data);
         message.setId("id");
 
         // get data

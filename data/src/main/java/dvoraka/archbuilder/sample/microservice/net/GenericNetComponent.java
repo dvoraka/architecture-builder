@@ -5,8 +5,8 @@ import dvoraka.archbuilder.sample.microservice.data.message.Message;
 /**
  * Generic network component.
  *
- * @param <M> the type of the request message
- * @param <R> the type of the response message
+ * @param <M> the request message type
+ * @param <R> the response message type
  */
 public interface GenericNetComponent<M extends Message, R extends Message>
         extends NetReceiver<M>, NetSender<R> {

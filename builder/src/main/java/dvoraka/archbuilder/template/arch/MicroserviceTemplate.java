@@ -8,7 +8,6 @@ import dvoraka.archbuilder.sample.microservice.data.BaseException;
 import dvoraka.archbuilder.sample.microservice.data.ResultData;
 import dvoraka.archbuilder.sample.microservice.data.message.ResponseMessage;
 import dvoraka.archbuilder.sample.microservice.net.NetReceiver;
-import dvoraka.archbuilder.sample.microservice.net.GenericNetComponent;
 import dvoraka.archbuilder.sample.microservice.net.ServiceNetComponent;
 import dvoraka.archbuilder.springconfig.BeanMapping;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
@@ -124,21 +123,6 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .build();
 
         // messages
-        Directory requestMessageAbs = new Directory.DirectoryBuilder("")
-                .type(DirType.ABSTRACT)
-                .parent(srcBase)
-                .typeClass(requestSuperMessage)
-                .build();
-
-        String requestMessageName = serviceName + "Message";
-        Directory requestMessage = new Directory.DirectoryBuilder("data/message")
-                .type(DirType.IMPL)
-                .parent(srcBase)
-                .superType(requestMessageAbs)
-                .parameterTypeDir(service)
-                .filename(requestMessageName)
-                .build();
-
         Directory responseMessageAbs = new Directory.DirectoryBuilder("")
                 .type(DirType.ABSTRACT)
                 .parent(srcBase)
@@ -153,6 +137,24 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .parameterTypeDir(data)
                 .parameterTypeDir(exception)
                 .filename(responseMessageName)
+                .build();
+
+        Directory requestMessageAbs = new Directory.DirectoryBuilder("")
+                .type(DirType.ABSTRACT)
+                .parent(srcBase)
+                .typeClass(requestSuperMessage)
+                .build();
+
+        String requestMessageName = serviceName + "Message";
+        Directory requestMessage = new Directory.DirectoryBuilder("data/message")
+                .type(DirType.IMPL)
+                .parent(srcBase)
+                .superType(requestMessageAbs)
+                .parameterTypeDir(service)
+                .parameterTypeDir(responseMessage)
+                .parameterTypeDir(data)
+                .parameterTypeDir(exception)
+                .filename(requestMessageName)
                 .build();
 
         // server

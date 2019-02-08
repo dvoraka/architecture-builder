@@ -1,1 +1,5 @@
 description = 'Prototypes'
+
+dependencies {
+    compile project(':data')
+}

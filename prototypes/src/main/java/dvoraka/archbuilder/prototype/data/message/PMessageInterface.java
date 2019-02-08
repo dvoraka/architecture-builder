@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.prototype.data;
+package dvoraka.archbuilder.prototype.data.message;
 
 public interface PMessageInterface<T> {
 

@@ -1,7 +1,7 @@
 package dvoraka.archbuilder.prototype.message.v1;
 
-import dvoraka.archbuilder.prototype.data.PBudgetMessage;
 import dvoraka.archbuilder.prototype.data.PData;
+import dvoraka.archbuilder.prototype.data.message.PBudgetMessage;
 
 public class MessageApp {
 

@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+
+  # RabbitMQ
+  rabbitmq-dev:
+    build: ./rabbitmq
+    image: "rabbitmq-prototype-server"
+    ports:
+      - "5672:5672"
+      - "15672:15672"

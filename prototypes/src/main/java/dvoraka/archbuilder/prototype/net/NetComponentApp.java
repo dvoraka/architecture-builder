@@ -1,13 +1,21 @@
 package dvoraka.archbuilder.prototype.net;
 
-import dvoraka.archbuilder.prototype.data.net.PBalanceNetAdapter;
-import dvoraka.archbuilder.prototype.data.net.PBalanceNetComponent;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
+@SpringBootApplication
 public class NetComponentApp {
 
     public static void main(String[] args) {
-        System.out.println("Net component app");
+        SpringApplication.run(NetComponentApp.class, args);
+    }
 
-        PBalanceNetComponent netComponent = new PBalanceNetAdapter();
+    @Bean
+    public CommandLineRunner commandLineRunner() {
+        return args -> {
+            System.out.println("Net app");
+        };
     }
 }

@@ -1,19 +1,23 @@
-package dvoraka.archbuilder.prototype.data.net;
+package dvoraka.archbuilder.sample.microservice.net;
 
 import dvoraka.archbuilder.sample.microservice.data.message.Message;
-import dvoraka.archbuilder.sample.microservice.net.Acknowledgment;
-import dvoraka.archbuilder.sample.microservice.net.NetMessageListener;
-import dvoraka.archbuilder.sample.microservice.net.NetReceiver;
 
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-public class PBaseNetReceiver<M extends Message> implements NetReceiver<M> {
+//TODO: merge with abstract net receiver
+
+/**
+ * Base class for network receiver.
+ *
+ * @param <M> the receiving message type
+ */
+public class BaseNetReceiver<M extends Message> implements NetReceiver<M> {
 
     private final Set<NetMessageListener<M>> listeners;
 
 
-    public PBaseNetReceiver() {
+    public BaseNetReceiver() {
         listeners = new CopyOnWriteArraySet<>();
     }
 

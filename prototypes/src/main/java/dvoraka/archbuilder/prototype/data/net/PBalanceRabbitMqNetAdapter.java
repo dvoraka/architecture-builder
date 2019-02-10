@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
-public class PBalanceNetAdapter
+public class PBalanceRabbitMqNetAdapter
         extends PBaseNetComponent<PBalanceMessage, PBalanceResponseMessage, PBalanceData, PBalanceException>
         implements PBalanceNetComponent {
 

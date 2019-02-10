@@ -1,6 +1,8 @@
-package dvoraka.archbuilder.sample.microservice.net;
+package dvoraka.archbuilder.sample.microservice.net.receive;
 
 import dvoraka.archbuilder.sample.microservice.data.message.Message;
+import dvoraka.archbuilder.sample.microservice.net.Acknowledgment;
+import dvoraka.archbuilder.sample.microservice.net.NetMessageListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

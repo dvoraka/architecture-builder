@@ -4,8 +4,8 @@ import dvoraka.archbuilder.sample.microservice.data.BaseException;
 import dvoraka.archbuilder.sample.microservice.data.ResultData;
 import dvoraka.archbuilder.sample.microservice.data.message.Message;
 import dvoraka.archbuilder.sample.microservice.data.message.ResponseMessage;
-import dvoraka.archbuilder.sample.microservice.net.BaseNetReceiver;
 import dvoraka.archbuilder.sample.microservice.net.ServiceNetComponent;
+import dvoraka.archbuilder.sample.microservice.net.receive.BaseNetReceiver;
 
 public abstract class PBaseNetComponent<
         M extends Message,

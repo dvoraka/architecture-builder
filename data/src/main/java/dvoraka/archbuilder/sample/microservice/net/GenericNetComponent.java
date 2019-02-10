@@ -1,6 +1,8 @@
 package dvoraka.archbuilder.sample.microservice.net;
 
 import dvoraka.archbuilder.sample.microservice.data.message.Message;
+import dvoraka.archbuilder.sample.microservice.net.receive.NetReceiver;
+import dvoraka.archbuilder.sample.microservice.net.send.NetSender;
 
 /**
  * Generic network component.

@@ -1,18 +1,25 @@
 package dvoraka.archbuilder.prototype.data.net;
 
+import com.rabbitmq.client.Channel;
 import dvoraka.archbuilder.prototype.data.PBalanceData;
 import dvoraka.archbuilder.prototype.data.PBalanceException;
 import dvoraka.archbuilder.prototype.data.message.PBalanceMessage;
 import dvoraka.archbuilder.prototype.data.message.PBalanceResponseMessage;
 import org.springframework.amqp.core.Message;
-import org.springframework.amqp.core.MessageListener;
+import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+
+@Component
 public class PBalanceNetAdapter
         extends PBaseNetComponent<PBalanceMessage, PBalanceResponseMessage, PBalanceData, PBalanceException>
-        implements PBalanceNetComponent, MessageListener {
+        implements PBalanceNetComponent {
 
+    @Autowired
     private RabbitTemplate rabbitTemplate;
 
 
@@ -21,13 +28,14 @@ public class PBalanceNetAdapter
         rabbitTemplate.send(null);
     }
 
-    @Override
-    public void onMessage(Message message) {
+    @RabbitListener(queuesToDeclare = @Queue(name = "test"))
+    public void receive(Message message, Channel channel) throws IOException {
+        System.out.println("Receive: " + message);
+
+//        channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
+
+        // translate message
+
         onMessage(null, null);
-    }
-
-    @RabbitListener
-    public void receive() {
-
     }
 }

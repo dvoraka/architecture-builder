@@ -1,5 +1,7 @@
 package dvoraka.archbuilder.generate;
 
+import dvoraka.archbuilder.DirType;
+import dvoraka.archbuilder.Directory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,5 +50,13 @@ public final class Utils {
                 .filter(file -> file.getName().endsWith("*.class"))
                 .peek(p -> log.debug("Deleting: {}", p))
                 .forEach(File::delete);
+    }
+
+    public static Directory createAbstractDirFor(Class<?> cls, Directory srcBase) {
+        return new Directory.DirectoryBuilder("util")
+                .type(DirType.ABSTRACT)
+                .parent(srcBase)
+                .typeClass(cls)
+                .build();
     }
 }

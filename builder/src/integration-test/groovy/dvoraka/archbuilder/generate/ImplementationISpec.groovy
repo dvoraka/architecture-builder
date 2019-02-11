@@ -11,6 +11,8 @@ import spock.lang.Ignore
 
 import java.util.concurrent.RunnableFuture
 
+import static dvoraka.archbuilder.generate.Utils.createAbstractDirFor
+
 class ImplementationISpec extends BaseISpec {
 
     @Autowired
@@ -285,16 +287,8 @@ class ImplementationISpec extends BaseISpec {
             Class<?> iface = SimpleInterface
             Class<?> cls = SimpleClass
 
-            Directory simpleInterface = new Directory.DirectoryBuilder("test")
-                    .type(DirType.ABSTRACT)
-                    .parent(srcBase)
-                    .typeClass(iface)
-                    .build()
-            Directory simpleClass = new Directory.DirectoryBuilder("test")
-                    .type(DirType.ABSTRACT)
-                    .parent(srcBase)
-                    .typeClass(cls)
-                    .build()
+            Directory simpleInterface = createAbstractDirFor(iface, srcBase)
+            Directory simpleClass = createAbstractDirFor(cls, srcBase)
             Directory simpleInterfaceImpl = new Directory.DirectoryBuilder("test")
                     .type(DirType.IMPL)
                     .parent(srcBase)

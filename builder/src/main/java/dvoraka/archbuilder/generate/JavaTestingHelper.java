@@ -57,6 +57,10 @@ public interface JavaTestingHelper {
         return clazz.getDeclaredConstructors().length;
     }
 
+    default int interfaceCount(Class<?> clazz) {
+        return clazz.getInterfaces().length;
+    }
+
     default boolean exists(DirType dirType, Directory directory, DirService dirService) {
         return dirService.findByType(dirType, directory)
                 .isPresent();

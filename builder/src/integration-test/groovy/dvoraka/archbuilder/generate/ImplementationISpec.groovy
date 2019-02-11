@@ -310,6 +310,6 @@ class ImplementationISpec extends BaseISpec {
             isPublicNotAbstract(clazz)
             hasNoTypeParameters(clazz)
             hasNoDeclaredMethods(clazz)
-            clazz.getInterfaces().length == 1
+            interfaceCount(clazz) == 1
     }
 }

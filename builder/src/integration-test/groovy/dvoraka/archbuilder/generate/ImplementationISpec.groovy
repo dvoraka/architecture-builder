@@ -2,10 +2,12 @@ package dvoraka.archbuilder.generate
 
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
+import dvoraka.archbuilder.sample.SimpleClass
 import dvoraka.archbuilder.sample.SimpleInterface
 import dvoraka.archbuilder.sample.generic.Interface4p1m
 import dvoraka.archbuilder.sample.generic.InterfaceE1pb
 import org.springframework.beans.factory.annotation.Autowired
+import spock.lang.Ignore
 
 import java.util.concurrent.RunnableFuture
 
@@ -275,5 +277,39 @@ class ImplementationISpec extends BaseISpec {
             isPublicAbstract(clazz)
             hasTypeParameters(clazz)
             hasNoDeclaredMethods(clazz)
+    }
+
+    @Ignore('WIP')
+    def "simple interface implementation and simple class extension"() {
+        given:
+            Class<?> iface = SimpleInterface
+            Class<?> cls = SimpleClass
+
+            Directory simpleInterface = new Directory.DirectoryBuilder("test")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeClass(iface)
+                    .build()
+            Directory simpleClass = new Directory.DirectoryBuilder("test")
+                    .type(DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeClass(cls)
+                    .build()
+            Directory simpleInterfaceImpl = new Directory.DirectoryBuilder("test")
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(simpleInterface)
+                    .superType(simpleClass)
+                    .filename('Test' + cls.getSimpleName() + iface.getSimpleName())
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(simpleInterfaceImpl))
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
+            clazz.getInterfaces().length == 1
     }
 }

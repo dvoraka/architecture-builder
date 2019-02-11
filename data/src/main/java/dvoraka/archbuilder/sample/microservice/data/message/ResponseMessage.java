@@ -32,4 +32,11 @@ public abstract class ResponseMessage<
     public D getResultData() {
         return resultData;
     }
+
+    @Override
+    public void checkStatus() throws E {
+        if (getResultData() != null && getResultData().getException().isPresent()) {
+            throw getResultData().getException().get();
+        }
+    }
 }

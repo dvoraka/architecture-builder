@@ -4,6 +4,7 @@ import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
 import dvoraka.archbuilder.sample.SimpleClass
 import dvoraka.archbuilder.sample.SimpleInterface
+import dvoraka.archbuilder.sample.SimpleInterface2
 import dvoraka.archbuilder.sample.generic.Interface4p1m
 import dvoraka.archbuilder.sample.generic.InterfaceE1pb
 import org.springframework.beans.factory.annotation.Autowired
@@ -287,7 +288,7 @@ class ImplementationISpec extends BaseISpec {
 
             Directory simpleInterface = createAbstractDirFor(iface, srcBase)
             Directory simpleClass = createAbstractDirFor(cls, srcBase)
-            Directory simpleInterfaceImpl = new Directory.DirectoryBuilder("test")
+            Directory impl = new Directory.DirectoryBuilder('test')
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(simpleInterface)
@@ -296,12 +297,40 @@ class ImplementationISpec extends BaseISpec {
                     .build()
         when:
             mainGenerator.generate(root)
-            Class<?> clazz = loadClass(getClassName(simpleInterfaceImpl))
+            Class<?> clazz = loadClass(getClassName(impl))
         then:
             notThrown(Exception)
             isPublicNotAbstract(clazz)
             hasNoTypeParameters(clazz)
             hasNoDeclaredMethods(clazz)
             interfaceCount(clazz) == 1
+    }
+
+    def "simple interfaces implementation and simple class extension"() {
+        given:
+            Class<?> iface = SimpleInterface
+            Class<?> iface2 = SimpleInterface2
+            Class<?> cls = SimpleClass
+
+            Directory simpleInterface = createAbstractDirFor(iface, srcBase)
+            Directory simpleInterface2 = createAbstractDirFor(iface2, srcBase)
+            Directory simpleClass = createAbstractDirFor(cls, srcBase)
+            Directory impl = new Directory.DirectoryBuilder('test')
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(simpleInterface)
+                    .superType(simpleInterface2)
+                    .superType(simpleClass)
+                    .filename('Test2' + cls.getSimpleName() + iface.getSimpleName())
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(impl))
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
+            interfaceCount(clazz) == 2
     }
 }

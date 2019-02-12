@@ -193,7 +193,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
                 if (superType2.getTypeParameters().length == 0) {
                     implementationBuilder = implementationBuilder
-                            .addSuperinterface(superType);
+                            .addSuperinterface(superType2);
                 } else { // parametrized type
                     ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(
                             superType2,

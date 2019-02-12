@@ -7,7 +7,6 @@ import dvoraka.archbuilder.sample.SimpleInterface
 import dvoraka.archbuilder.sample.generic.Interface4p1m
 import dvoraka.archbuilder.sample.generic.InterfaceE1pb
 import org.springframework.beans.factory.annotation.Autowired
-import spock.lang.Ignore
 
 import java.util.concurrent.RunnableFuture
 
@@ -281,7 +280,6 @@ class ImplementationISpec extends BaseISpec {
             hasNoDeclaredMethods(clazz)
     }
 
-    @Ignore('WIP')
     def "simple interface implementation and simple class extension"() {
         given:
             Class<?> iface = SimpleInterface

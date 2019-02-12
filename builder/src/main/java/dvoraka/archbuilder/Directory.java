@@ -39,6 +39,7 @@ public class Directory {
     private List<Directory> children;
 
     private Directory superType;
+    private List<Directory> superTypes;
 
     private List<Directory> dependencies;
     private List<String> parameters;
@@ -52,8 +53,6 @@ public class Directory {
     private Directory() {
         id = UUID.randomUUID().toString();
         children = new ArrayList<>();
-        dependencies = new ArrayList<>();
-        parameters = new ArrayList<>();
     }
 
     public void addChildren(Directory directory) {
@@ -125,11 +124,15 @@ public class Directory {
     }
 
     public List<Directory> getChildren() {
-        return children;
+        return Collections.unmodifiableList(children);
     }
 
     public Optional<Directory> getSuperType() {
         return Optional.ofNullable(superType);
+    }
+
+    public List<Directory> getSuperTypes() {
+        return Collections.unmodifiableList(superTypes);
     }
 
     public List<Directory> getDependencies() {
@@ -202,6 +205,7 @@ public class Directory {
         private DirType type;
         private Directory parent;
         private Directory superType;
+        private List<Directory> superTypes;
 
         private List<Directory> dependencies;
         private List<String> parameters;
@@ -211,6 +215,7 @@ public class Directory {
 
         public DirectoryBuilder(String name) {
             this.name = name;
+            superTypes = new ArrayList<>();
             dependencies = new ArrayList<>();
             parameters = new ArrayList<>();
         }
@@ -255,6 +260,7 @@ public class Directory {
         public DirectoryBuilder superType(Directory superType) {
             this.superType = superType;
             dependsOn(superType);
+            this.superTypes.add(superType);
             return this;
         }
 
@@ -305,6 +311,7 @@ public class Directory {
             directory.type = this.type;
             directory.parent = this.parent;
             directory.superType = this.superType;
+            directory.superTypes = this.superTypes;
             directory.dependencies = this.dependencies;
             directory.parameters = this.parameters;
 

@@ -146,6 +146,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         List<Class<?>> superTypes = superTypeDirs.stream()
                 .map(dir -> loadClass(dir.getTypeName()))
                 .collect(Collectors.toList());
+        Optional<Class<?>> superClass = findClass(superTypes);
 
         // type parameters
         Map<TypeVariable<?>, Type> typeMapping = new HashMap<>();
@@ -165,14 +166,18 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         }
         List<MethodSpec> methodSpecs = genMethodSpecs(allMethods, typeMapping);
         // add constructor specs if necessary
-        if (isConstructorNeeded(superType)) {
-            List<MethodSpec> constructorSpecs = genConstructorSpecs(superType, typeMapping);
-            methodSpecs.addAll(constructorSpecs);
+        if (superClass.isPresent()) {
+            Class<?> cls = superClass.get();
+            if (isConstructorNeeded(cls)) {
+                List<MethodSpec> constructorSpecs = genConstructorSpecs(cls, typeMapping);
+                methodSpecs.addAll(constructorSpecs);
+            }
         }
 
+        //TODO: filename is always presented
         // prepare final filename
         String name = directory.getFilename()
-                .orElse(superType.getSimpleName() + "Impl");
+                .orElseThrow(() -> new GeneratorException("No filename"));
 
         // spec builder
         TypeSpec.Builder implementationBuilder = directory.isInterfaceType()

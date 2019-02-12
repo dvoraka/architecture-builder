@@ -36,7 +36,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -138,19 +137,24 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 .orElseThrow(this::noSuperTypeException)
                 .getTypeName());
 
-        // check type parameters
-        Map<TypeVariable<?>, Type> typeMapping;
-        if (superType.getTypeParameters().length == 0) {
-            typeMapping = Collections.emptyMap();
-        } else {
-            typeMapping = getTypeVarMapping(directory, superType);
+        List<Directory> superTypes = directory.getSuperTypes();
+        if (superTypes.isEmpty()) {
+            throw noSuperTypeException();
+        }
+
+        // type parameters
+        Map<TypeVariable<?>, Type> typeMapping = new HashMap<>();
+        for (Directory superTypeDir : superTypes) {
+
+            Class<?> superType2 = loadClass(superTypeDir.getTypeName());
+            if (superType2.getTypeParameters().length != 0) {
+                typeMapping.putAll(getTypeVarMapping(directory, superType));
+            }
         }
 
         // find methods and gen specs
-        List<Method> allMethods;
-        if (directory.isAbstractType()) {
-            allMethods = Collections.emptyList();
-        } else {
+        List<Method> allMethods = new ArrayList<>();
+        if (!directory.isAbstractType()) {
             allMethods = findMethods(superType);
         }
         List<MethodSpec> methodSpecs = genMethodSpecs(allMethods, typeMapping);

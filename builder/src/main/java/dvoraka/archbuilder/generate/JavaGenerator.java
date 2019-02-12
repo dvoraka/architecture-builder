@@ -134,7 +134,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         log.debug("Generating implementation: {}", directory);
 
         // load supertype
-        //TODO: remove
+        //TODO: replace with super type class
         Class<?> superType = loadClass(directory.getSuperType()
                 .orElseThrow(this::noSuperTypeException)
                 .getTypeName());
@@ -158,7 +158,10 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         // find methods and gen specs
         List<Method> allMethods = new ArrayList<>();
         if (!directory.isAbstractType()) {
-            allMethods = findMethods(superType);
+            allMethods = superTypes.stream()
+                    .map(this::findMethods)
+                    .flatMap(List::stream)
+                    .collect(Collectors.toList());
         }
         List<MethodSpec> methodSpecs = genMethodSpecs(allMethods, typeMapping);
         // add constructor specs if necessary

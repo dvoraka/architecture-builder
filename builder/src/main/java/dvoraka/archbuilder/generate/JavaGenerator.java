@@ -184,39 +184,41 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 ? TypeSpec.interfaceBuilder(name)
                 : TypeSpec.classBuilder(name);
 
-        implementationBuilder
-                .addMethods(methodSpecs);
+        implementationBuilder.addMethods(methodSpecs);
 
-        if (superType.isInterface()) {
+        // set supertypes
+        for (Class<?> superType2 : superTypes) {
 
-            if (superType.getTypeParameters().length == 0) {
-                implementationBuilder = implementationBuilder
-                        .addSuperinterface(superType);
-            } else { // parametrized type
-                ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(
-                        superType,
-                        buildTypeArray(superType.getTypeParameters(), typeMapping)
-                );
+            if (superType2.isInterface()) {
 
-                implementationBuilder = implementationBuilder
-                        .addSuperinterface(parameterizedTypeName);
-            }
-        } else { // supertype is class
+                if (superType2.getTypeParameters().length == 0) {
+                    implementationBuilder = implementationBuilder
+                            .addSuperinterface(superType);
+                } else { // parametrized type
+                    ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(
+                            superType2,
+                            buildTypeArray(superType2.getTypeParameters(), typeMapping)
+                    );
+                    implementationBuilder = implementationBuilder
+                            .addSuperinterface(parameterizedTypeName);
+                }
+            } else { // supertype is class
 
-            if (superType.getTypeParameters().length == 0) {
-                implementationBuilder = implementationBuilder
-                        .superclass(superType);
-            } else {
-                ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(
-                        superType,
-                        buildTypeArray(superType.getTypeParameters(), typeMapping)
-                );
-
-                implementationBuilder = implementationBuilder
-                        .superclass(parameterizedTypeName);
+                if (superType2.getTypeParameters().length == 0) {
+                    implementationBuilder = implementationBuilder
+                            .superclass(superType2);
+                } else {
+                    ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(
+                            superType2,
+                            buildTypeArray(superType2.getTypeParameters(), typeMapping)
+                    );
+                    implementationBuilder = implementationBuilder
+                            .superclass(parameterizedTypeName);
+                }
             }
         }
 
+        //TODO: supertypes
         // we need to add type variables from supertype if necessary
         if (directory.getParameters().isEmpty()) {
             implementationBuilder

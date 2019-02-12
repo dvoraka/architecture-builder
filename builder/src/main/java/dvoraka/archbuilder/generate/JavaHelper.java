@@ -2,6 +2,7 @@ package dvoraka.archbuilder.generate;
 
 import com.squareup.javapoet.TypeVariableName;
 import dvoraka.archbuilder.Directory;
+import dvoraka.archbuilder.exception.GeneratorException;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -84,9 +85,12 @@ public interface JavaHelper {
         return returnValue;
     }
 
-    //TODO: translate to GeneratorException
-    default Class<?> loadClass(String className) throws ClassNotFoundException {
-        return Class.forName(className);
+    default Class<?> loadClass(String className) throws GeneratorException {
+        try {
+            return Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            throw new GeneratorException(e);
+        }
     }
 
     default String javaSuffix(String filename) {

@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import static java.lang.reflect.Modifier.isAbstract;
 import static java.lang.reflect.Modifier.isFinal;
@@ -133,22 +134,24 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         log.debug("Generating implementation: {}", directory);
 
         // load supertype
+        //TODO: remove
         Class<?> superType = loadClass(directory.getSuperType()
                 .orElseThrow(this::noSuperTypeException)
                 .getTypeName());
 
-        List<Directory> superTypes = directory.getSuperTypes();
-        if (superTypes.isEmpty()) {
+        List<Directory> superTypeDirs = directory.getSuperTypes();
+        if (superTypeDirs.isEmpty()) {
             throw noSuperTypeException();
         }
+        List<Class<?>> superTypes = superTypeDirs.stream()
+                .map(dir -> loadClass(dir.getTypeName()))
+                .collect(Collectors.toList());
 
         // type parameters
         Map<TypeVariable<?>, Type> typeMapping = new HashMap<>();
-        for (Directory superTypeDir : superTypes) {
-
-            Class<?> superType2 = loadClass(superTypeDir.getTypeName());
+        for (Class<?> superType2 : superTypes) {
             if (superType2.getTypeParameters().length != 0) {
-                typeMapping.putAll(getTypeVarMapping(directory, superType));
+                typeMapping.putAll(getTypeVarMapping(directory, superType2));
             }
         }
 

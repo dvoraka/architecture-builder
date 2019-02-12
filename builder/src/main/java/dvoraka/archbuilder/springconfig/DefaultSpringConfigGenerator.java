@@ -27,13 +27,9 @@ public class DefaultSpringConfigGenerator implements SpringConfigGenerator, Java
         for (BeanMapping mapping : beanMappings) {
 
             Class<?> mappingClass;
-            try {
-                mappingClass = mapping.getTypeDir() != null
-                        ? loadClass(mapping.getTypeDir().getTypeName())
-                        : mapping.getType();
-            } catch (ClassNotFoundException e) {
-                throw new GeneratorException(e);
-            }
+            mappingClass = mapping.getTypeDir() != null
+                    ? loadClass(mapping.getTypeDir().getTypeName())
+                    : mapping.getType();
 
             Object code = mapping.getCodeTemplate() != null
                     ? mapping.getCodeTemplate().apply(mapping)
@@ -50,13 +46,9 @@ public class DefaultSpringConfigGenerator implements SpringConfigGenerator, Java
             List<ParameterSpec> parameterSpecs = new ArrayList<>();
             for (BeanParameter parameter : mapping.getParameters()) {
                 Class<?> parameterClass;
-                try {
-                    parameterClass = parameter.getTypeDir() != null
-                            ? loadClass(parameter.getTypeDir().getTypeName())
-                            : parameter.getType();
-                } catch (ClassNotFoundException e) {
-                    throw new GeneratorException(e);
-                }
+                parameterClass = parameter.getTypeDir() != null
+                        ? loadClass(parameter.getTypeDir().getTypeName())
+                        : parameter.getType();
 
                 parameterSpecs.add(ParameterSpec.builder(
                         parameterClass,
@@ -129,12 +121,8 @@ public class DefaultSpringConfigGenerator implements SpringConfigGenerator, Java
     }
 
     private Class<?> getReturnClass(BeanMapping beanMapping) {
-        try {
-            return beanMapping.getToTypeDir() != null
-                    ? loadClass(beanMapping.getToTypeDir().getTypeName())
-                    : beanMapping.getToType();
-        } catch (ClassNotFoundException e) {
-            throw new GeneratorException(e);
-        }
+        return beanMapping.getToTypeDir() != null
+                ? loadClass(beanMapping.getToTypeDir().getTypeName())
+                : beanMapping.getToType();
     }
 }

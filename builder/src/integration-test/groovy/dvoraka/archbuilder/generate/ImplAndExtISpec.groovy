@@ -6,7 +6,9 @@ import dvoraka.archbuilder.sample.SimpleClass
 import dvoraka.archbuilder.sample.SimpleInterface
 import dvoraka.archbuilder.sample.SimpleInterface2
 import dvoraka.archbuilder.sample.generic.Class1p
+import dvoraka.archbuilder.sample.generic.Interface1p1am
 import org.springframework.beans.factory.annotation.Autowired
+import spock.lang.Ignore
 
 import static dvoraka.archbuilder.generate.Utils.createAbstractDirFor
 
@@ -117,6 +119,58 @@ class ImplAndExtISpec extends BaseISpec {
             isPublicNotAbstract(clazz)
             hasNoTypeParameters(clazz)
             hasNoDeclaredMethods(clazz)
+            interfaceCount(clazz) == 1
+    }
+
+    @Ignore('WIP')
+    def "interface1p1m implementation and class1p extension NP"() {
+        given:
+            Class<?> iface = Interface1p1am
+            Class<?> cls = Class1p
+
+            Directory ifaceDir = createAbstractDirFor(iface, srcBase)
+            Directory clsDir = createAbstractDirFor(cls, srcBase)
+            Directory impl = new Directory.DirectoryBuilder('test')
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(ifaceDir)
+                    .superType(clsDir)
+                    .filename('TestNP' + cls.getSimpleName() + iface.getSimpleName())
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(impl))
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            declaredMethodCount(clazz) == 1
+            interfaceCount(clazz) == 1
+    }
+
+    def "interface1p1m implementation and class1p extension"() {
+        given:
+            Class<?> iface = Interface1p1am
+            Class<?> cls = Class1p
+
+            Directory ifaceDir = createAbstractDirFor(iface, srcBase)
+            Directory clsDir = createAbstractDirFor(cls, srcBase)
+            Directory impl = new Directory.DirectoryBuilder('test')
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(ifaceDir)
+                    .superType(clsDir)
+                    .parameterTypeClass(String)
+                    .filename('Test' + cls.getSimpleName() + iface.getSimpleName())
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(impl))
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            declaredMethodCount(clazz) == 1
             interfaceCount(clazz) == 1
     }
 }

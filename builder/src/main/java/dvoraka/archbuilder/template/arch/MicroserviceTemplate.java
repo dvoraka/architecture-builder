@@ -4,9 +4,11 @@ import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;
 import dvoraka.archbuilder.exception.GeneratorException;
 import dvoraka.archbuilder.generate.JavaUtils;
+import dvoraka.archbuilder.generate.Utils;
 import dvoraka.archbuilder.sample.microservice.data.BaseException;
 import dvoraka.archbuilder.sample.microservice.data.ResultData;
 import dvoraka.archbuilder.sample.microservice.data.message.ResponseMessage;
+import dvoraka.archbuilder.sample.microservice.net.BaseNetComponent;
 import dvoraka.archbuilder.sample.microservice.net.ServiceNetComponent;
 import dvoraka.archbuilder.sample.microservice.net.receive.NetReceiver;
 import dvoraka.archbuilder.springconfig.BeanMapping;
@@ -196,6 +198,22 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .parameterTypeDir(data)
                 .parameterTypeDir(exception)
                 .filename(networkComponentName)
+                .build();
+
+        Directory baseNetComponent = Utils.createAbstractDirFor(BaseNetComponent.class, srcBase);
+
+        //TODO: fix method stubs
+        String netAdapterName = serviceName + "NetAdapter";
+        Directory serviceNetAdapter = new Directory.DirectoryBuilder("net")
+                .type(DirType.IMPL)
+                .parent(srcBase)
+                .superType(serviceNetworkComponent)
+                .superType(baseNetComponent)
+                .parameterTypeDir(requestMessage)
+                .parameterTypeDir(responseMessage)
+                .parameterTypeDir(data)
+                .parameterTypeDir(exception)
+                .filename(netAdapterName)
                 .build();
 
         String networkReceiverName = serviceName + "NetReceiver";

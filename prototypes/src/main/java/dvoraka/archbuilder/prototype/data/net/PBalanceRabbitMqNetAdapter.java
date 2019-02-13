@@ -5,6 +5,7 @@ import dvoraka.archbuilder.prototype.data.PBalanceData;
 import dvoraka.archbuilder.prototype.data.PBalanceException;
 import dvoraka.archbuilder.prototype.data.message.PBalanceMessage;
 import dvoraka.archbuilder.prototype.data.message.PBalanceResponseMessage;
+import dvoraka.archbuilder.sample.microservice.net.BaseNetComponent;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -16,7 +17,7 @@ import java.io.IOException;
 
 @Component
 public class PBalanceRabbitMqNetAdapter
-        extends PBaseNetComponent<PBalanceMessage, PBalanceResponseMessage, PBalanceData, PBalanceException>
+        extends BaseNetComponent<PBalanceMessage, PBalanceResponseMessage, PBalanceData, PBalanceException>
         implements PBalanceNetComponent {
 
     @Autowired

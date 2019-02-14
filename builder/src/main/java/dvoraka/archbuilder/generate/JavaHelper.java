@@ -129,6 +129,20 @@ public interface JavaHelper {
         }
     }
 
+    default String getGenericSignature(Method method) {
+        try {
+            Method m = Method.class.getDeclaredMethod("getGenericSignature");
+            m.setAccessible(true);
+            String signature = (String) m.invoke(method);
+
+            return signature;
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+        throw new GeneratorException("Getting method signature failed.");
+    }
+
     default RuntimeException noSuperTypeException() {
         return new RuntimeException("No super type specified!");
     }

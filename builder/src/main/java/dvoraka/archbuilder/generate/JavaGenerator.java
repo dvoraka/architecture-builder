@@ -170,6 +170,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                     .distinct()
                     .collect(Collectors.toList());
         }
+        mergeMethods(allMethods);
         List<MethodSpec> methodSpecs = genMethodSpecs(allMethods, typeMapping);
         // add constructor specs if necessary
         if (superClass.isPresent()) {
@@ -797,6 +798,27 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
     private Class<?> loadNonCpClass(Path path) {
         return new ByteClassLoader(this.getClass().getClassLoader()).loadClass(path);
+    }
+
+    private List<Method> mergeMethods(List<Method> methods) {
+
+        List<Method> mergedMethods = new ArrayList<>();
+        for (Method method : methods) {
+            if (java.lang.reflect.Modifier.isAbstract(method.getModifiers())) {
+
+                for (Method m : methods) {
+                    if (!java.lang.reflect.Modifier.isAbstract(m.getModifiers())) {
+
+                        // compare signatures and add only if abstract method doesn't
+                        // have any non-abstract implementation
+
+                        System.out.println("");
+                    }
+                }
+            }
+        }
+
+        return mergedMethods;
     }
 
     private void save(Directory directory, String source, String filename) throws IOException {

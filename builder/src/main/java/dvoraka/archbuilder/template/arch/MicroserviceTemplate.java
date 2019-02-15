@@ -202,7 +202,6 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
 
         Directory baseNetComponent = Utils.createAbstractDirFor(BaseNetComponent.class, srcBase);
 
-        //TODO: fix method stubs
         String netAdapterName = serviceName + "NetAdapter";
         Directory serviceNetAdapter = new Directory.DirectoryBuilder("net")
                 .type(DirType.IMPL)

@@ -170,7 +170,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                     .distinct()
                     .collect(Collectors.toList());
         }
-        mergeMethods(allMethods);
+        allMethods = mergeMethods(allMethods);
         List<MethodSpec> methodSpecs = genMethodSpecs(allMethods, typeMapping);
         // add constructor specs if necessary
         if (superClass.isPresent()) {
@@ -802,13 +802,27 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
     private List<Method> mergeMethods(List<Method> methods) {
 
-        List<Method> mergedMethods = new ArrayList<>();
+        List<Method> mergedMethods = new ArrayList<>(methods);
+        List<Method> toRemove = new ArrayList<>();
         for (Method method : methods) {
 
-            // current approach is to use all methods from one supertype and skip
-            // all "bad" methods so we could start with very simple solution to check
-            // method name and if has implementation already
+            if (isAbstract(method.getModifiers())) {
+                for (Method m : methods) {
+
+                    if (!(m.equals(method) || m.isSynthetic() || isAbstract(m.getModifiers()))) {
+
+                        if (m.getName().equals(method.getName())
+                                && m.getParameterCount() == method.getParameterCount()) {
+
+                            // remove abstract method
+                            toRemove.add(method);
+                        }
+                    }
+                }
+            }
         }
+
+        mergedMethods.removeAll(toRemove);
 
         return mergedMethods;
     }

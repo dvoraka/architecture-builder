@@ -804,18 +804,10 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
         List<Method> mergedMethods = new ArrayList<>();
         for (Method method : methods) {
-            if (java.lang.reflect.Modifier.isAbstract(method.getModifiers())) {
 
-                for (Method m : methods) {
-                    if (!java.lang.reflect.Modifier.isAbstract(m.getModifiers())) {
-
-                        // compare signatures and add only if abstract method doesn't
-                        // have any non-abstract implementation
-
-                        System.out.println("");
-                    }
-                }
-            }
+            // current approach is to use all methods from one supertype and skip
+            // all "bad" methods so we could start with very simple solution to check
+            // method name and if has implementation already
         }
 
         return mergedMethods;

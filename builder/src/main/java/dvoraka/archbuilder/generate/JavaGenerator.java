@@ -156,11 +156,6 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             }
         }
 
-        //TODO: when we have more types we can have same methods
-        // and distinct is for same methods
-        // checking abstract methods and possible implementations
-        // could be done by signatures - same signature but different modifier
-        //
         // find methods and gen specs
         List<Method> allMethods = new ArrayList<>();
         if (!directory.isAbstractType()) {
@@ -170,6 +165,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                     .distinct()
                     .collect(Collectors.toList());
         }
+        //TODO: current merging is very simple - name && parameter count check
         allMethods = mergeMethods(allMethods);
         List<MethodSpec> methodSpecs = genMethodSpecs(allMethods, typeMapping);
         // add constructor specs if necessary

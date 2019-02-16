@@ -197,7 +197,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 if (superType2.getTypeParameters().length == 0) {
                     implementationBuilder = implementationBuilder
                             .addSuperinterface(superType2);
-                } else { // parametrized type
+                } else { // parametrized interface
                     ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(
                             superType2,
                             buildTypeArray(superType2.getTypeParameters(), typeMapping)
@@ -210,7 +210,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 if (superType2.getTypeParameters().length == 0) {
                     implementationBuilder = implementationBuilder
                             .superclass(superType2);
-                } else {
+                } else { // parametrized class
                     ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(
                             superType2,
                             buildTypeArray(superType2.getTypeParameters(), typeMapping)
@@ -698,6 +698,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
         Map<TypeVariable<?>, Type> typeMapping = new HashMap<>();
         if (directory.getParameters().isEmpty()) {
+            //TODO
             // just copy type variables
             for (TypeVariable<? extends Class<?>> typeVariable : typeVariables) {
                 typeMapping.put(typeVariable, typeVariable);

@@ -9,6 +9,7 @@ import dvoraka.archbuilder.sample.SimpleInterface2
 import dvoraka.archbuilder.sample.generic.Class1p
 import dvoraka.archbuilder.sample.generic.Class1p1m
 import dvoraka.archbuilder.sample.generic.Interface1p1am
+import dvoraka.archbuilder.sample.generic.Interface2p2am
 import org.springframework.beans.factory.annotation.Autowired
 import spock.lang.Ignore
 
@@ -216,6 +217,38 @@ class ImplAndExtISpec extends BaseISpec {
                     .superType(clsDir)
                     .parameterTypeClass(String)
                     .filename('Test' + cls.getSimpleName() + iface.getSimpleName())
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(impl))
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            declaredMethodCount(clazz) == 1
+            interfaceCount(clazz) == 1
+    }
+
+    @Ignore('WIP - variable parameter count doesn\'t work')
+    def "interface1p1am, interface2p2am implementation and class1p1m extension"() {
+        given:
+            Class<?> iface = Interface1p1am
+            Class<?> iface2 = Interface2p2am
+            Class<?> cls = Class1p1m
+
+            Directory ifaceDir = createAbstractDirFor(iface, srcBase)
+            Directory ifaceDir2 = createAbstractDirFor(iface2, srcBase)
+            Directory clsDir = createAbstractDirFor(cls, srcBase)
+            Directory impl = new Directory.DirectoryBuilder('test')
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(ifaceDir)
+                    .superType(ifaceDir2)
+                    .superType(clsDir)
+                    .parameterTypeClass(String)
+                    .parameterTypeClass(Long)
+                    .filename('Test' + cls.getSimpleName()
+                    + iface.getSimpleName() + iface2.getSimpleName())
                     .build()
         when:
             mainGenerator.generate(root)

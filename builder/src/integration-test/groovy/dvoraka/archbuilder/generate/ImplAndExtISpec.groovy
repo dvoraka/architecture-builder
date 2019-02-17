@@ -126,7 +126,7 @@ class ImplAndExtISpec extends BaseISpec {
     }
 
     @Ignore('WIP')
-    def "interface1p1m implementation and class1p extension NP"() {
+    def "interface1p1am implementation and class1p extension NP"() {
         given:
             Class<?> iface = Interface1p1am
             Class<?> cls = Class1p
@@ -151,7 +151,7 @@ class ImplAndExtISpec extends BaseISpec {
             interfaceCount(clazz) == 1
     }
 
-    def "interface1p1m implementation and class1p extension"() {
+    def "interface1p1am implementation and class1p extension"() {
         given:
             Class<?> iface = Interface1p1am
             Class<?> cls = Class1p
@@ -177,7 +177,7 @@ class ImplAndExtISpec extends BaseISpec {
             interfaceCount(clazz) == 1
     }
 
-    def "interface1p1m implementation and class1m extension"() {
+    def "interface1p1am implementation and class1m extension"() {
         given:
             Class<?> iface = Interface1p1am
             Class<?> cls = Class1m
@@ -203,7 +203,7 @@ class ImplAndExtISpec extends BaseISpec {
             interfaceCount(clazz) == 1
     }
 
-    def "interface1p1m implementation and class1p1m extension"() {
+    def "interface1p1am implementation and class1p1m extension"() {
         given:
             Class<?> iface = Interface1p1am
             Class<?> cls = Class1p1m

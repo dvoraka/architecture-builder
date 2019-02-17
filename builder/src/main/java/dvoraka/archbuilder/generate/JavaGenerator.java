@@ -148,6 +148,19 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 .collect(Collectors.toList());
         Optional<Class<?>> superClass = findClass(superTypes);
 
+        //TODO
+        // if parameters are not present generate type variables
+        int parameterCount;
+        if (directory.getParameters().isEmpty()) {
+            // check supertype parameters
+            parameterCount = superTypes.stream()
+                    .map(Class::getTypeParameters)
+                    .mapToInt(params -> params.length)
+                    .filter(length -> length > 0)
+                    .findFirst()
+                    .orElse(0);
+        }
+
         // type parameters
         Map<TypeVariable<?>, Type> typeMapping = new HashMap<>();
         for (Class<?> superType2 : superTypes) {

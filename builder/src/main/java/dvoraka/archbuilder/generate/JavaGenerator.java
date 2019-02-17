@@ -150,8 +150,12 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
         //TODO
         // if parameters are not present generate type variables
+        Map<TypeVariable<?>, Type> typeMapping = new HashMap<>();
         int parameterCount;
         if (directory.getParameters().isEmpty()) {
+
+            // prepare code here and then move
+
             // check supertype parameters
             parameterCount = superTypes.stream()
                     .map(Class::getTypeParameters)
@@ -159,13 +163,23 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                     .filter(length -> length > 0)
                     .findFirst()
                     .orElse(0);
-        }
 
-        // type parameters
-        Map<TypeVariable<?>, Type> typeMapping = new HashMap<>();
-        for (Class<?> superType2 : superTypes) {
-            if (superType2.getTypeParameters().length != 0) {
-                typeMapping.putAll(getTypeVarMapping(directory, superType2));
+            // code from getTypeVarMapping()
+            for (Class<?> superType2 : superTypes) {
+                TypeVariable<? extends Class<?>>[] typeVariables = superType2.getTypeParameters();
+
+                for (TypeVariable<? extends Class<?>> typeVariable : typeVariables) {
+                    typeMapping.put(typeVariable, typeVariable);
+                }
+
+                addAllTypeVarMappings(superType2, typeMapping);
+            }
+        } else {
+            // type parameters
+            for (Class<?> superType2 : superTypes) {
+                if (superType2.getTypeParameters().length != 0) {
+                    typeMapping.putAll(getTypeVarMapping(directory, superType2));
+                }
             }
         }
 
@@ -711,7 +725,8 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
         Map<TypeVariable<?>, Type> typeMapping = new HashMap<>();
         if (directory.getParameters().isEmpty()) {
-            //TODO
+            //TODO: throw an exception after code migration
+//            throw new GeneratorException("No parameters for directory");
             // just copy type variables
             for (TypeVariable<? extends Class<?>> typeVariable : typeVariables) {
                 typeMapping.put(typeVariable, typeVariable);

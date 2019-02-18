@@ -133,12 +133,6 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
     private void genImpl(Directory directory) throws ClassNotFoundException {
         log.debug("Generating implementation: {}", directory);
 
-        // load supertype
-        //TODO: replace with super type class
-        Class<?> superType = loadClass(directory.getSuperType()
-                .orElseThrow(this::noSuperTypeException)
-                .getTypeName());
-
         List<Directory> superTypeDirs = directory.getSuperTypes();
         if (superTypeDirs.isEmpty()) {
             throw noSuperTypeException();
@@ -148,30 +142,26 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 .collect(Collectors.toList());
         Optional<Class<?>> superClass = findClass(superTypes);
 
-        //TODO
-        // if parameters are not present generate type variables
+        // if parameters are not present generate type variables from supertypes
         Map<TypeVariable<?>, Type> typeMapping = new HashMap<>();
-        int parameterCount;
-        TypeVariable<? extends Class<?>>[] typeParameters = null;
-
-        // check supertype parameters
-
-        parameterCount = superTypes.stream()
+        int parameterCount = superTypes.stream()
                 .map(Class::getTypeParameters)
                 .mapToInt(params -> params.length)
                 .filter(length -> length > 0)
                 .max()
                 .orElse(0);
 
+        TypeVariable<? extends Class<?>>[] typeParameters = null;
         if (directory.getParameters().isEmpty() && parameterCount > 0) {
 
             // prepare code here and then move
 
-            Optional<Class<?>> first = superTypes.stream()
+            Class<?> templateClass = superTypes.stream()
                     .filter(cls -> cls.getTypeParameters().length == parameterCount)
-                    .findFirst();
+                    .findFirst()
+                    .orElseThrow(() -> new GeneratorException("No template class found."));
 
-            typeParameters = first.get().getTypeParameters();
+            typeParameters = templateClass.getTypeParameters();
 
             // code from getTypeVarMapping()
             for (Class<?> superType2 : superTypes) {
@@ -180,9 +170,6 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 for (int i = 0; i < typeVariables.length; i++) {
                     typeMapping.put(typeVariables[i], typeParameters[i]);
                 }
-//                for (TypeVariable<? extends Class<?>> typeVariable : typeVariables) {
-//                    typeMapping.put(typeVariable, typeVariable);
-//                }
 
                 addAllTypeVarMappings(superType2, typeMapping);
             }
@@ -260,17 +247,15 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             }
         }
 
-        //TODO: supertypes
-        // we need to add type variables from supertype if necessary
-        if (directory.getParameters().isEmpty() && parameterCount > 0) {
+        // add type variables from supertypes if necessary
+        if (typeParameters != null) {
+
             List<TypeVariableName> typeVariableNames = new ArrayList<>();
             for (TypeVariable<? extends Class<?>> typeParameter : typeParameters) {
                 typeVariableNames.add(TypeVariableName.get(typeParameter));
             }
-            if (directory.getParameters().isEmpty()) {
-                implementationBuilder
-                        .addTypeVariables(typeVariableNames);
-            }
+
+            implementationBuilder.addTypeVariables(typeVariableNames);
         }
 
         // modifiers

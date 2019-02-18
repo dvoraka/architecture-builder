@@ -125,7 +125,7 @@ class ImplAndExtISpec extends BaseISpec {
             interfaceCount(clazz) == 1
     }
 
-    @Ignore('WIP')
+//    @Ignore('WIP')
     def "interface1p1am implementation and class1p extension NP"() {
         given:
             Class<?> iface = Interface1p1am
@@ -146,7 +146,7 @@ class ImplAndExtISpec extends BaseISpec {
         then:
             notThrown(Exception)
             isPublicNotAbstract(clazz)
-            hasNoTypeParameters(clazz)
+            hasTypeParameters(clazz)
             declaredMethodCount(clazz) == 1
             interfaceCount(clazz) == 1
     }

@@ -152,25 +152,37 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         // if parameters are not present generate type variables
         Map<TypeVariable<?>, Type> typeMapping = new HashMap<>();
         int parameterCount;
-        if (directory.getParameters().isEmpty()) {
+        TypeVariable<? extends Class<?>>[] typeParameters = null;
+
+        // check supertype parameters
+
+        parameterCount = superTypes.stream()
+                .map(Class::getTypeParameters)
+                .mapToInt(params -> params.length)
+                .filter(length -> length > 0)
+                .max()
+                .orElse(0);
+
+        if (directory.getParameters().isEmpty() && parameterCount > 0) {
 
             // prepare code here and then move
 
-            // check supertype parameters
-            parameterCount = superTypes.stream()
-                    .map(Class::getTypeParameters)
-                    .mapToInt(params -> params.length)
-                    .filter(length -> length > 0)
-                    .findFirst()
-                    .orElse(0);
+            Optional<Class<?>> first = superTypes.stream()
+                    .filter(cls -> cls.getTypeParameters().length == parameterCount)
+                    .findFirst();
+
+            typeParameters = first.get().getTypeParameters();
 
             // code from getTypeVarMapping()
             for (Class<?> superType2 : superTypes) {
                 TypeVariable<? extends Class<?>>[] typeVariables = superType2.getTypeParameters();
 
-                for (TypeVariable<? extends Class<?>> typeVariable : typeVariables) {
-                    typeMapping.put(typeVariable, typeVariable);
+                for (int i = 0; i < typeVariables.length; i++) {
+                    typeMapping.put(typeVariables[i], typeParameters[i]);
                 }
+//                for (TypeVariable<? extends Class<?>> typeVariable : typeVariables) {
+//                    typeMapping.put(typeVariable, typeVariable);
+//                }
 
                 addAllTypeVarMappings(superType2, typeMapping);
             }
@@ -250,9 +262,15 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
         //TODO: supertypes
         // we need to add type variables from supertype if necessary
-        if (directory.getParameters().isEmpty()) {
-            implementationBuilder
-                    .addTypeVariables(getTypeVariableNames(superType));
+        if (directory.getParameters().isEmpty() && parameterCount > 0) {
+            List<TypeVariableName> typeVariableNames = new ArrayList<>();
+            for (TypeVariable<? extends Class<?>> typeParameter : typeParameters) {
+                typeVariableNames.add(TypeVariableName.get(typeParameter));
+            }
+            if (directory.getParameters().isEmpty()) {
+                implementationBuilder
+                        .addTypeVariables(typeVariableNames);
+            }
         }
 
         // modifiers

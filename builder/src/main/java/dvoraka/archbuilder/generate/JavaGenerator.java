@@ -133,6 +133,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
     private void genImpl(Directory directory) throws ClassNotFoundException {
         log.debug("Generating implementation: {}", directory);
 
+        // prepare super types
         List<Directory> superTypeDirs = directory.getSuperTypes();
         if (superTypeDirs.isEmpty()) {
             throw noSuperTypeException();
@@ -141,26 +142,13 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 .map(dir -> loadClass(dir.getTypeName()))
                 .collect(Collectors.toList());
         Optional<Class<?>> superClass = findClass(superTypes);
+        int parameterCount = getParameterCount(superTypes);
 
-        // if parameters are not present generate type variables from supertypes
         Map<TypeVariable<?>, Type> typeMapping = new HashMap<>();
-        int parameterCount = superTypes.stream()
-                .map(Class::getTypeParameters)
-                .mapToInt(params -> params.length)
-                .filter(length -> length > 0)
-                .max()
-                .orElse(0);
-
         TypeVariable<? extends Class<?>>[] typeParameters = null;
         if (directory.getParameters().isEmpty() && parameterCount > 0) {
 
-            // prepare code here and then move
-
-            Class<?> templateClass = superTypes.stream()
-                    .filter(cls -> cls.getTypeParameters().length == parameterCount)
-                    .findFirst()
-                    .orElseThrow(() -> new GeneratorException("No template class found."));
-
+            Class<?> templateClass = findTemplateClass(superTypes, parameterCount);
             typeParameters = templateClass.getTypeParameters();
 
             // code from getTypeVarMapping()
@@ -852,6 +840,22 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         mergedMethods.removeAll(toRemove);
 
         return mergedMethods;
+    }
+
+    private int getParameterCount(List<Class<?>> classes) {
+        return classes.stream()
+                .map(Class::getTypeParameters)
+                .mapToInt(params -> params.length)
+                .filter(length -> length > 0)
+                .max()
+                .orElse(0);
+    }
+
+    private Class<?> findTemplateClass(List<Class<?>> classes, int paramCount) {
+        return classes.stream()
+                .filter(cls -> cls.getTypeParameters().length == paramCount)
+                .findFirst()
+                .orElseThrow(() -> new GeneratorException("No template class found."));
     }
 
     private void save(Directory directory, String source, String filename) throws IOException {

@@ -310,38 +310,33 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
         Class<?> superSuperClass = loadClass(superSuperDir.getTypeName());
         Class<?> superClass = loadClass(getClassName(superDir));
-
-        // check parameter count and save type parameters
-        Map<TypeVariable<?>, Type> typeMapping;
-        Directory paramDir;
-        if (directory.getParameters().isEmpty()) {
-            paramDir = superDir;
-            typeMapping = getTypeVarMapping(paramDir, superSuperClass);
-        } else {
-            paramDir = directory;
-            typeMapping = getTypeVarMapping(paramDir, superClass);
+        if (superClass.getTypeParameters().length != 0) {
+            throw new GeneratorException("Super class has type parameters!");
         }
 
-        // find all methods from the super type
-        List<Method> allMethods = findMethods(superClass);
+        // type parameters
+        Map<TypeVariable<?>, Type> typeMapping = new HashMap<>();
+        if (directory.getParameters().isEmpty()) {
+            if (!superDir.getParameters().isEmpty()) {
+                typeMapping = getTypeVarMapping(superDir, superSuperClass);
+            }
+        } else {
+            typeMapping = getTypeVarMapping(directory, superClass);
+        }
 
-        // process all methods
+        // methods
+        List<Method> allMethods = findMethods(superClass);
         List<MethodSpec> methodSpecs = genMethodSpecs(allMethods, typeMapping);
 
         String name = directory.getFilename()
                 .orElseThrow(() -> new GeneratorException("No filename for service implementation."));
 
-        TypeSpec serviceImpl;
-        if (superClass.getTypeParameters().length == 0) {
-            serviceImpl = TypeSpec.classBuilder(name)
-                    .addModifiers(Modifier.PUBLIC)
-                    .addSuperinterface(superClass)
-                    .addAnnotation(Service.class)
-                    .addMethods(methodSpecs)
-                    .build();
-        } else {
-            throw new RuntimeException("Super class has type parameters!");
-        }
+        TypeSpec serviceImpl = TypeSpec.classBuilder(name)
+                .addModifiers(Modifier.PUBLIC)
+                .addSuperinterface(superClass)
+                .addAnnotation(Service.class)
+                .addMethods(methodSpecs)
+                .build();
 
         JavaFile javaFile = JavaFile.builder(directory.getPackageName(), serviceImpl)
                 .build();
@@ -678,12 +673,12 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
         Map<TypeVariable<?>, Type> typeMapping = new HashMap<>();
         if (directory.getParameters().isEmpty()) {
-            //TODO: throw an exception after code migration
-//            throw new GeneratorException("No parameters for directory");
+            throw new GeneratorException("No parameters for directory.");
+
             // just copy type variables
-            for (TypeVariable<? extends Class<?>> typeVariable : typeVariables) {
-                typeMapping.put(typeVariable, typeVariable);
-            }
+//            for (TypeVariable<? extends Class<?>> typeVariable : typeVariables) {
+//                typeMapping.put(typeVariable, typeVariable);
+//            }
         } else {
 
             if (directory.getParameters().size() != typeVariables.length) {

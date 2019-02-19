@@ -52,7 +52,6 @@ microservice/
 │   │   └── ResultMessage.java
 │   └── ResultData.java
 ├── Management.java
-├── mscomponents.puml
 ├── net
 │   ├── Acknowledgment.java
 │   ├── BaseNetComponent.java

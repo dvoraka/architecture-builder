@@ -658,16 +658,13 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             }
         }
 
-        ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(
+        return ParameterizedTypeName.get(
                 ClassName.get(rawClass),
                 typeNames.toArray(new TypeName[0])
         );
-
-        return parameterizedTypeName;
     }
 
-    private Map<TypeVariable<?>, Type> getTypeVarMapping(Directory directory, Class<?> clazz)
-            throws ClassNotFoundException {
+    private Map<TypeVariable<?>, Type> getTypeVarMapping(Directory directory, Class<?> clazz) {
 
         TypeVariable<? extends Class<?>>[] typeVariables = clazz.getTypeParameters();
 
@@ -680,9 +677,8 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 //                typeMapping.put(typeVariable, typeVariable);
 //            }
         } else {
-
             if (directory.getParameters().size() != typeVariables.length) {
-                throw new RuntimeException("Type parameter counts do not match for: "
+                throw new GeneratorException("Type parameter counts do not match for: "
                         + directory.getFilename().orElse("unknown"));
             }
 

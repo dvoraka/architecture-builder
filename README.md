@@ -43,6 +43,7 @@ Starting abstraction is (from sample package in the project):
 ```
 microservice/
 ├── data
+│   ├── BaseException.java
 │   ├── message
 │   │   ├── BaseMessage.java
 │   │   ├── Message.java
@@ -51,12 +52,19 @@ microservice/
 │   │   └── ResultMessage.java
 │   └── ResultData.java
 ├── Management.java
+├── mscomponents.puml
 ├── net
 │   ├── Acknowledgment.java
-│   ├── NetworkComponent.java
-│   ├── NetworkMessageListener.java
-│   ├── Receiver.java
-│   └── Sender.java
+│   ├── BaseNetComponent.java
+│   ├── GenericNetComponent.java
+│   ├── NetMessageListener.java
+│   ├── receive
+│   │   ├── BaseNetReceiver.java
+│   │   └── NetReceiver.java
+│   ├── send
+│   │   ├── AbstractNetSender.java
+│   │   └── NetSender.java
+│   └── ServiceNetComponent.java
 ├── server
 │   └── AbstractServer.java
 └── service
@@ -66,7 +74,7 @@ microservice/
 And generated project structure:
 
 ```
-project/
+budget-service/
 ├── build.gradle
 ├── gradle
 │   └── wrapper
@@ -80,17 +88,26 @@ project/
         ├── java
         │   └── test
         │       └── microservice
+        │           ├── BudgetApp.java
+        │           ├── configuration
+        │           │   └── BudgetConfig.java
         │           ├── data
+        │           │   ├── BudgetData.java
         │           │   └── message
-        │           │       ├── TestingServiceMessage.java
-        │           │       └── TestingServiceResponseMessage.java
+        │           │       ├── BudgetMessage.java
+        │           │       └── BudgetResponseMessage.java
+        │           ├── exception
+        │           │   └── BudgetException.java
+        │           ├── net
+        │           │   ├── BudgetNetAdapter.java
+        │           │   ├── BudgetNetComponent.java
+        │           │   ├── BudgetNetReceiver.java
+        │           │   └── BudgetNetResponseReceiver.java
         │           ├── server
-        │           │   ├── TestingServiceNetworkComponent.java
-        │           │   └── TestingServiceServer.java
-        │           ├── service
-        │           │   ├── DefaultTestingService.java
-        │           │   └── TestingService.java
-        │           └── TestingServiceApp.java
+        │           │   └── BudgetServer.java
+        │           └── service
+        │               ├── BudgetService.java
+        │               └── DefaultBudgetService.java
         └── resources
             └── application.properties
 ```

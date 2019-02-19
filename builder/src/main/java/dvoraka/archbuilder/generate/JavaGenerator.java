@@ -151,21 +151,12 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             Class<?> templateClass = findTemplateClass(superTypes, parameterCount);
             typeParameters = templateClass.getTypeParameters();
 
-            // code from getTypeVarMapping()
-            for (Class<?> superType2 : superTypes) {
-                TypeVariable<? extends Class<?>>[] typeVariables = superType2.getTypeParameters();
+            typeMapping.putAll(getTypeVarMapping2(superTypes, typeParameters));
 
-                for (int i = 0; i < typeVariables.length; i++) {
-                    typeMapping.put(typeVariables[i], typeParameters[i]);
-                }
-
-                addAllTypeVarMappings(superType2, typeMapping);
-            }
-        } else {
-            // type parameters
-            for (Class<?> superType2 : superTypes) {
-                if (superType2.getTypeParameters().length != 0) {
-                    typeMapping.putAll(getTypeVarMapping(directory, superType2));
+        } else { // type parameters entered
+            for (Class<?> superType : superTypes) {
+                if (superType.getTypeParameters().length > 0) {
+                    typeMapping.putAll(getTypeVarMapping(directory, superType));
                 }
             }
         }
@@ -739,6 +730,24 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         }
 
         addAllTypeVarMappings(clazz, typeMapping);
+
+        return typeMapping;
+    }
+
+    private Map<TypeVariable<?>, Type> getTypeVarMapping2(
+            List<Class<?>> superTypes,
+            TypeVariable<? extends Class<?>>[] typeParameters
+    ) {
+        Map<TypeVariable<?>, Type> typeMapping = new HashMap<>();
+        for (Class<?> superType : superTypes) {
+            TypeVariable<? extends Class<?>>[] typeVariables = superType.getTypeParameters();
+
+            for (int i = 0; i < typeVariables.length; i++) {
+                typeMapping.put(typeVariables[i], typeParameters[i]);
+            }
+
+            addAllTypeVarMappings(superType, typeMapping);
+        }
 
         return typeMapping;
     }

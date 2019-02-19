@@ -182,48 +182,19 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             }
         }
 
-        //TODO: filename is always presented
         // prepare final filename
         String name = directory.getFilename()
-                .orElseThrow(() -> new GeneratorException("No filename"));
+                .orElseThrow(() -> new GeneratorException("No filename."));
 
-        // spec builder
+        // type spec builder
         TypeSpec.Builder implementationBuilder = directory.isInterfaceType()
                 ? TypeSpec.interfaceBuilder(name)
                 : TypeSpec.classBuilder(name);
-
         implementationBuilder.addMethods(methodSpecs);
 
         // set supertypes
-        for (Class<?> superType2 : superTypes) {
-
-            if (superType2.isInterface()) {
-
-                if (superType2.getTypeParameters().length == 0) {
-                    implementationBuilder = implementationBuilder
-                            .addSuperinterface(superType2);
-                } else { // parametrized interface
-                    ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(
-                            superType2,
-                            buildTypeArray(superType2.getTypeParameters(), typeMapping)
-                    );
-                    implementationBuilder = implementationBuilder
-                            .addSuperinterface(parameterizedTypeName);
-                }
-            } else { // supertype is class
-
-                if (superType2.getTypeParameters().length == 0) {
-                    implementationBuilder = implementationBuilder
-                            .superclass(superType2);
-                } else { // parametrized class
-                    ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(
-                            superType2,
-                            buildTypeArray(superType2.getTypeParameters(), typeMapping)
-                    );
-                    implementationBuilder = implementationBuilder
-                            .superclass(parameterizedTypeName);
-                }
-            }
+        for (Class<?> superType : superTypes) {
+            implementationBuilder = setSuperType(superType, typeMapping, implementationBuilder);
         }
 
         // add type variables from supertypes if necessary
@@ -865,6 +836,44 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 .filter(cls -> cls.getTypeParameters().length == paramCount)
                 .findFirst()
                 .orElseThrow(() -> new GeneratorException("No template class found."));
+    }
+
+    private TypeSpec.Builder setSuperType(
+            Class<?> superType, Map<TypeVariable<?>,
+            Type> typeMapping,
+            TypeSpec.Builder builder
+    ) {
+        TypeSpec.Builder updatedBuilder;
+        if (superType.isInterface()) {
+
+            if (superType.getTypeParameters().length == 0) {
+
+                updatedBuilder = builder.addSuperinterface(superType);
+            } else { // parametrized interface
+                ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(
+                        superType,
+                        buildTypeArray(superType.getTypeParameters(), typeMapping)
+                );
+
+                updatedBuilder = builder.addSuperinterface(parameterizedTypeName);
+            }
+        } else { // supertype is class
+
+            if (superType.getTypeParameters().length == 0) {
+
+                updatedBuilder = builder.superclass(superType);
+
+            } else { // parametrized class
+                ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(
+                        superType,
+                        buildTypeArray(superType.getTypeParameters(), typeMapping)
+                );
+
+                updatedBuilder = builder.superclass(parameterizedTypeName);
+            }
+        }
+
+        return updatedBuilder;
     }
 
     private void save(Directory directory, String source, String filename) throws IOException {

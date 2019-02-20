@@ -13,7 +13,6 @@ import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;
 import dvoraka.archbuilder.TypeVarMappingException;
 import dvoraka.archbuilder.exception.GeneratorException;
-import dvoraka.archbuilder.service.DirService;
 import dvoraka.archbuilder.util.ByteClassLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +41,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -50,32 +50,28 @@ import static java.lang.reflect.Modifier.isFinal;
 import static java.lang.reflect.Modifier.isPrivate;
 import static java.lang.reflect.Modifier.isProtected;
 import static java.lang.reflect.Modifier.isPublic;
-import static java.util.Objects.requireNonNull;
 
 @Service
 public class JavaGenerator implements LangGenerator, JavaHelper {
 
-    private final DirService dirService;
-
     private final Logger log = LoggerFactory.getLogger(JavaGenerator.class);
 
-    private final EnumMap<DirType, Consumer<Directory>> conf;
-    private final HashSet<Directory> processedDirs;
+    private final EnumMap<DirType, Consumer<Directory>> configuration;
+    private final Set<Directory> processedDirs;
 
 
     @Autowired
-    public JavaGenerator(DirService dirService) {
-        this.dirService = requireNonNull(dirService);
+    public JavaGenerator() {
 
-        conf = new EnumMap<>(DirType.class);
-        conf.put(DirType.BUILD_CONFIG, this::genBuildConfig);
-        conf.put(DirType.CUSTOM_TYPE, this::genCustomType);
-        conf.put(DirType.IMPL, this::genImplSafe);
-        conf.put(DirType.SERVICE, this::genServiceSafe);
-        conf.put(DirType.SERVICE_IMPL, this::genServiceImplSafe);
-        conf.put(DirType.SPRING_CONFIG, this::genSpringConfigType);
-        conf.put(DirType.SRC_PROPERTIES, this::genSrcProps);
-        conf.put(DirType.SRC_ROOT, this::processSrcRoot);
+        configuration = new EnumMap<>(DirType.class);
+        configuration.put(DirType.BUILD_CONFIG, this::genBuildConfig);
+        configuration.put(DirType.CUSTOM_TYPE, this::genCustomType);
+        configuration.put(DirType.IMPL, this::genImplSafe);
+        configuration.put(DirType.SERVICE, this::genServiceSafe);
+        configuration.put(DirType.SERVICE_IMPL, this::genServiceImplSafe);
+        configuration.put(DirType.SPRING_CONFIG, this::genSpringConfigType);
+        configuration.put(DirType.SRC_PROPERTIES, this::genSrcProps);
+        configuration.put(DirType.SRC_ROOT, this::processSrcRoot);
 
         checkImplementation();
         processedDirs = new HashSet<>();
@@ -83,7 +79,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
     private void checkImplementation() {
         for (DirType type : DirType.values()) {
-            if (!conf.containsKey(type)) {
+            if (!configuration.containsKey(type)) {
                 log.debug("Type not implemented: {}", type.toString());
             }
         }
@@ -99,8 +95,8 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         log.debug("Generating code for: {}", directory.getType());
         processedDirs.add(directory);
 
-        if (conf.containsKey(directory.getType())) {
-            conf.get(directory.getType()).accept(directory);
+        if (configuration.containsKey(directory.getType())) {
+            configuration.get(directory.getType()).accept(directory);
         }
     }
 

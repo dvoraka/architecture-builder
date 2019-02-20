@@ -221,7 +221,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         JavaFile javaFile = JavaFile.builder(directory.getPackageName(), implementation)
                 .build();
 
-        save(directory, javaFile.toString(), javaSuffix(name));
+        saveJava(directory, javaFile.toString(), javaSuffix(name));
     }
 
     private void genServiceSafe(Directory directory) {
@@ -275,7 +275,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         JavaFile javaFile = JavaFile.builder(directory.getPackageName(), serviceInterface)
                 .build();
 
-        save(directory, javaFile.toString(), javaSuffix(interfaceName));
+        saveJava(directory, javaFile.toString(), javaSuffix(interfaceName));
     }
 
     private void genServiceImplSafe(Directory directory) {
@@ -329,7 +329,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         JavaFile javaFile = JavaFile.builder(directory.getPackageName(), serviceImpl)
                 .build();
 
-        save(directory, javaFile.toString(), javaSuffix(name));
+        saveJava(directory, javaFile.toString(), javaSuffix(name));
     }
 
     private void genCustomType(Directory directory) {
@@ -339,7 +339,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         String filename = javaSuffix(directory.getFilename()
                 .orElseThrow(RuntimeException::new));
 
-        save(directory, source, filename);
+        saveJava(directory, source, filename);
     }
 
     private void genSpringConfigType(Directory directory) {
@@ -356,7 +356,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         String filename = javaSuffix(directory.getFilename()
                 .orElseThrow(RuntimeException::new));
 
-        save(directory, source, filename);
+        saveJava(directory, source, filename);
     }
 
     private List<MethodSpec> genMethodSpecs(List<Method> methods, Map<TypeVariable<?>, Type> typeMapping) {
@@ -840,6 +840,16 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         return updatedBuilder;
     }
 
+    private void saveJava(Directory directory, String source, String filename) {
+        if (!filename.endsWith(".java")) {
+            throw new GeneratorException("Java file must have .java suffix");
+        }
+
+        save(directory, source, filename);
+
+        JavaUtils.compileSource(getPathString(directory, filename));
+    }
+
     private void save(Directory directory, String source, String filename) {
         log.debug("Saving source:\n{}", source);
 
@@ -851,10 +861,6 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         } catch (IOException e) {
             log.error("Save failed!", e);
             throw new GeneratorException(e);
-        }
-
-        if (filename.endsWith(".java")) {
-            JavaUtils.compileSource(getPathString(directory, filename));
         }
     }
 }

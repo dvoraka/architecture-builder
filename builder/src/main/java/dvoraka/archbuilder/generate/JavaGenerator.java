@@ -115,11 +115,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         String filename = directory.getFilename()
                 .orElseThrow(RuntimeException::new);
 
-        try {
-            save(directory, configuration, filename);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        save(directory, configuration, filename);
     }
 
     private void genImplSafe(Directory directory) {
@@ -225,11 +221,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         JavaFile javaFile = JavaFile.builder(directory.getPackageName(), implementation)
                 .build();
 
-        try {
-            save(directory, javaFile.toString(), javaSuffix(name));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        save(directory, javaFile.toString(), javaSuffix(name));
     }
 
     private void genServiceSafe(Directory directory) {
@@ -283,11 +275,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         JavaFile javaFile = JavaFile.builder(directory.getPackageName(), serviceInterface)
                 .build();
 
-        try {
-            save(directory, javaFile.toString(), javaSuffix(interfaceName));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        save(directory, javaFile.toString(), javaSuffix(interfaceName));
     }
 
     private void genServiceImplSafe(Directory directory) {
@@ -341,12 +329,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         JavaFile javaFile = JavaFile.builder(directory.getPackageName(), serviceImpl)
                 .build();
 
-        try {
-//            javaFile.writeTo(System.out);
-            save(directory, javaFile.toString(), javaSuffix(name));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        save(directory, javaFile.toString(), javaSuffix(name));
     }
 
     private void genCustomType(Directory directory) {
@@ -356,11 +339,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         String filename = javaSuffix(directory.getFilename()
                 .orElseThrow(RuntimeException::new));
 
-        try {
-            save(directory, source, filename);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        save(directory, source, filename);
     }
 
     private void genSpringConfigType(Directory directory) {
@@ -377,11 +356,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         String filename = javaSuffix(directory.getFilename()
                 .orElseThrow(RuntimeException::new));
 
-        try {
-            save(directory, source, filename);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        save(directory, source, filename);
     }
 
     private List<MethodSpec> genMethodSpecs(List<Method> methods, Map<TypeVariable<?>, Type> typeMapping) {
@@ -774,12 +749,10 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
     private void genSrcProps(Directory directory) {
         String filename = directory.getFilename()
                 .orElseThrow(() -> new RuntimeException("No filename for source properties!"));
-        try {
-            String text = directory.getText() != null ? directory.getText() : "";
-            save(directory, text, filename);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        String text = directory.getText() != null ? directory.getText() : "";
+
+        save(directory, text, filename);
     }
 
     private Class<?> loadNonCpClass(Path path) {
@@ -867,13 +840,18 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         return updatedBuilder;
     }
 
-    private void save(Directory directory, String source, String filename) throws IOException {
+    private void save(Directory directory, String source, String filename) {
         log.debug("Saving source:\n{}", source);
 
-        Files.write(
-                Paths.get(directory.getPath() + File.separator + filename),
-                source.getBytes(StandardCharsets.UTF_8),
-                StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+        try {
+            Files.write(
+                    Paths.get(directory.getPath() + File.separator + filename),
+                    source.getBytes(StandardCharsets.UTF_8),
+                    StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException e) {
+            log.error("Save failed!", e);
+            throw new GeneratorException(e);
+        }
 
         if (filename.endsWith(".java")) {
             JavaUtils.compileSource(getPathString(directory, filename));

@@ -66,9 +66,9 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         configuration = new EnumMap<>(DirType.class);
         configuration.put(DirType.BUILD_CONFIG, this::genBuildConfig);
         configuration.put(DirType.CUSTOM_TYPE, this::genCustomType);
-        configuration.put(DirType.IMPL, this::genImplSafe);
-        configuration.put(DirType.SERVICE, this::genServiceSafe);
-        configuration.put(DirType.SERVICE_IMPL, this::genServiceImplSafe);
+        configuration.put(DirType.IMPL, this::genImpl);
+        configuration.put(DirType.SERVICE, this::genService);
+        configuration.put(DirType.SERVICE_IMPL, this::genServiceImpl);
         configuration.put(DirType.SPRING_CONFIG, this::genSpringConfigType);
         configuration.put(DirType.SRC_PROPERTIES, this::genSrcProps);
         configuration.put(DirType.SRC_ROOT, this::processSrcRoot);
@@ -114,15 +114,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         save(directory, configuration, filename);
     }
 
-    private void genImplSafe(Directory directory) {
-        try {
-            genImpl(directory);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void genImpl(Directory directory) throws ClassNotFoundException {
+    private void genImpl(Directory directory) {
         log.debug("Generating implementation: {}", directory);
 
         // prepare super types
@@ -220,15 +212,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         saveJava(directory, javaFile.toString(), javaSuffix(name));
     }
 
-    private void genServiceSafe(Directory directory) {
-        try {
-            genService(directory);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void genService(Directory directory) throws ClassNotFoundException {
+    private void genService(Directory directory) {
         log.debug("Generating service: {}", directory);
 
         String interfaceName = directory.getFilename()
@@ -274,15 +258,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         saveJava(directory, javaFile.toString(), javaSuffix(interfaceName));
     }
 
-    private void genServiceImplSafe(Directory directory) {
-        try {
-            genServiceImpl(directory);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void genServiceImpl(Directory directory) throws ClassNotFoundException {
+    private void genServiceImpl(Directory directory) {
         log.debug("Generating service implementation...");
 
         //TODO: if we don't have a super super type it's OK to continue without it

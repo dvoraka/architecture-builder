@@ -57,6 +57,14 @@ public interface JavaHelper {
 //        return methods;
     }
 
+    default List<Method> findAllMethods(List<Class<?>> classes) {
+        return classes.stream()
+                .map(this::findMethods)
+                .flatMap(List::stream)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
     default String getReturnValue(Type returnType) {
         String returnValue = "XXX";
 

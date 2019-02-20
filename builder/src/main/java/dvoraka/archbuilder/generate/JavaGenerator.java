@@ -149,11 +149,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         // find methods and gen specs
         List<Method> allMethods = new ArrayList<>();
         if (!directory.isAbstractType()) {
-            allMethods = superTypes.stream()
-                    .map(this::findMethods)
-                    .flatMap(List::stream)
-                    .distinct()
-                    .collect(Collectors.toList());
+            allMethods = findAllMethods(superTypes);
         }
         //TODO: current merging is very simple - name && parameter count check
         allMethods = mergeMethods(allMethods);
@@ -167,14 +163,13 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             }
         }
 
-        // prepare final filename
-        String name = directory.getFilename()
+        String filename = directory.getFilename()
                 .orElseThrow(() -> new GeneratorException("No filename."));
 
         // type spec builder
         TypeSpec.Builder implementationBuilder = directory.isInterfaceType()
-                ? TypeSpec.interfaceBuilder(name)
-                : TypeSpec.classBuilder(name);
+                ? TypeSpec.interfaceBuilder(filename)
+                : TypeSpec.classBuilder(filename);
         implementationBuilder.addMethods(methodSpecs);
 
         // set supertypes
@@ -194,23 +189,14 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         }
 
         // modifiers
-        if (directory.isInterfaceType()) { // interface
-            implementationBuilder = implementationBuilder
-                    .addModifiers(Modifier.PUBLIC);
-        } else if (directory.isAbstractType()) { // abstract
-            implementationBuilder = implementationBuilder
-                    .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
-        } else { // not abstract
-            implementationBuilder = implementationBuilder
-                    .addModifiers(Modifier.PUBLIC);
-        }
+        implementationBuilder = addModifiers(directory, implementationBuilder);
 
         TypeSpec implementation = implementationBuilder.build();
 
         JavaFile javaFile = JavaFile.builder(directory.getPackageName(), implementation)
                 .build();
 
-        saveJava(directory, javaFile.toString(), javaSuffix(name));
+        saveJava(directory, javaFile.toString(), javaSuffix(filename));
     }
 
     private void genService(Directory directory) {
@@ -808,6 +794,20 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
                 updatedBuilder = builder.superclass(parameterizedTypeName);
             }
+        }
+
+        return updatedBuilder;
+    }
+
+    private TypeSpec.Builder addModifiers(Directory directory, TypeSpec.Builder builder) {
+
+        TypeSpec.Builder updatedBuilder;
+        if (directory.isInterfaceType()) { // interface
+            updatedBuilder = builder.addModifiers(Modifier.PUBLIC);
+        } else if (directory.isAbstractType()) { // abstract
+            updatedBuilder = builder.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
+        } else { // not abstract
+            updatedBuilder = builder.addModifiers(Modifier.PUBLIC);
         }
 
         return updatedBuilder;

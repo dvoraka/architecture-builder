@@ -73,8 +73,9 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         configuration.put(DirType.SRC_PROPERTIES, this::genSrcProps);
         configuration.put(DirType.SRC_ROOT, this::processSrcRoot);
 
-        checkImplementation();
         processedDirs = new HashSet<>();
+
+        checkImplementation();
     }
 
     private void checkImplementation() {

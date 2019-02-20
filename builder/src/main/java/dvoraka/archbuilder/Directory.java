@@ -127,6 +127,10 @@ public class Directory {
         return Collections.unmodifiableList(children);
     }
 
+    /**
+     * @deprecated use {@link #getSuperTypes()}
+     */
+    @Deprecated
     public Optional<Directory> getSuperType() {
         return Optional.ofNullable(superType);
     }

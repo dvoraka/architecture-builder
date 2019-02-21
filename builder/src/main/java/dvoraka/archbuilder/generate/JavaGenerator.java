@@ -202,47 +202,43 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
     private void genService(Directory directory) {
         log.debug("Generating service: {}", directory);
 
-        String interfaceName = directory.getFilename()
-                .orElseThrow(() -> new RuntimeException("No service name!"));
+        // find supertype
+        List<Directory> superTypes = directory.getSuperTypes();
+        if (superTypes.size() != 1) {
+            throw new GeneratorException("Service must have exactly 1 super interface.");
+        }
+        Directory superDir = directory.getSuperTypes().get(0);
+        Class<?> superClass = loadClass(superDir.getTypeName());
 
-        // find superinterface
-        Optional<Directory> superDir = directory.getSuperType();
+        String filename = directory.getFilename()
+                .orElseThrow(this::noFilenameException);
 
         TypeSpec serviceInterface;
-        if (superDir.isPresent()) {
-
-            Class<?> superClass = loadClass(superDir.get().getTypeName());
-            if (superClass.getTypeParameters().length == 0) {
-                serviceInterface = TypeSpec.interfaceBuilder(interfaceName)
-                        .addModifiers(Modifier.PUBLIC)
-                        .addSuperinterface(superClass)
-                        .build();
-            } else {
-                TypeVariable<? extends Class<?>>[] typeParameters = superClass.getTypeParameters();
-
-                Map<TypeVariable<?>, Type> typeMapping = getTypeVarMapping(directory, superClass);
-
-                ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(
-                        superClass,
-                        buildTypeArray(typeParameters, typeMapping)
-                );
-
-                serviceInterface = TypeSpec.interfaceBuilder(interfaceName)
-                        .addModifiers(Modifier.PUBLIC)
-                        .addSuperinterface(parameterizedTypeName)
-                        .build();
-            }
-
-        } else {
-            serviceInterface = TypeSpec.interfaceBuilder(interfaceName)
+        if (superClass.getTypeParameters().length == 0) {
+            serviceInterface = TypeSpec.interfaceBuilder(filename)
                     .addModifiers(Modifier.PUBLIC)
+                    .addSuperinterface(superClass)
+                    .build();
+        } else {
+            TypeVariable<? extends Class<?>>[] typeParameters = superClass.getTypeParameters();
+
+            Map<TypeVariable<?>, Type> typeMapping = getTypeVarMapping(directory, superClass);
+
+            ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(
+                    superClass,
+                    buildTypeArray(typeParameters, typeMapping)
+            );
+
+            serviceInterface = TypeSpec.interfaceBuilder(filename)
+                    .addModifiers(Modifier.PUBLIC)
+                    .addSuperinterface(parameterizedTypeName)
                     .build();
         }
 
         JavaFile javaFile = JavaFile.builder(directory.getPackageName(), serviceInterface)
                 .build();
 
-        saveJava(directory, javaFile.toString(), javaSuffix(interfaceName));
+        saveJava(directory, javaFile.toString(), javaSuffix(filename));
     }
 
     private void genServiceImpl(Directory directory) {

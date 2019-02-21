@@ -256,7 +256,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 .orElseThrow(this::noSuperTypeException);
 
         Class<?> superSuperClass = loadClass(superSuperDir.getTypeName());
-        Class<?> superClass = loadClass(getClassName(superDir));
+        Class<?> superClass = loadClass(superDir.getTypeName());
         if (superClass.getTypeParameters().length != 0) {
             throw new GeneratorException("Super class has type parameters!");
         }
@@ -271,14 +271,13 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             typeMapping = getTypeVarMapping(directory, superClass);
         }
 
-        // methods
         List<Method> allMethods = findMethods(superClass);
         List<MethodSpec> methodSpecs = genMethodSpecs(allMethods, typeMapping);
 
-        String name = directory.getFilename()
+        String filename = directory.getFilename()
                 .orElseThrow(() -> new GeneratorException("No filename for service implementation."));
 
-        TypeSpec serviceImpl = TypeSpec.classBuilder(name)
+        TypeSpec serviceImpl = TypeSpec.classBuilder(filename)
                 .addModifiers(Modifier.PUBLIC)
                 .addSuperinterface(superClass)
                 .addAnnotation(Service.class)
@@ -288,7 +287,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         JavaFile javaFile = JavaFile.builder(directory.getPackageName(), serviceImpl)
                 .build();
 
-        saveJava(directory, javaFile.toString(), javaSuffix(name));
+        saveJava(directory, javaFile.toString(), javaSuffix(filename));
     }
 
     private void genCustomType(Directory directory) {

@@ -151,10 +151,6 @@ public interface JavaHelper {
         throw new GeneratorException("Getting method signature failed.");
     }
 
-    default RuntimeException noSuperTypeException() {
-        return new RuntimeException("No super type specified!");
-    }
-
     default boolean isConstructorNeeded(Class<?> superClass) {
 
         Constructor<?>[] declaredConstructors = superClass.getDeclaredConstructors();

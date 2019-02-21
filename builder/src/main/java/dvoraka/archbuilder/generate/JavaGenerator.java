@@ -35,6 +35,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -44,6 +45,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.lang.reflect.Modifier.isAbstract;
 import static java.lang.reflect.Modifier.isFinal;
@@ -221,7 +223,6 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                     .build();
         } else {
             TypeVariable<? extends Class<?>>[] typeParameters = superClass.getTypeParameters();
-
             Map<TypeVariable<?>, Type> typeMapping = getTypeVarMapping(directory, superClass);
 
             ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(
@@ -244,11 +245,15 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
     private void genServiceImpl(Directory directory) {
         log.debug("Generating service implementation...");
 
-        //TODO: if we don't have a super super type it's OK to continue without it
-        Directory superSuperDir = directory.getSuperType()
-                .flatMap(Directory::getSuperType)
-                .orElseThrow(RuntimeException::new);
-        Directory superDir = directory.getSuperType()
+        Directory superSuperDir = directory.getSuperTypes().stream()
+                .findAny()
+                .map(Directory::getSuperTypes)
+                .map(Collection::stream)
+                .flatMap(Stream::findAny)
+                .orElseThrow(this::noSuperTypeException);
+
+        Directory superDir = directory.getSuperTypes().stream()
+                .findAny()
                 .orElseThrow(this::noSuperTypeException);
 
         Class<?> superSuperClass = loadClass(superSuperDir.getTypeName());
@@ -834,5 +839,9 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
     private GeneratorException noFilenameException() {
         return new GeneratorException("No filename.");
+    }
+
+    private GeneratorException noSuperTypeException() {
+        return new GeneratorException("No supertype.");
     }
 }

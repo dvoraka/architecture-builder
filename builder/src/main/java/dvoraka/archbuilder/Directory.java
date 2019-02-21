@@ -38,7 +38,6 @@ public class Directory {
     @JsonManagedReference
     private List<Directory> children;
 
-    private Directory superType;
     private List<Directory> superTypes;
 
     private List<Directory> dependencies;
@@ -127,14 +126,6 @@ public class Directory {
         return Collections.unmodifiableList(children);
     }
 
-    /**
-     * @deprecated use {@link #getSuperTypes()}
-     */
-    @Deprecated
-    public Optional<Directory> getSuperType() {
-        return Optional.ofNullable(superType);
-    }
-
     public List<Directory> getSuperTypes() {
         return Collections.unmodifiableList(superTypes);
     }
@@ -174,7 +165,7 @@ public class Directory {
                 //TODO: check parent
 //                Objects.equals(parent, directory.parent) &&
                 Objects.equals(children, directory.children) &&
-                Objects.equals(superType, directory.superType) &&
+                Objects.equals(superTypes, directory.superTypes) &&
                 Objects.equals(dependencies, directory.dependencies) &&
                 Objects.equals(parameters, directory.parameters) &&
                 Objects.equals(text, directory.text);
@@ -183,7 +174,7 @@ public class Directory {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, filename, typeName, abstractType, interfaceType, type,
-                children, superType, dependencies, parameters, text);
+                children, superTypes, dependencies, parameters, text);
     }
 
     @Override
@@ -208,7 +199,6 @@ public class Directory {
 
         private DirType type;
         private Directory parent;
-        private Directory superType;
         private List<Directory> superTypes;
 
         private List<Directory> dependencies;
@@ -262,7 +252,6 @@ public class Directory {
         }
 
         public DirectoryBuilder superType(Directory superType) {
-            this.superType = superType;
             dependsOn(superType);
             this.superTypes.add(superType);
             return this;
@@ -314,7 +303,6 @@ public class Directory {
 
             directory.type = this.type;
             directory.parent = this.parent;
-            directory.superType = this.superType;
             directory.superTypes = this.superTypes;
             directory.dependencies = this.dependencies;
             directory.parameters = this.parameters;

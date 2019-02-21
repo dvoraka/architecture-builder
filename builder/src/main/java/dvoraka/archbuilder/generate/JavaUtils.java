@@ -32,11 +32,6 @@ public final class JavaUtils {
         return path.replace(File.separatorChar, '.');
     }
 
-    //TODO: it's probably useless with current implementation
-    public static String getClassName(Directory directory) {
-        return directory.getTypeName();
-    }
-
     public static int compileSource(String pathString) {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         log.info("Compiling source: {}...", pathString);

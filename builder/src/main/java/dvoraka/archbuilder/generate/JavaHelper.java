@@ -107,7 +107,7 @@ public interface JavaHelper {
     }
 
     default String getClassName(Directory directory) {
-        return JavaUtils.getClassName(directory);
+        return directory.getTypeName();
     }
 
     default String getPathString(Directory directory, String filename) {

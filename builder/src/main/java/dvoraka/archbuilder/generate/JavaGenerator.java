@@ -110,7 +110,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
         String configuration = directory.getText();
         String filename = directory.getFilename()
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(this::noFilenameException);
 
         save(directory, configuration, filename);
     }
@@ -164,7 +164,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         }
 
         String filename = directory.getFilename()
-                .orElseThrow(() -> new GeneratorException("No filename."));
+                .orElseThrow(this::noFilenameException);
 
         // type spec builder
         TypeSpec.Builder implementationBuilder = directory.isInterfaceType()
@@ -275,7 +275,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         List<MethodSpec> methodSpecs = genMethodSpecs(allMethods, typeMapping);
 
         String filename = directory.getFilename()
-                .orElseThrow(() -> new GeneratorException("No filename for service implementation."));
+                .orElseThrow(this::noFilenameException);
 
         TypeSpec serviceImpl = TypeSpec.classBuilder(filename)
                 .addModifiers(Modifier.PUBLIC)
@@ -295,7 +295,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
         String source = directory.getText();
         String filename = javaSuffix(directory.getFilename()
-                .orElseThrow(RuntimeException::new));
+                .orElseThrow(this::noFilenameException));
 
         saveJava(directory, source, filename);
     }
@@ -308,11 +308,11 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 : directory.getText();
 
         if (source == null || source.isEmpty()) {
-            throw new RuntimeException("No text");
+            throw new GeneratorException("No text.");
         }
 
         String filename = javaSuffix(directory.getFilename()
-                .orElseThrow(RuntimeException::new));
+                .orElseThrow(this::noFilenameException));
 
         saveJava(directory, source, filename);
     }
@@ -834,5 +834,9 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             log.error("Save failed!", e);
             throw new GeneratorException(e);
         }
+    }
+
+    private GeneratorException noFilenameException() {
+        return new GeneratorException("No filename.");
     }
 }

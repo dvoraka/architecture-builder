@@ -9,7 +9,10 @@ import dvoraka.archbuilder.generate.Generator
 import dvoraka.archbuilder.generate.JavaHelper
 import dvoraka.archbuilder.generate.JavaTestingHelper
 import dvoraka.archbuilder.generate.Utils
+import dvoraka.archbuilder.sample.microservice.data.BaseException
+import dvoraka.archbuilder.sample.microservice.data.ResultData
 import dvoraka.archbuilder.sample.microservice.data.message.RequestMessage
+import dvoraka.archbuilder.sample.microservice.data.message.ResponseMessage
 import dvoraka.archbuilder.sample.microservice.server.AbstractServer
 import dvoraka.archbuilder.sample.microservice.service.BaseService
 import dvoraka.archbuilder.service.DirService
@@ -51,8 +54,11 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
                 BaseService.class,
                 Collections.emptyList(),
                 serviceName,
+                BaseException.class,
                 AbstractServer.class,
+                ResultData.class,
                 RequestMessage.class,
+                ResponseMessage.class,
                 configGenerator
         )
 

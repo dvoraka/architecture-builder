@@ -5,9 +5,6 @@ import dvoraka.archbuilder.Directory;
 import dvoraka.archbuilder.exception.GeneratorException;
 import dvoraka.archbuilder.generate.JavaUtils;
 import dvoraka.archbuilder.generate.Utils;
-import dvoraka.archbuilder.sample.microservice.data.BaseException;
-import dvoraka.archbuilder.sample.microservice.data.ResultData;
-import dvoraka.archbuilder.sample.microservice.data.message.ResponseMessage;
 import dvoraka.archbuilder.sample.microservice.net.BaseNetComponent;
 import dvoraka.archbuilder.sample.microservice.net.ServiceNetComponent;
 import dvoraka.archbuilder.sample.microservice.net.receive.NetReceiver;
@@ -40,8 +37,11 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
             Class<?> superService,
             List<Class<?>> typeArguments,
             String serviceName,
+            Class<?> baseException,
             Class<?> superServer,
+            Class<?> resultData,
             Class<?> requestSuperMessage,
+            Class<?> responseBaseMessage,
             SpringConfigGenerator configGenerator
     ) {
         root = new Directory.DirectoryBuilder(rootDirName)
@@ -97,7 +97,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
         Directory exceptionAbs = new Directory.DirectoryBuilder("")
                 .type(DirType.ABSTRACT)
                 .parent(srcBase)
-                .typeClass(BaseException.class)
+                .typeClass(baseException)
                 .build();
 
         String exceptionName = serviceName + "Exception";
@@ -112,7 +112,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
         Directory dataAbs = new Directory.DirectoryBuilder("")
                 .type(DirType.ABSTRACT)
                 .parent(srcBase)
-                .typeClass(ResultData.class)
+                .typeClass(resultData)
                 .build();
 
         String dataName = serviceName + "Data";
@@ -128,7 +128,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
         Directory responseMessageAbs = new Directory.DirectoryBuilder("")
                 .type(DirType.ABSTRACT)
                 .parent(srcBase)
-                .typeClass(ResponseMessage.class)
+                .typeClass(responseBaseMessage)
                 .build();
 
         String responseMessageName = serviceName + "ResponseMessage";

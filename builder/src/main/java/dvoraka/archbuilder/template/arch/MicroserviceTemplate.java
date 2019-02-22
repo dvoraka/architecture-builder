@@ -24,6 +24,7 @@ import java.util.function.Supplier;
 public class MicroserviceTemplate implements ArchitectureTemplate {
 
     public static final String JAVA_SRC_DIR = "src/main/java";
+    public static final String MESSAGE_DIR = "data/message";
 
     private Directory root;
     private Directory srcRoot;
@@ -42,6 +43,9 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
             Class<?> resultData,
             Class<?> requestSuperMessage,
             Class<?> responseBaseMessage,
+            Class<?> superNetComponent,
+            Class<?> superNetReceiver,
+            Class<?> baseNetComponent,
             SpringConfigGenerator configGenerator
     ) {
         root = new Directory.DirectoryBuilder(rootDirName)
@@ -132,7 +136,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .build();
 
         String responseMessageName = serviceName + "ResponseMessage";
-        Directory responseMessage = new Directory.DirectoryBuilder("data/message")
+        Directory responseMessage = new Directory.DirectoryBuilder(MESSAGE_DIR)
                 .type(DirType.IMPL)
                 .parent(srcBase)
                 .superType(responseMessageAbs)
@@ -148,7 +152,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .build();
 
         String requestMessageName = serviceName + "Message";
-        Directory requestMessage = new Directory.DirectoryBuilder("data/message")
+        Directory requestMessage = new Directory.DirectoryBuilder(MESSAGE_DIR)
                 .type(DirType.IMPL)
                 .parent(srcBase)
                 .superType(requestMessageAbs)
@@ -178,13 +182,13 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
         Directory networkComponentAbs = new Directory.DirectoryBuilder("")
                 .type(DirType.ABSTRACT)
                 .parent(srcBase)
-                .typeClass(ServiceNetComponent.class)
+                .typeClass(superNetComponent)
                 .build();
 
         Directory networkReceiverAbs = new Directory.DirectoryBuilder("")
                 .type(DirType.ABSTRACT)
                 .parent(srcBase)
-                .typeClass(NetReceiver.class)
+                .typeClass(superNetReceiver)
                 .build();
 
         String networkComponentName = serviceName + "NetComponent";
@@ -200,14 +204,14 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .filename(networkComponentName)
                 .build();
 
-        Directory baseNetComponent = Utils.createAbstractDirFor(BaseNetComponent.class, srcBase);
+        Directory baseNetComponentAbs = Utils.createAbstractDirFor(baseNetComponent, srcBase);
 
         String netAdapterName = serviceName + "NetAdapter";
         Directory serviceNetAdapter = new Directory.DirectoryBuilder("net")
                 .type(DirType.IMPL)
                 .parent(srcBase)
                 .superType(serviceNetworkComponent)
-                .superType(baseNetComponent)
+                .superType(baseNetComponentAbs)
                 .parameterTypeDir(requestMessage)
                 .parameterTypeDir(responseMessage)
                 .parameterTypeDir(data)

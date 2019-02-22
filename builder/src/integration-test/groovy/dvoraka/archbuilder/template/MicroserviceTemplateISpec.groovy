@@ -13,6 +13,9 @@ import dvoraka.archbuilder.sample.microservice.data.BaseException
 import dvoraka.archbuilder.sample.microservice.data.ResultData
 import dvoraka.archbuilder.sample.microservice.data.message.RequestMessage
 import dvoraka.archbuilder.sample.microservice.data.message.ResponseMessage
+import dvoraka.archbuilder.sample.microservice.net.BaseNetComponent
+import dvoraka.archbuilder.sample.microservice.net.ServiceNetComponent
+import dvoraka.archbuilder.sample.microservice.net.receive.NetReceiver
 import dvoraka.archbuilder.sample.microservice.server.AbstractServer
 import dvoraka.archbuilder.sample.microservice.service.BaseService
 import dvoraka.archbuilder.service.DirService
@@ -59,6 +62,9 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
                 ResultData.class,
                 RequestMessage.class,
                 ResponseMessage.class,
+                ServiceNetComponent.class,
+                NetReceiver.class,
+                BaseNetComponent.class,
                 configGenerator
         )
 

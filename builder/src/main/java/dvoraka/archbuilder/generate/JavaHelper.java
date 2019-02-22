@@ -42,19 +42,6 @@ public interface JavaHelper {
         allMethods.addAll(publicMethods);
 
         return allMethods;
-
-//        return Arrays.asList(clazz.getMethods());
-
-//        if (clazz.getInterfaces().length == 0) {
-//            return Arrays.asList(clazz.getDeclaredMethods());
-//        }
-//
-//        List<Method> methods = new ArrayList<>();
-//        for (Class<?> cls : clazz.getInterfaces()) {
-//            methods.addAll(findMethods(cls));
-//        }
-//
-//        return methods;
     }
 
     default List<Method> findAllMethods(List<Class<?>> classes) {
@@ -120,7 +107,7 @@ public interface JavaHelper {
                 .append(".")
                 .append("Default")
                 .append(serviceImpl.getFilename()
-                        .orElseThrow(() -> new RuntimeException("No filename specified!")))
+                        .orElseThrow(() -> new GeneratorException("No filename specified.")))
                 .toString();
     }
 
@@ -145,10 +132,8 @@ public interface JavaHelper {
 
             return signature;
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
+            throw new GeneratorException("Getting method signature failed.", e);
         }
-
-        throw new GeneratorException("Getting method signature failed.");
     }
 
     default boolean isConstructorNeeded(Class<?> superClass) {

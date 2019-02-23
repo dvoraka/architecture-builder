@@ -47,7 +47,7 @@ public final class Utils {
                 .sorted(Comparator.reverseOrder())
                 .map(Path::toFile)
                 .filter(File::isFile)
-                .filter(file -> file.getName().endsWith("*.class"))
+                .filter(file -> file.getName().endsWith(".class"))
                 .peek(p -> log.debug("Deleting: {}", p))
                 .forEach(File::delete);
     }

@@ -4,11 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import dvoraka.archbuilder.generate.Generator;
 import dvoraka.archbuilder.generate.LangGenerator;
+import dvoraka.archbuilder.generate.MainGenerator;
 import dvoraka.archbuilder.service.DirService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
@@ -29,7 +31,7 @@ public class App {
     @Bean
     public CommandLineRunner runner() {
         return args -> {
-            System.out.println("App");
+            System.out.println(generator);
         };
     }
 
@@ -39,5 +41,17 @@ public class App {
         objectMapper.registerModule(new Jdk8Module());
 
         return objectMapper;
+    }
+
+    @TestConfiguration
+    class TestingConfiguration {
+
+        @Bean
+        Generator mainGenerator(DirService dirService, LangGenerator langGenerator) {
+            MainGenerator mainGenerator = new MainGenerator(dirService, langGenerator);
+            mainGenerator.setRemoveClasses(false);
+
+            return mainGenerator;
+        }
     }
 }

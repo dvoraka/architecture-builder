@@ -2,6 +2,7 @@ package dvoraka.archbuilder.generate;
 
 import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;
+import dvoraka.archbuilder.exception.GeneratorException;
 import dvoraka.archbuilder.service.DirService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,8 @@ public class MainGenerator implements Generator {
 
     private final Logger log = LoggerFactory.getLogger(MainGenerator.class);
 
+    private boolean removeClasses = true;
+
 
     @Autowired
     public MainGenerator(DirService dirService, LangGenerator langGenerator) {
@@ -37,16 +40,8 @@ public class MainGenerator implements Generator {
     @Override
     public void generate(Directory directory) {
 
-        //TODO: remove compiled classes after generation
-
-//        dirService.findByType(DirType.IMPL, directory).ifPresent(langGenerator::generate);
-//        System.exit(0);
-
         // create dirs
         dirService.processDirLeafs(directory, this::createDirectory);
-
-        // print nodes
-//        dirService.processDirNodes(directory, System.out::println);
 
         // start with SRC_ROOT
         dirService.findByType(DirType.SRC_ROOT, directory)
@@ -67,6 +62,17 @@ public class MainGenerator implements Generator {
             dirService.processDirs(directory, langGenerator::generate);
         }
         configurations.forEach(config -> dirService.processDirs(config, langGenerator::generate));
+
+        // remove class files
+        if (removeClasses) {
+            Directory rootDir = dirService.getRoot(directory);
+            String rootDirName = rootDir.getName();
+            try {
+                Utils.removeClassFiles(rootDirName);
+            } catch (IOException e) {
+                throw new GeneratorException("Removing failed.", e);
+            }
+        }
     }
 
     private void generateDependencies(Map<Directory, List<Directory>> dependencies, Directory directory) {
@@ -97,5 +103,20 @@ public class MainGenerator implements Generator {
         if (!directory.getDependencies().isEmpty()) {
             dependencies.put(directory, directory.getDependencies());
         }
+    }
+
+    public boolean isRemoveClasses() {
+        return removeClasses;
+    }
+
+    public void setRemoveClasses(boolean removeClasses) {
+        this.removeClasses = removeClasses;
+    }
+
+    @Override
+    public String toString() {
+        return "MainGenerator{" +
+                "removeClasses=" + removeClasses +
+                '}';
     }
 }

@@ -42,8 +42,8 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
     @Autowired
     SpringConfigGenerator configGenerator
 
-    String rootDirName = 'testing-service'
-    String packageName = 'test.microservice'
+    String rootDirName = 'budget-service'
+    String packageName = 'test.budget'
     String serviceName = 'Budget'
 
     MicroserviceTemplate template

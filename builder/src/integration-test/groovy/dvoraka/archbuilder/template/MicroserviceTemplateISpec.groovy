@@ -21,6 +21,7 @@ import dvoraka.archbuilder.sample.microservice.service.BaseService
 import dvoraka.archbuilder.service.DirService
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator
 import dvoraka.archbuilder.template.arch.MicroserviceTemplate
+import dvoraka.archbuilder.template.arch.NetTemplateConfig
 import groovy.json.JsonOutput
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
@@ -51,6 +52,15 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
 
     def setup() {
 
+        NetTemplateConfig netTemplateConfig = new NetTemplateConfig(
+                ResultData,
+                RequestMessage,
+                ResponseMessage,
+                ServiceNetComponent,
+                NetReceiver,
+                BaseNetComponent
+        )
+
         template = new MicroserviceTemplate(
                 rootDirName,
                 packageName,
@@ -59,12 +69,7 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
                 serviceName,
                 BaseException.class,
                 AbstractServer.class,
-                ResultData.class,
-                RequestMessage.class,
-                ResponseMessage.class,
-                ServiceNetComponent.class,
-                NetReceiver.class,
-                BaseNetComponent.class,
+                netTemplateConfig,
                 configGenerator
         )
 

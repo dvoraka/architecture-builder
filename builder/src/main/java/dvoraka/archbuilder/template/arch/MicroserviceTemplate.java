@@ -5,9 +5,6 @@ import dvoraka.archbuilder.Directory;
 import dvoraka.archbuilder.exception.GeneratorException;
 import dvoraka.archbuilder.generate.JavaUtils;
 import dvoraka.archbuilder.generate.Utils;
-import dvoraka.archbuilder.sample.microservice.net.BaseNetComponent;
-import dvoraka.archbuilder.sample.microservice.net.ServiceNetComponent;
-import dvoraka.archbuilder.sample.microservice.net.receive.NetReceiver;
 import dvoraka.archbuilder.springconfig.BeanMapping;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
 import dvoraka.archbuilder.template.config.BuildGradleTemplate;
@@ -40,12 +37,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
             String serviceName,
             Class<?> baseException,
             Class<?> superServer,
-            Class<?> resultData,
-            Class<?> requestSuperMessage,
-            Class<?> responseBaseMessage,
-            Class<?> superNetComponent,
-            Class<?> superNetReceiver,
-            Class<?> baseNetComponent,
+            NetTemplateConfig netConfig,
             SpringConfigGenerator configGenerator
     ) {
         root = new Directory.DirectoryBuilder(rootDirName)
@@ -116,7 +108,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
         Directory dataAbs = new Directory.DirectoryBuilder("")
                 .type(DirType.ABSTRACT)
                 .parent(srcBase)
-                .typeClass(resultData)
+                .typeClass(netConfig.getBaseResultData())
                 .build();
 
         String dataName = serviceName + "Data";
@@ -132,7 +124,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
         Directory responseMessageAbs = new Directory.DirectoryBuilder("")
                 .type(DirType.ABSTRACT)
                 .parent(srcBase)
-                .typeClass(responseBaseMessage)
+                .typeClass(netConfig.getResponseBaseMessage())
                 .build();
 
         String responseMessageName = serviceName + "ResponseMessage";
@@ -148,7 +140,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
         Directory requestMessageAbs = new Directory.DirectoryBuilder("")
                 .type(DirType.ABSTRACT)
                 .parent(srcBase)
-                .typeClass(requestSuperMessage)
+                .typeClass(netConfig.getRequestBaseMessage())
                 .build();
 
         String requestMessageName = serviceName + "Message";
@@ -182,13 +174,13 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
         Directory networkComponentAbs = new Directory.DirectoryBuilder("")
                 .type(DirType.ABSTRACT)
                 .parent(srcBase)
-                .typeClass(superNetComponent)
+                .typeClass(netConfig.getSuperNetComponent())
                 .build();
 
         Directory networkReceiverAbs = new Directory.DirectoryBuilder("")
                 .type(DirType.ABSTRACT)
                 .parent(srcBase)
-                .typeClass(superNetReceiver)
+                .typeClass(netConfig.getSuperNetReceiver())
                 .build();
 
         String networkComponentName = serviceName + "NetComponent";
@@ -204,7 +196,8 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .filename(networkComponentName)
                 .build();
 
-        Directory baseNetComponentAbs = Utils.createAbstractDirFor(baseNetComponent, srcBase);
+        Directory baseNetComponentAbs = Utils.createAbstractDirFor(
+                netConfig.getBaseNetComponent(), srcBase);
 
         String netAdapterName = serviceName + "NetAdapter";
         Directory serviceNetAdapter = new Directory.DirectoryBuilder("net")

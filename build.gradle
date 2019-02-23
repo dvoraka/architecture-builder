@@ -55,7 +55,7 @@ subprojects {
 
         // Testing
         // Spring testing
-        compile('org.springframework.boot:spring-boot-starter-test')
+        testCompile('org.springframework.boot:spring-boot-starter-test')
         // Spock
         testCompile('org.spockframework:spock-core:1.1-groovy-2.4')
         testCompile('org.spockframework:spock-spring:1.1-groovy-2.4')

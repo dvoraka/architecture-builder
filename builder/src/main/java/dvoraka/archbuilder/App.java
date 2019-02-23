@@ -10,18 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 
 @SpringBootApplication
 public class App {
 
     @Autowired
-    private DirService dirService;
-    @Autowired
-    private LangGenerator langGenerator;
-    @Autowired
-    private Generator generator;
+    private Generator mainGenerator;
 
 
     public static void main(String[] args) {
@@ -31,7 +27,10 @@ public class App {
     @Bean
     public CommandLineRunner runner() {
         return args -> {
-            System.out.println(generator);
+            System.out.println("App");
+            System.out.println(mainGenerator);
+
+            // some example code will be here
         };
     }
 
@@ -43,15 +42,12 @@ public class App {
         return objectMapper;
     }
 
-    @TestConfiguration
-    class TestingConfiguration {
+    @Profile("test")
+    @Bean
+    Generator mainGenerator(DirService dirService, LangGenerator langGenerator) {
+        MainGenerator mainGenerator = new MainGenerator(dirService, langGenerator);
+        mainGenerator.setRemoveClasses(false);
 
-        @Bean
-        Generator mainGenerator(DirService dirService, LangGenerator langGenerator) {
-            MainGenerator mainGenerator = new MainGenerator(dirService, langGenerator);
-            mainGenerator.setRemoveClasses(false);
-
-            return mainGenerator;
-        }
+        return mainGenerator;
     }
 }

@@ -53,12 +53,12 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
     def setup() {
 
         NetTemplateConfig netTemplateConfig = new NetTemplateConfig(
-                ResultData,
-                RequestMessage,
-                ResponseMessage,
-                ServiceNetComponent,
-                NetReceiver,
-                BaseNetComponent
+                ResultData.class,
+                RequestMessage.class,
+                ResponseMessage.class,
+                ServiceNetComponent.class,
+                NetReceiver.class,
+                BaseNetComponent.class
         )
 
         template = new MicroserviceTemplate(

@@ -18,16 +18,36 @@ class ExtensionISpec extends BaseISpec {
 
     def "simple class extension"() {
         given:
-            Directory abs = new Directory.DirectoryBuilder("test")
-                    .type(DirType.ABSTRACT)
+            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(SimpleClass.class)
                     .build()
-            Directory ext = new Directory.DirectoryBuilder('ext')
-                    .type(DirType.IMPL)
+            Directory ext = new Directory.DirectoryBuilder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
-                    .filename("TestSimpleClass")
+                    .filename('TestSimpleClass')
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(ext))
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
+            declaredConstructorCount(clazz) == 1
+    }
+
+    def "generated simple class extension"() {
+        given:
+            Directory abs = new Directory.DirectoryBuilder('test', DirType.NEW_TYPE)
+                    .parent(srcBase)
+                    .filename('NewSimpleClass')
+                    .build()
+            Directory ext = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abs)
+                    .filename('TestNewSimpleClass')
                     .build()
         when:
             mainGenerator.generate(root)

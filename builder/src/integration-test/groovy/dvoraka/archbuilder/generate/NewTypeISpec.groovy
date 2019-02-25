@@ -10,11 +10,11 @@ class NewTypeISpec extends BaseISpec {
     Generator mainGenerator
 
 
-    def "simple new type"() {
+    def "new simple class"() {
         given:
             Directory newType = new Directory.DirectoryBuilder('newtype', DirType.NEW_TYPE)
                     .parent(srcBase)
-                    .filename("SimpleNewType")
+                    .filename('NewSimpleClass')
                     .build()
         when:
             mainGenerator.generate(root)
@@ -26,11 +26,28 @@ class NewTypeISpec extends BaseISpec {
             hasNoDeclaredMethods(clazz)
     }
 
-    def "parametrized new type"() {
+    def "new simple interface"() {
         given:
             Directory newType = new Directory.DirectoryBuilder('newtype', DirType.NEW_TYPE)
                     .parent(srcBase)
-                    .filename("ParametrizedNewType")
+                    .filename('NewSimpleInterface')
+                    .interfaceType()
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(newType))
+        then:
+            notThrown(Exception)
+            isPublicAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
+    }
+
+    def "new parametrized class"() {
+        given:
+            Directory newType = new Directory.DirectoryBuilder('newtype', DirType.NEW_TYPE)
+                    .parent(srcBase)
+                    .filename('NewParametrizedType')
                     .parameterTypeName("T")
                     .parameterTypeName("U")
                     .parameterTypeName("V")

@@ -214,6 +214,11 @@ public class Directory {
             parameters = new ArrayList<>();
         }
 
+        public DirectoryBuilder(String name, DirType dirType) {
+            this(name);
+            this.type = dirType;
+        }
+
         public DirectoryBuilder filename(String filename) {
             this.filename = filename;
             return this;

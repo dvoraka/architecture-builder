@@ -207,6 +207,9 @@ public class Directory {
         private Supplier<String> textSupplier;
 
 
+        /**
+         * @deprecated use {@link #DirectoryBuilder(String, DirType)}
+         */
         public DirectoryBuilder(String name) {
             this.name = name;
             superTypes = new ArrayList<>();

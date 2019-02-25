@@ -42,8 +42,7 @@ class CustomTypeISpec extends BaseISpec {
             JavaFile javaFile = JavaFile.builder(packageName, typeSpec)
                     .build()
 
-            Directory customType = new Directory.DirectoryBuilder(packagePath)
-                    .type(DirType.CUSTOM_TYPE)
+            Directory customType = new Directory.DirectoryBuilder(packagePath, DirType.CUSTOM_TYPE)
                     .parent(srcBase)
                     .filename(className)
                     .text(javaFile.toString())
@@ -69,8 +68,7 @@ class CustomTypeISpec extends BaseISpec {
                     packageName
             )
 
-            Directory customType = new Directory.DirectoryBuilder('')
-                    .type(DirType.CUSTOM_TYPE)
+            Directory customType = new Directory.DirectoryBuilder('', DirType.CUSTOM_TYPE)
                     .parent(srcBase)
                     .filename(className)
                     .text(template.getSource())

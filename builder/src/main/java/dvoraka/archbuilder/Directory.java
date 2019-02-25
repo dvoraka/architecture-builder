@@ -336,6 +336,7 @@ public class Directory {
         private boolean isTypenameNecessary(Directory directory) {
             return directory.type == DirType.CUSTOM_TYPE
                     || directory.type == DirType.IMPL
+                    || directory.type == DirType.NEW_TYPE
                     || directory.type == DirType.SERVICE
                     || directory.type == DirType.SERVICE_IMPL
                     || directory.type == DirType.SPRING_CONFIG;

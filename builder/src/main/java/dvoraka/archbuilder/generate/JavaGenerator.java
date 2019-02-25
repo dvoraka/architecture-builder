@@ -125,7 +125,12 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
         TypeSpec.Builder builder = getTypeSpecBuilder(directory);
 
-        TypeSpec newType = builder.build();
+        for (String variable : directory.getParameters()) {
+            builder.addTypeVariable(TypeVariableName.get(variable));
+        }
+
+        TypeSpec newType = addModifiers(directory, builder)
+                .build();
 
         JavaFile javaFile = JavaFile.builder(directory.getPackageName(), newType)
                 .build();

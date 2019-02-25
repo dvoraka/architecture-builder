@@ -8,6 +8,12 @@ SERVICE_DIR=${PROJECTS}/architecture-builder/builder/${SERVICE}
 
 if [ -d "${SERVICE_DIR}" ]
 then
+    if [ -d ${SERVICE} ]
+    then
+        echo -n "Removing existing $SERVICE directory... "
+        rm -r ${SERVICE}
+        echo "done"
+    fi
     mv ${SERVICE_DIR} .
 else
     echo "No service directory."
@@ -15,5 +21,7 @@ else
 fi
 
 cd ${SERVICE}
+
+echo "Starting new service..."
 
 ./gradlew bootRun

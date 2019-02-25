@@ -25,6 +25,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 
+import java.io.File;
 import java.util.Collections;
 
 @SpringBootApplication
@@ -73,6 +74,9 @@ public class App {
             );
 
             mainGenerator.generate(template.getRootDirectory());
+
+            BuildTool buildTool = new GradleBuildTool(new File(rootDirName));
+            buildTool.prepareEnv();
         };
     }
 

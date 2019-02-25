@@ -195,7 +195,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
         // set supertypes
         for (Class<?> superType : superTypes) {
-            implementationBuilder = setSuperType(superType, typeMapping, implementationBuilder);
+            setSuperType(superType, typeMapping, implementationBuilder);
         }
 
         // add type variables from supertypes if necessary
@@ -209,10 +209,8 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             implementationBuilder.addTypeVariables(typeVariableNames);
         }
 
-        // modifiers
-        implementationBuilder = addModifiers(directory, implementationBuilder);
-
-        TypeSpec implementation = implementationBuilder.build();
+        TypeSpec implementation = addModifiers(directory, implementationBuilder)
+                .build();
 
         JavaFile javaFile = JavaFile.builder(directory.getPackageName(), implementation)
                 .build();

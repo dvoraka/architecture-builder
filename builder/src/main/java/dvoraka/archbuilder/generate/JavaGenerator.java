@@ -69,6 +69,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         configuration.put(DirType.BUILD_CONFIG, this::genBuildConfig);
         configuration.put(DirType.CUSTOM_TYPE, this::genCustomType);
         configuration.put(DirType.IMPL, this::genImpl);
+        configuration.put(DirType.NEW_TYPE, this::genNewType);
         configuration.put(DirType.SERVICE, this::genService);
         configuration.put(DirType.SERVICE_IMPL, this::genServiceImpl);
         configuration.put(DirType.SPRING_CONFIG, this::genSpringConfigType);
@@ -115,6 +116,20 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 .orElseThrow(this::noFilenameException);
 
         save(directory, configuration, filename);
+    }
+
+    private void genNewType(Directory directory) {
+        log.debug("Generating new type: {}", directory);
+
+        String filename = directory.getFilename()
+                .orElseThrow(this::noFilenameException);
+
+        TypeSpec newType = null;
+
+        JavaFile javaFile = JavaFile.builder(directory.getPackageName(), newType)
+                .build();
+
+        saveJava(directory, javaFile.toString(), javaSuffix(filename));
     }
 
     private void genImpl(Directory directory) {

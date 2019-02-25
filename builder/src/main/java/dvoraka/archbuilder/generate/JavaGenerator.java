@@ -121,10 +121,11 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
     private void genNewType(Directory directory) {
         log.debug("Generating new type: {}", directory);
 
-        String filename = directory.getFilename()
-                .orElseThrow(this::noFilenameException);
+        String filename = getFilename(directory);
 
-        TypeSpec newType = null;
+        TypeSpec.Builder builder = getTypeSpecBuilder(directory);
+
+        TypeSpec newType = builder.build();
 
         JavaFile javaFile = JavaFile.builder(directory.getPackageName(), newType)
                 .build();
@@ -180,13 +181,11 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             }
         }
 
-        String filename = directory.getFilename()
-                .orElseThrow(this::noFilenameException);
+        String filename = getFilename(directory);
 
         // type spec builder
-        TypeSpec.Builder implementationBuilder = directory.isInterfaceType()
-                ? TypeSpec.interfaceBuilder(filename)
-                : TypeSpec.classBuilder(filename);
+        TypeSpec.Builder implementationBuilder = getTypeSpecBuilder(directory);
+
         implementationBuilder.addMethods(methodSpecs);
 
         // set supertypes
@@ -227,8 +226,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         Directory superDir = directory.getSuperTypes().get(0);
         Class<?> superClass = loadClass(superDir.getTypeName());
 
-        String filename = directory.getFilename()
-                .orElseThrow(this::noFilenameException);
+        String filename = getFilename(directory);
 
         TypeSpec serviceInterface;
         if (superClass.getTypeParameters().length == 0) {
@@ -290,8 +288,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         List<Method> allMethods = findMethods(superClass);
         List<MethodSpec> methodSpecs = genMethodSpecs(allMethods, typeMapping);
 
-        String filename = directory.getFilename()
-                .orElseThrow(this::noFilenameException);
+        String filename = getFilename(directory);
 
         TypeSpec serviceImpl = TypeSpec.classBuilder(filename)
                 .addModifiers(Modifier.PUBLIC)
@@ -310,8 +307,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         log.debug("Generating custom type: {}", directory);
 
         String source = directory.getText();
-        String filename = javaSuffix(directory.getFilename()
-                .orElseThrow(this::noFilenameException));
+        String filename = javaSuffix(getFilename(directory));
 
         saveJava(directory, source, filename);
     }
@@ -327,8 +323,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             throw new GeneratorException("No text.");
         }
 
-        String filename = javaSuffix(directory.getFilename()
-                .orElseThrow(this::noFilenameException));
+        String filename = javaSuffix(getFilename(directory));
 
         saveJava(directory, source, filename);
     }
@@ -826,6 +821,20 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         }
 
         return updatedBuilder;
+    }
+
+    private TypeSpec.Builder getTypeSpecBuilder(Directory directory) {
+
+        String filename = getFilename(directory);
+
+        return directory.isInterfaceType()
+                ? TypeSpec.interfaceBuilder(filename)
+                : TypeSpec.classBuilder(filename);
+    }
+
+    private String getFilename(Directory directory) {
+        return directory.getFilename()
+                .orElseThrow(this::noFilenameException);
     }
 
     private void saveJava(Directory directory, String source, String filename) {

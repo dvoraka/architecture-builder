@@ -62,17 +62,15 @@ class ExtensionISpec extends BaseISpec {
 
     def "Object abstract extension"() {
         given:
-            Directory abs = new Directory.DirectoryBuilder("component")
-                    .type(DirType.ABSTRACT)
+            Directory abs = new Directory.DirectoryBuilder('component', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(Object.class)
                     .build()
-            Directory ext = new Directory.DirectoryBuilder('ext')
-                    .type(DirType.IMPL)
+            Directory ext = new Directory.DirectoryBuilder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .abstractType()
-                    .filename("AbstractTestObject")
+                    .filename('AbstractTestObject')
                     .build()
         when:
             mainGenerator.generate(root)
@@ -86,16 +84,14 @@ class ExtensionISpec extends BaseISpec {
 
     def "Object extension"() {
         given:
-            Directory abs = new Directory.DirectoryBuilder("component")
-                    .type(DirType.ABSTRACT)
+            Directory abs = new Directory.DirectoryBuilder('component', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(Object.class)
                     .build()
-            Directory ext = new Directory.DirectoryBuilder('ext')
-                    .type(DirType.IMPL)
+            Directory ext = new Directory.DirectoryBuilder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
-                    .filename("TestObject")
+                    .filename('TestObject')
                     .build()
         when:
             mainGenerator.generate(root)
@@ -180,13 +176,12 @@ class ExtensionISpec extends BaseISpec {
 
     def "generated class 1p extension"() {
         given:
-            Directory abs = new Directory.DirectoryBuilder("test", DirType.NEW_TYPE)
+            Directory abs = new Directory.DirectoryBuilder('test', DirType.NEW_TYPE)
                     .parent(srcBase)
                     .filename('NewClass1p')
                     .parameterTypeName("T")
                     .build()
-            Directory ext = new Directory.DirectoryBuilder('ext')
-                    .type(DirType.IMPL)
+            Directory ext = new Directory.DirectoryBuilder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .parameterTypeClass(Integer)
@@ -204,13 +199,12 @@ class ExtensionISpec extends BaseISpec {
 
     def "generated class 1p extension NP"() {
         given:
-            Directory abs = new Directory.DirectoryBuilder("test", DirType.NEW_TYPE)
+            Directory abs = new Directory.DirectoryBuilder('test', DirType.NEW_TYPE)
                     .parent(srcBase)
                     .filename('NewClass1p')
                     .parameterTypeName("T")
                     .build()
-            Directory ext = new Directory.DirectoryBuilder('ext')
-                    .type(DirType.IMPL)
+            Directory ext = new Directory.DirectoryBuilder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename('TestNP' + abs.getFilename().get())

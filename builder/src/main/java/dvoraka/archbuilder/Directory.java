@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import dvoraka.archbuilder.generate.JavaUtils;
+import dvoraka.archbuilder.generate.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -295,7 +296,7 @@ public class Directory {
         public DirectoryBuilder parameterTypeDir(Directory directory) {
             dependsOn(directory);
 
-            directory.getFilename().orElseThrow(() -> noFilenameException(directory));
+            directory.getFilename().orElseThrow(() -> Utils.noFilenameException(directory));
 
             return parameterTypeName(directory.getTypeName());
         }
@@ -325,7 +326,7 @@ public class Directory {
             // generate typename if necessary
             if (isTypenameNecessary(directory) && directory.typeName == null) {
                 if (filename == null || filename.isEmpty()) {
-                    throw noFilenameException(directory);
+                    throw Utils.noFilenameException(directory);
                 }
                 directory.typeName = directory.getPackageName() + "." + filename;
             }
@@ -340,10 +341,6 @@ public class Directory {
                     || directory.type == DirType.SERVICE
                     || directory.type == DirType.SERVICE_IMPL
                     || directory.type == DirType.SPRING_CONFIG;
-        }
-
-        private RuntimeException noFilenameException(Directory directory) {
-            return new RuntimeException("No filename for: " + directory);
         }
     }
 }

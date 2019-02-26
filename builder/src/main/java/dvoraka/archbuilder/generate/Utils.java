@@ -2,6 +2,7 @@ package dvoraka.archbuilder.generate;
 
 import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;
+import dvoraka.archbuilder.exception.GeneratorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,10 +54,13 @@ public final class Utils {
     }
 
     public static Directory createAbstractDirFor(Class<?> cls, Directory srcBase) {
-        return new Directory.DirectoryBuilder("util")
-                .type(DirType.ABSTRACT)
+        return new Directory.DirectoryBuilder("util", DirType.ABSTRACT)
                 .parent(srcBase)
                 .typeClass(cls)
                 .build();
+    }
+
+    public static GeneratorException noFilenameException(Directory directory) {
+        return new GeneratorException("No filename for: " + directory);
     }
 }

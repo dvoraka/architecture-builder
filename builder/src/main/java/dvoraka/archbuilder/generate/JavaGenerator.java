@@ -113,7 +113,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
         String configuration = directory.getText();
         String filename = directory.getFilename()
-                .orElseThrow(this::noFilenameException);
+                .orElseThrow(() -> Utils.noFilenameException(directory));
 
         save(directory, configuration, filename);
     }
@@ -837,7 +837,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
     private String getFilename(Directory directory) {
         return directory.getFilename()
-                .orElseThrow(this::noFilenameException);
+                .orElseThrow(() -> Utils.noFilenameException(directory));
     }
 
     private void saveJava(Directory directory, String source, String filename) {
@@ -862,10 +862,6 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             log.error("Save failed!", e);
             throw new GeneratorException(e);
         }
-    }
-
-    private GeneratorException noFilenameException() {
-        return new GeneratorException("No filename.");
     }
 
     private GeneratorException noSuperTypeException() {

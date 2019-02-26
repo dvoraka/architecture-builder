@@ -178,6 +178,53 @@ class ExtensionISpec extends BaseISpec {
             hasNoDeclaredMethods(clazz)
     }
 
+    def "generated class 1p extension"() {
+        given:
+            Directory abs = new Directory.DirectoryBuilder("test", DirType.NEW_TYPE)
+                    .parent(srcBase)
+                    .filename('NewClass1p')
+                    .parameterTypeName("T")
+                    .build()
+            Directory ext = new Directory.DirectoryBuilder('ext')
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abs)
+                    .parameterTypeClass(Integer)
+                    .filename('Test' + abs.getFilename().get())
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(ext))
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
+    }
+
+    def "generated class 1p extension NP"() {
+        given:
+            Directory abs = new Directory.DirectoryBuilder("test", DirType.NEW_TYPE)
+                    .parent(srcBase)
+                    .filename('NewClass1p')
+                    .parameterTypeName("T")
+                    .build()
+            Directory ext = new Directory.DirectoryBuilder('ext')
+                    .type(DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abs)
+                    .filename('TestNP' + abs.getFilename().get())
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(ext))
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
+    }
+
     def "class 1p1m extension NP"() {
         given:
             Class<?> cls = Class1p1m

@@ -23,7 +23,7 @@ import java.util.function.Supplier;
 )
 public class Directory {
 
-    private String id;
+    private final String id;
 
     private String name;
     private String filename;
@@ -37,7 +37,7 @@ public class Directory {
     @JsonBackReference
     private Directory parent;
     @JsonManagedReference
-    private List<Directory> children;
+    private final List<Directory> children;
 
     private List<Directory> superTypes;
 
@@ -58,7 +58,7 @@ public class Directory {
         children = new ArrayList<>();
     }
 
-    public void addChildren(Directory directory) {
+    private void addChildren(Directory directory) {
         children.add(directory);
     }
 
@@ -308,6 +308,15 @@ public class Directory {
             directory.getFilename().orElseThrow(() -> Utils.noFilenameException(directory));
 
             return parameterTypeName(directory.getTypeName());
+        }
+
+        public DirectoryBuilder metadata(String data) {
+            metadata.add(data);
+            return this;
+        }
+
+        public DirectoryBuilder metadataClass(Class<?> clazz) {
+            return metadata(clazz.getName());
         }
 
         public Directory build() {

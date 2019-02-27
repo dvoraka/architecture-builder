@@ -42,7 +42,10 @@ public class Directory {
     private List<Directory> superTypes;
 
     private List<Directory> dependencies;
+
     private List<String> parameters;
+    @JsonIgnore
+    private List<String> metadata;
 
     private String text;
     //TODO
@@ -139,6 +142,10 @@ public class Directory {
         return Collections.unmodifiableList(parameters);
     }
 
+    public List<String> getMetadata() {
+        return Collections.unmodifiableList(metadata);
+    }
+
     public String getText() {
         return text;
     }
@@ -204,6 +211,7 @@ public class Directory {
 
         private List<Directory> dependencies;
         private List<String> parameters;
+        private List<String> metadata;
         private String text;
         private Supplier<String> textSupplier;
 
@@ -216,6 +224,7 @@ public class Directory {
             superTypes = new ArrayList<>();
             dependencies = new ArrayList<>();
             parameters = new ArrayList<>();
+            metadata = new ArrayList<>();
         }
 
         public DirectoryBuilder(String name, DirType dirType) {
@@ -315,6 +324,7 @@ public class Directory {
             directory.superTypes = this.superTypes;
             directory.dependencies = this.dependencies;
             directory.parameters = this.parameters;
+            directory.metadata = this.metadata;
 
             directory.text = this.text;
             directory.textSupplier = this.textSupplier;

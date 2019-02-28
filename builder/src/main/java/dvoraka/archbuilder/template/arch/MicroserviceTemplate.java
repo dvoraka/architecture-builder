@@ -40,38 +40,32 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
             NetTemplateConfig netConfig,
             SpringConfigGenerator configGenerator
     ) {
-        root = new Directory.DirectoryBuilder(rootDirName)
-                .type(DirType.ROOT)
+        root = new Directory.DirectoryBuilder(rootDirName, DirType.ROOT)
                 .parent(null)
                 .build();
 
-        srcRoot = new Directory.DirectoryBuilder(JAVA_SRC_DIR)
-                .type(DirType.SRC_ROOT)
+        srcRoot = new Directory.DirectoryBuilder(JAVA_SRC_DIR, DirType.SRC_ROOT)
                 .parent(root)
                 .build();
 
         String pkgPath = JavaUtils.pkg2path(packageName);
-        srcBase = new Directory.DirectoryBuilder(pkgPath)
-                .type(DirType.SRC_BASE)
+        srcBase = new Directory.DirectoryBuilder(pkgPath, DirType.SRC_BASE)
                 .parent(srcRoot)
                 .build();
 
         String absPkgPath = "";
-        srcBaseAbs = new Directory.DirectoryBuilder(absPkgPath)
-                .type(DirType.SRC_BASE_ABSTRACT)
+        srcBaseAbs = new Directory.DirectoryBuilder(absPkgPath, DirType.SRC_BASE_ABSTRACT)
                 .parent(root)
                 .build();
 
         // service
-        Directory abstractService = new Directory.DirectoryBuilder("service")
-                .type(DirType.SERVICE_ABSTRACT)
+        Directory abstractService = new Directory.DirectoryBuilder("service", DirType.SERVICE_ABSTRACT)
                 .parent(srcBaseAbs)
                 .typeClass(superService)
                 .build();
 
         String serviceFullName = serviceName + "Service";
-        Directory.DirectoryBuilder serviceBuilder = new Directory.DirectoryBuilder("service")
-                .type(DirType.SERVICE)
+        Directory.DirectoryBuilder serviceBuilder = new Directory.DirectoryBuilder("service", DirType.SERVICE)
                 .parent(srcBase)
                 .superType(abstractService)
                 .filename(serviceFullName);
@@ -82,38 +76,33 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .build();
 
         String serviceImplFullName = "Default" + serviceFullName;
-        Directory serviceImpl = new Directory.DirectoryBuilder("service")
-                .type(DirType.SERVICE_IMPL)
+        Directory serviceImpl = new Directory.DirectoryBuilder("service", DirType.SERVICE_IMPL)
                 .parent(srcBase)
                 .superType(service)
                 .filename(serviceImplFullName)
                 .build();
 
         // exception
-        Directory exceptionAbs = new Directory.DirectoryBuilder("")
-                .type(DirType.ABSTRACT)
+        Directory exceptionAbs = new Directory.DirectoryBuilder("", DirType.ABSTRACT)
                 .parent(srcBase)
                 .typeClass(baseException)
                 .build();
 
         String exceptionName = serviceName + "Exception";
-        Directory exception = new Directory.DirectoryBuilder("exception")
-                .type(DirType.IMPL)
+        Directory exception = new Directory.DirectoryBuilder("exception", DirType.IMPL)
                 .parent(srcBase)
                 .superType(exceptionAbs)
                 .filename(exceptionName)
                 .build();
 
         // data
-        Directory dataAbs = new Directory.DirectoryBuilder("")
-                .type(DirType.ABSTRACT)
+        Directory dataAbs = new Directory.DirectoryBuilder("", DirType.ABSTRACT)
                 .parent(srcBase)
                 .typeClass(netConfig.getBaseResultData())
                 .build();
 
         String dataName = serviceName + "Data";
-        Directory data = new Directory.DirectoryBuilder("data")
-                .type(DirType.IMPL)
+        Directory data = new Directory.DirectoryBuilder("data", DirType.IMPL)
                 .parent(srcBase)
                 .superType(dataAbs)
                 .filename(dataName)
@@ -121,8 +110,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .build();
 
         // messages
-        Directory responseMessageAbs = new Directory.DirectoryBuilder("")
-                .type(DirType.ABSTRACT)
+        Directory responseMessageAbs = new Directory.DirectoryBuilder("", DirType.ABSTRACT)
                 .parent(srcBase)
                 .typeClass(netConfig.getResponseBaseMessage())
                 .build();
@@ -275,16 +263,14 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
 
         // build configuration
         ConfigurationTemplate buildGradleTemplate = new BuildGradleTemplate();
-        Directory buildGradle = new Directory.DirectoryBuilder("")
-                .type(DirType.BUILD_CONFIG)
+        Directory buildGradle = new Directory.DirectoryBuilder("", DirType.BUILD_CONFIG)
                 .parent(root)
                 .filename(buildGradleTemplate.getFilename())
                 .text(buildGradleTemplate.getConfig())
                 .build();
 
         ConfigurationTemplate settingsGradleTemplate = new SettingsGradleTemplate("Project1");
-        Directory settingsGradle = new Directory.DirectoryBuilder("")
-                .type(DirType.BUILD_CONFIG)
+        Directory settingsGradle = new Directory.DirectoryBuilder("", DirType.BUILD_CONFIG)
                 .parent(root)
                 .filename(settingsGradleTemplate.getFilename())
                 .text(settingsGradleTemplate.getConfig())

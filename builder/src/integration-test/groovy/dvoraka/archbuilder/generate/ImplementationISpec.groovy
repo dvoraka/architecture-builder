@@ -6,6 +6,7 @@ import dvoraka.archbuilder.sample.SimpleInterface
 import dvoraka.archbuilder.sample.generic.Interface4p1m
 import dvoraka.archbuilder.sample.generic.InterfaceE1pb
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Service
 
 import java.util.concurrent.RunnableFuture
 
@@ -17,27 +18,52 @@ class ImplementationISpec extends BaseISpec {
 
     def "List implementation"() {
         given:
-            Directory abstractList = new Directory.DirectoryBuilder("component")
-                    .type(DirType.ABSTRACT)
+            Class<?> cls = List
+            Directory abs = new Directory.DirectoryBuilder('component', DirType.ABSTRACT)
                     .parent(srcBase)
-                    .typeName("java.util.List")
+                    .typeClass(cls)
                     .build()
-            Directory listImpl = new Directory.DirectoryBuilder("component")
-                    .type(DirType.IMPL)
+            Directory impl = new Directory.DirectoryBuilder('component', DirType.IMPL)
                     .parent(srcBase)
-                    .superType(abstractList)
-                    .filename("CoolList")
-                    .parameterTypeName("java.lang.Integer")
+                    .superType(abs)
+                    .filename('Test' + cls.getSimpleName())
+                    .parameterTypeName('java.lang.Integer')
                     .build()
         when:
             mainGenerator.generate(root)
-            Class<?> clazz = loadClass(getClassName(listImpl))
+            Class<?> clazz = loadClass(getClassName(impl))
         then:
             notThrown(Exception)
             isPublicNotAbstract(clazz)
             hasNoTypeParameters(clazz)
             hasDeclaredMethods(clazz)
-            runMethod(clazz, "size") == 0
+            runMethod(clazz, 'size') == 0
+    }
+
+    def "List implementation with annotation"() {
+        given:
+            Class<?> cls = List
+            Directory abs = new Directory.DirectoryBuilder('component', DirType.ABSTRACT)
+                    .parent(srcBase)
+                    .typeClass(cls)
+                    .build()
+            Directory impl = new Directory.DirectoryBuilder('component', DirType.IMPL)
+                    .parent(srcBase)
+                    .superType(abs)
+                    .filename('TestA' + cls.getSimpleName())
+                    .metadataClass(Service)
+                    .parameterTypeName('java.lang.Integer')
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(impl))
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasDeclaredMethods(clazz)
+            runMethod(clazz, 'size') == 0
+            annotationCount(clazz) == 1
     }
 
     def "RunnableFuture abstract implementation"() {

@@ -16,7 +16,6 @@ import dvoraka.archbuilder.exception.GeneratorException;
 import dvoraka.archbuilder.util.ByteClassLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.lang.model.element.Modifier;
@@ -62,10 +61,16 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
     private final Set<Directory> processedDirs;
 
 
-    @Autowired
     public JavaGenerator() {
+        configuration = getConfiguration();
+        processedDirs = new HashSet<>();
 
-        configuration = new EnumMap<>(DirType.class);
+        checkImplementation();
+    }
+
+    private EnumMap<DirType, Consumer<Directory>> getConfiguration() {
+
+        EnumMap<DirType, Consumer<Directory>> configuration = new EnumMap<>(DirType.class);
         configuration.put(DirType.BUILD_CONFIG, this::genBuildConfig);
         configuration.put(DirType.CUSTOM_TYPE, this::genCustomType);
         configuration.put(DirType.IMPL, this::genImpl);
@@ -76,9 +81,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         configuration.put(DirType.SRC_PROPERTIES, this::genSrcProps);
         configuration.put(DirType.SRC_ROOT, this::processSrcRoot);
 
-        processedDirs = new HashSet<>();
-
-        checkImplementation();
+        return configuration;
     }
 
     private void checkImplementation() {

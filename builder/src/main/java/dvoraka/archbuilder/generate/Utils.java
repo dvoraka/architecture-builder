@@ -54,7 +54,7 @@ public final class Utils {
     }
 
     public static Directory createAbstractDirFor(Class<?> cls, Directory srcBase) {
-        return new Directory.DirectoryBuilder("util", DirType.ABSTRACT)
+        return new Directory.Builder("util", DirType.ABSTRACT)
                 .parent(srcBase)
                 .typeClass(cls)
                 .build();

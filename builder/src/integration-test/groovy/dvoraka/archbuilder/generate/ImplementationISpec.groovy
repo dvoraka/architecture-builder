@@ -19,11 +19,11 @@ class ImplementationISpec extends BaseISpec {
     def "List implementation"() {
         given:
             Class<?> cls = List
-            Directory abs = new Directory.DirectoryBuilder('component', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('component', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory impl = new Directory.DirectoryBuilder('component', DirType.IMPL)
+            Directory impl = new Directory.Builder('component', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename('Test' + cls.getSimpleName())
@@ -43,11 +43,11 @@ class ImplementationISpec extends BaseISpec {
     def "List implementation with annotation"() {
         given:
             Class<?> cls = List
-            Directory abs = new Directory.DirectoryBuilder('component', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('component', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory impl = new Directory.DirectoryBuilder('component', DirType.IMPL)
+            Directory impl = new Directory.Builder('component', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename('TestA' + cls.getSimpleName())
@@ -68,11 +68,11 @@ class ImplementationISpec extends BaseISpec {
 
     def "RunnableFuture abstract implementation"() {
         given:
-            Directory abs = new Directory.DirectoryBuilder("component", DirType.ABSTRACT)
+            Directory abs = new Directory.Builder("component", DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(RunnableFuture.class)
                     .build()
-            Directory impl = new Directory.DirectoryBuilder("component", DirType.IMPL)
+            Directory impl = new Directory.Builder("component", DirType.IMPL)
                     .parent(srcBase)
                     .abstractType()
                     .superType(abs)
@@ -91,11 +91,11 @@ class ImplementationISpec extends BaseISpec {
 
     def "simple interface implementation (with type name)"() {
         given:
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeName("dvoraka.archbuilder.sample.SimpleInterface")
                     .build()
-            Directory impl = new Directory.DirectoryBuilder('test', DirType.IMPL)
+            Directory impl = new Directory.Builder('test', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename("DefaultSimpleInterface")
@@ -112,11 +112,11 @@ class ImplementationISpec extends BaseISpec {
 
     def "simple interface implementation (with type class)"() {
         given:
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(SimpleInterface.class)
                     .build()
-            Directory impl = new Directory.DirectoryBuilder('test', DirType.IMPL)
+            Directory impl = new Directory.Builder('test', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename("DefaultSimpleInterface2")
@@ -133,11 +133,11 @@ class ImplementationISpec extends BaseISpec {
 
     def "simple interface abstract implementation (with type name)"() {
         given:
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeName("dvoraka.archbuilder.sample.SimpleInterface")
                     .build()
-            Directory impl = new Directory.DirectoryBuilder('test', DirType.IMPL)
+            Directory impl = new Directory.Builder('test', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .abstractType()
@@ -156,17 +156,17 @@ class ImplementationISpec extends BaseISpec {
     def "simple interface abstract implementation implementation"() {
         given:
             Class<?> cls = SimpleInterface.class
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory impl1 = new Directory.DirectoryBuilder('test', DirType.IMPL)
+            Directory impl1 = new Directory.Builder('test', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .abstractType()
                     .filename('TestAbstract1' + cls.getSimpleName())
                     .build()
-            Directory impl2 = new Directory.DirectoryBuilder('test', DirType.IMPL)
+            Directory impl2 = new Directory.Builder('test', DirType.IMPL)
                     .parent(srcBase)
                     .superType(impl1)
                     .filename('Test2' + cls.getSimpleName())
@@ -184,11 +184,11 @@ class ImplementationISpec extends BaseISpec {
     def "interface E1pb implementation NP"() {
         given:
             Class<?> cls = InterfaceE1pb
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory impl = new Directory.DirectoryBuilder('test', DirType.IMPL)
+            Directory impl = new Directory.Builder('test', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename("TestNP" + cls.getSimpleName())
@@ -206,11 +206,11 @@ class ImplementationISpec extends BaseISpec {
     def "interface with 4 parameters implementation"() {
         given:
             Class<?> cls = Interface4p1m.class
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory impl = new Directory.DirectoryBuilder('test', DirType.IMPL)
+            Directory impl = new Directory.Builder('test', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename('Test' + cls.getSimpleName())
@@ -232,11 +232,11 @@ class ImplementationISpec extends BaseISpec {
     def "interface with 4 parameters implementation extension"() {
         given:
             Class<?> cls = Interface4p1m.class
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory impl1 = new Directory.DirectoryBuilder('test', DirType.IMPL)
+            Directory impl1 = new Directory.Builder('test', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename('Test1' + cls.getSimpleName())
@@ -245,7 +245,7 @@ class ImplementationISpec extends BaseISpec {
                     .parameterTypeName("java.lang.Boolean")
                     .parameterTypeClass(SimpleInterface.class)
                     .build()
-            Directory impl2 = new Directory.DirectoryBuilder('test2', DirType.IMPL)
+            Directory impl2 = new Directory.Builder('test2', DirType.IMPL)
                     .parent(srcBase)
                     .superType(impl1)
                     .filename('Test2' + cls.getSimpleName())
@@ -263,11 +263,11 @@ class ImplementationISpec extends BaseISpec {
     def "interface with 4 parameters abstract implementation"() {
         given:
             Class<?> cls = Interface4p1m.class
-            Directory interface4p = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory interface4p = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory interface4pImpl = new Directory.DirectoryBuilder('impl', DirType.IMPL)
+            Directory interface4pImpl = new Directory.Builder('impl', DirType.IMPL)
                     .parent(srcBase)
                     .superType(interface4p)
                     .filename('Test' + cls.getSimpleName())

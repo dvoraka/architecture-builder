@@ -22,12 +22,12 @@ class SpringConfigISpec extends BaseISpec {
     def "Spring config"() {
         given:
             Class<?> cls = SimpleClass
-            Directory abs = new Directory.DirectoryBuilder('test')
+            Directory abs = new Directory.Builder('test')
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory ext = new Directory.DirectoryBuilder('config')
+            Directory ext = new Directory.Builder('config')
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
@@ -35,12 +35,12 @@ class SpringConfigISpec extends BaseISpec {
                     .build()
 
             Class<?> cls2 = Class1c1m
-            Directory abs2 = new Directory.DirectoryBuilder('test')
+            Directory abs2 = new Directory.Builder('test')
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls2)
                     .build()
-            Directory ext2 = new Directory.DirectoryBuilder('config')
+            Directory ext2 = new Directory.Builder('config')
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs2)
@@ -69,7 +69,7 @@ class SpringConfigISpec extends BaseISpec {
             beanMappings.add(mapping)
             beanMappings.add(mapping2)
 
-            Directory configuration = new Directory.DirectoryBuilder('config')
+            Directory configuration = new Directory.Builder('config')
                     .type(DirType.SPRING_CONFIG)
                     .parent(srcBase)
                     .filename('SpringConfig')

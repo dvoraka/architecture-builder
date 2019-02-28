@@ -28,7 +28,7 @@ class ImplAndExtISpec extends BaseISpec {
 
             Directory simpleInterface = createAbstractDirFor(iface, srcBase)
             Directory simpleClass = createAbstractDirFor(cls, srcBase)
-            Directory impl = new Directory.DirectoryBuilder('test')
+            Directory impl = new Directory.Builder('test')
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(simpleInterface)
@@ -55,7 +55,7 @@ class ImplAndExtISpec extends BaseISpec {
             Directory simpleInterface = createAbstractDirFor(iface, srcBase)
             Directory simpleInterface2 = createAbstractDirFor(iface2, srcBase)
             Directory simpleClass = createAbstractDirFor(cls, srcBase)
-            Directory impl = new Directory.DirectoryBuilder('test')
+            Directory impl = new Directory.Builder('test')
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(simpleInterface)
@@ -81,7 +81,7 @@ class ImplAndExtISpec extends BaseISpec {
 
             Directory simpleInterface = createAbstractDirFor(iface, srcBase)
             Directory clsDir = createAbstractDirFor(cls, srcBase)
-            Directory impl = new Directory.DirectoryBuilder('test')
+            Directory impl = new Directory.Builder('test')
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(simpleInterface)
@@ -106,7 +106,7 @@ class ImplAndExtISpec extends BaseISpec {
 
             Directory simpleInterface = createAbstractDirFor(iface, srcBase)
             Directory clsDir = createAbstractDirFor(cls, srcBase)
-            Directory impl = new Directory.DirectoryBuilder('test')
+            Directory impl = new Directory.Builder('test')
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(simpleInterface)
@@ -133,7 +133,7 @@ class ImplAndExtISpec extends BaseISpec {
 
             Directory ifaceDir = createAbstractDirFor(iface, srcBase)
             Directory clsDir = createAbstractDirFor(cls, srcBase)
-            Directory impl = new Directory.DirectoryBuilder('test')
+            Directory impl = new Directory.Builder('test')
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(ifaceDir)
@@ -158,7 +158,7 @@ class ImplAndExtISpec extends BaseISpec {
 
             Directory ifaceDir = createAbstractDirFor(iface, srcBase)
             Directory clsDir = createAbstractDirFor(cls, srcBase)
-            Directory impl = new Directory.DirectoryBuilder('test')
+            Directory impl = new Directory.Builder('test')
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(ifaceDir)
@@ -184,7 +184,7 @@ class ImplAndExtISpec extends BaseISpec {
 
             Directory ifaceDir = createAbstractDirFor(iface, srcBase)
             Directory clsDir = createAbstractDirFor(cls, srcBase)
-            Directory impl = new Directory.DirectoryBuilder('test')
+            Directory impl = new Directory.Builder('test')
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(ifaceDir)
@@ -210,7 +210,7 @@ class ImplAndExtISpec extends BaseISpec {
 
             Directory ifaceDir = createAbstractDirFor(iface, srcBase)
             Directory clsDir = createAbstractDirFor(cls, srcBase)
-            Directory impl = new Directory.DirectoryBuilder('test')
+            Directory impl = new Directory.Builder('test')
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(ifaceDir)
@@ -239,7 +239,7 @@ class ImplAndExtISpec extends BaseISpec {
             Directory ifaceDir = createAbstractDirFor(iface, srcBase)
             Directory ifaceDir2 = createAbstractDirFor(iface2, srcBase)
             Directory clsDir = createAbstractDirFor(cls, srcBase)
-            Directory impl = new Directory.DirectoryBuilder('test')
+            Directory impl = new Directory.Builder('test')
                     .type(DirType.IMPL)
                     .parent(srcBase)
                     .superType(ifaceDir)

@@ -13,7 +13,7 @@ class NewTypeISpec extends BaseISpec {
 
     def "new simple class"() {
         given:
-            Directory newType = new Directory.DirectoryBuilder('newtype', DirType.NEW_TYPE)
+            Directory newType = new Directory.Builder('newtype', DirType.NEW_TYPE)
                     .parent(srcBase)
                     .filename('NewSimpleClass')
                     .build()
@@ -29,7 +29,7 @@ class NewTypeISpec extends BaseISpec {
 
     def "new simple class with annotation"() {
         given:
-            Directory newType = new Directory.DirectoryBuilder('newtype', DirType.NEW_TYPE)
+            Directory newType = new Directory.Builder('newtype', DirType.NEW_TYPE)
                     .parent(srcBase)
                     .filename('NewASimpleClass')
                     .metadataClass(Service)
@@ -47,7 +47,7 @@ class NewTypeISpec extends BaseISpec {
 
     def "new simple class with 2 annotations"() {
         given:
-            Directory newType = new Directory.DirectoryBuilder('newtype', DirType.NEW_TYPE)
+            Directory newType = new Directory.Builder('newtype', DirType.NEW_TYPE)
                     .parent(srcBase)
                     .filename('NewA2SimpleClass')
                     .metadataClass(Service)
@@ -66,7 +66,7 @@ class NewTypeISpec extends BaseISpec {
 
     def "new simple interface"() {
         given:
-            Directory newType = new Directory.DirectoryBuilder('newtype', DirType.NEW_TYPE)
+            Directory newType = new Directory.Builder('newtype', DirType.NEW_TYPE)
                     .parent(srcBase)
                     .filename('NewSimpleInterface')
                     .interfaceType()
@@ -83,7 +83,7 @@ class NewTypeISpec extends BaseISpec {
 
     def "new parametrized class"() {
         given:
-            Directory newType = new Directory.DirectoryBuilder('newtype', DirType.NEW_TYPE)
+            Directory newType = new Directory.Builder('newtype', DirType.NEW_TYPE)
                     .parent(srcBase)
                     .filename('NewParametrizedType')
                     .parameterTypeName("T")

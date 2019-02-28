@@ -18,11 +18,11 @@ class ExtensionISpec extends BaseISpec {
 
     def "simple class extension"() {
         given:
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(SimpleClass.class)
                     .build()
-            Directory ext = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename('TestSimpleClass')
@@ -40,11 +40,11 @@ class ExtensionISpec extends BaseISpec {
 
     def "generated simple class extension"() {
         given:
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.NEW_TYPE)
+            Directory abs = new Directory.Builder('test', DirType.NEW_TYPE)
                     .parent(srcBase)
                     .filename('NewSimpleClass')
                     .build()
-            Directory ext = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename('TestNewSimpleClass')
@@ -62,11 +62,11 @@ class ExtensionISpec extends BaseISpec {
 
     def "Object abstract extension"() {
         given:
-            Directory abs = new Directory.DirectoryBuilder('component', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('component', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(Object.class)
                     .build()
-            Directory ext = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .abstractType()
@@ -84,11 +84,11 @@ class ExtensionISpec extends BaseISpec {
 
     def "Object extension"() {
         given:
-            Directory abs = new Directory.DirectoryBuilder('component', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('component', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(Object.class)
                     .build()
-            Directory ext = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename('TestObject')
@@ -105,12 +105,12 @@ class ExtensionISpec extends BaseISpec {
 
     def "Timer extension"() {
         given:
-            Directory abs = new Directory.DirectoryBuilder("component")
+            Directory abs = new Directory.Builder("component")
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(Timer.class)
                     .build()
-            Directory ext = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename("TestTimer")
@@ -128,11 +128,11 @@ class ExtensionISpec extends BaseISpec {
 
     def "class 1m extension"() {
         given:
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(Class1m.class)
                     .build()
-            Directory ext = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename("TestClass1m")
@@ -150,11 +150,11 @@ class ExtensionISpec extends BaseISpec {
     def "class 1p extension"() {
         given:
             Class<?> cls = Class1p
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory ext = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename('Test' + cls.getSimpleName())
@@ -171,12 +171,12 @@ class ExtensionISpec extends BaseISpec {
 
     def "generated class 1p extension"() {
         given:
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.NEW_TYPE)
+            Directory abs = new Directory.Builder('test', DirType.NEW_TYPE)
                     .parent(srcBase)
                     .filename('NewClass1p')
                     .parameterTypeName("T")
                     .build()
-            Directory ext = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .parameterTypeClass(Integer)
@@ -194,12 +194,12 @@ class ExtensionISpec extends BaseISpec {
 
     def "generated class 1p extension NP"() {
         given:
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.NEW_TYPE)
+            Directory abs = new Directory.Builder('test', DirType.NEW_TYPE)
                     .parent(srcBase)
                     .filename('NewClass1p')
                     .parameterTypeName("T")
                     .build()
-            Directory ext = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename('TestNP' + abs.getFilename().get())
@@ -217,11 +217,11 @@ class ExtensionISpec extends BaseISpec {
     def "class 1p1m extension NP"() {
         given:
             Class<?> cls = Class1p1m
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory ext = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename('TestNP' + cls.getSimpleName())
@@ -239,11 +239,11 @@ class ExtensionISpec extends BaseISpec {
     def "class 1pb1m extension NP"() {
         given:
             Class<?> cls = Class1pb1m
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory ext = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename('TestNP' + cls.getSimpleName())
@@ -260,11 +260,11 @@ class ExtensionISpec extends BaseISpec {
 
     def "abstract class 1am extension"() {
         given:
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(AbstractClass1am.class)
                     .build()
-            Directory ext = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename("TestAbstractClass1am")
@@ -281,11 +281,11 @@ class ExtensionISpec extends BaseISpec {
 
     def "abstract class 1p1am extension"() {
         given:
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(AbstractClass1p1am)
                     .build()
-            Directory ext = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .parameterTypeClass(String.class)
@@ -303,11 +303,11 @@ class ExtensionISpec extends BaseISpec {
 
     def "abstract class 1p1am extension NP"() {
         given:
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(AbstractClass1p1am)
                     .build()
-            Directory ext = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename("TestNPAbstractClass1p1am")
@@ -325,11 +325,11 @@ class ExtensionISpec extends BaseISpec {
     def "abstract class 1pb1am extension NP"() {
         given:
             Class<?> cls = AbstractClass1pb1am
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory ext = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename('TestNP' + cls.getSimpleName())
@@ -347,11 +347,11 @@ class ExtensionISpec extends BaseISpec {
     def "abstract class 1pb1am2 extension NP"() {
         given:
             Class<?> cls = AbstractClass1pb1am2
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory ext = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename('TestNP' + cls.getSimpleName())
@@ -368,11 +368,11 @@ class ExtensionISpec extends BaseISpec {
 
     def "abstract class 1p1am abstract extension"() {
         given:
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(AbstractClass1p1am)
                     .build()
-            Directory ext = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext = new Directory.Builder('ext', DirType.IMPL)
                     .abstractType()
                     .parent(srcBase)
                     .superType(abs)
@@ -391,11 +391,11 @@ class ExtensionISpec extends BaseISpec {
 
     def "class 1p2c1m extension"() {
         given:
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(Class1p2c1m)
                     .build()
-            Directory ext = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .parameterTypeClass(Long.class)
@@ -415,11 +415,11 @@ class ExtensionISpec extends BaseISpec {
     def "class 1p2c1am1m extension"() {
         given:
             Class<?> cls = Class1p2c1am1m
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory ext = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .parameterTypeClass(Long.class)
@@ -440,11 +440,11 @@ class ExtensionISpec extends BaseISpec {
     def "class 3c1m extension"() {
         given:
             Class<?> cls = Class3c1m
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory ext = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename('Test' + cls.getSimpleName())
@@ -463,15 +463,15 @@ class ExtensionISpec extends BaseISpec {
     def "class 2pp extension"() {
         given:
             Class<?> cls = Class2pp
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory dataAbs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory dataAbs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(ResultData)
                     .build()
-            Directory ext = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
 //                    .parameterTypeDir(dataAbs)
@@ -491,18 +491,18 @@ class ExtensionISpec extends BaseISpec {
     def "ResponseMessage extension"() {
         given:
             Class<?> cls = ResponseMessage
-            Directory dataAbs = new Directory.DirectoryBuilder('')
+            Directory dataAbs = new Directory.Builder('')
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(TestingResultData.class)
                     .parameterTypeClass(BaseException.class)
                     .build()
-            Directory abs = new Directory.DirectoryBuilder('')
+            Directory abs = new Directory.Builder('')
                     .type(DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory ext = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .parameterTypeDir(dataAbs)
@@ -519,16 +519,16 @@ class ExtensionISpec extends BaseISpec {
     def "class 3c1m extension extension"() {
         given:
             Class<?> cls = Class3c1m
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory ext1 = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext1 = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename('Test1' + cls.getSimpleName())
                     .build()
-            Directory ext2 = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext2 = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(ext1)
                     .filename('Test2' + cls.getSimpleName())
@@ -547,17 +547,17 @@ class ExtensionISpec extends BaseISpec {
     def "class 3c1m abstract extension extension"() {
         given:
             Class<?> cls = Class3c1m
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory ext1 = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext1 = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .abstractType()
                     .filename('Test1' + cls.getSimpleName())
                     .build()
-            Directory ext2 = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext2 = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(ext1)
                     .filename('Test2' + cls.getSimpleName())
@@ -576,17 +576,17 @@ class ExtensionISpec extends BaseISpec {
     def "abstract class E3c1m abstract extension extension"() {
         given:
             Class<?> cls = AbstractClassE3c1am1m.class
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory ext1 = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext1 = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .abstractType()
                     .filename('Test1' + cls.getSimpleName())
                     .build()
-            Directory ext2 = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext2 = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(ext1)
                     .filename('Test2' + cls.getSimpleName())
@@ -605,17 +605,17 @@ class ExtensionISpec extends BaseISpec {
     def "abstract class E1pb2am abstract extension extension NP"() {
         given:
             Class<?> cls = AbstractClassE1pb2am
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory ext1 = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext1 = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .abstractType()
                     .filename('Test1' + cls.getSimpleName())
                     .build()
-            Directory ext2 = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext2 = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(ext1)
                     .filename('Test2' + cls.getSimpleName())
@@ -633,17 +633,17 @@ class ExtensionISpec extends BaseISpec {
     def "abstract class E1pb2am abstract extension extension"() {
         given:
             Class<?> cls = AbstractClassE1pb2am
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory ext1 = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext1 = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .abstractType()
                     .filename('Test10' + cls.getSimpleName())
                     .build()
-            Directory ext2 = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext2 = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(ext1)
                     .parameterTypeClass(Long.class)
@@ -662,11 +662,11 @@ class ExtensionISpec extends BaseISpec {
     def "simple interface extension"() {
         given:
             Class<?> cls = SimpleInterface.class
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory ext = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .interfaceType()
@@ -685,11 +685,11 @@ class ExtensionISpec extends BaseISpec {
     def "interface 4p1am extension"() {
         given:
             Class<?> cls = Interface4p1m.class
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory ext = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory ext = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .interfaceType()
@@ -712,11 +712,11 @@ class ExtensionISpec extends BaseISpec {
     def "interface 4p1am extension NP"() {
         given:
             Class<?> cls = Interface4p1m.class
-            Directory interface4p = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory interface4p = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory interface4pImpl = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory interface4pImpl = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(interface4p)
                     .interfaceType()
@@ -735,11 +735,11 @@ class ExtensionISpec extends BaseISpec {
     def "interface E1pb extension"() {
         given:
             Class<?> cls = InterfaceE1pb
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory impl = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory impl = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .interfaceType()
@@ -759,11 +759,11 @@ class ExtensionISpec extends BaseISpec {
     def "interface E1pb extension NP"() {
         given:
             Class<?> cls = InterfaceE1pb
-            Directory abs = new Directory.DirectoryBuilder('test', DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory impl = new Directory.DirectoryBuilder('ext', DirType.IMPL)
+            Directory impl = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .interfaceType()

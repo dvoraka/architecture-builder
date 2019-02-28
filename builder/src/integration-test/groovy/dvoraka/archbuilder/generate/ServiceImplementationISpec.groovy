@@ -13,12 +13,12 @@ class ServiceImplementationISpec extends BaseISpec {
 
     def "Map service implementation"() {
         given:
-            Directory abstractMapService = new Directory.DirectoryBuilder("service")
+            Directory abstractMapService = new Directory.Builder("service")
                     .type(DirType.SERVICE_ABSTRACT)
                     .parent(srcBaseAbs)
                     .typeName("java.util.Map")
                     .build()
-            Directory mapService = new Directory.DirectoryBuilder("service")
+            Directory mapService = new Directory.Builder("service")
                     .type(DirType.SERVICE)
                     .parent(srcBase)
                     .superType(abstractMapService)
@@ -26,7 +26,7 @@ class ServiceImplementationISpec extends BaseISpec {
                     .parameterTypeName("java.lang.String")
                     .parameterTypeName("java.lang.Long")
                     .build()
-            Directory mapServiceImpl = new Directory.DirectoryBuilder("service")
+            Directory mapServiceImpl = new Directory.Builder("service")
                     .type(DirType.SERVICE_IMPL)
                     .parent(srcBase)
                     .superType(mapService)
@@ -44,19 +44,19 @@ class ServiceImplementationISpec extends BaseISpec {
 
     def "RunnableFuture service implementation"() {
         given:
-            Directory abstractRFService = new Directory.DirectoryBuilder("service")
+            Directory abstractRFService = new Directory.Builder("service")
                     .type(DirType.SERVICE_ABSTRACT)
                     .parent(srcBaseAbs)
                     .typeName("java.util.concurrent.RunnableFuture")
                     .build()
-            Directory rfService = new Directory.DirectoryBuilder("service")
+            Directory rfService = new Directory.Builder("service")
                     .type(DirType.SERVICE)
                     .parent(srcBase)
                     .superType(abstractRFService)
                     .filename("RFService")
                     .parameterTypeName("java.lang.String")
                     .build()
-            Directory rfServiceImpl = new Directory.DirectoryBuilder("service2")
+            Directory rfServiceImpl = new Directory.Builder("service2")
                     .type(DirType.SERVICE_IMPL)
                     .parent(srcBase)
                     .superType(rfService)
@@ -71,12 +71,12 @@ class ServiceImplementationISpec extends BaseISpec {
     def "ServiceInterface2p service implementation"() {
         given:
             Class<?> cls = ServiceInterface2p.class
-            Directory baseService = new Directory.DirectoryBuilder("service")
+            Directory baseService = new Directory.Builder("service")
                     .type(DirType.SERVICE_ABSTRACT)
                     .parent(srcBaseAbs)
                     .typeClass(cls)
                     .build()
-            Directory service = new Directory.DirectoryBuilder("service")
+            Directory service = new Directory.Builder("service")
                     .type(DirType.SERVICE)
                     .parent(srcBase)
                     .superType(baseService)
@@ -84,7 +84,7 @@ class ServiceImplementationISpec extends BaseISpec {
                     .parameterTypeClass(String.class)
                     .parameterTypeClass(Long.class)
                     .build()
-            Directory serviceImpl = new Directory.DirectoryBuilder("service")
+            Directory serviceImpl = new Directory.Builder("service")
                     .type(DirType.SERVICE_IMPL)
                     .parent(srcBase)
                     .superType(service)

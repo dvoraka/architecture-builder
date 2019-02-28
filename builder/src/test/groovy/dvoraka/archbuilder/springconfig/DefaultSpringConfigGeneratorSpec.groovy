@@ -24,12 +24,12 @@ class DefaultSpringConfigGeneratorSpec extends Specification {
 
     def "simple return with dir type"() {
         given:
-            Directory fromTypeDir = new Directory.DirectoryBuilder('test')
+            Directory fromTypeDir = new Directory.Builder('test')
                     .type(DirType.ABSTRACT)
                     .parent(null)
                     .typeClass(Number)
                     .build()
-            Directory toTypeDir = new Directory.DirectoryBuilder('test')
+            Directory toTypeDir = new Directory.Builder('test')
                     .type(DirType.ABSTRACT)
                     .parent(null)
                     .typeClass(Long)
@@ -47,12 +47,12 @@ class DefaultSpringConfigGeneratorSpec extends Specification {
 
     def "param return"() {
         given:
-            Directory fromTypeDir = new Directory.DirectoryBuilder('test')
+            Directory fromTypeDir = new Directory.Builder('test')
                     .type(DirType.ABSTRACT)
                     .parent(null)
                     .typeClass(Number)
                     .build()
-            Directory toTypeDir = new Directory.DirectoryBuilder('test')
+            Directory toTypeDir = new Directory.Builder('test')
                     .type(DirType.ABSTRACT)
                     .parent(null)
                     .typeClass(Long)

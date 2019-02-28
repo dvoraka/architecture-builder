@@ -21,16 +21,16 @@ class BaseISpec extends Specification implements JavaHelper, JavaTestingHelper {
 
 
     def setup() {
-        root = new Directory.DirectoryBuilder(rootDirName, DirType.ROOT)
+        root = new Directory.Builder(rootDirName, DirType.ROOT)
                 .parent(null)
                 .build()
-        srcRoot = new Directory.DirectoryBuilder("src/main/java", DirType.SRC_ROOT)
+        srcRoot = new Directory.Builder("src/main/java", DirType.SRC_ROOT)
                 .parent(root)
                 .build()
-        srcBase = new Directory.DirectoryBuilder("dvoraka/testapp", DirType.SRC_BASE)
+        srcBase = new Directory.Builder("dvoraka/testapp", DirType.SRC_BASE)
                 .parent(srcRoot)
                 .build()
-        srcBaseAbs = new Directory.DirectoryBuilder("dvoraka/diffapp", DirType.SRC_BASE_ABSTRACT)
+        srcBaseAbs = new Directory.Builder("dvoraka/diffapp", DirType.SRC_BASE_ABSTRACT)
                 .parent(root)
                 .build()
     }

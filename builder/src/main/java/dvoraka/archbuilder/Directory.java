@@ -196,7 +196,7 @@ public class Directory {
                 '}';
     }
 
-    public static final class DirectoryBuilder {
+    public static final class Builder {
 
         private String name;
         private String filename;
@@ -217,9 +217,9 @@ public class Directory {
 
 
         /**
-         * @deprecated use {@link #DirectoryBuilder(String, DirType)}
+         * @deprecated use {@link #Builder(String, DirType)}
          */
-        public DirectoryBuilder(String name) {
+        public Builder(String name) {
             this.name = name;
             superTypes = new ArrayList<>();
             dependencies = new ArrayList<>();
@@ -227,65 +227,65 @@ public class Directory {
             metadata = new ArrayList<>();
         }
 
-        public DirectoryBuilder(String name, DirType dirType) {
+        public Builder(String name, DirType dirType) {
             this(name);
             this.type = dirType;
         }
 
-        public DirectoryBuilder filename(String filename) {
+        public Builder filename(String filename) {
             this.filename = filename;
             return this;
         }
 
-        public DirectoryBuilder typeName(String typeName) {
+        public Builder typeName(String typeName) {
             this.typeName = typeName;
             String[] names = typeName.split("\\.");
             this.filename = names[names.length - 1];
             return this;
         }
 
-        public DirectoryBuilder typeClass(Class<?> clazz) {
+        public Builder typeClass(Class<?> clazz) {
             return typeName(clazz.getName());
         }
 
-        public DirectoryBuilder abstractType() {
+        public Builder abstractType() {
             this.abstractType = true;
             return this;
         }
 
-        public DirectoryBuilder interfaceType() {
+        public Builder interfaceType() {
             abstractType();
             this.interfaceType = true;
             return this;
         }
 
-        public DirectoryBuilder type(DirType type) {
+        public Builder type(DirType type) {
             this.type = type;
             return this;
         }
 
-        public DirectoryBuilder parent(Directory parent) {
+        public Builder parent(Directory parent) {
             this.parent = parent;
             return this;
         }
 
-        public DirectoryBuilder superType(Directory superType) {
+        public Builder superType(Directory superType) {
             dependsOn(superType);
             this.superTypes.add(superType);
             return this;
         }
 
-        public DirectoryBuilder text(String text) {
+        public Builder text(String text) {
             this.text = text;
             return this;
         }
 
-        public DirectoryBuilder textSupplier(Supplier<String> supplier) {
+        public Builder textSupplier(Supplier<String> supplier) {
             this.textSupplier = supplier;
             return this;
         }
 
-        public DirectoryBuilder dependsOn(Directory directory) {
+        public Builder dependsOn(Directory directory) {
             if (type == DirType.SPRING_CONFIG || directory.getType() == DirType.SPRING_CONFIG) {
                 throw new RuntimeException("Spring config must not have any dependencies.");
             }
@@ -293,16 +293,16 @@ public class Directory {
             return this;
         }
 
-        public DirectoryBuilder parameterTypeName(String className) {
+        public Builder parameterTypeName(String className) {
             parameters.add(className);
             return this;
         }
 
-        public DirectoryBuilder parameterTypeClass(Class<?> clazz) {
+        public Builder parameterTypeClass(Class<?> clazz) {
             return parameterTypeName(clazz.getName());
         }
 
-        public DirectoryBuilder parameterTypeDir(Directory directory) {
+        public Builder parameterTypeDir(Directory directory) {
             dependsOn(directory);
 
             directory.getFilename().orElseThrow(() -> Utils.noFilenameException(directory));
@@ -310,12 +310,12 @@ public class Directory {
             return parameterTypeName(directory.getTypeName());
         }
 
-        public DirectoryBuilder metadata(String data) {
+        public Builder metadata(String data) {
             metadata.add(data);
             return this;
         }
 
-        public DirectoryBuilder metadataClass(Class<?> clazz) {
+        public Builder metadataClass(Class<?> clazz) {
             return metadata(clazz.getName());
         }
 

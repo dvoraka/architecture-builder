@@ -121,20 +121,11 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
     private void genNewType(Directory directory) {
         log.debug("Generating new type: {}", directory);
 
-        String filename = getFilename(directory);
-
         TypeSpec.Builder builder = getTypeSpecBuilder(directory);
 
         addTypeVariables(directory, builder);
-        addAnnotations(directory, builder);
-        addModifiers(directory, builder);
 
-        TypeSpec newType = builder.build();
-
-        JavaFile javaFile = JavaFile.builder(directory.getPackageName(), newType)
-                .build();
-
-        saveJava(directory, javaFile.toString(), javaSuffix(filename));
+        completeAndSaveClass(directory, builder);
     }
 
     private void genImpl(Directory directory) {
@@ -185,8 +176,6 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             }
         }
 
-        String filename = getFilename(directory);
-
         // type spec builder
         TypeSpec.Builder implementationBuilder = getTypeSpecBuilder(directory);
 
@@ -199,22 +188,10 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
         // add type variables from supertypes if necessary
         if (typeParameters != null) {
-
-            List<TypeVariableName> typeVariableNames = new ArrayList<>();
-            for (TypeVariable<? extends Class<?>> typeParameter : typeParameters) {
-                typeVariableNames.add(TypeVariableName.get(typeParameter));
-            }
-
-            implementationBuilder.addTypeVariables(typeVariableNames);
+            addTypeVariables(typeParameters, implementationBuilder);
         }
 
-        TypeSpec implementation = addModifiers(directory, implementationBuilder)
-                .build();
-
-        JavaFile javaFile = JavaFile.builder(directory.getPackageName(), implementation)
-                .build();
-
-        saveJava(directory, javaFile.toString(), javaSuffix(filename));
+        completeAndSaveClass(directory, implementationBuilder);
     }
 
     private void genService(Directory directory) {
@@ -843,6 +820,20 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         return builder;
     }
 
+    private TypeSpec.Builder addTypeVariables(
+            TypeVariable<? extends Class<?>>[] typeParameters,
+            TypeSpec.Builder builder
+    ) {
+        List<TypeVariableName> typeVariableNames = new ArrayList<>();
+        for (TypeVariable<? extends Class<?>> typeParameter : typeParameters) {
+            typeVariableNames.add(TypeVariableName.get(typeParameter));
+        }
+
+        builder.addTypeVariables(typeVariableNames);
+
+        return builder;
+    }
+
     private TypeSpec.Builder getTypeSpecBuilder(Directory directory) {
 
         String filename = getFilename(directory);
@@ -879,6 +870,19 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             log.error("Save failed!", e);
             throw new GeneratorException(e);
         }
+    }
+
+    private void completeAndSaveClass(Directory directory, TypeSpec.Builder builder) {
+
+        addAnnotations(directory, builder);
+        addModifiers(directory, builder);
+
+        TypeSpec typeSpec = builder.build();
+
+        JavaFile javaFile = JavaFile.builder(directory.getPackageName(), typeSpec)
+                .build();
+
+        saveJava(directory, javaFile.toString(), javaSuffix(getFilename(directory)));
     }
 
     private GeneratorException noSuperTypeException() {

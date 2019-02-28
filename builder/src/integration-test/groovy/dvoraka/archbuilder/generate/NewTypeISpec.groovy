@@ -3,6 +3,7 @@ package dvoraka.archbuilder.generate
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Service
 
 class NewTypeISpec extends BaseISpec {
 
@@ -24,6 +25,43 @@ class NewTypeISpec extends BaseISpec {
             isPublicNotAbstract(clazz)
             hasNoTypeParameters(clazz)
             hasNoDeclaredMethods(clazz)
+    }
+
+    def "new simple class with annotation"() {
+        given:
+            Directory newType = new Directory.DirectoryBuilder('newtype', DirType.NEW_TYPE)
+                    .parent(srcBase)
+                    .filename('NewASimpleClass')
+                    .metadataClass(Service)
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(newType))
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
+            annotationCount(clazz) == 1
+    }
+
+    def "new simple class with 2 annotations"() {
+        given:
+            Directory newType = new Directory.DirectoryBuilder('newtype', DirType.NEW_TYPE)
+                    .parent(srcBase)
+                    .filename('NewA2SimpleClass')
+                    .metadataClass(Service)
+                    .metadataClass(Deprecated)
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(newType))
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
+            annotationCount(clazz) == 2
     }
 
     def "new simple interface"() {

@@ -53,6 +53,10 @@ public interface JavaTestingHelper {
                 .count();
     }
 
+    default int annotationCount(Class<?> clazz) {
+        return clazz.getDeclaredAnnotations().length;
+    }
+
     default int declaredConstructorCount(Class<?> clazz) {
         return clazz.getDeclaredConstructors().length;
     }

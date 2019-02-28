@@ -125,14 +125,11 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
         TypeSpec.Builder builder = getTypeSpecBuilder(directory);
 
-        for (String variable : directory.getParameters()) {
-            builder.addTypeVariable(TypeVariableName.get(variable));
-        }
-
+        addTypeVariables(directory, builder);
         addAnnotations(directory, builder);
+        addModifiers(directory, builder);
 
-        TypeSpec newType = addModifiers(directory, builder)
-                .build();
+        TypeSpec newType = builder.build();
 
         JavaFile javaFile = JavaFile.builder(directory.getPackageName(), newType)
                 .build();
@@ -832,6 +829,15 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         for (String annotation : directory.getMetadata()) {
             Class<?> cls = loadClass(annotation);
             builder.addAnnotation(cls);
+        }
+
+        return builder;
+    }
+
+    private TypeSpec.Builder addTypeVariables(Directory directory, TypeSpec.Builder builder) {
+
+        for (String variable : directory.getParameters()) {
+            builder.addTypeVariable(TypeVariableName.get(variable));
         }
 
         return builder;

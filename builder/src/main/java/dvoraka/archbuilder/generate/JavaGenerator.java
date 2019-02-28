@@ -129,6 +129,8 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             builder.addTypeVariable(TypeVariableName.get(variable));
         }
 
+        addAnnotations(directory, builder);
+
         TypeSpec newType = addModifiers(directory, builder)
                 .build();
 
@@ -814,16 +816,25 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
     private TypeSpec.Builder addModifiers(Directory directory, TypeSpec.Builder builder) {
 
-        TypeSpec.Builder updatedBuilder;
         if (directory.isInterfaceType()) { // interface
-            updatedBuilder = builder.addModifiers(Modifier.PUBLIC);
+            builder.addModifiers(Modifier.PUBLIC);
         } else if (directory.isAbstractType()) { // abstract
-            updatedBuilder = builder.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
+            builder.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
         } else { // not abstract
-            updatedBuilder = builder.addModifiers(Modifier.PUBLIC);
+            builder.addModifiers(Modifier.PUBLIC);
         }
 
-        return updatedBuilder;
+        return builder;
+    }
+
+    private TypeSpec.Builder addAnnotations(Directory directory, TypeSpec.Builder builder) {
+
+        for (String annotation : directory.getMetadata()) {
+            Class<?> cls = loadClass(annotation);
+            builder.addAnnotation(cls);
+        }
+
+        return builder;
     }
 
     private TypeSpec.Builder getTypeSpecBuilder(Directory directory) {

@@ -14,13 +14,11 @@ class GenericsISpec extends BaseISpec {
     def "abstract class EE2pb3am extension"() {
         given:
             Class<?> cls = AbstractClassEE2pb3am
-            Directory abs = new Directory.Builder('test')
-                    .type(DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory ext = new Directory.Builder('generics')
-                    .type(DirType.IMPL)
+            Directory ext = new Directory.Builder('generics', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename('Test' + cls.getSimpleName())
@@ -40,13 +38,11 @@ class GenericsISpec extends BaseISpec {
     def "abstract class EE2p4am extension"() {
         given:
             Class<?> cls = AbstractClassEE2p4am
-            Directory abs = new Directory.Builder('test')
-                    .type(DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory ext = new Directory.Builder('generics')
-                    .type(DirType.IMPL)
+            Directory ext = new Directory.Builder('generics', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename('Test' + cls.getSimpleName())
@@ -66,13 +62,11 @@ class GenericsISpec extends BaseISpec {
     def "interface 2p2am implementation"() {
         given:
             Class<?> cls = Interface2p2am
-            Directory abs = new Directory.Builder('test')
-                    .type(DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory impl = new Directory.Builder('generics')
-                    .type(DirType.IMPL)
+            Directory impl = new Directory.Builder('generics', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename('Test' + cls.getSimpleName())
@@ -92,13 +86,11 @@ class GenericsISpec extends BaseISpec {
     def "interface 2p2am implementation NP"() {
         given:
             Class<?> cls = Interface2p2am
-            Directory abs = new Directory.Builder('test')
-                    .type(DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory impl = new Directory.Builder('generics')
-                    .type(DirType.IMPL)
+            Directory impl = new Directory.Builder('generics', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename('TestNP' + cls.getSimpleName())
@@ -116,13 +108,11 @@ class GenericsISpec extends BaseISpec {
     def "interface E2p2am implementation"() {
         given:
             Class<?> cls = InterfaceE2p2am
-            Directory abs = new Directory.Builder('test')
-                    .type(DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory impl = new Directory.Builder('generics')
-                    .type(DirType.IMPL)
+            Directory impl = new Directory.Builder('generics', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename('Test' + cls.getSimpleName())
@@ -142,13 +132,11 @@ class GenericsISpec extends BaseISpec {
     def "interface E2p2am implementation NP"() {
         given:
             Class<?> cls = InterfaceE2p2am
-            Directory abs = new Directory.Builder('test')
-                    .type(DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory impl = new Directory.Builder('generics')
-                    .type(DirType.IMPL)
+            Directory impl = new Directory.Builder('generics', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename('TestNP' + cls.getSimpleName())
@@ -166,13 +154,11 @@ class GenericsISpec extends BaseISpec {
     def "interface EE2p2am implementation"() {
         given:
             Class<?> cls = InterfaceEE2p2am
-            Directory abs = new Directory.Builder('test')
-                    .type(DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory impl = new Directory.Builder('generics')
-                    .type(DirType.IMPL)
+            Directory impl = new Directory.Builder('generics', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename('Test' + cls.getSimpleName())
@@ -192,13 +178,11 @@ class GenericsISpec extends BaseISpec {
     def "interface EE2p2am implementation NP"() {
         given:
             Class<?> cls = InterfaceEE2p2am
-            Directory abs = new Directory.Builder('test')
-                    .type(DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory impl = new Directory.Builder('generics')
-                    .type(DirType.IMPL)
+            Directory impl = new Directory.Builder('generics', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename('TestNP' + cls.getSimpleName())
@@ -216,13 +200,11 @@ class GenericsISpec extends BaseISpec {
     def "interface 2pb2am implementation"() {
         given:
             Class<?> cls = Interface2pb2am
-            Directory abs = new Directory.Builder('test')
-                    .type(DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory impl = new Directory.Builder('generics')
-                    .type(DirType.IMPL)
+            Directory impl = new Directory.Builder('generics', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename('Test' + cls.getSimpleName())
@@ -242,13 +224,11 @@ class GenericsISpec extends BaseISpec {
     def "interface 2pb2am implementation NP"() {
         given:
             Class<?> cls = Interface2pb2am
-            Directory abs = new Directory.Builder('test')
-                    .type(DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('test', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()
-            Directory impl = new Directory.Builder('generics')
-                    .type(DirType.IMPL)
+            Directory impl = new Directory.Builder('generics', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
                     .filename('TestNP' + cls.getSimpleName())

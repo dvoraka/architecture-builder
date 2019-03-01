@@ -116,8 +116,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .build();
 
         String responseMessageName = serviceName + "ResponseMessage";
-        Directory responseMessage = new Directory.Builder(MESSAGE_DIR)
-                .type(DirType.IMPL)
+        Directory responseMessage = new Directory.Builder(MESSAGE_DIR, DirType.IMPL)
                 .parent(srcBase)
                 .superType(responseMessageAbs)
                 .parameterTypeDir(data)
@@ -125,15 +124,13 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .filename(responseMessageName)
                 .build();
 
-        Directory requestMessageAbs = new Directory.Builder("")
-                .type(DirType.ABSTRACT)
+        Directory requestMessageAbs = new Directory.Builder("", DirType.ABSTRACT)
                 .parent(srcBase)
                 .typeClass(netConfig.getRequestBaseMessage())
                 .build();
 
         String requestMessageName = serviceName + "Message";
-        Directory requestMessage = new Directory.Builder(MESSAGE_DIR)
-                .type(DirType.IMPL)
+        Directory requestMessage = new Directory.Builder(MESSAGE_DIR, DirType.IMPL)
                 .parent(srcBase)
                 .superType(requestMessageAbs)
                 .parameterTypeDir(service)
@@ -144,36 +141,31 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .build();
 
         // server
-        Directory serverAbs = new Directory.Builder("")
-                .type(DirType.ABSTRACT)
+        Directory serverAbs = new Directory.Builder("", DirType.ABSTRACT)
                 .parent(srcBase)
                 .typeClass(superServer)
                 .build();
 
         String serverName = serviceName + "Server";
-        Directory server = new Directory.Builder("server")
-                .type(DirType.IMPL)
+        Directory server = new Directory.Builder("server", DirType.IMPL)
                 .parent(srcBase)
                 .superType(serverAbs)
                 .filename(serverName)
                 .build();
 
         // network components
-        Directory networkComponentAbs = new Directory.Builder("")
-                .type(DirType.ABSTRACT)
+        Directory networkComponentAbs = new Directory.Builder("", DirType.ABSTRACT)
                 .parent(srcBase)
                 .typeClass(netConfig.getSuperNetComponent())
                 .build();
 
-        Directory networkReceiverAbs = new Directory.Builder("")
-                .type(DirType.ABSTRACT)
+        Directory networkReceiverAbs = new Directory.Builder("", DirType.ABSTRACT)
                 .parent(srcBase)
                 .typeClass(netConfig.getSuperNetReceiver())
                 .build();
 
         String networkComponentName = serviceName + "NetComponent";
-        Directory serviceNetworkComponent = new Directory.Builder("net")
-                .type(DirType.IMPL)
+        Directory serviceNetworkComponent = new Directory.Builder("net", DirType.IMPL)
                 .parent(srcBase)
                 .superType(networkComponentAbs)
                 .interfaceType()
@@ -188,8 +180,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 netConfig.getBaseNetComponent(), srcBase);
 
         String netAdapterName = serviceName + "NetAdapter";
-        Directory serviceNetAdapter = new Directory.Builder("net")
-                .type(DirType.IMPL)
+        Directory serviceNetAdapter = new Directory.Builder("net", DirType.IMPL)
                 .parent(srcBase)
                 .superType(serviceNetworkComponent)
                 .superType(baseNetComponentAbs)
@@ -201,8 +192,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .build();
 
         String networkReceiverName = serviceName + "NetReceiver";
-        Directory networkReceiver = new Directory.Builder("net")
-                .type(DirType.IMPL)
+        Directory networkReceiver = new Directory.Builder("net", DirType.IMPL)
                 .parent(srcBase)
                 .superType(networkReceiverAbs)
                 .interfaceType()
@@ -211,8 +201,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .build();
 
         String networkResponseReceiverName = serviceName + "NetResponseReceiver";
-        Directory networkResponseReceiver = new Directory.Builder("net")
-                .type(DirType.IMPL)
+        Directory networkResponseReceiver = new Directory.Builder("net", DirType.IMPL)
                 .parent(srcBase)
                 .superType(networkReceiverAbs)
                 .interfaceType()
@@ -221,8 +210,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .build();
 
         // application properties
-        Directory srcProps = new Directory.Builder("src/main/resources")
-                .type(DirType.SRC_PROPERTIES)
+        Directory srcProps = new Directory.Builder("src/main/resources", DirType.SRC_PROPERTIES)
                 .parent(root)
                 .filename("application.properties")
                 .text("prop1=value\nprop2=value2\n")
@@ -231,8 +219,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
         // application
         String appClassName = serviceName + "App";
         SourceTemplate sourceTemplate = new SpringBootApplicationTemplate(appClassName, packageName);
-        Directory application = new Directory.Builder("")
-                .type(DirType.CUSTOM_TYPE)
+        Directory application = new Directory.Builder("", DirType.CUSTOM_TYPE)
                 .parent(srcBase)
                 .filename(appClassName)
                 .text(sourceTemplate.getSource())
@@ -252,8 +239,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
         beanMappings.add(serviceBeanMapping);
 
         String springConfigName = serviceName + "Config";
-        Directory springConfig = new Directory.Builder("configuration")
-                .type(DirType.SPRING_CONFIG)
+        Directory springConfig = new Directory.Builder("configuration", DirType.SPRING_CONFIG)
                 .parent(srcBase)
                 .filename(springConfigName)
                 .build();

@@ -30,8 +30,6 @@ public class Directory {
     private String typeName;
 
     private boolean abstractType;
-    @Deprecated
-    private boolean interfaceType;
 
     private DirType type;
 
@@ -117,18 +115,19 @@ public class Directory {
         return abstractType;
     }
 
+    @JsonIgnore
     public boolean isInterfaceType() {
-        return interfaceType;
+        return intType == Type.INTERFACE;
     }
 
     @JsonIgnore
     public boolean isEnumType() {
-        return false;
+        return intType == Type.ENUM;
     }
 
     @JsonIgnore
     public boolean isAnnotationType() {
-        return false;
+        return intType == Type.ANNOTATION;
     }
 
     public DirType getType() {
@@ -181,7 +180,7 @@ public class Directory {
         if (o == null || getClass() != o.getClass()) return false;
         Directory directory = (Directory) o;
         return abstractType == directory.abstractType &&
-                interfaceType == directory.interfaceType &&
+                intType == directory.intType &&
                 id.equals(directory.id) &&
                 name.equals(directory.name) &&
                 Objects.equals(filename, directory.filename) &&
@@ -198,7 +197,7 @@ public class Directory {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, filename, typeName, abstractType, interfaceType, type,
+        return Objects.hash(id, name, filename, typeName, abstractType, intType, type,
                 children, superTypes, dependencies, parameters, text);
     }
 
@@ -220,7 +219,6 @@ public class Directory {
         private String typeName;
 
         private boolean abstractType;
-        private boolean interfaceType;
 
         private DirType type;
         private Directory parent;
@@ -275,7 +273,6 @@ public class Directory {
         public Builder interfaceType() {
             abstractType();
             this.intType = Type.INTERFACE;
-            this.interfaceType = true;
             return this;
         }
 
@@ -356,7 +353,6 @@ public class Directory {
             directory.typeName = this.typeName;
 
             directory.abstractType = this.abstractType;
-            directory.interfaceType = this.interfaceType;
 
             directory.type = this.type;
             directory.parent = this.parent;

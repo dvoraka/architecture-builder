@@ -52,6 +52,8 @@ public class Directory {
     @JsonIgnore
     private Supplier<String> textSupplier;
 
+    private Type intType;
+
 
     private Directory() {
         id = UUID.randomUUID().toString();

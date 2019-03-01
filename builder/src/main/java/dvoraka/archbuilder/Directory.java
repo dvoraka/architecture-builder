@@ -118,6 +118,16 @@ public class Directory {
         return interfaceType;
     }
 
+    @JsonIgnore
+    public boolean isEnumType() {
+        return false;
+    }
+
+    @JsonIgnore
+    public boolean isAnnotationType() {
+        return false;
+    }
+
     public DirType getType() {
         return type;
     }
@@ -256,6 +266,14 @@ public class Directory {
         public Builder interfaceType() {
             abstractType();
             this.interfaceType = true;
+            return this;
+        }
+
+        public Builder enumType() {
+            return this;
+        }
+
+        public Builder annotationType() {
             return this;
         }
 

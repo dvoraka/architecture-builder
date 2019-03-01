@@ -841,9 +841,18 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
         String filename = getFilename(directory);
 
-        return directory.isInterfaceType()
-                ? TypeSpec.interfaceBuilder(filename)
-                : TypeSpec.classBuilder(filename);
+        TypeSpec.Builder builder;
+        if (directory.isInterfaceType()) {
+            builder = TypeSpec.interfaceBuilder(filename);
+        } else if (directory.isEnumType()) {
+            builder = TypeSpec.enumBuilder(filename);
+        } else if (directory.isAnnotationType()) {
+            builder = TypeSpec.annotationBuilder(filename);
+        } else {
+            builder = TypeSpec.classBuilder(filename);
+        }
+
+        return builder;
     }
 
     private String getFilename(Directory directory) {

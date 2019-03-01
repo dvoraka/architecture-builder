@@ -12,7 +12,7 @@ import spock.lang.Specification
 class BaseISpec extends Specification implements JavaHelper, JavaTestingHelper {
 
     @Shared
-    String rootDirName = "testRootDir"
+    String rootDirName = 'testRootDir'
 
     Directory root
     Directory srcRoot

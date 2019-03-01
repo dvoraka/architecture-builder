@@ -49,7 +49,7 @@ class CustomTypeISpec extends BaseISpec {
                     .build()
         when:
             mainGenerator.generate(root)
-            Class<?> clazz = loadClass(getClassName(customType))
+            Class<?> clazz = loadClass(customType.getTypeName())
         then:
             notThrown(Exception)
             isPublicNotAbstract(clazz)
@@ -75,7 +75,7 @@ class CustomTypeISpec extends BaseISpec {
                     .build()
         when:
             mainGenerator.generate(root)
-            Class<?> clazz = loadClass(getClassName(customType))
+            Class<?> clazz = loadClass(customType.getTypeName())
         then:
             notThrown(Exception)
             isPublicNotAbstract(clazz)

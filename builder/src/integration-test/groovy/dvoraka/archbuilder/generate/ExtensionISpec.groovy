@@ -105,15 +105,14 @@ class ExtensionISpec extends BaseISpec {
 
     def "Timer extension"() {
         given:
-            Directory abs = new Directory.Builder("component")
-                    .type(DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('component', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(Timer.class)
                     .build()
             Directory ext = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
-                    .filename("TestTimer")
+                    .filename('TestTimer')
                     .build()
         when:
             mainGenerator.generate(root)
@@ -135,7 +134,7 @@ class ExtensionISpec extends BaseISpec {
             Directory ext = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
                     .superType(abs)
-                    .filename("TestClass1m")
+                    .filename('TestClass1m')
                     .build()
         when:
             mainGenerator.generate(root)
@@ -491,14 +490,12 @@ class ExtensionISpec extends BaseISpec {
     def "ResponseMessage extension"() {
         given:
             Class<?> cls = ResponseMessage
-            Directory dataAbs = new Directory.Builder('')
-                    .type(DirType.ABSTRACT)
+            Directory dataAbs = new Directory.Builder('', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(TestingResultData.class)
                     .parameterTypeClass(BaseException.class)
                     .build()
-            Directory abs = new Directory.Builder('')
-                    .type(DirType.ABSTRACT)
+            Directory abs = new Directory.Builder('', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(cls)
                     .build()

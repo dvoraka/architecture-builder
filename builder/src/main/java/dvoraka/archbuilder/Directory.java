@@ -30,6 +30,7 @@ public class Directory {
     private String typeName;
 
     private boolean abstractType;
+    @Deprecated
     private boolean interfaceType;
 
     private DirType type;
@@ -170,6 +171,10 @@ public class Directory {
         this.textSupplier = textSupplier;
     }
 
+    public Type getIntType() {
+        return intType;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -227,6 +232,8 @@ public class Directory {
         private String text;
         private Supplier<String> textSupplier;
 
+        private Type intType = Type.CLASS;
+
 
         /**
          * @deprecated use {@link #Builder(String, DirType)}
@@ -267,15 +274,18 @@ public class Directory {
 
         public Builder interfaceType() {
             abstractType();
+            this.intType = Type.INTERFACE;
             this.interfaceType = true;
             return this;
         }
 
         public Builder enumType() {
+            this.intType = Type.ENUM;
             return this;
         }
 
         public Builder annotationType() {
+            this.intType = Type.ANNOTATION;
             return this;
         }
 
@@ -357,6 +367,8 @@ public class Directory {
 
             directory.text = this.text;
             directory.textSupplier = this.textSupplier;
+
+            directory.intType = this.intType;
 
             if (parent != null) {
                 parent.addChildren(directory);

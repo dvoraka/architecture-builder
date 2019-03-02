@@ -20,7 +20,7 @@ class NewTypeISpec extends BaseISpec {
                     .build()
         when:
             mainGenerator.generate(root)
-            Class<?> clazz = loadClass(getClassName(newType))
+            Class<?> clazz = loadClass(newType.getTypeName())
         then:
             notThrown(Exception)
             isPublicNotAbstract(clazz)
@@ -37,7 +37,7 @@ class NewTypeISpec extends BaseISpec {
                     .build()
         when:
             mainGenerator.generate(root)
-            Class<?> clazz = loadClass(getClassName(newType))
+            Class<?> clazz = loadClass(newType.getTypeName())
         then:
             notThrown(Exception)
             isPublicNotAbstract(clazz)
@@ -56,7 +56,7 @@ class NewTypeISpec extends BaseISpec {
                     .build()
         when:
             mainGenerator.generate(root)
-            Class<?> clazz = loadClass(getClassName(newType))
+            Class<?> clazz = loadClass(newType.getTypeName())
         then:
             notThrown(Exception)
             isPublicNotAbstract(clazz)
@@ -74,12 +74,13 @@ class NewTypeISpec extends BaseISpec {
                     .build()
         when:
             mainGenerator.generate(root)
-            Class<?> clazz = loadClass(getClassName(newType))
+            Class<?> clazz = loadClass(newType.getTypeName())
         then:
             notThrown(Exception)
             isPublicAbstract(clazz)
             hasNoTypeParameters(clazz)
             hasNoDeclaredMethods(clazz)
+            clazz.isInterface()
     }
 
     def "new parametrized class"() {
@@ -93,7 +94,7 @@ class NewTypeISpec extends BaseISpec {
                     .build()
         when:
             mainGenerator.generate(root)
-            Class<?> clazz = loadClass(getClassName(newType))
+            Class<?> clazz = loadClass(newType.getTypeName())
         then:
             notThrown(Exception)
             isPublicNotAbstract(clazz)
@@ -111,11 +112,30 @@ class NewTypeISpec extends BaseISpec {
                     .build()
         when:
             mainGenerator.generate(root)
-            Class<?> clazz = loadClass(getClassName(newType))
+            Class<?> clazz = loadClass(newType.getTypeName())
         then:
             notThrown(Exception)
             isPublicAbstract(clazz)
             hasNoTypeParameters(clazz)
             hasNoDeclaredMethods(clazz)
+            clazz.isEnum()
+    }
+
+    def "new simple annotation"() {
+        given:
+            Directory newType = new Directory.Builder('newtype', DirType.NEW_TYPE)
+                    .parent(srcBase)
+                    .filename('NewSimpleAnnotation')
+                    .annotationType()
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(newType.getTypeName())
+        then:
+            notThrown(Exception)
+            isPublicAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
+            clazz.isAnnotation()
     }
 }

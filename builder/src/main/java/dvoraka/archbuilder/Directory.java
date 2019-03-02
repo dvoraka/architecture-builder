@@ -331,9 +331,8 @@ public class Directory {
 
         public Builder parameterTypeDir(Directory directory) {
             dependsOn(directory);
-
-            directory.getFilename().orElseThrow(() -> Utils.noFilenameException(directory));
-
+            directory.getFilename()
+                    .orElseThrow(() -> Utils.noFilenameException(directory));
             return parameterTypeName(directory.getTypeName());
         }
 
@@ -344,6 +343,11 @@ public class Directory {
 
         public Builder metadataClass(Class<?> clazz) {
             return metadata(clazz.getName());
+        }
+
+        public Builder metadataDir(Directory directory) {
+            dependsOn(directory);
+            return metadata(directory.getTypeName());
         }
 
         public Directory build() {

@@ -138,4 +138,28 @@ class NewTypeISpec extends BaseISpec {
             hasNoDeclaredMethods(clazz)
             clazz.isAnnotation()
     }
+
+    def "new simple annotation usage"() {
+        given:
+            Directory annotation = new Directory.Builder('annotation', DirType.NEW_TYPE)
+                    .parent(srcBase)
+                    .filename('NewSimpleAnnotation')
+                    .annotationType()
+                    .build()
+
+            Directory cls = new Directory.Builder('newtype', DirType.NEW_TYPE)
+                    .parent(srcBase)
+                    .filename('NewAnnotatedClass')
+                    .metadataDir(annotation)
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(cls.getTypeName())
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
+            annotationCount(clazz) == 0 // not runtime policy
+    }
 }

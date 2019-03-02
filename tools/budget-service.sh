@@ -1,16 +1,26 @@
 #!/usr/bin/env bash
 
 PROJECTS=~/projects
+
+PROJECT=architecture-builder
 SERVICE=budget-service
 
-SERVICE_DIR=${PROJECTS}/architecture-builder/builder/${SERVICE}
+ROOT_DIR=${PROJECTS}/${PROJECT}
+SERVICE_DIR=${ROOT_DIR}/builder/${SERVICE}
 
+
+# generate service
+cd ${ROOT_DIR}
+./gradlew bootRun
+
+cd -
 
 if [ -d "${SERVICE_DIR}" ]
 then
     if [ -d ${SERVICE} ]
     then
-        echo -n "Removing existing $SERVICE directory... "
+        echo
+        echo -n " * Removing existing $SERVICE directory... "
         rm -r ${SERVICE}
         echo "done"
     fi
@@ -22,6 +32,6 @@ fi
 
 cd ${SERVICE}
 
-echo "Starting new service..."
+echo " * Starting new service..."
 
 ./gradlew bootRun

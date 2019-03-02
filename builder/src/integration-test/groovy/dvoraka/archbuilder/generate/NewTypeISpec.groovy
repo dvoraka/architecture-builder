@@ -146,7 +146,6 @@ class NewTypeISpec extends BaseISpec {
                     .filename('NewSimpleAnnotation')
                     .annotationType()
                     .build()
-
             Directory cls = new Directory.Builder('newtype', DirType.NEW_TYPE)
                     .parent(srcBase)
                     .filename('NewAnnotatedClass')

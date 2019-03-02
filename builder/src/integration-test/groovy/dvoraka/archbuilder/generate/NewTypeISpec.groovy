@@ -4,6 +4,7 @@ import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import spock.lang.Ignore
 
 class NewTypeISpec extends BaseISpec {
 
@@ -97,6 +98,24 @@ class NewTypeISpec extends BaseISpec {
             notThrown(Exception)
             isPublicNotAbstract(clazz)
             hasTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
+    }
+
+    @Ignore("WIP - missing enum constants")
+    def "new simple enum"() {
+        given:
+            Directory newType = new Directory.Builder('newtype', DirType.NEW_TYPE)
+                    .parent(srcBase)
+                    .filename('NewSimpleEnum')
+                    .enumType()
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(newType))
+        then:
+            notThrown(Exception)
+            isPublicAbstract(clazz)
+            hasNoTypeParameters(clazz)
             hasNoDeclaredMethods(clazz)
     }
 }

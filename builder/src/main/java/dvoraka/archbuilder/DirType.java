@@ -25,6 +25,8 @@ public enum DirType {
     NEW_TYPE,
     SPRING_CONFIG,
 
+    TEXT,
+
     ABSTRACT(true, false),
     IMPL;
 

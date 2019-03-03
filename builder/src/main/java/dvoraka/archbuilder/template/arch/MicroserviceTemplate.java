@@ -253,6 +253,20 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .filename(settingsGradleTemplate.getFilename())
                 .text(settingsGradleTemplate.getConfig())
                 .build();
+
+        // gitignore file
+        String gitignoreText = TextBuilder.create()
+                .addLine("# Gradle")
+                .addLine(".gradle/")
+                .addLine()
+                .addLine("# Idea")
+                .addLine(".idea/")
+                .getText();
+        Directory gitignore = new Directory.Builder("", DirType.TEXT)
+                .parent(root)
+                .filename(".gitignore")
+                .text(gitignoreText)
+                .build();
     }
 
     @Override

@@ -80,6 +80,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         configuration.put(DirType.SPRING_CONFIG, this::genSpringConfigType);
         configuration.put(DirType.SRC_PROPERTIES, this::genSrcProps);
         configuration.put(DirType.SRC_ROOT, this::processSrcRoot);
+        configuration.put(DirType.TEXT, this::genText);
 
         return configuration;
     }
@@ -695,6 +696,11 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 }
             }
         }
+    }
+
+    private void genText(Directory directory) {
+        // props will be probably removed
+        genSrcProps(directory);
     }
 
     private void genSrcProps(Directory directory) {

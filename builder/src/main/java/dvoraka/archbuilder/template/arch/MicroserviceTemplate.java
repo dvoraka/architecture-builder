@@ -12,6 +12,7 @@ import dvoraka.archbuilder.template.config.ConfigurationTemplate;
 import dvoraka.archbuilder.template.config.SettingsGradleTemplate;
 import dvoraka.archbuilder.template.source.SourceTemplate;
 import dvoraka.archbuilder.template.source.SpringBootApplicationTemplate;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -63,7 +64,6 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .parent(srcBaseAbs)
                 .typeClass(superService)
                 .build();
-
         String serviceFullName = serviceName + "Service";
         Directory.Builder serviceBuilder = new Directory.Builder("service", DirType.SERVICE)
                 .parent(srcBase)
@@ -74,7 +74,6 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
         }
         Directory service = serviceBuilder
                 .build();
-
         String serviceImplFullName = "Default" + serviceFullName;
         Directory serviceImpl = new Directory.Builder("service", DirType.SERVICE_IMPL)
                 .parent(srcBase)
@@ -87,7 +86,6 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .parent(srcBase)
                 .typeClass(baseException)
                 .build();
-
         String exceptionName = serviceName + "Exception";
         Directory exception = new Directory.Builder("exception", DirType.IMPL)
                 .parent(srcBase)
@@ -100,7 +98,6 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .parent(srcBase)
                 .typeClass(netConfig.getBaseResultData())
                 .build();
-
         String dataName = serviceName + "Data";
         Directory data = new Directory.Builder("data", DirType.IMPL)
                 .parent(srcBase)
@@ -114,7 +111,6 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .parent(srcBase)
                 .typeClass(netConfig.getResponseBaseMessage())
                 .build();
-
         String responseMessageName = serviceName + "ResponseMessage";
         Directory responseMessage = new Directory.Builder(MESSAGE_DIR, DirType.IMPL)
                 .parent(srcBase)
@@ -123,12 +119,10 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .parameterTypeDir(exception)
                 .filename(responseMessageName)
                 .build();
-
         Directory requestMessageAbs = new Directory.Builder("", DirType.ABSTRACT)
                 .parent(srcBase)
                 .typeClass(netConfig.getRequestBaseMessage())
                 .build();
-
         String requestMessageName = serviceName + "Message";
         Directory requestMessage = new Directory.Builder(MESSAGE_DIR, DirType.IMPL)
                 .parent(srcBase)
@@ -145,12 +139,12 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .parent(srcBase)
                 .typeClass(superServer)
                 .build();
-
         String serverName = serviceName + "Server";
         Directory server = new Directory.Builder("server", DirType.IMPL)
                 .parent(srcBase)
                 .superType(serverAbs)
                 .filename(serverName)
+                .metadataClass(Service.class)
                 .build();
 
         // network components
@@ -158,12 +152,10 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .parent(srcBase)
                 .typeClass(netConfig.getSuperNetComponent())
                 .build();
-
         Directory networkReceiverAbs = new Directory.Builder("", DirType.ABSTRACT)
                 .parent(srcBase)
                 .typeClass(netConfig.getSuperNetReceiver())
                 .build();
-
         String networkComponentName = serviceName + "NetComponent";
         Directory serviceNetworkComponent = new Directory.Builder("net", DirType.IMPL)
                 .parent(srcBase)
@@ -175,10 +167,8 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .parameterTypeDir(exception)
                 .filename(networkComponentName)
                 .build();
-
         Directory baseNetComponentAbs = Utils.createAbstractDirFor(
                 netConfig.getBaseNetComponent(), srcBase);
-
         String netAdapterName = serviceName + "NetAdapter";
         Directory serviceNetAdapter = new Directory.Builder("net", DirType.IMPL)
                 .parent(srcBase)
@@ -190,7 +180,6 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .parameterTypeDir(exception)
                 .filename(netAdapterName)
                 .build();
-
         String networkReceiverName = serviceName + "NetReceiver";
         Directory networkReceiver = new Directory.Builder("net", DirType.IMPL)
                 .parent(srcBase)
@@ -199,7 +188,6 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .parameterTypeDir(requestMessage)
                 .filename(networkReceiverName)
                 .build();
-
         String networkResponseReceiverName = serviceName + "NetResponseReceiver";
         Directory networkResponseReceiver = new Directory.Builder("net", DirType.IMPL)
                 .parent(srcBase)
@@ -254,7 +242,6 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .filename(buildGradleTemplate.getFilename())
                 .text(buildGradleTemplate.getConfig())
                 .build();
-
         ConfigurationTemplate settingsGradleTemplate = new SettingsGradleTemplate("Project1");
         Directory settingsGradle = new Directory.Builder("", DirType.BUILD_CONFIG)
                 .parent(root)

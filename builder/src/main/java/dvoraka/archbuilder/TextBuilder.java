@@ -9,6 +9,10 @@ public class TextBuilder {
         builder = new StringBuilder();
     }
 
+    public static TextBuilder create() {
+        return new TextBuilder();
+    }
+
     public TextBuilder addLine() {
         builder.append("\n");
         return this;

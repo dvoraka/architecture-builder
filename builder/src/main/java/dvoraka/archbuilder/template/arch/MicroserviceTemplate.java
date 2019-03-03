@@ -2,6 +2,7 @@ package dvoraka.archbuilder.template.arch;
 
 import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;
+import dvoraka.archbuilder.TextBuilder;
 import dvoraka.archbuilder.exception.GeneratorException;
 import dvoraka.archbuilder.generate.JavaUtils;
 import dvoraka.archbuilder.generate.Utils;
@@ -198,10 +199,14 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .build();
 
         // application properties
+        String propertiesText = TextBuilder.create()
+                .addLine("prop1=value")
+                .addLine("prop2=value2")
+                .getText();
         Directory srcProps = new Directory.Builder("src/main/resources", DirType.SRC_PROPERTIES)
                 .parent(root)
                 .filename("application.properties")
-                .text("prop1=value\nprop2=value2\n")
+                .text(propertiesText)
                 .build();
 
         // application

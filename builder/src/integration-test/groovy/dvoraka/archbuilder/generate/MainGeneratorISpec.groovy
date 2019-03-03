@@ -19,8 +19,7 @@ class MainGeneratorISpec extends BaseISpec {
 
     def "abstract Map service"() {
         given:
-            Directory abstractMapService = new Directory.Builder('service')
-                    .type(DirType.SERVICE_ABSTRACT)
+            Directory abstractMapService = new Directory.Builder('service', DirType.SERVICE_ABSTRACT)
                     .parent(root)
                     .typeName("java.util.Map")
                     .build()
@@ -32,8 +31,7 @@ class MainGeneratorISpec extends BaseISpec {
 
     def "abstract List"() {
         given:
-            Directory abstractList = new Directory.Builder('component')
-                    .type(DirType.ABSTRACT)
+            Directory abstractList = new Directory.Builder('component', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeName("java.util.List")
                     .build()
@@ -45,8 +43,7 @@ class MainGeneratorISpec extends BaseISpec {
 
     def "src properties"() {
         given:
-            Directory srcProps = new Directory.Builder('src/main/resources')
-                    .type(DirType.SRC_PROPERTIES)
+            Directory srcProps = new Directory.Builder('src/main/resources', DirType.SRC_PROPERTIES)
                     .parent(root)
                     .filename("application.properties")
                     .text("prop1=value\nprop2=value2\n")
@@ -60,8 +57,7 @@ class MainGeneratorISpec extends BaseISpec {
 
     def "build config"() {
         given:
-            Directory buildConfig = new Directory.Builder('')
-                    .type(DirType.BUILD_CONFIG)
+            Directory buildConfig = new Directory.Builder('', DirType.BUILD_CONFIG)
                     .parent(root)
                     .filename("build.gradle")
                     .text("apply plugin: 'java'")

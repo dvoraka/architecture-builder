@@ -233,20 +233,14 @@ public class Directory {
         private Type intType = Type.CLASS;
 
 
-        /**
-         * @deprecated use {@link #Builder(String, DirType)}
-         */
-        public Builder(String name) {
+        public Builder(String name, DirType dirType) {
             this.name = name;
+            this.type = dirType;
+
             superTypes = new ArrayList<>();
             dependencies = new ArrayList<>();
             parameters = new ArrayList<>();
             metadata = new ArrayList<>();
-        }
-
-        public Builder(String name, DirType dirType) {
-            this(name);
-            this.type = dirType;
         }
 
         public Builder filename(String filename) {

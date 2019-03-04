@@ -34,7 +34,7 @@ public class App {
     @Autowired
     private Generator mainGenerator;
     @Autowired
-    SpringConfigGenerator configGenerator;
+    private SpringConfigGenerator configGenerator;
 
 
     public static void main(String[] args) {
@@ -90,7 +90,7 @@ public class App {
 
     @Profile("test")
     @Bean
-    Generator mainGenerator(DirService dirService, LangGenerator langGenerator) {
+    public Generator mainGenerator(DirService dirService, LangGenerator langGenerator) {
         MainGenerator mainGenerator = new MainGenerator(dirService, langGenerator);
         mainGenerator.setRemoveClasses(false);
 

@@ -27,9 +27,6 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
     public static final String MESSAGE_DIR = "data/message";
 
     private Directory root;
-    private Directory srcRoot;
-    private Directory srcBase;
-    private Directory srcBaseAbs;
 
 
     public MicroserviceTemplate(
@@ -47,17 +44,17 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .parent(null)
                 .build();
 
-        srcRoot = new Directory.Builder(JAVA_SRC_DIR, DirType.SRC_ROOT)
+        Directory srcRoot = new Directory.Builder(JAVA_SRC_DIR, DirType.SRC_ROOT)
                 .parent(root)
                 .build();
 
         String pkgPath = JavaUtils.pkg2path(packageName);
-        srcBase = new Directory.Builder(pkgPath, DirType.SRC_BASE)
+        Directory srcBase = new Directory.Builder(pkgPath, DirType.SRC_BASE)
                 .parent(srcRoot)
                 .build();
 
         String absPkgPath = "";
-        srcBaseAbs = new Directory.Builder(absPkgPath, DirType.SRC_BASE_ABSTRACT)
+        Directory srcBaseAbs = new Directory.Builder(absPkgPath, DirType.SRC_BASE_ABSTRACT)
                 .parent(root)
                 .build();
 

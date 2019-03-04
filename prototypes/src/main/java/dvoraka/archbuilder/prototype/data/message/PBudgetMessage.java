@@ -27,5 +27,6 @@ public class PBudgetMessage implements PMessageInterface<PData> {
     }
 
     public void customMethod() {
+        // empty
     }
 }

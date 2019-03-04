@@ -26,5 +26,6 @@ public class PInfoMessage implements PMessageInterface2 {
     }
 
     public void customMethod() {
+        // empty
     }
 }

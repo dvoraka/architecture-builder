@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import dvoraka.archbuilder.exception.GeneratorException;
 import dvoraka.archbuilder.generate.JavaUtils;
 import dvoraka.archbuilder.generate.Utils;
 
@@ -91,7 +92,7 @@ public class Directory {
     }
 
     @JsonIgnore
-    boolean isBase() {
+    public boolean isBase() {
         return type.isBase();
     }
 
@@ -308,7 +309,7 @@ public class Directory {
 
         public Builder dependsOn(Directory directory) {
             if (type == DirType.SPRING_CONFIG || directory.getType() == DirType.SPRING_CONFIG) {
-                throw new RuntimeException("Spring config must not have any dependencies.");
+                throw new GeneratorException("Spring config must not have any dependencies.");
             }
             dependencies.add(directory);
             return this;

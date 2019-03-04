@@ -13,6 +13,7 @@ import dvoraka.archbuilder.template.config.ConfigurationTemplate;
 import dvoraka.archbuilder.template.config.SettingsGradleTemplate;
 import dvoraka.archbuilder.template.source.SourceTemplate;
 import dvoraka.archbuilder.template.source.SpringBootApplicationTemplate;
+import dvoraka.archbuilder.template.text.DefaultGitignoreTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -255,13 +256,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .build();
 
         // gitignore file
-        String gitignoreText = TextBuilder.create()
-                .addLine("# Gradle")
-                .addLine(".gradle/")
-                .addLine()
-                .addLine("# Idea")
-                .addLine(".idea/")
-                .getText();
+        String gitignoreText = new DefaultGitignoreTemplate().getText();
         Directory gitignore = new Directory.Builder("", DirType.TEXT)
                 .parent(root)
                 .filename(".gitignore")

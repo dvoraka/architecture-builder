@@ -34,6 +34,11 @@ is usually very similar and you only need to choose the name of the application.
 
 It's a template for any configuration, like build configuration. The templates are used in Directories.
 
+### Text template
+
+Template for any text based data. It could be used so far simple text builder to build dynamic text templates.
+Used with Directories.
+
 ## Examples
 
 ### Micro-service template
@@ -41,7 +46,7 @@ It's a template for any configuration, like build configuration. The templates a
 It creates the whole micro-service skeleton based on known abstraction.
 
 Starting abstraction is (from sample package in the project):
-```
+```text
 microservice/
 ├── data
 │   ├── BaseException.java
@@ -73,7 +78,7 @@ microservice/
 
 And generated project structure:
 
-```
+```text
 budget-service/
 ├── build.gradle
 ├── gradle

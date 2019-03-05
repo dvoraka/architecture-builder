@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/dvoraka/architecture-builder.svg?branch=master)](https://travis-ci.org/dvoraka/architecture-builder)
 [![codecov](https://codecov.io/gh/dvoraka/architecture-builder/branch/master/graph/badge.svg)](https://codecov.io/gh/dvoraka/architecture-builder)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/87c3fd4174c74af7b7a35f717d6c9afe)](https://www.codacy.com/app/dvoraka/architecture-builder?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=dvoraka/architecture-builder&amp;utm_campaign=Badge_Grade)
 
 It's an application/project builder from prebuilt structures. You can use smaller blocks to build your application
 dynamically (generate source code and all other stuff). There are high-level Java templates for building the whole

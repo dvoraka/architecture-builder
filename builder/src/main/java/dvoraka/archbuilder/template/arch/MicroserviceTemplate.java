@@ -177,6 +177,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .parameterTypeDir(responseMessage)
                 .parameterTypeDir(data)
                 .parameterTypeDir(exception)
+                .metadataClass(Service.class)
                 .filename(netAdapterName)
                 .build();
         String networkReceiverName = serviceName + "NetReceiver";

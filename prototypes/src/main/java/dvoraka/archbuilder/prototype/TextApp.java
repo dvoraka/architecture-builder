@@ -6,6 +6,7 @@ public class TextApp {
 
         String var1Name = "var1";
         String var2Name = "var2";
+//        String var2Name = ".*var2"; // name must be checked for special characters
 
         String var1Value = "VALUE";
         String var2Value = "ANOTHER VALUE";

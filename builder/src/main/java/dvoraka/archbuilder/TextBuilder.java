@@ -30,6 +30,8 @@ public class TextBuilder {
     }
 
     public TextBuilder variable(String varName, String varValue) {
+        checkSpecialChars(varName);
+        checkSpecialChars(varValue);
         variables.put(varName, varValue);
         return this;
     }
@@ -41,9 +43,14 @@ public class TextBuilder {
     public String render() {
         String newText = getText();
         for (Map.Entry<String, String> varEntry : variables.entrySet()) {
-            newText = newText.replaceAll("\\$\\{" + varEntry.getKey() + "}", varEntry.getValue());
+            String varRegex = "\\$\\{" + varEntry.getKey() + "}";
+            newText = newText.replaceAll(varRegex, varEntry.getValue());
         }
 
         return newText;
+    }
+
+    private void checkSpecialChars(String string) {
+        // \.[]{}()<>*+-=!?^$|
     }
 }

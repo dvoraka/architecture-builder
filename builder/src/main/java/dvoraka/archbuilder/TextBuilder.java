@@ -1,12 +1,17 @@
 package dvoraka.archbuilder;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class TextBuilder {
 
     private final StringBuilder builder;
+    private final Map<String, String> variables;
 
 
     public TextBuilder() {
         builder = new StringBuilder();
+        variables = new HashMap<>();
     }
 
     public static TextBuilder create() {
@@ -24,7 +29,21 @@ public class TextBuilder {
         return this;
     }
 
+    public TextBuilder variable(String varName, String varValue) {
+        variables.put(varName, varValue);
+        return this;
+    }
+
     public String getText() {
         return builder.toString();
+    }
+
+    public String render() {
+        String newText = getText();
+        for (Map.Entry<String, String> varEntry : variables.entrySet()) {
+            newText = newText.replaceAll("\\$\\{" + varEntry.getKey() + "}", varEntry.getValue());
+        }
+
+        return newText;
     }
 }

@@ -234,9 +234,15 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .toTypeDir(server)
                 .codeTemplate(configGenerator::simpleReturn)
                 .build();
+        BeanMapping adapterBeanMapping = new BeanMapping.Builder(uncapitalize(networkComponentName))
+                .typeDir(serviceNetworkComponent)
+                .toTypeDir(serviceNetAdapter)
+                .codeTemplate(configGenerator::simpleReturn)
+                .build();
 
         beanMappings.add(serviceBeanMapping);
         beanMappings.add(serverBeanMapping);
+        beanMappings.add(adapterBeanMapping);
 
         String springConfigName = serviceName + "Config";
         Directory springConfig = new Directory.Builder("configuration", DirType.SPRING_CONFIG)

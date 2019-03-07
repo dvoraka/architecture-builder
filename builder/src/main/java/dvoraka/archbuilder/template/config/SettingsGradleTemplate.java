@@ -1,5 +1,7 @@
 package dvoraka.archbuilder.template.config;
 
+import dvoraka.archbuilder.TextBuilder;
+
 public class SettingsGradleTemplate implements ConfigurationTemplate {
 
     private static final String FILENAME = "settings.gradle";
@@ -18,15 +20,10 @@ public class SettingsGradleTemplate implements ConfigurationTemplate {
 
     @Override
     public String getConfig() {
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("rootProject.name = ");
-        sb.append("'");
-        sb.append(getProjectName());
-        sb.append("'");
-        sb.append("\n");
-
-        return sb.toString();
+        return new TextBuilder()
+                .addLine("rootProject.name = '${name}'")
+                .variable("name", getProjectName())
+                .render();
     }
 
     public String getProjectName() {

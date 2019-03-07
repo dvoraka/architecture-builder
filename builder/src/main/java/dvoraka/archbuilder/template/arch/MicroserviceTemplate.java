@@ -12,7 +12,7 @@ import dvoraka.archbuilder.template.config.BuildGradleTemplate;
 import dvoraka.archbuilder.template.config.ConfigurationTemplate;
 import dvoraka.archbuilder.template.config.SettingsGradleTemplate;
 import dvoraka.archbuilder.template.source.SourceTemplate;
-import dvoraka.archbuilder.template.source.SpringBootApplicationTemplate;
+import dvoraka.archbuilder.template.source.SpringBootApp2Template;
 import dvoraka.archbuilder.template.text.DefaultGitignoreTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -212,7 +212,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
 
         // application
         String appClassName = serviceName + "App";
-        SourceTemplate sourceTemplate = new SpringBootApplicationTemplate(appClassName, packageName);
+        SourceTemplate sourceTemplate = new SpringBootApp2Template(appClassName, packageName);
         Directory application = new Directory.Builder("", DirType.CUSTOM_TYPE)
                 .parent(srcBase)
                 .filename(appClassName)

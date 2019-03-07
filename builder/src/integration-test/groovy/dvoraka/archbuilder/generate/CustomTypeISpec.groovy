@@ -7,7 +7,7 @@ import com.squareup.javapoet.TypeSpec
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
 import dvoraka.archbuilder.template.source.SourceTemplate
-import dvoraka.archbuilder.template.source.SpringBootApplicationTemplate
+import dvoraka.archbuilder.template.source.SpringBootAppTemplate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -63,7 +63,7 @@ class CustomTypeISpec extends BaseISpec {
             String path = srcBase.getPackageName()
             String packageName = JavaUtils.path2pkg(path)
 
-            SourceTemplate template = new SpringBootApplicationTemplate(
+            SourceTemplate template = new SpringBootAppTemplate(
                     className,
                     packageName
             )

@@ -2,6 +2,8 @@ package dvoraka.archbuilder;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TextBuilder {
 
@@ -30,8 +32,6 @@ public class TextBuilder {
     }
 
     public TextBuilder variable(String varName, String varValue) {
-        checkSpecialChars(varName);
-        checkSpecialChars(varValue);
         variables.put(varName, varValue);
         return this;
     }
@@ -43,14 +43,11 @@ public class TextBuilder {
     public String render() {
         String newText = getText();
         for (Map.Entry<String, String> varEntry : variables.entrySet()) {
-            String varRegex = "\\$\\{" + varEntry.getKey() + "}";
-            newText = newText.replaceAll(varRegex, varEntry.getValue());
+            String varRegex = "\\$\\{" + Pattern.quote(varEntry.getKey()) + "}";
+            String varValue = Matcher.quoteReplacement(varEntry.getValue());
+            newText = newText.replaceAll(varRegex, varValue);
         }
 
         return newText;
-    }
-
-    private void checkSpecialChars(String string) {
-        // \.[]{}()<>*+-=!?^$|
     }
 }

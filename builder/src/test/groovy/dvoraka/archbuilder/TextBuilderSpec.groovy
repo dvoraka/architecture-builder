@@ -29,12 +29,12 @@ class TextBuilderSpec extends Specification {
             builder
                     .addLine('line 1')
                     .addLine()
-                    .addLine('line 3 with variable 1: ${var1}')
+                    .addLine('line 3 with variable 1: ${.var1}')
                     .addLine()
                     .addLine('line 5')
-                    .addLine('line 6 with variable 2: ${var2} and variable 1: ${var1}')
-                    .variable('var1', 'house')
-                    .variable('var2', 'car')
+                    .addLine('line 6 with variable 2: ${$.var*} and variable 1: ${.var1}')
+                    .variable('.var1', 'house$$')
+                    .variable('$.var*', 'car*')
         expect:
             println 'original:'
             println builder.getText()

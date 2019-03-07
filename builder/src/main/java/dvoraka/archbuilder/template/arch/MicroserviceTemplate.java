@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
+import static dvoraka.archbuilder.generate.Utils.uncapitalize;
+
 public class MicroserviceTemplate implements ArchitectureTemplate {
 
     public static final String JAVA_SRC_DIR = "src/main/java";
@@ -199,8 +201,8 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
 
         // application properties
         String propertiesText = TextBuilder.create()
-                .addLine("prop1=value")
-                .addLine("prop2=value2")
+                .addLine("# Logging")
+                .addLine("logging.level.root=info")
                 .getText();
         Directory srcProps = new Directory.Builder("src/main/resources", DirType.SRC_PROPERTIES)
                 .parent(root)
@@ -227,8 +229,14 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
                 .toTypeDir(serviceImpl)
                 .codeTemplate(configGenerator::simpleReturn)
                 .build();
+        BeanMapping serverBeanMapping = new BeanMapping.Builder(uncapitalize(serverName))
+                .typeDir(server)
+                .toTypeDir(server)
+                .codeTemplate(configGenerator::simpleReturn)
+                .build();
 
         beanMappings.add(serviceBeanMapping);
+        beanMappings.add(serverBeanMapping);
 
         String springConfigName = serviceName + "Config";
         Directory springConfig = new Directory.Builder("configuration", DirType.SPRING_CONFIG)

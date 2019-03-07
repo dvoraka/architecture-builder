@@ -5,6 +5,7 @@ import dvoraka.archbuilder.Directory;
 import dvoraka.archbuilder.exception.GeneratorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -62,5 +63,9 @@ public final class Utils {
 
     public static GeneratorException noFilenameException(Directory directory) {
         return new GeneratorException("No filename for: " + directory);
+    }
+
+    public static String uncapitalize(String string) {
+        return StringUtils.uncapitalize(string);
     }
 }

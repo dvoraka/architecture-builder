@@ -8,8 +8,8 @@ import dvoraka.archbuilder.generate.JavaUtils;
 import dvoraka.archbuilder.generate.Utils;
 import dvoraka.archbuilder.springconfig.BeanMapping;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
+import dvoraka.archbuilder.template.TemplateHelper;
 import dvoraka.archbuilder.template.config.BuildGradleTemplate;
-import dvoraka.archbuilder.template.config.ConfigurationTemplate;
 import dvoraka.archbuilder.template.config.SettingsGradleTemplate;
 import dvoraka.archbuilder.template.source.SourceTemplate;
 import dvoraka.archbuilder.template.source.SpringBootApp2Template;
@@ -23,7 +23,7 @@ import java.util.function.Supplier;
 
 import static dvoraka.archbuilder.generate.Utils.uncapitalize;
 
-public class MicroserviceTemplate implements ArchitectureTemplate {
+public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelper {
 
     public static final String JAVA_SRC_DIR = "src/main/java";
     public static final String MESSAGE_DIR = "data/message";
@@ -254,26 +254,11 @@ public class MicroserviceTemplate implements ArchitectureTemplate {
         springConfig.setTextSupplier(callback);
 
         // build configuration
-        ConfigurationTemplate buildGradleTemplate = new BuildGradleTemplate();
-        Directory buildGradle = new Directory.Builder("", DirType.BUILD_CONFIG)
-                .parent(root)
-                .filename(buildGradleTemplate.getFilename())
-                .text(buildGradleTemplate.getConfig())
-                .build();
-        ConfigurationTemplate settingsGradleTemplate = new SettingsGradleTemplate("Project1");
-        Directory settingsGradle = new Directory.Builder("", DirType.BUILD_CONFIG)
-                .parent(root)
-                .filename(settingsGradleTemplate.getFilename())
-                .text(settingsGradleTemplate.getConfig())
-                .build();
+        buildGradle(root, new BuildGradleTemplate());
+        settingsGradle(root, new SettingsGradleTemplate("Budget"));
 
         // gitignore file
-        String gitignoreText = new DefaultGitignoreTemplate().getText();
-        Directory gitignore = new Directory.Builder("", DirType.TEXT)
-                .parent(root)
-                .filename(".gitignore")
-                .text(gitignoreText)
-                .build();
+        gitignore(root, new DefaultGitignoreTemplate());
     }
 
     @Override

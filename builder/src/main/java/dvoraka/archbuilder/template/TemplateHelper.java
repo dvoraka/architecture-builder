@@ -7,20 +7,20 @@ import dvoraka.archbuilder.template.text.TextTemplate;
 
 public interface TemplateHelper {
 
-    default Directory buildGradle(Directory root, ConfigurationTemplate buildGradle) {
+    default Directory configuration(Directory parent, ConfigurationTemplate template) {
         return new Directory.Builder("", DirType.BUILD_CONFIG)
-                .parent(root)
-                .filename(buildGradle.getFilename())
-                .text(buildGradle.getConfig())
+                .parent(parent)
+                .filename(template.getFilename())
+                .text(template.getConfig())
                 .build();
     }
 
+    default Directory buildGradle(Directory root, ConfigurationTemplate buildGradle) {
+        return configuration(root, buildGradle);
+    }
+
     default Directory settingsGradle(Directory root, ConfigurationTemplate settingsGradle) {
-        return new Directory.Builder("", DirType.BUILD_CONFIG)
-                .parent(root)
-                .filename(settingsGradle.getFilename())
-                .text(settingsGradle.getConfig())
-                .build();
+        return configuration(root, settingsGradle);
     }
 
     default Directory gitignore(Directory root, TextTemplate textTemplate) {

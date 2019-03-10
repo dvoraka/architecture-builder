@@ -204,7 +204,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
                 .addLine("# Logging")
                 .addLine("logging.level.root=info")
                 .getText();
-        Directory srcProps = new Directory.Builder("src/main/resources", DirType.SRC_PROPERTIES)
+        Directory srcProps = new Directory.Builder("src/main/resources", DirType.TEXT)
                 .parent(root)
                 .filename("application.properties")
                 .text(propertiesText)

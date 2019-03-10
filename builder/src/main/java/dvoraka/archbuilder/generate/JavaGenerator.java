@@ -78,7 +78,6 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         configuration.put(DirType.SERVICE, this::genService);
         configuration.put(DirType.SERVICE_IMPL, this::genServiceImpl);
         configuration.put(DirType.SPRING_CONFIG, this::genSpringConfigType);
-        configuration.put(DirType.SRC_PROPERTIES, this::genSrcProps);
         configuration.put(DirType.SRC_ROOT, this::processSrcRoot);
         configuration.put(DirType.TEXT, this::genText);
 
@@ -699,13 +698,8 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
     }
 
     private void genText(Directory directory) {
-        // props will be probably removed
-        genSrcProps(directory);
-    }
-
-    private void genSrcProps(Directory directory) {
         String filename = directory.getFilename()
-                .orElseThrow(() -> new RuntimeException("No filename for source properties!"));
+                .orElseThrow(() -> new RuntimeException("No filename for the text file!"));
 
         String text = directory.getText() != null ? directory.getText() : "";
 

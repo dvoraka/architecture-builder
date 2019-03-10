@@ -2,6 +2,7 @@ package dvoraka.archbuilder.generate
 
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
+import dvoraka.archbuilder.TextBuilder
 import dvoraka.archbuilder.service.DirService
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
@@ -43,10 +44,14 @@ class MainGeneratorISpec extends BaseISpec {
 
     def "src properties"() {
         given:
-            Directory srcProps = new Directory.Builder('src/main/resources', DirType.SRC_PROPERTIES)
+            String text = new TextBuilder()
+                    .addLine('prop1=value')
+                    .addLine('prop2=value2')
+                    .getText()
+            Directory srcProps = new Directory.Builder('src/main/resources', DirType.TEXT)
                     .parent(root)
-                    .filename("application.properties")
-                    .text("prop1=value\nprop2=value2\n")
+                    .filename('application.properties')
+                    .text(text)
                     .build()
         when:
             mainGenerator.generate(root)

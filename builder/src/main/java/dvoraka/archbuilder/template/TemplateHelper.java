@@ -2,32 +2,27 @@ package dvoraka.archbuilder.template;
 
 import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;
-import dvoraka.archbuilder.template.config.ConfigurationTemplate;
-import dvoraka.archbuilder.template.text.TextTemplate;
+import dvoraka.archbuilder.template.config.TextFileTemplate;
 
 public interface TemplateHelper {
 
-    default Directory configuration(Directory parent, ConfigurationTemplate template) {
-        return new Directory.Builder("", DirType.BUILD_CONFIG)
+    default Directory textFile(Directory parent, TextFileTemplate template) {
+        return new Directory.Builder(template.getPath(), DirType.BUILD_CONFIG)
                 .parent(parent)
                 .filename(template.getFilename())
-                .text(template.getConfig())
+                .text(template.getText())
                 .build();
     }
 
-    default Directory buildGradle(Directory root, ConfigurationTemplate buildGradle) {
-        return configuration(root, buildGradle);
+    default Directory buildGradle(Directory root, TextFileTemplate buildGradle) {
+        return textFile(root, buildGradle);
     }
 
-    default Directory settingsGradle(Directory root, ConfigurationTemplate settingsGradle) {
-        return configuration(root, settingsGradle);
+    default Directory settingsGradle(Directory root, TextFileTemplate settingsGradle) {
+        return textFile(root, settingsGradle);
     }
 
-    default Directory gitignore(Directory root, TextTemplate textTemplate) {
-        return new Directory.Builder("", DirType.TEXT)
-                .parent(root)
-                .filename(".gitignore")
-                .text(textTemplate.getText())
-                .build();
+    default Directory gitignore(Directory root, TextFileTemplate template) {
+        return textFile(root, template);
     }
 }

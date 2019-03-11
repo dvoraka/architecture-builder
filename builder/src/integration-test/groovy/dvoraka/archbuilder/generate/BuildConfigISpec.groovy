@@ -4,8 +4,8 @@ import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
 import dvoraka.archbuilder.service.DirService
 import dvoraka.archbuilder.template.config.BuildGradleTemplate
-import dvoraka.archbuilder.template.config.ConfigurationTemplate
 import dvoraka.archbuilder.template.config.SettingsGradleTemplate
+import dvoraka.archbuilder.template.config.TextFileTemplate
 import org.springframework.beans.factory.annotation.Autowired
 
 import java.nio.file.Files
@@ -26,7 +26,7 @@ class BuildConfigISpec extends BaseISpec {
             Directory buildGradle = new Directory.Builder('', DirType.BUILD_CONFIG)
                     .parent(root)
                     .filename(template.getFilename())
-                    .text(template.getConfig())
+                    .text(template.getText())
                     .build()
         when:
             mainGenerator.generate(root)
@@ -37,12 +37,12 @@ class BuildConfigISpec extends BaseISpec {
 
     def "Gradle settings.gradle generation"() {
         given:
-            ConfigurationTemplate template = new SettingsGradleTemplate('TestProject1')
+            TextFileTemplate template = new SettingsGradleTemplate('TestProject1')
 
             Directory settingsGradle = new Directory.Builder('', DirType.BUILD_CONFIG)
                     .parent(root)
                     .filename(template.getFilename())
-                    .text(template.getConfig())
+                    .text(template.getText())
                     .build()
         when:
             mainGenerator.generate(root)

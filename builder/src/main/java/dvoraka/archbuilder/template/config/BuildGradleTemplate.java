@@ -3,7 +3,7 @@ package dvoraka.archbuilder.template.config;
 import java.util.Collections;
 import java.util.Set;
 
-public class BuildGradleTemplate implements ConfigurationTemplate {
+public class BuildGradleTemplate implements TextFileTemplate {
 
     private static final String FILENAME = "build.gradle";
 
@@ -24,7 +24,7 @@ public class BuildGradleTemplate implements ConfigurationTemplate {
     }
 
     @Override
-    public String getConfig() {
+    public String getText() {
 
         // POC stuff only
 
@@ -54,6 +54,11 @@ public class BuildGradleTemplate implements ConfigurationTemplate {
         sb.append("}\n\n");
 
         return sb.toString();
+    }
+
+    @Override
+    public String getPath() {
+        return "";
     }
 
     public Set<String> getPlugins() {

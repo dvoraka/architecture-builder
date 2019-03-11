@@ -31,6 +31,10 @@ public final class JavaUtils {
         return path.replace(File.separatorChar, '.');
     }
 
+    public static String javaSuffix(String filename) {
+        return filename + ".java";
+    }
+
     public static int compileSource(String pathString) {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         log.info("Compiling source: {}...", pathString);

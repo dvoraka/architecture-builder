@@ -40,6 +40,11 @@ public class SpringBootAppTemplate implements SourceTemplate {
         return javaFile.toString();
     }
 
+    @Override
+    public String getTypeName() {
+        return getClassName();
+    }
+
     protected MethodSpec mainMethodSpec(String argsName) {
         return MethodSpec.methodBuilder("main")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
@@ -53,13 +58,14 @@ public class SpringBootAppTemplate implements SourceTemplate {
         return className;
     }
 
-    protected String getPackageName() {
+    @Override
+    public String getPackageName() {
         return packageName;
     }
 
     @Override
     public String getFilename() {
-        return getClassName();
+        return JavaUtils.javaSuffix(getClassName());
     }
 
     @Override

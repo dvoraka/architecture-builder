@@ -90,7 +90,7 @@ public interface JavaHelper {
     }
 
     default String javaSuffix(String filename) {
-        return filename + ".java";
+        return JavaUtils.javaSuffix(filename);
     }
 
     default String getClassName(Directory directory) {

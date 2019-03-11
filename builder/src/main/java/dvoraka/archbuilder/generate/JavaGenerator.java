@@ -112,13 +112,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
     }
 
     private void genBuildConfig(Directory directory) {
-        log.debug("Generating build config: {}", directory);
-
-        String configuration = directory.getText();
-        String filename = directory.getFilename()
-                .orElseThrow(() -> Utils.noFilenameException(directory));
-
-        save(directory, configuration, filename);
+        genText(directory);
     }
 
     private void genNewType(Directory directory) {
@@ -698,9 +692,10 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
     }
 
     private void genText(Directory directory) {
-        String filename = directory.getFilename()
-                .orElseThrow(() -> new RuntimeException("No filename for the text file!"));
+        log.debug("Generating text file: {}", directory);
 
+        String filename = directory.getFilename()
+                .orElseThrow(() -> Utils.noFilenameException(directory));
         String text = directory.getText() != null ? directory.getText() : "";
 
         save(directory, text, filename);

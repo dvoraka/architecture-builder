@@ -2,7 +2,6 @@ package dvoraka.archbuilder.template.arch;
 
 import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;
-import dvoraka.archbuilder.TextBuilder;
 import dvoraka.archbuilder.exception.GeneratorException;
 import dvoraka.archbuilder.generate.JavaUtils;
 import dvoraka.archbuilder.generate.Utils;
@@ -13,6 +12,7 @@ import dvoraka.archbuilder.template.source.SourceTemplate;
 import dvoraka.archbuilder.template.source.SpringBootApp2Template;
 import dvoraka.archbuilder.template.text.BuildGradleTemplate;
 import dvoraka.archbuilder.template.text.GitignoreTemplate;
+import dvoraka.archbuilder.template.text.PropertiesTemplate;
 import dvoraka.archbuilder.template.text.SettingsGradleTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -199,17 +199,6 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
                 .filename(networkResponseReceiverName)
                 .build();
 
-        // application properties
-        String propertiesText = TextBuilder.create()
-                .addLine("# Logging")
-                .addLine("logging.level.root=info")
-                .getText();
-        Directory srcProps = new Directory.Builder("src/main/resources", DirType.TEXT)
-                .parent(root)
-                .filename("application.properties")
-                .text(propertiesText)
-                .build();
-
         // application
         String appClassName = serviceName + "App";
         SourceTemplate sourceTemplate = new SpringBootApp2Template(appClassName, packageName);
@@ -252,6 +241,9 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
         Supplier<String> callback = () ->
                 configGenerator.genConfiguration(beanMappings, springConfig);
         springConfig.setTextSupplier(callback);
+
+        // application properties
+        properties(root, new PropertiesTemplate());
 
         // build configuration
         buildGradle(root, new BuildGradleTemplate());

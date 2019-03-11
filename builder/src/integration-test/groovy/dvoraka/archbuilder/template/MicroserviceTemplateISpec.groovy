@@ -85,7 +85,6 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
             exists(DirType.SERVICE_ABSTRACT, rootDir, dirService)
             exists(DirType.SERVICE_IMPL, rootDir, dirService)
 
-            exists(DirType.BUILD_CONFIG, rootDir, dirService)
             exists(DirType.TEXT, rootDir, dirService)
 
         when:

@@ -7,7 +7,7 @@ import dvoraka.archbuilder.template.text.TextFileTemplate;
 public interface TemplateHelper {
 
     default Directory textFile(Directory parent, TextFileTemplate template) {
-        return new Directory.Builder(template.getPath(), DirType.BUILD_CONFIG)
+        return new Directory.Builder(template.getPath(), DirType.TEXT)
                 .parent(parent)
                 .filename(template.getFilename())
                 .text(template.getText())
@@ -23,6 +23,10 @@ public interface TemplateHelper {
     }
 
     default Directory gitignore(Directory root, TextFileTemplate template) {
+        return textFile(root, template);
+    }
+
+    default Directory properties(Directory root, TextFileTemplate template) {
         return textFile(root, template);
     }
 }

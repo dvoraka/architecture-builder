@@ -10,9 +10,9 @@ import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
 import dvoraka.archbuilder.template.TemplateHelper;
 import dvoraka.archbuilder.template.source.SourceTemplate;
 import dvoraka.archbuilder.template.source.SpringBootApp2Template;
+import dvoraka.archbuilder.template.text.AppPropertiesTemplate;
 import dvoraka.archbuilder.template.text.BuildGradleTemplate;
 import dvoraka.archbuilder.template.text.GitignoreTemplate;
-import dvoraka.archbuilder.template.text.PropertiesTemplate;
 import dvoraka.archbuilder.template.text.SettingsGradleTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -210,7 +210,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
 
         // Spring configuration
         List<BeanMapping> beanMappings = new ArrayList<>();
-        // service mapping
+        // mappings
         String serviceMappingName = StringUtils.uncapitalize(service.getFilename()
                 .orElseThrow(() -> new GeneratorException("No filename.")));
         BeanMapping serviceBeanMapping = new BeanMapping.Builder(serviceMappingName)
@@ -243,7 +243,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
         springConfig.setTextSupplier(callback);
 
         // application properties
-        properties(root, new PropertiesTemplate());
+        properties(root, new AppPropertiesTemplate());
 
         // build configuration
         buildGradle(root, new BuildGradleTemplate());

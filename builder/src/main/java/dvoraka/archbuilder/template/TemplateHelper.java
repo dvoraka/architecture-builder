@@ -14,6 +14,14 @@ public interface TemplateHelper {
                 .build();
     }
 
+    default Directory classFile(Directory parent, TextFileTemplate template) {
+        return new Directory.Builder(template.getPath(), DirType.CUSTOM_TYPE)
+                .parent(parent)
+                .filename(template.getFilename())
+                .text(template.getText())
+                .build();
+    }
+
     default Directory buildGradle(Directory root, TextFileTemplate buildGradle) {
         return textFile(root, buildGradle);
     }
@@ -28,5 +36,9 @@ public interface TemplateHelper {
 
     default Directory properties(Directory root, TextFileTemplate template) {
         return textFile(root, template);
+    }
+
+    default Directory springBootApp(Directory root, TextFileTemplate template) {
+        return classFile(root, template);
     }
 }

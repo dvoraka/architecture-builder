@@ -4,6 +4,7 @@ import com.squareup.javapoet.ArrayTypeName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
+import dvoraka.archbuilder.generate.JavaUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -54,5 +55,20 @@ public class SpringBootAppTemplate implements SourceTemplate {
 
     protected String getPackageName() {
         return packageName;
+    }
+
+    @Override
+    public String getFilename() {
+        return getClassName();
+    }
+
+    @Override
+    public String getText() {
+        return getSource();
+    }
+
+    @Override
+    public String getPath() {
+        return JavaUtils.pkg2path(getPackageName());
     }
 }

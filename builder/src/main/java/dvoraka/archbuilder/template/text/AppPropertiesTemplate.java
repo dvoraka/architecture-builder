@@ -2,7 +2,7 @@ package dvoraka.archbuilder.template.text;
 
 import dvoraka.archbuilder.TextBuilder;
 
-public class PropertiesTemplate implements TextFileTemplate {
+public class AppPropertiesTemplate implements TextFileTemplate {
 
     @Override
     public String getFilename() {

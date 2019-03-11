@@ -9,11 +9,11 @@ import dvoraka.archbuilder.generate.Utils;
 import dvoraka.archbuilder.springconfig.BeanMapping;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
 import dvoraka.archbuilder.template.TemplateHelper;
-import dvoraka.archbuilder.template.config.BuildGradleTemplate;
-import dvoraka.archbuilder.template.config.SettingsGradleTemplate;
 import dvoraka.archbuilder.template.source.SourceTemplate;
 import dvoraka.archbuilder.template.source.SpringBootApp2Template;
-import dvoraka.archbuilder.template.text.DefaultGitignoreTemplate;
+import dvoraka.archbuilder.template.text.BuildGradleTemplate;
+import dvoraka.archbuilder.template.text.GitignoreTemplate;
+import dvoraka.archbuilder.template.text.SettingsGradleTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -258,7 +258,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
         settingsGradle(root, new SettingsGradleTemplate("Budget"));
 
         // gitignore file
-        gitignore(root, new DefaultGitignoreTemplate());
+        gitignore(root, new GitignoreTemplate());
     }
 
     @Override

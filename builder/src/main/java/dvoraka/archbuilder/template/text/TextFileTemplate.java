@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.template.config;
+package dvoraka.archbuilder.template.text;
 
 public interface TextFileTemplate {
 

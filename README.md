@@ -30,14 +30,10 @@ making it configurable, like name of the base package, main abstract class, etc.
 For Java classes it's possible to use configurable source templates. For instance, Spring Boot application class
 is usually very similar and you only need to choose the name of the application. The templates are used in Directories.
 
-### Configuration template
-
-It's a template for any configuration, like build configuration. The templates are used in Directories.
-
 ### Text template
 
-Template for any text based data. It could be used so far simple text builder to build dynamic text templates.
-Used with Directories.
+Template for any text based data. It could be used simple text builder to build dynamic text templates.
+The templates are used in Directories.
 
 ## Examples
 

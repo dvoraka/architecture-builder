@@ -1,9 +1,8 @@
 package dvoraka.archbuilder.template.text;
 
 import dvoraka.archbuilder.TextBuilder;
-import dvoraka.archbuilder.template.config.TextFileTemplate;
 
-public class DefaultGitignoreTemplate implements TextFileTemplate {
+public class GitignoreTemplate implements TextFileTemplate {
 
     @Override
     public String getFilename() {

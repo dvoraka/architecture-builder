@@ -3,9 +3,9 @@ package dvoraka.archbuilder.generate
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
 import dvoraka.archbuilder.service.DirService
-import dvoraka.archbuilder.template.config.BuildGradleTemplate
-import dvoraka.archbuilder.template.config.SettingsGradleTemplate
-import dvoraka.archbuilder.template.config.TextFileTemplate
+import dvoraka.archbuilder.template.text.BuildGradleTemplate
+import dvoraka.archbuilder.template.text.SettingsGradleTemplate
+import dvoraka.archbuilder.template.text.TextFileTemplate
 import org.springframework.beans.factory.annotation.Autowired
 
 import java.nio.file.Files

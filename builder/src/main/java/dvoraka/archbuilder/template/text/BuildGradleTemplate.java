@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.template.config;
+package dvoraka.archbuilder.template.text;
 
 import java.util.Collections;
 import java.util.Set;

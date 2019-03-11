@@ -374,7 +374,15 @@ public class Directory {
                 if (filename == null || filename.isEmpty()) {
                     throw Utils.noFilenameException(directory);
                 }
-                directory.typeName = directory.getPackageName() + "." + filename;
+
+                if (filename.endsWith(".java")) {
+                    String[] parts = filename.split("\\.");
+                    String typeName = parts[0];
+                    directory.typeName = directory.getPackageName() + "." + typeName;
+                } else {
+                    //TODO: should be removed
+                    directory.typeName = directory.getPackageName() + "." + filename;
+                }
             }
 
             return directory;

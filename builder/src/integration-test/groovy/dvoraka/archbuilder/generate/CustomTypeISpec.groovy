@@ -44,7 +44,7 @@ class CustomTypeISpec extends BaseISpec {
 
             Directory customType = new Directory.Builder(packagePath, DirType.CUSTOM_TYPE)
                     .parent(srcBase)
-                    .filename(className)
+                    .filename(javaSuffix(className))
                     .text(javaFile.toString())
                     .build()
         when:
@@ -70,7 +70,7 @@ class CustomTypeISpec extends BaseISpec {
 
             Directory customType = new Directory.Builder('', DirType.CUSTOM_TYPE)
                     .parent(srcBase)
-                    .filename(className)
+                    .filename(javaSuffix(className))
                     .text(template.getSource())
                     .build()
         when:
@@ -81,7 +81,6 @@ class CustomTypeISpec extends BaseISpec {
             isPublicNotAbstract(clazz)
             hasNoTypeParameters(clazz)
             declaredMethodCount(clazz) == 1
-
         when:
             runMainMethod(clazz, new String[0])
         then:

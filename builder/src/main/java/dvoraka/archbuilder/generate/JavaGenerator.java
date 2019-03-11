@@ -283,7 +283,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         log.debug("Generating custom type: {}", directory);
 
         String source = directory.getText();
-        String filename = javaSuffix(getFilename(directory));
+        String filename = getFilename(directory);
 
         saveJava(directory, source, filename);
     }

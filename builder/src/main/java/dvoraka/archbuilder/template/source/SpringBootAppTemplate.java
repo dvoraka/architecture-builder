@@ -24,6 +24,15 @@ public class SpringBootAppTemplate implements SourceTemplate {
         this.packageName = requireNonNull(packageName);
     }
 
+    protected MethodSpec mainMethodSpec(String argsName) {
+        return MethodSpec.methodBuilder("main")
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                .returns(Void.TYPE)
+                .addParameter(ArrayTypeName.of(String.class), argsName)
+                .addStatement("$T.run($L.class, $L)", SpringApplication.class, getClassName(), argsName)
+                .build();
+    }
+
     @Override
     public String getSource() {
         MethodSpec methodSpec = mainMethodSpec(ARGS_NAME);
@@ -43,15 +52,6 @@ public class SpringBootAppTemplate implements SourceTemplate {
     @Override
     public String getTypeName() {
         return getClassName();
-    }
-
-    protected MethodSpec mainMethodSpec(String argsName) {
-        return MethodSpec.methodBuilder("main")
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                .returns(Void.TYPE)
-                .addParameter(ArrayTypeName.of(String.class), argsName)
-                .addStatement("$T.run($L.class, $L)", SpringApplication.class, getClassName(), argsName)
-                .build();
     }
 
     protected String getClassName() {
@@ -75,6 +75,6 @@ public class SpringBootAppTemplate implements SourceTemplate {
 
     @Override
     public String getPath() {
-        return JavaUtils.pkg2path(getPackageName());
+        return "";
     }
 }

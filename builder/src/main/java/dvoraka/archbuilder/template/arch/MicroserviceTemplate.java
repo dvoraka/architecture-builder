@@ -202,12 +202,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
         // application
         String appClassName = serviceName + "App";
         SourceTemplate appSourceTemplate = new SpringBootApp2Template(appClassName, packageName);
-        Directory application = new Directory.Builder("", DirType.CUSTOM_TYPE)
-                .parent(srcBase)
-                .filename(appClassName + ".java")
-                .text(appSourceTemplate.getSource())
-                .build();
-//        springBootApp(srcBase, appSourceTemplate);
+        springBootApp(srcBase, appSourceTemplate);
 
         // Spring configuration
         List<BeanMapping> beanMappings = new ArrayList<>();

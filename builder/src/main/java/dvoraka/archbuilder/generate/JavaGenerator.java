@@ -869,8 +869,10 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         log.debug("Saving source:\n{}", source);
 
         try {
+            String filePath = directory.getPath() + File.separator + filename;
+            log.debug("Writing file: {}...", filePath);
             Files.write(
-                    Paths.get(directory.getPath() + File.separator + filename),
+                    Paths.get(filePath),
                     source.getBytes(StandardCharsets.UTF_8),
                     StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {

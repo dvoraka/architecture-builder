@@ -66,24 +66,35 @@ public class Directory {
 
     @JsonIgnore
     public String getPackageName() {
+        String pkgName;
         if (isBase()) {
-            return getName();
+            pkgName = getName();
         } else {
-            String packagePath = getParent().getPackageName();
-            if (!getName().isEmpty()) {
-                packagePath += File.separatorChar + getName();
+            if (getName().isEmpty()) {
+                pkgName = JavaUtils.path2pkg(getParent().getPackageName());
+            } else {
+                pkgName = JavaUtils.path2pkg(getParent().getPackageName()
+                        + File.separatorChar + getName());
             }
-            return JavaUtils.path2pkg(packagePath);
         }
+
+        return pkgName;
     }
 
     @JsonIgnore
     public String getPath() {
+        String path;
         if (isRoot()) {
-            return getName();
+            path = getName();
         } else {
-            return getParent().getPath() + File.separatorChar + getName();
+            if (getName().isEmpty()) {
+                path = getParent().getPath();
+            } else {
+                path = getParent().getPath() + File.separatorChar + getName();
+            }
         }
+
+        return path;
     }
 
     @JsonIgnore

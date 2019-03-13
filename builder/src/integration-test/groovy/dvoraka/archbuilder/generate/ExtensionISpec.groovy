@@ -82,6 +82,24 @@ class ExtensionISpec extends BaseISpec {
             hasNoDeclaredMethods(clazz)
     }
 
+    def "Object abstract extension without abstract dir"() {
+        given:
+            Directory ext = new Directory.Builder('ext', DirType.IMPL)
+                    .parent(srcBase)
+                    .superTypeClass(Object)
+                    .abstractType()
+                    .filename('AbstractTestObject')
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(ext))
+        then:
+            notThrown(Exception)
+            isPublicAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
+    }
+
     def "Object extension"() {
         given:
             Directory abs = new Directory.Builder('component', DirType.ABSTRACT)
@@ -123,6 +141,24 @@ class ExtensionISpec extends BaseISpec {
             hasNoTypeParameters(clazz)
             hasNoDeclaredMethods(clazz)
             clazz.getSuperclass() == Timer.class
+    }
+
+    def "Timer extension without abstract dir"() {
+        given:
+            Directory ext = new Directory.Builder('ext', DirType.IMPL)
+                    .parent(srcBase)
+                    .superTypeClass(Timer)
+                    .filename('TestTimer')
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(getClassName(ext))
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
+            clazz.getSuperclass() == Timer
     }
 
     def "class 1m extension"() {

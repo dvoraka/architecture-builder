@@ -308,6 +308,15 @@ public class Directory {
             return this;
         }
 
+        public Builder superTypeClass(Class<?> clazz) {
+            if (parent == null) {
+                throw new GeneratorException("Parent must be set before superTypeClass method.");
+            }
+            Directory wrapper = Utils.createAbstractDirFor(clazz, parent);
+            this.superTypes.add(wrapper);
+            return this;
+        }
+
         public Builder text(String text) {
             this.text = text;
             return this;

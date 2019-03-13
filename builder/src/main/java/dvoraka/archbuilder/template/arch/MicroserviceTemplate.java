@@ -48,14 +48,14 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
         Directory srcAbsBase = srcAbsBase(root, "");
 
         // service
-        Directory abstractService = new Directory.Builder("service", DirType.SERVICE_ABSTRACT)
-                .parent(srcAbsBase)
-                .typeClass(superService)
-                .build();
+//        Directory abstractService = new Directory.Builder("service", DirType.SERVICE_ABSTRACT)
+//                .parent(srcAbsBase)
+//                .typeClass(superService)
+//                .build();
         String serviceFullName = serviceName + "Service";
         Directory.Builder serviceBuilder = new Directory.Builder("service", DirType.SERVICE)
                 .parent(srcBase)
-                .superType(abstractService)
+                .superTypeClass(superService)
                 .filename(serviceFullName);
         for (Class<?> typeArgument : typeArguments) {
             serviceBuilder.parameterTypeClass(typeArgument);
@@ -70,51 +70,51 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
                 .build();
 
         // exception
-        Directory exceptionAbs = new Directory.Builder("", DirType.ABSTRACT)
-                .parent(srcBase)
-                .typeClass(baseException)
-                .build();
+//        Directory exceptionAbs = new Directory.Builder("", DirType.ABSTRACT)
+//                .parent(srcBase)
+//                .typeClass(baseException)
+//                .build();
         String exceptionName = serviceName + "Exception";
         Directory exception = new Directory.Builder("exception", DirType.IMPL)
                 .parent(srcBase)
-                .superType(exceptionAbs)
+                .superTypeClass(baseException)
                 .filename(exceptionName)
                 .build();
 
         // data
-        Directory dataAbs = new Directory.Builder("", DirType.ABSTRACT)
-                .parent(srcBase)
-                .typeClass(netConfig.getBaseResultData())
-                .build();
+//        Directory dataAbs = new Directory.Builder("", DirType.ABSTRACT)
+//                .parent(srcBase)
+//                .typeClass(netConfig.getBaseResultData())
+//                .build();
         String dataName = serviceName + "Data";
         Directory data = new Directory.Builder("data", DirType.IMPL)
                 .parent(srcBase)
-                .superType(dataAbs)
+                .superTypeClass(netConfig.getBaseResultData())
                 .filename(dataName)
                 .parameterTypeDir(exception)
                 .build();
 
         // messages
-        Directory responseMessageAbs = new Directory.Builder("", DirType.ABSTRACT)
-                .parent(srcBase)
-                .typeClass(netConfig.getResponseBaseMessage())
-                .build();
+//        Directory responseMessageAbs = new Directory.Builder("", DirType.ABSTRACT)
+//                .parent(srcBase)
+//                .typeClass(netConfig.getResponseBaseMessage())
+//                .build();
         String responseMessageName = serviceName + "ResponseMessage";
         Directory responseMessage = new Directory.Builder(MESSAGE_DIR, DirType.IMPL)
                 .parent(srcBase)
-                .superType(responseMessageAbs)
+                .superTypeClass(netConfig.getResponseBaseMessage())
                 .parameterTypeDir(data)
                 .parameterTypeDir(exception)
                 .filename(responseMessageName)
                 .build();
-        Directory requestMessageAbs = new Directory.Builder("", DirType.ABSTRACT)
-                .parent(srcBase)
-                .typeClass(netConfig.getRequestBaseMessage())
-                .build();
+//        Directory requestMessageAbs = new Directory.Builder("", DirType.ABSTRACT)
+//                .parent(srcBase)
+//                .typeClass(netConfig.getRequestBaseMessage())
+//                .build();
         String requestMessageName = serviceName + "Message";
         Directory requestMessage = new Directory.Builder(MESSAGE_DIR, DirType.IMPL)
                 .parent(srcBase)
-                .superType(requestMessageAbs)
+                .superTypeClass(netConfig.getRequestBaseMessage())
                 .parameterTypeDir(service)
                 .parameterTypeDir(responseMessage)
                 .parameterTypeDir(data)
@@ -123,31 +123,31 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
                 .build();
 
         // server
-        Directory serverAbs = new Directory.Builder("", DirType.ABSTRACT)
-                .parent(srcBase)
-                .typeClass(superServer)
-                .build();
+//        Directory serverAbs = new Directory.Builder("", DirType.ABSTRACT)
+//                .parent(srcBase)
+//                .typeClass(superServer)
+//                .build();
         String serverName = serviceName + "Server";
         Directory server = new Directory.Builder("server", DirType.IMPL)
                 .parent(srcBase)
-                .superType(serverAbs)
+                .superTypeClass(superServer)
                 .filename(serverName)
                 .metadataClass(Service.class)
                 .build();
 
         // network components
-        Directory networkComponentAbs = new Directory.Builder("", DirType.ABSTRACT)
-                .parent(srcBase)
-                .typeClass(netConfig.getSuperNetComponent())
-                .build();
-        Directory networkReceiverAbs = new Directory.Builder("", DirType.ABSTRACT)
-                .parent(srcBase)
-                .typeClass(netConfig.getSuperNetReceiver())
-                .build();
+//        Directory networkComponentAbs = new Directory.Builder("", DirType.ABSTRACT)
+//                .parent(srcBase)
+//                .typeClass(netConfig.getSuperNetComponent())
+//                .build();
+//        Directory networkReceiverAbs = new Directory.Builder("", DirType.ABSTRACT)
+//                .parent(srcBase)
+//                .typeClass(netConfig.getSuperNetReceiver())
+//                .build();
         String networkComponentName = serviceName + "NetComponent";
         Directory serviceNetworkComponent = new Directory.Builder("net", DirType.IMPL)
                 .parent(srcBase)
-                .superType(networkComponentAbs)
+                .superTypeClass(netConfig.getSuperNetComponent())
                 .interfaceType()
                 .parameterTypeDir(requestMessage)
                 .parameterTypeDir(responseMessage)
@@ -172,7 +172,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
         String networkReceiverName = serviceName + "NetReceiver";
         Directory networkReceiver = new Directory.Builder("net", DirType.IMPL)
                 .parent(srcBase)
-                .superType(networkReceiverAbs)
+                .superTypeClass(netConfig.getSuperNetReceiver())
                 .interfaceType()
                 .parameterTypeDir(requestMessage)
                 .filename(networkReceiverName)
@@ -180,7 +180,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
         String networkResponseReceiverName = serviceName + "NetResponseReceiver";
         Directory networkResponseReceiver = new Directory.Builder("net", DirType.IMPL)
                 .parent(srcBase)
-                .superType(networkReceiverAbs)
+                .superTypeClass(netConfig.getSuperNetReceiver())
                 .interfaceType()
                 .parameterTypeDir(responseMessage)
                 .filename(networkResponseReceiverName)

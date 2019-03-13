@@ -529,7 +529,7 @@ class ExtensionISpec extends BaseISpec {
             Directory dataAbs = new Directory.Builder('', DirType.ABSTRACT)
                     .parent(srcBase)
                     .typeClass(TestingResultData.class)
-                    .parameterTypeClass(BaseException.class)
+//                    .parameterTypeClass(BaseException.class)
                     .build()
             Directory abs = new Directory.Builder('', DirType.ABSTRACT)
                     .parent(srcBase)

@@ -3,7 +3,6 @@ package dvoraka.archbuilder.template.arch;
 import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;
 import dvoraka.archbuilder.exception.GeneratorException;
-import dvoraka.archbuilder.generate.JavaUtils;
 import dvoraka.archbuilder.generate.Utils;
 import dvoraka.archbuilder.springconfig.BeanMapping;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
@@ -21,11 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
+import static dvoraka.archbuilder.generate.JavaUtils.pkg2path;
 import static dvoraka.archbuilder.generate.Utils.uncapitalize;
 
 public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelper {
 
-    public static final String JAVA_SRC_DIR = "src/main/java";
     public static final String MESSAGE_DIR = "data/message";
 
     private Directory root;
@@ -42,18 +41,10 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
             NetTemplateConfig netConfig,
             SpringConfigGenerator configGenerator
     ) {
-        root = new Directory.Builder(rootDirName, DirType.ROOT)
-                .parent(null)
-                .build();
+        root = root(rootDirName);
+        Directory srcRoot = srcRoot(root);
 
-        Directory srcRoot = new Directory.Builder(JAVA_SRC_DIR, DirType.SRC_ROOT)
-                .parent(root)
-                .build();
-
-        String pkgPath = JavaUtils.pkg2path(packageName);
-        Directory srcBase = new Directory.Builder(pkgPath, DirType.SRC_BASE)
-                .parent(srcRoot)
-                .build();
+        Directory srcBase = srcBase(srcRoot, pkg2path(packageName));
 
         String absPkgPath = "";
         Directory srcBaseAbs = new Directory.Builder(absPkgPath, DirType.SRC_BASE_ABSTRACT)

@@ -6,6 +6,27 @@ import dvoraka.archbuilder.template.text.TextFileTemplate;
 
 public interface TemplateHelper {
 
+    String JAVA_SRC_DIR = "src/main/java";
+
+
+    default Directory root(String rootDirName) {
+        return new Directory.Builder(rootDirName, DirType.ROOT)
+                .parent(null)
+                .build();
+    }
+
+    default Directory srcRoot(Directory root) {
+        return new Directory.Builder(TemplateHelper.JAVA_SRC_DIR, DirType.SRC_ROOT)
+                .parent(root)
+                .build();
+    }
+
+    default Directory srcBase(Directory srcRoot, String pkgPath) {
+        return new Directory.Builder(pkgPath, DirType.SRC_BASE)
+                .parent(srcRoot)
+                .build();
+    }
+
     default Directory textFile(Directory parent, TextFileTemplate template) {
         return new Directory.Builder(template.getPath(), DirType.TEXT)
                 .parent(parent)

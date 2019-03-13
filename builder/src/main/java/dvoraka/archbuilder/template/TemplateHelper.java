@@ -27,6 +27,12 @@ public interface TemplateHelper {
                 .build();
     }
 
+    default Directory srcAbsBase(Directory root, String pkgPath) {
+        return new Directory.Builder(pkgPath, DirType.SRC_BASE_ABSTRACT)
+                .parent(root)
+                .build();
+    }
+
     default Directory textFile(Directory parent, TextFileTemplate template) {
         return new Directory.Builder(template.getPath(), DirType.TEXT)
                 .parent(parent)

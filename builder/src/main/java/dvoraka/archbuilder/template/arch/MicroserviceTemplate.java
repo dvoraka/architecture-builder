@@ -45,15 +45,11 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
         Directory srcRoot = srcRoot(root);
 
         Directory srcBase = srcBase(srcRoot, pkg2path(packageName));
-
-        String absPkgPath = "";
-        Directory srcBaseAbs = new Directory.Builder(absPkgPath, DirType.SRC_BASE_ABSTRACT)
-                .parent(root)
-                .build();
+        Directory srcAbsBase = srcAbsBase(root, "");
 
         // service
         Directory abstractService = new Directory.Builder("service", DirType.SERVICE_ABSTRACT)
-                .parent(srcBaseAbs)
+                .parent(srcAbsBase)
                 .typeClass(superService)
                 .build();
         String serviceFullName = serviceName + "Service";

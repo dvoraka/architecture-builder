@@ -3,7 +3,6 @@ package dvoraka.archbuilder.template.arch;
 import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;
 import dvoraka.archbuilder.exception.GeneratorException;
-import dvoraka.archbuilder.generate.Utils;
 import dvoraka.archbuilder.springconfig.BeanMapping;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
 import dvoraka.archbuilder.template.TemplateHelper;
@@ -14,7 +13,6 @@ import dvoraka.archbuilder.template.text.BuildGradleTemplate;
 import dvoraka.archbuilder.template.text.GitignoreTemplate;
 import dvoraka.archbuilder.template.text.SettingsGradleTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,13 +43,8 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
         Directory srcRoot = srcRoot(root);
 
         Directory srcBase = srcBase(srcRoot, pkg2path(packageName));
-        Directory srcAbsBase = srcAbsBase(root, "");
 
         // service
-//        Directory abstractService = new Directory.Builder("service", DirType.SERVICE_ABSTRACT)
-//                .parent(srcAbsBase)
-//                .typeClass(superService)
-//                .build();
         String serviceFullName = serviceName + "Service";
         Directory.Builder serviceBuilder = new Directory.Builder("service", DirType.SERVICE)
                 .parent(srcBase)
@@ -70,10 +63,6 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
                 .build();
 
         // exception
-//        Directory exceptionAbs = new Directory.Builder("", DirType.ABSTRACT)
-//                .parent(srcBase)
-//                .typeClass(baseException)
-//                .build();
         String exceptionName = serviceName + "Exception";
         Directory exception = new Directory.Builder("exception", DirType.IMPL)
                 .parent(srcBase)
@@ -82,10 +71,6 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
                 .build();
 
         // data
-//        Directory dataAbs = new Directory.Builder("", DirType.ABSTRACT)
-//                .parent(srcBase)
-//                .typeClass(netConfig.getBaseResultData())
-//                .build();
         String dataName = serviceName + "Data";
         Directory data = new Directory.Builder("data", DirType.IMPL)
                 .parent(srcBase)
@@ -95,10 +80,6 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
                 .build();
 
         // messages
-//        Directory responseMessageAbs = new Directory.Builder("", DirType.ABSTRACT)
-//                .parent(srcBase)
-//                .typeClass(netConfig.getResponseBaseMessage())
-//                .build();
         String responseMessageName = serviceName + "ResponseMessage";
         Directory responseMessage = new Directory.Builder(MESSAGE_DIR, DirType.IMPL)
                 .parent(srcBase)
@@ -107,10 +88,6 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
                 .parameterTypeDir(exception)
                 .filename(responseMessageName)
                 .build();
-//        Directory requestMessageAbs = new Directory.Builder("", DirType.ABSTRACT)
-//                .parent(srcBase)
-//                .typeClass(netConfig.getRequestBaseMessage())
-//                .build();
         String requestMessageName = serviceName + "Message";
         Directory requestMessage = new Directory.Builder(MESSAGE_DIR, DirType.IMPL)
                 .parent(srcBase)
@@ -123,10 +100,6 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
                 .build();
 
         // server
-//        Directory serverAbs = new Directory.Builder("", DirType.ABSTRACT)
-//                .parent(srcBase)
-//                .typeClass(superServer)
-//                .build();
         String serverName = serviceName + "Server";
         Directory server = new Directory.Builder("server", DirType.IMPL)
                 .parent(srcBase)
@@ -136,14 +109,6 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
                 .build();
 
         // network components
-//        Directory networkComponentAbs = new Directory.Builder("", DirType.ABSTRACT)
-//                .parent(srcBase)
-//                .typeClass(netConfig.getSuperNetComponent())
-//                .build();
-//        Directory networkReceiverAbs = new Directory.Builder("", DirType.ABSTRACT)
-//                .parent(srcBase)
-//                .typeClass(netConfig.getSuperNetReceiver())
-//                .build();
         String networkComponentName = serviceName + "NetComponent";
         Directory serviceNetworkComponent = new Directory.Builder("net", DirType.IMPL)
                 .parent(srcBase)
@@ -155,13 +120,11 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
                 .parameterTypeDir(exception)
                 .filename(networkComponentName)
                 .build();
-        Directory baseNetComponentAbs = Utils.createAbstractDirFor(
-                netConfig.getBaseNetComponent(), srcBase);
         String netAdapterName = serviceName + "NetAdapter";
         Directory serviceNetAdapter = new Directory.Builder("net", DirType.IMPL)
                 .parent(srcBase)
                 .superType(serviceNetworkComponent)
-                .superType(baseNetComponentAbs)
+                .superTypeClass(netConfig.getBaseNetComponent())
                 .parameterTypeDir(requestMessage)
                 .parameterTypeDir(responseMessage)
                 .parameterTypeDir(data)
@@ -186,7 +149,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
                 .filename(networkResponseReceiverName)
                 .build();
 
-        // application
+        // Spring Boot application
         String appClassName = serviceName + "App";
         SourceTemplate appSourceTemplate = new SpringBootApp2Template(appClassName, packageName);
         springBootApp(srcBase, appSourceTemplate);
@@ -194,7 +157,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
         // Spring configuration
         List<BeanMapping> beanMappings = new ArrayList<>();
         // mappings
-        String serviceMappingName = StringUtils.uncapitalize(service.getFilename()
+        String serviceMappingName = uncapitalize(service.getFilename()
                 .orElseThrow(() -> new GeneratorException("No filename.")));
         BeanMapping serviceBeanMapping = new BeanMapping.Builder(serviceMappingName)
                 .typeDir(service)

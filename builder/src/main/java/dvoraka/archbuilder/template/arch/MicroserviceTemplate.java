@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import static dvoraka.archbuilder.generate.JavaUtils.pkg2path;
+import static dvoraka.archbuilder.generate.Utils.noFilenameException;
 import static dvoraka.archbuilder.generate.Utils.uncapitalize;
 
 public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelper {
@@ -158,7 +159,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
         List<BeanMapping> beanMappings = new ArrayList<>();
         // mappings
         String serviceMappingName = uncapitalize(service.getFilename()
-                .orElseThrow(() -> new GeneratorException("No filename.")));
+                .orElseThrow(() -> noFilenameException(service)));
         BeanMapping serviceBeanMapping = new BeanMapping.Builder(serviceMappingName)
                 .typeDir(service)
                 .toTypeDir(serviceImpl)

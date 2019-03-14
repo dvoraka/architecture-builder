@@ -122,7 +122,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
         addTypeVariables(directory, builder);
 
-        completeAndSaveClass(directory, builder);
+        completeAndSaveClassFile(directory, builder);
     }
 
     private void genImpl(Directory directory) {
@@ -188,7 +188,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             addTypeVariables(typeParameters, implementationBuilder);
         }
 
-        completeAndSaveClass(directory, implementationBuilder);
+        completeAndSaveClassFile(directory, implementationBuilder);
     }
 
     private void genService(Directory directory) {
@@ -881,7 +881,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         }
     }
 
-    private void completeAndSaveClass(Directory directory, TypeSpec.Builder builder) {
+    private void completeAndSaveClassFile(Directory directory, TypeSpec.Builder builder) {
 
         addAnnotations(directory, builder);
         addModifiers(directory, builder);

@@ -2,7 +2,6 @@ package dvoraka.archbuilder.template.arch;
 
 import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;
-import dvoraka.archbuilder.exception.GeneratorException;
 import dvoraka.archbuilder.springconfig.BeanMapping;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
 import dvoraka.archbuilder.template.TemplateHelper;
@@ -194,7 +193,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
 
         // build configuration
         buildGradle(root, new BuildGradleTemplate());
-        settingsGradle(root, new SettingsGradleTemplate("Budget"));
+        settingsGradle(root, new SettingsGradleTemplate(serviceName));
 
         // gitignore file
         gitignore(root, new GitignoreTemplate());

@@ -9,30 +9,20 @@ import dvoraka.archbuilder.generate.Generator
 import dvoraka.archbuilder.generate.JavaHelper
 import dvoraka.archbuilder.generate.JavaTestingHelper
 import dvoraka.archbuilder.generate.Utils
-import dvoraka.archbuilder.sample.microservice.data.BaseException
-import dvoraka.archbuilder.sample.microservice.data.ResultData
-import dvoraka.archbuilder.sample.microservice.data.message.RequestMessage
-import dvoraka.archbuilder.sample.microservice.data.message.ResponseMessage
-import dvoraka.archbuilder.sample.microservice.net.BaseNetComponent
-import dvoraka.archbuilder.sample.microservice.net.ServiceNetComponent
-import dvoraka.archbuilder.sample.microservice.net.receive.NetReceiver
-import dvoraka.archbuilder.sample.microservice.server.AbstractServer
 import dvoraka.archbuilder.sample.microservice.service.BaseService
 import dvoraka.archbuilder.service.DirService
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator
 import dvoraka.archbuilder.template.arch.ArchitectureTemplate
-import dvoraka.archbuilder.template.arch.MicroserviceTemplate
-import dvoraka.archbuilder.template.arch.NetTemplateConfig
+import dvoraka.archbuilder.template.arch.RestMicroserviceTemplate
 import groovy.json.JsonOutput
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import spock.lang.Ignore
 import spock.lang.Specification
 
 @Slf4j
 @SpringBootTest
-class MicroserviceTemplateISpec extends Specification implements JavaHelper, JavaTestingHelper {
+class RestMicroserviceTemplateISpec extends Specification implements JavaHelper, JavaTestingHelper {
 
     @Autowired
     Generator mainGenerator
@@ -43,9 +33,9 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
     @Autowired
     SpringConfigGenerator configGenerator
 
-    String rootDirName = 'budget-service'
-    String packageName = 'test.budget'
-    String serviceName = 'Budget'
+    String rootDirName = 'balance-service'
+    String packageName = 'test.balance'
+    String serviceName = 'Balance'
 
     ArchitectureTemplate template
     Directory rootDir
@@ -53,31 +43,19 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
 
     def setup() {
 
-        NetTemplateConfig netTemplateConfig = new NetTemplateConfig(
-                ResultData.class,
-                RequestMessage.class,
-                ResponseMessage.class,
-                ServiceNetComponent.class,
-                NetReceiver.class,
-                BaseNetComponent.class
-        )
-
-        template = new MicroserviceTemplate(
+        template = new RestMicroserviceTemplate(
                 rootDirName,
                 packageName,
                 BaseService.class,
                 Collections.emptyList(),
                 serviceName,
-                BaseException.class,
-                AbstractServer.class,
-                netTemplateConfig,
                 configGenerator
         )
 
         rootDir = template.getRootDirectory()
     }
 
-    def "create micro-service - budget service"() {
+    def "create micro-service - balance service"() {
         when:
             mainGenerator.generate(rootDir)
 
@@ -107,32 +85,6 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
 
         cleanup:
             Utils.removeFiles(rootDirName)
-    }
-
-    @Ignore("needs working repository")
-    def "create micro-service with build"() {
-        when:
-            mainGenerator.generate(rootDir)
-
-        then:
-            notThrown(Exception)
-
-        when:
-            BuildTool buildTool = new GradleBuildTool(new File(rootDirName))
-            buildTool.prepareEnv()
-
-        then:
-            notThrown(Exception)
-
-        when:
-            buildTool.build()
-
-        then:
-            notThrown(Exception)
-
-        cleanup:
-            Utils.removeFiles(rootDirName)
-            true
     }
 
     def "micro-service directory serialization"() {

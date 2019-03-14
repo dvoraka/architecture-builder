@@ -7,6 +7,8 @@ import java.util.regex.Pattern;
 
 public class TextBuilder {
 
+    private static final String TAB = "    ";
+
     private final StringBuilder builder;
     private final Map<String, String> variables;
 
@@ -20,14 +22,30 @@ public class TextBuilder {
         return new TextBuilder();
     }
 
-    public TextBuilder addLine() {
+    public TextBuilder ln() {
         builder.append("\n");
         return this;
     }
 
-    public TextBuilder addLine(String line) {
-        builder.append(line);
-        builder.append("\n");
+    public TextBuilder tab() {
+        builder.append(TAB);
+        return this;
+    }
+
+    public TextBuilder add(String text) {
+        builder.append(text);
+        return this;
+    }
+
+    public TextBuilder addLn(String text) {
+        builder.append(text);
+        ln();
+        return this;
+    }
+
+    public TextBuilder addTab(String text) {
+        tab();
+        builder.append(text);
         return this;
     }
 

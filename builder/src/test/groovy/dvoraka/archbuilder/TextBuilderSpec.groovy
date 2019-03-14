@@ -14,12 +14,12 @@ class TextBuilderSpec extends Specification {
     def "test"() {
         setup:
             builder
-                    .addLine("line 1")
-                    .addLine()
-                    .addLine("line 3")
-                    .addLine()
-                    .addLine("line 5")
-                    .addLine("line 6")
+                    .addLn("line 1")
+                    .ln()
+                    .addLn("line 3")
+                    .ln()
+                    .addLn("line 5")
+                    .addLn("line 6")
         expect:
             println builder.getText()
     }
@@ -27,12 +27,12 @@ class TextBuilderSpec extends Specification {
     def "substitution test"() {
         setup:
             builder
-                    .addLine('line 1')
-                    .addLine()
-                    .addLine('line 3 with variable 1: ${.var1}')
-                    .addLine()
-                    .addLine('line 5')
-                    .addLine('line 6 with variable 2: ${$.var*} and variable 1: ${.var1}')
+                    .addLn('line 1')
+                    .ln()
+                    .addLn('line 3 with variable 1: ${.var1}')
+                    .ln()
+                    .addLn('line 5')
+                    .addLn('line 6 with variable 2: ${$.var*} and variable 1: ${.var1}')
                     .variable('.var1', 'house$$')
                     .variable('$.var*', 'car*')
         expect:

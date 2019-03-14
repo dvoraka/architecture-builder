@@ -12,8 +12,8 @@ public class AppPropertiesTemplate implements TextFileTemplate {
     @Override
     public String getText() {
         return TextBuilder.create()
-                .addLine("# Logging")
-                .addLine("logging.level.root=info")
+                .addLn("# Logging")
+                .addLn("logging.level.root=info")
                 .getText();
     }
 

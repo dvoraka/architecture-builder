@@ -45,8 +45,8 @@ class MainGeneratorISpec extends BaseISpec {
     def "src properties"() {
         given:
             String text = new TextBuilder()
-                    .addLine('prop1=value')
-                    .addLine('prop2=value2')
+                    .addLn('prop1=value')
+                    .addLn('prop2=value2')
                     .getText()
             Directory srcProps = new Directory.Builder('src/main/resources', DirType.TEXT)
                     .parent(root)

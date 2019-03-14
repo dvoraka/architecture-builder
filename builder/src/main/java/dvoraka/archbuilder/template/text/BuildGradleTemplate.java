@@ -1,5 +1,7 @@
 package dvoraka.archbuilder.template.text;
 
+import dvoraka.archbuilder.TextBuilder;
+
 import java.util.Collections;
 import java.util.Set;
 
@@ -29,9 +31,14 @@ public class BuildGradleTemplate implements TextFileTemplate {
         // POC stuff only
 
         StringBuilder sb = new StringBuilder();
+        // replacement
+        TextBuilder tb = new TextBuilder();
 
         // Spring Boot plugin
         sb.append("plugins { id 'org.springframework.boot' version '2.1.0.RELEASE' }\n\n");
+
+        tb.addLn("plugins { id 'org.springframework.boot' version '2.1.0.RELEASE' }");
+        tb.ln();
 
         // plugins
         for (String plugin : plugins) {
@@ -40,14 +47,21 @@ public class BuildGradleTemplate implements TextFileTemplate {
             sb.append(plugin);
             sb.append("'");
             sb.append("\n");
+
+            tb.add("apply plugin: ").add("'").add(plugin).addLn("'");
         }
         sb.append("\n");
+
+        tb.ln();
 
         sb.append("repositories {\n");
         sb.append("    jcenter()\n");
         sb.append("    maven { url 'https://jitpack.io' }\n");
         sb.append("    maven { url 'https://repo.gradle.org/gradle/libs-releases' }\n");
         sb.append("}\n\n");
+
+//        tb.addLn("repositories {")
+//                .addLn("  jcenter()");
 
         sb.append("dependencies {\n");
         sb.append("    implementation 'com.github.dvoraka:architecture-builder:master-SNAPSHOT'\n");

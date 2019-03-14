@@ -12,11 +12,11 @@ public class GitignoreTemplate implements TextFileTemplate {
     @Override
     public String getText() {
         return TextBuilder.create()
-                .addLine("# Gradle")
-                .addLine(".gradle/")
-                .addLine()
-                .addLine("# Idea")
-                .addLine(".idea/")
+                .addLn("# Gradle")
+                .addLn(".gradle/")
+                .ln()
+                .addLn("# Idea")
+                .addLn(".idea/")
                 .getText();
     }
 

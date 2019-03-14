@@ -21,7 +21,7 @@ public class SettingsGradleTemplate implements TextFileTemplate {
     @Override
     public String getText() {
         return new TextBuilder()
-                .addLine("rootProject.name = '${name}'")
+                .addLn("rootProject.name = '${name}'")
                 .variable("name", getProjectName())
                 .render();
     }

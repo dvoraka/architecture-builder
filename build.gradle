@@ -33,6 +33,7 @@ subprojects {
     dependencies {
         // Spring Boot starter
         compile('org.springframework.boot:spring-boot-starter')
+        compile('org.springframework.boot:spring-boot-starter-web')
         // Spring logging
         compile('org.springframework.boot:spring-boot-starter-logging')
 

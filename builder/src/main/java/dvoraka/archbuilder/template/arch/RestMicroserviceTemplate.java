@@ -11,6 +11,7 @@ import dvoraka.archbuilder.template.text.AppPropertiesTemplate;
 import dvoraka.archbuilder.template.text.BuildGradleTemplate;
 import dvoraka.archbuilder.template.text.GitignoreTemplate;
 import dvoraka.archbuilder.template.text.SettingsGradleTemplate;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +58,12 @@ public class RestMicroserviceTemplate implements ArchitectureTemplate, TemplateH
                 .build();
 
         // controller
-        //TODO
+        String controlerName = serviceName + "Controller";
+        Directory controller = new Directory.Builder("controller", DirType.NEW_TYPE)
+                .parent(srcBase)
+                .filename(controlerName)
+                .metadataClass(RestController.class)
+                .build();
 
         // Spring Boot application
         String appClassName = serviceName + "App";

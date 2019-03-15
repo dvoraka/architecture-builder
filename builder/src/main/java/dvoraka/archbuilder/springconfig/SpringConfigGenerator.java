@@ -1,6 +1,6 @@
 package dvoraka.archbuilder.springconfig;
 
-import dvoraka.archbuilder.Directory;
+import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.exception.GeneratorException;
 
 import java.util.List;

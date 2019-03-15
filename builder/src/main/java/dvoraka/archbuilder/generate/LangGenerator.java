@@ -1,6 +1,6 @@
 package dvoraka.archbuilder.generate;
 
-import dvoraka.archbuilder.Directory;
+import dvoraka.archbuilder.data.Directory;
 
 public interface LangGenerator {
 

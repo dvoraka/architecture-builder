@@ -1,10 +1,10 @@
 package dvoraka.archbuilder.template
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import dvoraka.archbuilder.DirType
-import dvoraka.archbuilder.Directory
 import dvoraka.archbuilder.build.BuildTool
 import dvoraka.archbuilder.build.GradleBuildTool
+import dvoraka.archbuilder.data.DirType
+import dvoraka.archbuilder.data.Directory
 import dvoraka.archbuilder.generate.Generator
 import dvoraka.archbuilder.generate.JavaHelper
 import dvoraka.archbuilder.generate.JavaTestingHelper

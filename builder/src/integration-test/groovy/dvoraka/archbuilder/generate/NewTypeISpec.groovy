@@ -1,7 +1,7 @@
 package dvoraka.archbuilder.generate
 
-import dvoraka.archbuilder.DirType
-import dvoraka.archbuilder.Directory
+import dvoraka.archbuilder.data.DirType
+import dvoraka.archbuilder.data.Directory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import spock.lang.Ignore

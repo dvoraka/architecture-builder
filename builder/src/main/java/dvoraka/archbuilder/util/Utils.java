@@ -1,7 +1,7 @@
 package dvoraka.archbuilder.util;
 
-import dvoraka.archbuilder.DirType;
-import dvoraka.archbuilder.Directory;
+import dvoraka.archbuilder.data.DirType;
+import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.exception.GeneratorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

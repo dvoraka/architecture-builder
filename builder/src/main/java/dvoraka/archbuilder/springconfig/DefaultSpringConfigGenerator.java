@@ -5,7 +5,7 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.TypeSpec;
-import dvoraka.archbuilder.Directory;
+import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.exception.GeneratorException;
 import dvoraka.archbuilder.generate.JavaHelper;
 import org.springframework.context.annotation.Bean;

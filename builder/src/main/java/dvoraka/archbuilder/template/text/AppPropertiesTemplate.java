@@ -1,6 +1,6 @@
 package dvoraka.archbuilder.template.text;
 
-import dvoraka.archbuilder.TextBuilder;
+import dvoraka.archbuilder.util.TextBuilder;
 
 public class AppPropertiesTemplate implements TextFileTemplate {
 

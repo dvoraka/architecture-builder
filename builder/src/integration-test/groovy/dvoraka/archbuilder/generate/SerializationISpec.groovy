@@ -1,7 +1,7 @@
 package dvoraka.archbuilder.generate
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import dvoraka.archbuilder.Directory
+import dvoraka.archbuilder.data.Directory
 import dvoraka.archbuilder.service.DirService
 import org.springframework.beans.factory.annotation.Autowired
 

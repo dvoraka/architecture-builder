@@ -1,6 +1,6 @@
 package dvoraka.archbuilder.template.arch;
 
-import dvoraka.archbuilder.Directory;
+import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.sample.microservice.data.BaseException;
 import dvoraka.archbuilder.sample.microservice.data.ResultData;
 import dvoraka.archbuilder.sample.microservice.data.message.RequestMessage;

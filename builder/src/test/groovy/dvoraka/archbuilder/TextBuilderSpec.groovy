@@ -1,5 +1,6 @@
 package dvoraka.archbuilder
 
+import dvoraka.archbuilder.util.TextBuilder
 import spock.lang.Specification
 
 class TextBuilderSpec extends Specification {

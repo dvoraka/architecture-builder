@@ -1,7 +1,7 @@
 package dvoraka.archbuilder.generate;
 
-import dvoraka.archbuilder.DirType;
-import dvoraka.archbuilder.Directory;
+import dvoraka.archbuilder.data.DirType;
+import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.service.DirService;
 
 import java.lang.reflect.InvocationTargetException;

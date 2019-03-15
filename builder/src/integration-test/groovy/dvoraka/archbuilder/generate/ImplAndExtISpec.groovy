@@ -1,7 +1,7 @@
 package dvoraka.archbuilder.generate
 
-import dvoraka.archbuilder.DirType
-import dvoraka.archbuilder.Directory
+import dvoraka.archbuilder.data.DirType
+import dvoraka.archbuilder.data.Directory
 import dvoraka.archbuilder.sample.Class1m
 import dvoraka.archbuilder.sample.SimpleClass
 import dvoraka.archbuilder.sample.SimpleInterface

@@ -1,7 +1,7 @@
 package dvoraka.archbuilder.template;
 
-import dvoraka.archbuilder.DirType;
-import dvoraka.archbuilder.Directory;
+import dvoraka.archbuilder.data.DirType;
+import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.template.text.TextFileTemplate;
 
 public interface TemplateHelper {

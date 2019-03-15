@@ -20,6 +20,9 @@ import org.springframework.context.annotation.Profile;
 
 import java.io.File;
 
+/**
+ * Template testing.
+ */
 @SpringBootApplication
 public class App {
 

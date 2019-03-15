@@ -1,9 +1,9 @@
 package dvoraka.archbuilder.generate
 
-import dvoraka.archbuilder.DirType
-import dvoraka.archbuilder.Directory
-import dvoraka.archbuilder.TextBuilder
+import dvoraka.archbuilder.data.DirType
+import dvoraka.archbuilder.data.Directory
 import dvoraka.archbuilder.service.DirService
+import dvoraka.archbuilder.util.TextBuilder
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
 

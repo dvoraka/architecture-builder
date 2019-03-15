@@ -1,8 +1,8 @@
 package dvoraka.archbuilder.springconfig
 
 import com.squareup.javapoet.CodeBlock
-import dvoraka.archbuilder.DirType
-import dvoraka.archbuilder.Directory
+import dvoraka.archbuilder.data.DirType
+import dvoraka.archbuilder.data.Directory
 import spock.lang.Specification
 
 class DefaultSpringConfigGeneratorSpec extends Specification {

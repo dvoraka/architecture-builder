@@ -1,7 +1,7 @@
 package dvoraka.archbuilder.generate;
 
-import dvoraka.archbuilder.DirType;
-import dvoraka.archbuilder.Directory;
+import dvoraka.archbuilder.data.DirType;
+import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.exception.GeneratorException;
 import dvoraka.archbuilder.service.DirService;
 import dvoraka.archbuilder.util.Utils;

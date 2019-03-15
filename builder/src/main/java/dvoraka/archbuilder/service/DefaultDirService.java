@@ -2,8 +2,8 @@ package dvoraka.archbuilder.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dvoraka.archbuilder.DirType;
-import dvoraka.archbuilder.Directory;
+import dvoraka.archbuilder.data.DirType;
+import dvoraka.archbuilder.data.Directory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;

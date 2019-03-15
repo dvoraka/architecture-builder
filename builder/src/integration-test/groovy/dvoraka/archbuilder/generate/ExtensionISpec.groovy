@@ -1,8 +1,8 @@
 package dvoraka.archbuilder.generate
 
 
-import dvoraka.archbuilder.DirType
-import dvoraka.archbuilder.Directory
+import dvoraka.archbuilder.data.DirType
+import dvoraka.archbuilder.data.Directory
 import dvoraka.archbuilder.sample.*
 import dvoraka.archbuilder.sample.generic.*
 import dvoraka.archbuilder.sample.microservice.data.BaseException

@@ -1,6 +1,6 @@
 package dvoraka.archbuilder.template.arch;
 
-import dvoraka.archbuilder.Directory;
+import dvoraka.archbuilder.data.Directory;
 
 public interface ArchitectureTemplate {
 

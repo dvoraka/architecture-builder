@@ -1,8 +1,8 @@
 package dvoraka.archbuilder.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import dvoraka.archbuilder.DirType;
-import dvoraka.archbuilder.Directory;
+import dvoraka.archbuilder.data.DirType;
+import dvoraka.archbuilder.data.Directory;
 
 import java.nio.file.Path;
 import java.util.Optional;

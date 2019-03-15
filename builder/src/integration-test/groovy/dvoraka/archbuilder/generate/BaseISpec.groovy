@@ -1,7 +1,7 @@
 package dvoraka.archbuilder.generate
 
-import dvoraka.archbuilder.DirType
-import dvoraka.archbuilder.Directory
+import dvoraka.archbuilder.data.DirType
+import dvoraka.archbuilder.data.Directory
 import dvoraka.archbuilder.util.Utils
 import groovy.util.logging.Slf4j
 import org.springframework.boot.test.context.SpringBootTest

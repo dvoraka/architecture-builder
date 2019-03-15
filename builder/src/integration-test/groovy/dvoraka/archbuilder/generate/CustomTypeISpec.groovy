@@ -4,8 +4,8 @@ import com.squareup.javapoet.ArrayTypeName
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeSpec
-import dvoraka.archbuilder.DirType
-import dvoraka.archbuilder.Directory
+import dvoraka.archbuilder.data.DirType
+import dvoraka.archbuilder.data.Directory
 import dvoraka.archbuilder.template.source.SourceTemplate
 import dvoraka.archbuilder.template.source.SpringBootAppTemplate
 import dvoraka.archbuilder.util.JavaUtils

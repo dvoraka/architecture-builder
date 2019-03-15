@@ -1,7 +1,7 @@
 package dvoraka.archbuilder.template.arch;
 
-import dvoraka.archbuilder.DirType;
-import dvoraka.archbuilder.Directory;
+import dvoraka.archbuilder.data.DirType;
+import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.springconfig.BeanMapping;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
 import dvoraka.archbuilder.template.TemplateHelper;

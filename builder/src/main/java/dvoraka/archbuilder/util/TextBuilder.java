@@ -1,4 +1,4 @@
-package dvoraka.archbuilder;
+package dvoraka.archbuilder.util;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -38,14 +38,20 @@ public class TextBuilder {
     }
 
     public TextBuilder addLn(String text) {
-        builder.append(text);
+        add(text);
         ln();
         return this;
     }
 
     public TextBuilder addTab(String text) {
         tab();
-        builder.append(text);
+        add(text);
+        return this;
+    }
+
+    public TextBuilder addTabLn(String text) {
+        addTab(text);
+        ln();
         return this;
     }
 

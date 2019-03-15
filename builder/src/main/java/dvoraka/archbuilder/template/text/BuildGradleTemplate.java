@@ -28,46 +28,33 @@ public class BuildGradleTemplate implements TextFileTemplate {
     @Override
     public String getText() {
 
-        // POC stuff only
-
-        StringBuilder sb = new StringBuilder();
-        // replacement
         TextBuilder tb = new TextBuilder();
 
         // Spring Boot plugin
-        sb.append("plugins { id 'org.springframework.boot' version '2.1.0.RELEASE' }\n\n");
-
         tb.addLn("plugins { id 'org.springframework.boot' version '2.1.0.RELEASE' }");
         tb.ln();
 
         // plugins
         for (String plugin : plugins) {
-            sb.append("apply plugin: ");
-            sb.append("'");
-            sb.append(plugin);
-            sb.append("'");
-            sb.append("\n");
-
             tb.add("apply plugin: ").add("'").add(plugin).addLn("'");
         }
-        sb.append("\n");
-
         tb.ln();
 
-        sb.append("repositories {\n");
-        sb.append("    jcenter()\n");
-        sb.append("    maven { url 'https://jitpack.io' }\n");
-        sb.append("    maven { url 'https://repo.gradle.org/gradle/libs-releases' }\n");
-        sb.append("}\n\n");
+        // repositories
+        tb.addLn("repositories {");
+        tb.tab().addLn("jcenter()");
+        tb.tab().addLn("maven { url 'https://jitpack.io' }");
+        tb.tab().addLn("maven { url 'https://repo.gradle.org/gradle/libs-releases' }");
+        tb.addLn("}");
+        tb.ln();
 
-//        tb.addLn("repositories {")
-//                .addLn("  jcenter()");
+        // dependencies
+        tb.addLn("dependencies {");
+        tb.tab().addLn("implementation 'com.github.dvoraka:architecture-builder:master-SNAPSHOT'");
+        tb.addLn("}");
+        tb.ln();
 
-        sb.append("dependencies {\n");
-        sb.append("    implementation 'com.github.dvoraka:architecture-builder:master-SNAPSHOT'\n");
-        sb.append("}\n\n");
-
-        return sb.toString();
+        return tb.getText();
     }
 
     @Override

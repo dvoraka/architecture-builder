@@ -6,8 +6,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import dvoraka.archbuilder.exception.GeneratorException;
-import dvoraka.archbuilder.generate.JavaUtils;
-import dvoraka.archbuilder.generate.Utils;
+import dvoraka.archbuilder.util.JavaUtils;
+import dvoraka.archbuilder.util.Utils;
 
 import java.io.File;
 import java.util.ArrayList;

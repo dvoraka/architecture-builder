@@ -11,9 +11,10 @@ import com.squareup.javapoet.TypeVariableName;
 import com.squareup.javapoet.WildcardTypeName;
 import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;
-import dvoraka.archbuilder.TypeVarMappingException;
 import dvoraka.archbuilder.exception.GeneratorException;
 import dvoraka.archbuilder.util.ByteClassLoader;
+import dvoraka.archbuilder.util.JavaUtils;
+import dvoraka.archbuilder.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -684,7 +685,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                     if (typeMapping.containsKey(actualVar)) {
                         typeMapping.put(srcTypeParams[i], typeMapping.get(actualVar));
                     } else {
-                        throw new TypeVarMappingException();
+                        throw new GeneratorException("Type var mapping failed!");
                     }
                 }
             }

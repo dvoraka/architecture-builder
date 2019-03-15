@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.generate;
+package dvoraka.archbuilder.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

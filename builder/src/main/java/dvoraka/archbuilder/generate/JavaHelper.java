@@ -3,6 +3,7 @@ package dvoraka.archbuilder.generate;
 import com.squareup.javapoet.TypeVariableName;
 import dvoraka.archbuilder.Directory;
 import dvoraka.archbuilder.exception.GeneratorException;
+import dvoraka.archbuilder.util.JavaUtils;
 
 import java.io.File;
 import java.lang.reflect.Constructor;

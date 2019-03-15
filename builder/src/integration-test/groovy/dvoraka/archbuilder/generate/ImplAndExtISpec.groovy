@@ -13,7 +13,7 @@ import dvoraka.archbuilder.sample.generic.Interface2p2am
 import org.springframework.beans.factory.annotation.Autowired
 import spock.lang.Ignore
 
-import static dvoraka.archbuilder.generate.Utils.createAbstractDirFor
+import static dvoraka.archbuilder.util.Utils.createAbstractDirFor
 
 class ImplAndExtISpec extends BaseISpec {
 

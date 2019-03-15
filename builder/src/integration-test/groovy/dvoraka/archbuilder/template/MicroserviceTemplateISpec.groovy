@@ -1,14 +1,13 @@
 package dvoraka.archbuilder.template
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import dvoraka.archbuilder.BuildTool
 import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
-import dvoraka.archbuilder.GradleBuildTool
+import dvoraka.archbuilder.build.BuildTool
+import dvoraka.archbuilder.build.GradleBuildTool
 import dvoraka.archbuilder.generate.Generator
 import dvoraka.archbuilder.generate.JavaHelper
 import dvoraka.archbuilder.generate.JavaTestingHelper
-import dvoraka.archbuilder.generate.Utils
 import dvoraka.archbuilder.sample.microservice.data.BaseException
 import dvoraka.archbuilder.sample.microservice.data.ResultData
 import dvoraka.archbuilder.sample.microservice.data.message.RequestMessage
@@ -23,6 +22,7 @@ import dvoraka.archbuilder.springconfig.SpringConfigGenerator
 import dvoraka.archbuilder.template.arch.ArchitectureTemplate
 import dvoraka.archbuilder.template.arch.MicroserviceTemplate
 import dvoraka.archbuilder.template.arch.NetTemplateConfig
+import dvoraka.archbuilder.util.Utils
 import groovy.json.JsonOutput
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired

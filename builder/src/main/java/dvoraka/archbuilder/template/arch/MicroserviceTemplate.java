@@ -17,9 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-import static dvoraka.archbuilder.generate.JavaUtils.pkg2path;
-import static dvoraka.archbuilder.generate.Utils.noFilenameException;
-import static dvoraka.archbuilder.generate.Utils.uncapitalize;
+import static dvoraka.archbuilder.util.JavaUtils.pkg2path;
+import static dvoraka.archbuilder.util.Utils.noFilenameException;
+import static dvoraka.archbuilder.util.Utils.uncapitalize;
 
 public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelper {
 

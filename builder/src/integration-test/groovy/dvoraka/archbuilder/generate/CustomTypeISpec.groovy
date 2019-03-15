@@ -8,6 +8,7 @@ import dvoraka.archbuilder.DirType
 import dvoraka.archbuilder.Directory
 import dvoraka.archbuilder.template.source.SourceTemplate
 import dvoraka.archbuilder.template.source.SpringBootAppTemplate
+import dvoraka.archbuilder.util.JavaUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication

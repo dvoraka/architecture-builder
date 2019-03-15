@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.generate;
+package dvoraka.archbuilder.util;
 
 import dvoraka.archbuilder.DirType;
 import dvoraka.archbuilder.Directory;

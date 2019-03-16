@@ -33,8 +33,6 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
             Class<?> superService,
             List<Class<?>> typeArguments,
             String serviceName,
-            Class<?> baseException,
-            Class<?> superServer,
             NetTemplateConfig netConfig,
             SpringConfigGenerator configGenerator
     ) {

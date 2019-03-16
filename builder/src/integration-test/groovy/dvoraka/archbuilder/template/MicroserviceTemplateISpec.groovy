@@ -70,8 +70,6 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
                 BaseService.class,
                 Collections.emptyList(),
                 serviceName,
-                BaseException.class,
-                AbstractServer.class,
                 netTemplateConfig,
                 configGenerator
         )

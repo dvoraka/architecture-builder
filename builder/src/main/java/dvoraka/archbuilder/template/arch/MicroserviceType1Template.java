@@ -42,8 +42,6 @@ public class MicroserviceType1Template implements ArchitectureTemplate {
                 BaseService.class,
                 Collections.emptyList(),
                 serviceName,
-                BaseException.class,
-                AbstractServer.class,
                 netTemplateConfig,
                 configGenerator
         );

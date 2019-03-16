@@ -2,6 +2,7 @@ package dvoraka.archbuilder.template.arch;
 
 import dvoraka.archbuilder.data.DirType;
 import dvoraka.archbuilder.data.Directory;
+import dvoraka.archbuilder.exception.GeneratorException;
 import dvoraka.archbuilder.springconfig.BeanMapping;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,10 @@ public class NetSubmodule implements Submodule {
 
     @Override
     public void addSubmodule(Directory srcBase) {
+
+        if (!srcBase.isBase()) {
+            throw new GeneratorException("Src base must be base.");
+        }
 
         // exception
         String exceptionName = getBaseName() + "Exception";

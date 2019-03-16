@@ -63,7 +63,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
 
         // network
         Submodule networkModule = new NetSubmodule(serviceName, service, netConfig, configGenerator);
-        networkModule.addSubmodule(srcRoot);
+        networkModule.addSubmodule(srcBase);
 
         // Spring Boot application
         String appClassName = serviceName + "App";

@@ -34,25 +34,11 @@ public class BuildGradleTemplate implements TextFileTemplate {
         tb.addLn("plugins { id 'org.springframework.boot' version '2.1.0.RELEASE' }");
         tb.ln();
 
-        // plugins
-        for (String plugin : plugins) {
-            tb.add("apply plugin: ").add("'").add(plugin).addLn("'");
-        }
-        tb.ln();
+        addPlugins(tb);
 
-        // repositories
-        tb.addLn("repositories {");
-        tb.tab().addLn("jcenter()");
-        tb.tab().addLn("maven { url 'https://jitpack.io' }");
-        tb.tab().addLn("maven { url 'https://repo.gradle.org/gradle/libs-releases' }");
-        tb.addLn("}");
-        tb.ln();
+        addRepositories(tb);
 
-        // dependencies
-        tb.addLn("dependencies {");
-        tb.tab().addLn("implementation 'com.github.dvoraka:architecture-builder:master-SNAPSHOT'");
-        tb.addLn("}");
-        tb.ln();
+        addDependencies(tb);
 
         return tb.getText();
     }
@@ -60,6 +46,29 @@ public class BuildGradleTemplate implements TextFileTemplate {
     @Override
     public String getPath() {
         return "";
+    }
+
+    protected void addPlugins(TextBuilder tb) {
+        for (String plugin : getPlugins()) {
+            tb.add("apply plugin: ").add("'").add(plugin).addLn("'");
+        }
+        tb.ln();
+    }
+
+    protected void addRepositories(TextBuilder tb) {
+        tb.addLn("repositories {");
+        tb.tab().addLn("jcenter()");
+        tb.tab().addLn("maven { url 'https://jitpack.io' }");
+        tb.tab().addLn("maven { url 'https://repo.gradle.org/gradle/libs-releases' }");
+        tb.addLn("}");
+        tb.ln();
+    }
+
+    protected void addDependencies(TextBuilder tb) {
+        tb.addLn("dependencies {");
+        tb.tab().addLn("implementation 'com.github.dvoraka:architecture-builder:master-SNAPSHOT'");
+        tb.addLn("}");
+        tb.ln();
     }
 
     public Set<String> getPlugins() {

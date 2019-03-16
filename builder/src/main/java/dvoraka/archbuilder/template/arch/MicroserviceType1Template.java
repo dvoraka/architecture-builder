@@ -27,11 +27,13 @@ public class MicroserviceType1Template implements ArchitectureTemplate {
     ) {
         NetTemplateConfig netTemplateConfig = new NetTemplateConfig(
                 ResultData.class,
+                BaseException.class,
                 RequestMessage.class,
                 ResponseMessage.class,
                 ServiceNetComponent.class,
                 NetReceiver.class,
-                BaseNetComponent.class
+                BaseNetComponent.class,
+                AbstractServer.class
         );
 
         MicroserviceTemplate template = new MicroserviceTemplate(

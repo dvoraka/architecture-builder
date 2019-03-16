@@ -2,9 +2,15 @@ package dvoraka.archbuilder.template.arch;
 
 import dvoraka.archbuilder.data.DirType;
 import dvoraka.archbuilder.data.Directory;
+import dvoraka.archbuilder.springconfig.BeanMapping;
+import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static dvoraka.archbuilder.template.arch.MicroserviceTemplate.MESSAGE_DIR;
+import static dvoraka.archbuilder.util.Utils.uncapitalize;
 
 public class NetSubmodule implements Submodule {
 
@@ -12,11 +18,23 @@ public class NetSubmodule implements Submodule {
     private final Directory service;
     private final NetTemplateConfig config;
 
+    private final SpringConfigGenerator configGenerator;
 
-    public NetSubmodule(String baseName, Directory service, NetTemplateConfig config) {
+    private final List<BeanMapping> configuration;
+
+
+    public NetSubmodule(
+            String baseName,
+            Directory service,
+            NetTemplateConfig config,
+            SpringConfigGenerator configGenerator
+    ) {
         this.baseName = baseName;
         this.service = service;
         this.config = config;
+        this.configGenerator = configGenerator;
+
+        configuration = new ArrayList<>();
     }
 
     @Override
@@ -108,6 +126,25 @@ public class NetSubmodule implements Submodule {
                 .parameterTypeDir(responseMessage)
                 .filename(networkResponseReceiverName)
                 .build();
+
+        // create configuration
+        BeanMapping serverBeanMapping = new BeanMapping.Builder(uncapitalize(serverName))
+                .typeDir(server)
+                .toTypeDir(server)
+                .codeTemplate(configGenerator::simpleReturn)
+                .build();
+        BeanMapping adapterBeanMapping = new BeanMapping.Builder(uncapitalize(networkComponentName))
+                .typeDir(serviceNetworkComponent)
+                .toTypeDir(serviceNetAdapter)
+                .codeTemplate(configGenerator::simpleReturn)
+                .build();
+        configuration.add(serverBeanMapping);
+        configuration.add(adapterBeanMapping);
+    }
+
+    @Override
+    public List<BeanMapping> getConfiguration() {
+        return configuration;
     }
 
     public String getBaseName() {

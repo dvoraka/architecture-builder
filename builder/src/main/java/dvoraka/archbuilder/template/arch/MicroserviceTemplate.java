@@ -11,7 +11,6 @@ import dvoraka.archbuilder.template.text.AppPropertiesTemplate;
 import dvoraka.archbuilder.template.text.BuildGradleTemplate;
 import dvoraka.archbuilder.template.text.GitignoreTemplate;
 import dvoraka.archbuilder.template.text.SettingsGradleTemplate;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,92 +61,9 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
                 .filename(serviceImplFullName)
                 .build();
 
-        // exception
-        String exceptionName = serviceName + "Exception";
-        Directory exception = new Directory.Builder("exception", DirType.IMPL)
-                .parent(srcBase)
-                .superTypeClass(baseException)
-                .filename(exceptionName)
-                .build();
-
-        // data
-        String dataName = serviceName + "Data";
-        Directory data = new Directory.Builder("data", DirType.IMPL)
-                .parent(srcBase)
-                .superTypeClass(netConfig.getBaseResultData())
-                .filename(dataName)
-                .parameterTypeDir(exception)
-                .build();
-
-        // messages
-        String responseMessageName = serviceName + "ResponseMessage";
-        Directory responseMessage = new Directory.Builder(MESSAGE_DIR, DirType.IMPL)
-                .parent(srcBase)
-                .superTypeClass(netConfig.getResponseBaseMessage())
-                .parameterTypeDir(data)
-                .parameterTypeDir(exception)
-                .filename(responseMessageName)
-                .build();
-        String requestMessageName = serviceName + "Message";
-        Directory requestMessage = new Directory.Builder(MESSAGE_DIR, DirType.IMPL)
-                .parent(srcBase)
-                .superTypeClass(netConfig.getRequestBaseMessage())
-                .parameterTypeDir(service)
-                .parameterTypeDir(responseMessage)
-                .parameterTypeDir(data)
-                .parameterTypeDir(exception)
-                .filename(requestMessageName)
-                .build();
-
-        // server
-        String serverName = serviceName + "Server";
-        Directory server = new Directory.Builder("server", DirType.IMPL)
-                .parent(srcBase)
-                .superTypeClass(superServer)
-                .filename(serverName)
-                .metadataClass(Service.class)
-                .build();
-
-        // network components
-        String networkComponentName = serviceName + "NetComponent";
-        Directory serviceNetworkComponent = new Directory.Builder("net", DirType.IMPL)
-                .parent(srcBase)
-                .superTypeClass(netConfig.getSuperNetComponent())
-                .interfaceType()
-                .parameterTypeDir(requestMessage)
-                .parameterTypeDir(responseMessage)
-                .parameterTypeDir(data)
-                .parameterTypeDir(exception)
-                .filename(networkComponentName)
-                .build();
-        String netAdapterName = serviceName + "NetAdapter";
-        Directory serviceNetAdapter = new Directory.Builder("net", DirType.IMPL)
-                .parent(srcBase)
-                .superType(serviceNetworkComponent)
-                .superTypeClass(netConfig.getBaseNetComponent())
-                .parameterTypeDir(requestMessage)
-                .parameterTypeDir(responseMessage)
-                .parameterTypeDir(data)
-                .parameterTypeDir(exception)
-                .metadataClass(Service.class)
-                .filename(netAdapterName)
-                .build();
-        String networkReceiverName = serviceName + "NetReceiver";
-        Directory networkReceiver = new Directory.Builder("net", DirType.IMPL)
-                .parent(srcBase)
-                .superTypeClass(netConfig.getSuperNetReceiver())
-                .interfaceType()
-                .parameterTypeDir(requestMessage)
-                .filename(networkReceiverName)
-                .build();
-        String networkResponseReceiverName = serviceName + "NetResponseReceiver";
-        Directory networkResponseReceiver = new Directory.Builder("net", DirType.IMPL)
-                .parent(srcBase)
-                .superTypeClass(netConfig.getSuperNetReceiver())
-                .interfaceType()
-                .parameterTypeDir(responseMessage)
-                .filename(networkResponseReceiverName)
-                .build();
+        // network
+        Submodule networkModule = new NetSubmodule(serviceName, service, netConfig, configGenerator);
+        networkModule.addSubmodule(srcRoot);
 
         // Spring Boot application
         String appClassName = serviceName + "App";
@@ -164,20 +80,9 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
                 .toTypeDir(serviceImpl)
                 .codeTemplate(configGenerator::simpleReturn)
                 .build();
-        BeanMapping serverBeanMapping = new BeanMapping.Builder(uncapitalize(serverName))
-                .typeDir(server)
-                .toTypeDir(server)
-                .codeTemplate(configGenerator::simpleReturn)
-                .build();
-        BeanMapping adapterBeanMapping = new BeanMapping.Builder(uncapitalize(networkComponentName))
-                .typeDir(serviceNetworkComponent)
-                .toTypeDir(serviceNetAdapter)
-                .codeTemplate(configGenerator::simpleReturn)
-                .build();
 
         beanMappings.add(serviceBeanMapping);
-        beanMappings.add(serverBeanMapping);
-        beanMappings.add(adapterBeanMapping);
+        beanMappings.addAll(networkModule.getConfiguration());
 
         String springConfigName = serviceName + "Config";
         Directory springConfig = new Directory.Builder("configuration", DirType.SPRING_CONFIG)

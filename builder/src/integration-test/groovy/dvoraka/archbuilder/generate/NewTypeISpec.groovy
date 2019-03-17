@@ -33,7 +33,7 @@ class NewTypeISpec extends BaseISpec {
             Directory newType = new Directory.Builder('newtype', DirType.NEW_TYPE)
                     .parent(srcBase)
                     .filename('NewASimpleClass')
-                    .metadataClass(Service)
+                    .metadata(Service)
                     .build()
         when:
             mainGenerator.generate(root)
@@ -51,8 +51,8 @@ class NewTypeISpec extends BaseISpec {
             Directory newType = new Directory.Builder('newtype', DirType.NEW_TYPE)
                     .parent(srcBase)
                     .filename('NewA2SimpleClass')
-                    .metadataClass(Service)
-                    .metadataClass(Deprecated)
+                    .metadata(Service)
+                    .metadata(Deprecated)
                     .build()
         when:
             mainGenerator.generate(root)
@@ -149,7 +149,7 @@ class NewTypeISpec extends BaseISpec {
             Directory cls = new Directory.Builder('newtype', DirType.NEW_TYPE)
                     .parent(srcBase)
                     .filename('NewAnnotatedClass')
-                    .metadataDir(annotation)
+                    .metadata(annotation)
                     .build()
         when:
             mainGenerator.generate(root)

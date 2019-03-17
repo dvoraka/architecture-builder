@@ -51,7 +51,7 @@ class ImplementationISpec extends BaseISpec {
                     .parent(srcBase)
                     .superType(abs)
                     .filename('TestA' + cls.getSimpleName())
-                    .metadataClass(Service)
+                    .metadata(Service)
                     .parameterTypeName('java.lang.Integer')
                     .build()
         when:

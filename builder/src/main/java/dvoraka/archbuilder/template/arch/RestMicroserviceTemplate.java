@@ -62,7 +62,7 @@ public class RestMicroserviceTemplate implements ArchitectureTemplate, TemplateH
         Directory controller = new Directory.Builder("controller", DirType.NEW_TYPE)
                 .parent(srcBase)
                 .filename(controlerName)
-                .metadataClass(RestController.class)
+                .metadata(RestController.class)
                 .build();
 
         // Spring Boot application

@@ -88,7 +88,7 @@ public class NetSubmodule implements Submodule {
                 .parent(srcBase)
                 .superType(config.getSuperServer())
                 .filename(serverName)
-                .metadataClass(Service.class)
+                .metadata(Service.class)
                 .build();
 
         // network components
@@ -112,7 +112,7 @@ public class NetSubmodule implements Submodule {
                 .parameterTypeDir(responseMessage)
                 .parameterTypeDir(data)
                 .parameterTypeDir(exception)
-                .metadataClass(Service.class)
+                .metadata(Service.class)
                 .filename(netAdapterName)
                 .build();
         String networkReceiverName = getBaseName() + "NetReceiver";

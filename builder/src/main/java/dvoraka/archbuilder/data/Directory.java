@@ -323,7 +323,7 @@ public class Directory {
             return this;
         }
 
-        public Builder textSupplier(Supplier<String> supplier) {
+        public Builder text(Supplier<String> supplier) {
             this.textSupplier = supplier;
             return this;
         }
@@ -359,16 +359,23 @@ public class Directory {
             return parameterTypeName(directory.getTypeName());
         }
 
+        public Builder parameterTypeDir(Collection<Directory> dirs) {
+            for (Directory dir : dirs) {
+                parameterTypeDir(dir);
+            }
+            return this;
+        }
+
         public Builder metadata(String data) {
             metadata.add(data);
             return this;
         }
 
-        public Builder metadataClass(Class<?> clazz) {
+        public Builder metadata(Class<?> clazz) {
             return metadata(clazz.getName());
         }
 
-        public Builder metadataDir(Directory directory) {
+        public Builder metadata(Directory directory) {
             dependsOn(directory);
             return metadata(directory.getTypeName());
         }

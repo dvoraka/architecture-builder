@@ -11,6 +11,7 @@ import dvoraka.archbuilder.util.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -342,6 +343,13 @@ public class Directory {
 
         public Builder parameterTypeClass(Class<?> clazz) {
             return parameterTypeName(clazz.getName());
+        }
+
+        public Builder parameterTypeClass(Collection<Class<?>> classes) {
+            for (Class<?> cls : classes) {
+                parameterTypeName(cls.getName());
+            }
+            return this;
         }
 
         public Builder parameterTypeDir(Directory directory) {

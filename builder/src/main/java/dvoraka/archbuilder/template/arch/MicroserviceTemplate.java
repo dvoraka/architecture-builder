@@ -38,19 +38,15 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
     ) {
         root = root(rootDirName);
         Directory srcRoot = srcRoot(root);
-
         Directory srcBase = srcBase(srcRoot, pkg2path(packageName));
 
         // service
         String serviceFullName = serviceName + "Service";
-        Directory.Builder serviceBuilder = new Directory.Builder("service", DirType.SERVICE)
+        Directory service = new Directory.Builder("service", DirType.SERVICE)
                 .parent(srcBase)
                 .superTypeClass(superService)
-                .filename(serviceFullName);
-        for (Class<?> typeArgument : typeArguments) {
-            serviceBuilder.parameterTypeClass(typeArgument);
-        }
-        Directory service = serviceBuilder
+                .filename(serviceFullName)
+                .parameterTypeClass(typeArguments)
                 .build();
         String serviceImplFullName = "Default" + serviceFullName;
         Directory serviceImpl = new Directory.Builder("service", DirType.SERVICE_IMPL)
@@ -71,6 +67,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
         // Spring configuration
         List<BeanMapping> beanMappings = new ArrayList<>();
         // mappings
+        //TODO: getFilename should return .java suffix
         String serviceMappingName = uncapitalize(service.getFilename()
                 .orElseThrow(() -> noFilenameException(service)));
         BeanMapping serviceBeanMapping = new BeanMapping.Builder(serviceMappingName)

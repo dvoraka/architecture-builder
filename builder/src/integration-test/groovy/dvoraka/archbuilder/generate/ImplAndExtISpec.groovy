@@ -107,7 +107,7 @@ class ImplAndExtISpec extends BaseISpec {
                     .parent(srcBase)
                     .superType(simpleInterface)
                     .superType(clsDir)
-                    .parameterTypeClass(Integer)
+                    .parameterType(Integer)
                     .filename('Test' + cls.getSimpleName() + iface.getSimpleName())
                     .build()
         when:
@@ -157,7 +157,7 @@ class ImplAndExtISpec extends BaseISpec {
                     .parent(srcBase)
                     .superType(ifaceDir)
                     .superType(clsDir)
-                    .parameterTypeClass(String)
+                    .parameterType(String)
                     .filename('Test' + cls.getSimpleName() + iface.getSimpleName())
                     .build()
         when:
@@ -182,7 +182,7 @@ class ImplAndExtISpec extends BaseISpec {
                     .parent(srcBase)
                     .superType(ifaceDir)
                     .superType(clsDir)
-                    .parameterTypeClass(String)
+                    .parameterType(String)
                     .filename('Test' + cls.getSimpleName() + iface.getSimpleName())
                     .build()
         when:
@@ -207,7 +207,7 @@ class ImplAndExtISpec extends BaseISpec {
                     .parent(srcBase)
                     .superType(ifaceDir)
                     .superType(clsDir)
-                    .parameterTypeClass(String)
+                    .parameterType(String)
                     .filename('Test' + cls.getSimpleName() + iface.getSimpleName())
                     .build()
         when:
@@ -236,8 +236,8 @@ class ImplAndExtISpec extends BaseISpec {
                     .superType(ifaceDir)
                     .superType(ifaceDir2)
                     .superType(clsDir)
-                    .parameterTypeClass(String)
-                    .parameterTypeClass(Long)
+                    .parameterType(String)
+                    .parameterType(Long)
                     .filename('Test' + cls.getSimpleName()
                     + iface.getSimpleName() + iface2.getSimpleName())
                     .build()

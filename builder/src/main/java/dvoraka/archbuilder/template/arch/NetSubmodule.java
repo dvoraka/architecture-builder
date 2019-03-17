@@ -59,7 +59,7 @@ public class NetSubmodule implements Submodule {
                 .parent(srcBase)
                 .superType(getConfig().getBaseResultData())
                 .filename(dataName)
-                .parameterTypeDir(exception)
+                .parameterType(exception)
                 .build();
 
         // messages
@@ -67,18 +67,18 @@ public class NetSubmodule implements Submodule {
         Directory responseMessage = new Directory.Builder(MESSAGE_DIR, DirType.IMPL)
                 .parent(srcBase)
                 .superType(getConfig().getResponseBaseMessage())
-                .parameterTypeDir(data)
-                .parameterTypeDir(exception)
+                .parameterType(data)
+                .parameterType(exception)
                 .filename(responseMessageName)
                 .build();
         String requestMessageName = getBaseName() + "Message";
         Directory requestMessage = new Directory.Builder(MESSAGE_DIR, DirType.IMPL)
                 .parent(srcBase)
                 .superType(getConfig().getRequestBaseMessage())
-                .parameterTypeDir(service)
-                .parameterTypeDir(responseMessage)
-                .parameterTypeDir(data)
-                .parameterTypeDir(exception)
+                .parameterType(service)
+                .parameterType(responseMessage)
+                .parameterType(data)
+                .parameterType(exception)
                 .filename(requestMessageName)
                 .build();
 
@@ -97,10 +97,10 @@ public class NetSubmodule implements Submodule {
                 .parent(srcBase)
                 .superType(getConfig().getSuperNetComponent())
                 .interfaceType()
-                .parameterTypeDir(requestMessage)
-                .parameterTypeDir(responseMessage)
-                .parameterTypeDir(data)
-                .parameterTypeDir(exception)
+                .parameterType(requestMessage)
+                .parameterType(responseMessage)
+                .parameterType(data)
+                .parameterType(exception)
                 .filename(networkComponentName)
                 .build();
         String netAdapterName = getBaseName() + "NetAdapter";
@@ -108,10 +108,10 @@ public class NetSubmodule implements Submodule {
                 .parent(srcBase)
                 .superType(serviceNetworkComponent)
                 .superType(getConfig().getBaseNetComponent())
-                .parameterTypeDir(requestMessage)
-                .parameterTypeDir(responseMessage)
-                .parameterTypeDir(data)
-                .parameterTypeDir(exception)
+                .parameterType(requestMessage)
+                .parameterType(responseMessage)
+                .parameterType(data)
+                .parameterType(exception)
                 .metadata(Service.class)
                 .filename(netAdapterName)
                 .build();
@@ -120,7 +120,7 @@ public class NetSubmodule implements Submodule {
                 .parent(srcBase)
                 .superType(getConfig().getSuperNetReceiver())
                 .interfaceType()
-                .parameterTypeDir(requestMessage)
+                .parameterType(requestMessage)
                 .filename(networkReceiverName)
                 .build();
         String networkResponseReceiverName = getBaseName() + "NetResponseReceiver";
@@ -128,7 +128,7 @@ public class NetSubmodule implements Submodule {
                 .parent(srcBase)
                 .superType(getConfig().getSuperNetReceiver())
                 .interfaceType()
-                .parameterTypeDir(responseMessage)
+                .parameterType(responseMessage)
                 .filename(networkResponseReceiverName)
                 .build();
 

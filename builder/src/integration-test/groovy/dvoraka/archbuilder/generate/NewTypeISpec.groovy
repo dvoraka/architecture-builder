@@ -88,9 +88,9 @@ class NewTypeISpec extends BaseISpec {
             Directory newType = new Directory.Builder('newtype', DirType.NEW_TYPE)
                     .parent(srcBase)
                     .filename('NewParametrizedType')
-                    .parameterTypeName("T")
-                    .parameterTypeName("U")
-                    .parameterTypeName("V")
+                    .parameterType("T")
+                    .parameterType("U")
+                    .parameterType("V")
                     .build()
         when:
             mainGenerator.generate(root)

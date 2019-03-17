@@ -46,7 +46,7 @@ public class RestMicroserviceTemplate implements ArchitectureTemplate, TemplateH
                 .superType(superService)
                 .filename(serviceFullName);
         for (Class<?> typeArgument : typeArguments) {
-            serviceBuilder.parameterTypeClass(typeArgument);
+            serviceBuilder.parameterType(typeArgument);
         }
         Directory service = serviceBuilder
                 .build();

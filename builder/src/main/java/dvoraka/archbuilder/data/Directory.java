@@ -303,18 +303,18 @@ public class Directory {
             return this;
         }
 
-        public Builder superType(Directory superType) {
-            dependsOn(superType);
-            this.superTypes.add(superType);
-            return this;
-        }
-
         public Builder superType(Class<?> clazz) {
             if (parent == null) {
                 throw new GeneratorException("Parent must be set before superType method.");
             }
             Directory wrapper = Utils.createAbstractDirFor(clazz, parent);
             this.superTypes.add(wrapper);
+            return this;
+        }
+
+        public Builder superType(Directory superType) {
+            dependsOn(superType);
+            this.superTypes.add(superType);
             return this;
         }
 
@@ -336,32 +336,32 @@ public class Directory {
             return this;
         }
 
-        public Builder parameterTypeName(String typeName) {
+        public Builder parameterType(String typeName) {
             parameters.add(typeName);
             return this;
         }
 
-        public Builder parameterTypeClass(Class<?> clazz) {
-            return parameterTypeName(clazz.getName());
+        public Builder parameterType(Class<?> cls) {
+            return parameterType(cls.getName());
+        }
+
+        public Builder parameterType(Directory directory) {
+            dependsOn(directory);
+            directory.getFilename()
+                    .orElseThrow(() -> Utils.noFilenameException(directory));
+            return parameterType(directory.getTypeName());
         }
 
         public Builder parameterTypeClass(Collection<Class<?>> classes) {
             for (Class<?> cls : classes) {
-                parameterTypeName(cls.getName());
+                parameterType(cls.getName());
             }
             return this;
         }
 
-        public Builder parameterTypeDir(Directory directory) {
-            dependsOn(directory);
-            directory.getFilename()
-                    .orElseThrow(() -> Utils.noFilenameException(directory));
-            return parameterTypeName(directory.getTypeName());
-        }
-
         public Builder parameterTypeDir(Collection<Directory> dirs) {
             for (Directory dir : dirs) {
-                parameterTypeDir(dir);
+                parameterType(dir);
             }
             return this;
         }

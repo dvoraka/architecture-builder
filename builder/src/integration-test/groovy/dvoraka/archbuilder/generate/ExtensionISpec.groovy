@@ -86,7 +86,7 @@ class ExtensionISpec extends BaseISpec {
         given:
             Directory ext = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
-                    .superTypeClass(Object)
+                    .superType(Object)
                     .abstractType()
                     .filename('AbstractTestObject')
                     .build()
@@ -147,7 +147,7 @@ class ExtensionISpec extends BaseISpec {
         given:
             Directory ext = new Directory.Builder('ext', DirType.IMPL)
                     .parent(srcBase)
-                    .superTypeClass(Timer)
+                    .superType(Timer)
                     .filename('TestTimer')
                     .build()
         when:

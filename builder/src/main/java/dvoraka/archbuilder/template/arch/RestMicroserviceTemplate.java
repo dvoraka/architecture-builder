@@ -43,7 +43,7 @@ public class RestMicroserviceTemplate implements ArchitectureTemplate, TemplateH
         String serviceFullName = serviceName + "Service";
         Directory.Builder serviceBuilder = new Directory.Builder("service", DirType.SERVICE)
                 .parent(srcBase)
-                .superTypeClass(superService)
+                .superType(superService)
                 .filename(serviceFullName);
         for (Class<?> typeArgument : typeArguments) {
             serviceBuilder.parameterTypeClass(typeArgument);

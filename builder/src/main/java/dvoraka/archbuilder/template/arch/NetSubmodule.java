@@ -49,7 +49,7 @@ public class NetSubmodule implements Submodule {
         String exceptionName = getBaseName() + "Exception";
         Directory exception = new Directory.Builder("exception", DirType.IMPL)
                 .parent(srcBase)
-                .superTypeClass(config.getBaseException())
+                .superType(config.getBaseException())
                 .filename(exceptionName)
                 .build();
 
@@ -57,7 +57,7 @@ public class NetSubmodule implements Submodule {
         String dataName = getBaseName() + "Data";
         Directory data = new Directory.Builder("data", DirType.IMPL)
                 .parent(srcBase)
-                .superTypeClass(getConfig().getBaseResultData())
+                .superType(getConfig().getBaseResultData())
                 .filename(dataName)
                 .parameterTypeDir(exception)
                 .build();
@@ -66,7 +66,7 @@ public class NetSubmodule implements Submodule {
         String responseMessageName = getBaseName() + "ResponseMessage";
         Directory responseMessage = new Directory.Builder(MESSAGE_DIR, DirType.IMPL)
                 .parent(srcBase)
-                .superTypeClass(getConfig().getResponseBaseMessage())
+                .superType(getConfig().getResponseBaseMessage())
                 .parameterTypeDir(data)
                 .parameterTypeDir(exception)
                 .filename(responseMessageName)
@@ -74,7 +74,7 @@ public class NetSubmodule implements Submodule {
         String requestMessageName = getBaseName() + "Message";
         Directory requestMessage = new Directory.Builder(MESSAGE_DIR, DirType.IMPL)
                 .parent(srcBase)
-                .superTypeClass(getConfig().getRequestBaseMessage())
+                .superType(getConfig().getRequestBaseMessage())
                 .parameterTypeDir(service)
                 .parameterTypeDir(responseMessage)
                 .parameterTypeDir(data)
@@ -86,7 +86,7 @@ public class NetSubmodule implements Submodule {
         String serverName = getBaseName() + "Server";
         Directory server = new Directory.Builder("server", DirType.IMPL)
                 .parent(srcBase)
-                .superTypeClass(config.getSuperServer())
+                .superType(config.getSuperServer())
                 .filename(serverName)
                 .metadataClass(Service.class)
                 .build();
@@ -95,7 +95,7 @@ public class NetSubmodule implements Submodule {
         String networkComponentName = getBaseName() + "NetComponent";
         Directory serviceNetworkComponent = new Directory.Builder("net", DirType.IMPL)
                 .parent(srcBase)
-                .superTypeClass(getConfig().getSuperNetComponent())
+                .superType(getConfig().getSuperNetComponent())
                 .interfaceType()
                 .parameterTypeDir(requestMessage)
                 .parameterTypeDir(responseMessage)
@@ -107,7 +107,7 @@ public class NetSubmodule implements Submodule {
         Directory serviceNetAdapter = new Directory.Builder("net", DirType.IMPL)
                 .parent(srcBase)
                 .superType(serviceNetworkComponent)
-                .superTypeClass(getConfig().getBaseNetComponent())
+                .superType(getConfig().getBaseNetComponent())
                 .parameterTypeDir(requestMessage)
                 .parameterTypeDir(responseMessage)
                 .parameterTypeDir(data)
@@ -118,7 +118,7 @@ public class NetSubmodule implements Submodule {
         String networkReceiverName = getBaseName() + "NetReceiver";
         Directory networkReceiver = new Directory.Builder("net", DirType.IMPL)
                 .parent(srcBase)
-                .superTypeClass(getConfig().getSuperNetReceiver())
+                .superType(getConfig().getSuperNetReceiver())
                 .interfaceType()
                 .parameterTypeDir(requestMessage)
                 .filename(networkReceiverName)
@@ -126,7 +126,7 @@ public class NetSubmodule implements Submodule {
         String networkResponseReceiverName = getBaseName() + "NetResponseReceiver";
         Directory networkResponseReceiver = new Directory.Builder("net", DirType.IMPL)
                 .parent(srcBase)
-                .superTypeClass(getConfig().getSuperNetReceiver())
+                .superType(getConfig().getSuperNetReceiver())
                 .interfaceType()
                 .parameterTypeDir(responseMessage)
                 .filename(networkResponseReceiverName)

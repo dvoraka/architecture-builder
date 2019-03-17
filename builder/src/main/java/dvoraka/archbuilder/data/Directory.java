@@ -309,9 +309,9 @@ public class Directory {
             return this;
         }
 
-        public Builder superTypeClass(Class<?> clazz) {
+        public Builder superType(Class<?> clazz) {
             if (parent == null) {
-                throw new GeneratorException("Parent must be set before superTypeClass method.");
+                throw new GeneratorException("Parent must be set before superType method.");
             }
             Directory wrapper = Utils.createAbstractDirFor(clazz, parent);
             this.superTypes.add(wrapper);
@@ -336,8 +336,8 @@ public class Directory {
             return this;
         }
 
-        public Builder parameterTypeName(String className) {
-            parameters.add(className);
+        public Builder parameterTypeName(String typeName) {
+            parameters.add(typeName);
             return this;
         }
 

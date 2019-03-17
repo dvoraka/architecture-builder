@@ -44,7 +44,7 @@ public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelpe
         String serviceFullName = serviceName + "Service";
         Directory service = new Directory.Builder("service", DirType.SERVICE)
                 .parent(srcBase)
-                .superTypeClass(superService)
+                .superType(superService)
                 .filename(serviceFullName)
                 .parameterTypeClass(typeArguments)
                 .build();

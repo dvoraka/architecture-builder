@@ -11,7 +11,7 @@ import dvoraka.archbuilder.generate.JavaTestingHelper
 import dvoraka.archbuilder.sample.microservice.service.BaseService
 import dvoraka.archbuilder.service.DirService
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator
-import dvoraka.archbuilder.template.arch.ArchitectureTemplate
+import dvoraka.archbuilder.template.arch.Module
 import dvoraka.archbuilder.template.arch.RestMicroserviceTemplate
 import dvoraka.archbuilder.util.Utils
 import groovy.json.JsonOutput
@@ -37,7 +37,7 @@ class RestMicroserviceTemplateISpec extends Specification implements JavaHelper,
     String packageName = 'test.balance'
     String serviceName = 'Balance'
 
-    ArchitectureTemplate template
+    Module template
     Directory rootDir
 
 

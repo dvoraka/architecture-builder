@@ -2,7 +2,7 @@ package dvoraka.archbuilder.template.arch;
 
 import dvoraka.archbuilder.data.Directory;
 
-public interface ArchitectureTemplate {
+public interface Module {
 
     Directory getRootDirectory();
 }

@@ -9,8 +9,8 @@ import dvoraka.archbuilder.generate.LangGenerator;
 import dvoraka.archbuilder.generate.MainGenerator;
 import dvoraka.archbuilder.service.DirService;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
-import dvoraka.archbuilder.template.arch.ArchitectureTemplate;
 import dvoraka.archbuilder.template.arch.MicroserviceType1Template;
+import dvoraka.archbuilder.template.arch.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -48,7 +48,7 @@ public class App {
             String packageName = "test.budget";
             String serviceName = "Budget";
 
-            ArchitectureTemplate template = new MicroserviceType1Template(
+            Module template = new MicroserviceType1Template(
                     rootDirName,
                     packageName,
                     serviceName,

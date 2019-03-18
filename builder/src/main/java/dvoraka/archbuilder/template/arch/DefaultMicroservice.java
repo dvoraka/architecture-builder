@@ -20,14 +20,14 @@ import static dvoraka.archbuilder.util.JavaUtils.pkg2path;
 import static dvoraka.archbuilder.util.Utils.noFilenameException;
 import static dvoraka.archbuilder.util.Utils.uncapitalize;
 
-public class MicroserviceTemplate implements ArchitectureTemplate, TemplateHelper {
+public class DefaultMicroservice implements Module, TemplateHelper {
 
     public static final String MESSAGE_DIR = "data/message";
 
     private Directory root;
 
 
-    public MicroserviceTemplate(
+    public DefaultMicroservice(
             String rootDirName,
             String packageName,
             Class<?> superService,

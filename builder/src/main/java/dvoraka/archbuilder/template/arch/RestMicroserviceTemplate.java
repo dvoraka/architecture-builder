@@ -21,7 +21,7 @@ import static dvoraka.archbuilder.util.JavaUtils.pkg2path;
 import static dvoraka.archbuilder.util.Utils.noFilenameException;
 import static dvoraka.archbuilder.util.Utils.uncapitalize;
 
-public class RestMicroserviceTemplate implements ArchitectureTemplate, TemplateHelper {
+public class RestMicroserviceTemplate implements Module, TemplateHelper {
 
     private Directory root;
 

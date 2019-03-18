@@ -14,7 +14,7 @@ import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
 
 import java.util.Collections;
 
-public class MicroserviceType1Template implements ArchitectureTemplate {
+public class MicroserviceType1Template implements Module {
 
     private Directory root;
 
@@ -36,7 +36,7 @@ public class MicroserviceType1Template implements ArchitectureTemplate {
                 AbstractServer.class
         );
 
-        MicroserviceTemplate template = new MicroserviceTemplate(
+        DefaultMicroservice template = new DefaultMicroservice(
                 rootDirName,
                 packageName,
                 BaseService.class,

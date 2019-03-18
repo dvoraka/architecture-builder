@@ -19,8 +19,8 @@ import dvoraka.archbuilder.sample.microservice.server.AbstractServer
 import dvoraka.archbuilder.sample.microservice.service.BaseService
 import dvoraka.archbuilder.service.DirService
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator
-import dvoraka.archbuilder.template.arch.ArchitectureTemplate
-import dvoraka.archbuilder.template.arch.MicroserviceTemplate
+import dvoraka.archbuilder.template.arch.DefaultMicroservice
+import dvoraka.archbuilder.template.arch.Module
 import dvoraka.archbuilder.template.arch.NetTemplateConfig
 import dvoraka.archbuilder.util.Utils
 import groovy.json.JsonOutput
@@ -32,7 +32,7 @@ import spock.lang.Specification
 
 @Slf4j
 @SpringBootTest
-class MicroserviceTemplateISpec extends Specification implements JavaHelper, JavaTestingHelper {
+class DefaultMicroserviceISpec extends Specification implements JavaHelper, JavaTestingHelper {
 
     @Autowired
     Generator mainGenerator
@@ -47,7 +47,7 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
     String packageName = 'test.budget'
     String serviceName = 'Budget'
 
-    ArchitectureTemplate template
+    Module template
     Directory rootDir
 
 
@@ -64,7 +64,7 @@ class MicroserviceTemplateISpec extends Specification implements JavaHelper, Jav
                 AbstractServer.class
         )
 
-        template = new MicroserviceTemplate(
+        template = new DefaultMicroservice(
                 rootDirName,
                 packageName,
                 BaseService.class,

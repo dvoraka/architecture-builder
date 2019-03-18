@@ -1,16 +1,17 @@
-package dvoraka.archbuilder.template.arch;
+package dvoraka.archbuilder.submodule;
 
 import dvoraka.archbuilder.data.DirType;
 import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.exception.GeneratorException;
 import dvoraka.archbuilder.springconfig.BeanMapping;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
+import dvoraka.archbuilder.template.NetTemplateConfig;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static dvoraka.archbuilder.template.arch.DefaultMicroservice.MESSAGE_DIR;
+import static dvoraka.archbuilder.module.DefaultMicroservice.MESSAGE_DIR;
 import static dvoraka.archbuilder.util.Utils.uncapitalize;
 
 public class NetSubmodule implements Submodule {

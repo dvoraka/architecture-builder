@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.template.arch;
+package dvoraka.archbuilder.module;
 
 import dvoraka.archbuilder.data.DirType;
 import dvoraka.archbuilder.data.Directory;
@@ -11,6 +11,7 @@ import dvoraka.archbuilder.template.text.AppPropertiesTemplate;
 import dvoraka.archbuilder.template.text.BuildGradleTemplate;
 import dvoraka.archbuilder.template.text.GitignoreTemplate;
 import dvoraka.archbuilder.template.text.SettingsGradleTemplate;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,33 +21,34 @@ import static dvoraka.archbuilder.util.JavaUtils.pkg2path;
 import static dvoraka.archbuilder.util.Utils.noFilenameException;
 import static dvoraka.archbuilder.util.Utils.uncapitalize;
 
-public class DefaultMicroservice implements Module, TemplateHelper {
-
-    public static final String MESSAGE_DIR = "data/message";
+public class RestMicroserviceTemplate implements Module, TemplateHelper {
 
     private Directory root;
 
 
-    public DefaultMicroservice(
+    public RestMicroserviceTemplate(
             String rootDirName,
             String packageName,
             Class<?> superService,
             List<Class<?>> typeArguments,
             String serviceName,
-            NetTemplateConfig netConfig,
             SpringConfigGenerator configGenerator
     ) {
         root = root(rootDirName);
         Directory srcRoot = srcRoot(root);
+
         Directory srcBase = srcBase(srcRoot, pkg2path(packageName));
 
         // service
         String serviceFullName = serviceName + "Service";
-        Directory service = new Directory.Builder("service", DirType.SERVICE)
+        Directory.Builder serviceBuilder = new Directory.Builder("service", DirType.SERVICE)
                 .parent(srcBase)
                 .superType(superService)
-                .filename(serviceFullName)
-                .parameterType(typeArguments)
+                .filename(serviceFullName);
+        for (Class<?> typeArgument : typeArguments) {
+            serviceBuilder.parameterType(typeArgument);
+        }
+        Directory service = serviceBuilder
                 .build();
         String serviceImplFullName = "Default" + serviceFullName;
         Directory serviceImpl = new Directory.Builder("service", DirType.SERVICE_IMPL)
@@ -55,9 +57,13 @@ public class DefaultMicroservice implements Module, TemplateHelper {
                 .filename(serviceImplFullName)
                 .build();
 
-        // network
-        Submodule networkModule = new NetSubmodule(serviceName, service, netConfig, configGenerator);
-        networkModule.addSubmodule(srcBase);
+        // controller
+        String controlerName = serviceName + "Controller";
+        Directory controller = new Directory.Builder("controller", DirType.NEW_TYPE)
+                .parent(srcBase)
+                .filename(controlerName)
+                .metadata(RestController.class)
+                .build();
 
         // Spring Boot application
         String appClassName = serviceName + "App";
@@ -67,7 +73,6 @@ public class DefaultMicroservice implements Module, TemplateHelper {
         // Spring configuration
         List<BeanMapping> beanMappings = new ArrayList<>();
         // mappings
-        //TODO: getFilename should return .java suffix
         String serviceMappingName = uncapitalize(service.getFilename()
                 .orElseThrow(() -> noFilenameException(service)));
         BeanMapping serviceBeanMapping = new BeanMapping.Builder(serviceMappingName)
@@ -77,7 +82,6 @@ public class DefaultMicroservice implements Module, TemplateHelper {
                 .build();
 
         beanMappings.add(serviceBeanMapping);
-        beanMappings.addAll(networkModule.getConfiguration());
 
         String springConfigName = serviceName + "Config";
         Directory springConfig = new Directory.Builder("configuration", DirType.SPRING_CONFIG)

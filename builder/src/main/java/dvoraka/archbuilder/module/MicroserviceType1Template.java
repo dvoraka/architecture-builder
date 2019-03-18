@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.template.arch;
+package dvoraka.archbuilder.module;
 
 import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.sample.microservice.data.BaseException;
@@ -11,6 +11,7 @@ import dvoraka.archbuilder.sample.microservice.net.receive.NetReceiver;
 import dvoraka.archbuilder.sample.microservice.server.AbstractServer;
 import dvoraka.archbuilder.sample.microservice.service.BaseService;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
+import dvoraka.archbuilder.template.NetTemplateConfig;
 
 import java.util.Collections;
 

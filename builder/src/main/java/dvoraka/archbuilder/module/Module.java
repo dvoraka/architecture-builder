@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.template.arch;
+package dvoraka.archbuilder.module;
 
 import dvoraka.archbuilder.data.Directory;
 

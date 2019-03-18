@@ -8,11 +8,11 @@ import dvoraka.archbuilder.data.Directory
 import dvoraka.archbuilder.generate.Generator
 import dvoraka.archbuilder.generate.JavaHelper
 import dvoraka.archbuilder.generate.JavaTestingHelper
+import dvoraka.archbuilder.module.Module
+import dvoraka.archbuilder.module.RestMicroserviceTemplate
 import dvoraka.archbuilder.sample.microservice.service.BaseService
 import dvoraka.archbuilder.service.DirService
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator
-import dvoraka.archbuilder.template.arch.Module
-import dvoraka.archbuilder.template.arch.RestMicroserviceTemplate
 import dvoraka.archbuilder.util.Utils
 import groovy.json.JsonOutput
 import groovy.util.logging.Slf4j

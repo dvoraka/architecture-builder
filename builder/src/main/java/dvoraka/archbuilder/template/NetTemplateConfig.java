@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.template.arch;
+package dvoraka.archbuilder.template;
 
 public class NetTemplateConfig {
 

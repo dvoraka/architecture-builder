@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.template.arch;
+package dvoraka.archbuilder.submodule;
 
 import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.springconfig.BeanMapping;

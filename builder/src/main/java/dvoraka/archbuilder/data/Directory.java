@@ -352,16 +352,9 @@ public class Directory {
             return parameterType(directory.getTypeName());
         }
 
-        public Builder parameterTypeClass(Collection<Class<?>> classes) {
+        public Builder parameterType(Collection<Class<?>> classes) {
             for (Class<?> cls : classes) {
                 parameterType(cls.getName());
-            }
-            return this;
-        }
-
-        public Builder parameterTypeDir(Collection<Directory> dirs) {
-            for (Directory dir : dirs) {
-                parameterType(dir);
             }
             return this;
         }

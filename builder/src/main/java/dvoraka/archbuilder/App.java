@@ -7,7 +7,7 @@ import dvoraka.archbuilder.build.GradleBuildTool;
 import dvoraka.archbuilder.generate.Generator;
 import dvoraka.archbuilder.generate.LangGenerator;
 import dvoraka.archbuilder.generate.MainGenerator;
-import dvoraka.archbuilder.module.MicroserviceType1Template;
+import dvoraka.archbuilder.module.DefaultMicroservice;
 import dvoraka.archbuilder.module.Module;
 import dvoraka.archbuilder.service.DirService;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
@@ -42,20 +42,20 @@ public class App {
         return args -> {
             System.out.println("App");
 
-            // micro-service template testing
+            // micro-service module testing
 
             String rootDirName = "budget-service";
             String packageName = "test.budget";
             String serviceName = "Budget";
 
-            Module template = new MicroserviceType1Template(
+            Module module = new DefaultMicroservice(
                     rootDirName,
                     packageName,
                     serviceName,
                     configGenerator
             );
 
-            mainGenerator.generate(template.getRootDirectory());
+            mainGenerator.generate(module.getRootDirectory());
 
             BuildTool buildTool = new GradleBuildTool(new File(rootDirName));
             buildTool.prepareEnv();

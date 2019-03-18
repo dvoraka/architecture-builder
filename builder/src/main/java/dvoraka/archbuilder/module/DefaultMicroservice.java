@@ -1,105 +1,53 @@
 package dvoraka.archbuilder.module;
 
-import dvoraka.archbuilder.data.DirType;
 import dvoraka.archbuilder.data.Directory;
-import dvoraka.archbuilder.springconfig.BeanMapping;
+import dvoraka.archbuilder.sample.microservice.data.BaseException;
+import dvoraka.archbuilder.sample.microservice.data.ResultData;
+import dvoraka.archbuilder.sample.microservice.data.message.RequestMessage;
+import dvoraka.archbuilder.sample.microservice.data.message.ResponseMessage;
+import dvoraka.archbuilder.sample.microservice.net.BaseNetComponent;
+import dvoraka.archbuilder.sample.microservice.net.ServiceNetComponent;
+import dvoraka.archbuilder.sample.microservice.net.receive.NetReceiver;
+import dvoraka.archbuilder.sample.microservice.server.AbstractServer;
+import dvoraka.archbuilder.sample.microservice.service.BaseService;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
-import dvoraka.archbuilder.submodule.NetSubmodule;
-import dvoraka.archbuilder.submodule.Submodule;
 import dvoraka.archbuilder.template.NetTemplateConfig;
-import dvoraka.archbuilder.template.TemplateHelper;
-import dvoraka.archbuilder.template.source.SourceTemplate;
-import dvoraka.archbuilder.template.source.SpringBootApp2Template;
-import dvoraka.archbuilder.template.text.AppPropertiesTemplate;
-import dvoraka.archbuilder.template.text.BuildGradleTemplate;
-import dvoraka.archbuilder.template.text.GitignoreTemplate;
-import dvoraka.archbuilder.template.text.SettingsGradleTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Supplier;
+import java.util.Collections;
 
-import static dvoraka.archbuilder.util.JavaUtils.pkg2path;
-import static dvoraka.archbuilder.util.Utils.noFilenameException;
-import static dvoraka.archbuilder.util.Utils.uncapitalize;
+public class DefaultMicroservice implements Module {
 
-public class DefaultMicroservice implements Module, TemplateHelper {
-
-    public static final String MESSAGE_DIR = "data/message";
-
-    private Directory root;
+    private final Directory root;
 
 
     public DefaultMicroservice(
             String rootDirName,
             String packageName,
-            Class<?> superService,
-            List<Class<?>> typeArguments,
             String serviceName,
-            NetTemplateConfig netConfig,
             SpringConfigGenerator configGenerator
     ) {
-        root = root(rootDirName);
-        Directory srcRoot = srcRoot(root);
-        Directory srcBase = srcBase(srcRoot, pkg2path(packageName));
+        NetTemplateConfig netTemplateConfig = new NetTemplateConfig(
+                ResultData.class,
+                BaseException.class,
+                RequestMessage.class,
+                ResponseMessage.class,
+                ServiceNetComponent.class,
+                NetReceiver.class,
+                BaseNetComponent.class,
+                AbstractServer.class
+        );
 
-        // service
-        String serviceFullName = serviceName + "Service";
-        Directory service = new Directory.Builder("service", DirType.SERVICE)
-                .parent(srcBase)
-                .superType(superService)
-                .filename(serviceFullName)
-                .parameterType(typeArguments)
-                .build();
-        String serviceImplFullName = "Default" + serviceFullName;
-        Directory serviceImpl = new Directory.Builder("service", DirType.SERVICE_IMPL)
-                .parent(srcBase)
-                .superType(service)
-                .filename(serviceImplFullName)
-                .build();
+        Module configurableMicroservice = new ConfigurableMicroservice(
+                rootDirName,
+                packageName,
+                BaseService.class,
+                Collections.emptyList(),
+                serviceName,
+                netTemplateConfig,
+                configGenerator
+        );
 
-        // network
-        Submodule networkModule = new NetSubmodule(serviceName, service, netConfig, configGenerator);
-        networkModule.addSubmodule(srcBase);
-
-        // Spring Boot application
-        String appClassName = serviceName + "App";
-        SourceTemplate appSourceTemplate = new SpringBootApp2Template(appClassName, packageName);
-        springBootApp(srcBase, appSourceTemplate);
-
-        // Spring configuration
-        List<BeanMapping> beanMappings = new ArrayList<>();
-        // mappings
-        //TODO: getFilename should return .java suffix
-        String serviceMappingName = uncapitalize(service.getFilename()
-                .orElseThrow(() -> noFilenameException(service)));
-        BeanMapping serviceBeanMapping = new BeanMapping.Builder(serviceMappingName)
-                .typeDir(service)
-                .toTypeDir(serviceImpl)
-                .codeTemplate(configGenerator::simpleReturn)
-                .build();
-
-        beanMappings.add(serviceBeanMapping);
-        beanMappings.addAll(networkModule.getConfiguration());
-
-        String springConfigName = serviceName + "Config";
-        Directory springConfig = new Directory.Builder("configuration", DirType.SPRING_CONFIG)
-                .parent(srcBase)
-                .filename(springConfigName)
-                .build();
-        Supplier<String> callback = () ->
-                configGenerator.genConfiguration(beanMappings, springConfig);
-        springConfig.setTextSupplier(callback);
-
-        // application properties
-        properties(root, new AppPropertiesTemplate());
-
-        // build configuration
-        buildGradle(root, new BuildGradleTemplate());
-        settingsGradle(root, new SettingsGradleTemplate(serviceName));
-
-        // gitignore file
-        gitignore(root, new GitignoreTemplate());
+        root = configurableMicroservice.getRootDirectory();
     }
 
     @Override

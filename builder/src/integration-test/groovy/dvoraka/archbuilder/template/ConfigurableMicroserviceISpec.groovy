@@ -8,7 +8,7 @@ import dvoraka.archbuilder.data.Directory
 import dvoraka.archbuilder.generate.Generator
 import dvoraka.archbuilder.generate.JavaHelper
 import dvoraka.archbuilder.generate.JavaTestingHelper
-import dvoraka.archbuilder.module.DefaultMicroservice
+import dvoraka.archbuilder.module.ConfigurableMicroservice
 import dvoraka.archbuilder.module.Module
 import dvoraka.archbuilder.sample.microservice.data.BaseException
 import dvoraka.archbuilder.sample.microservice.data.ResultData
@@ -31,7 +31,7 @@ import spock.lang.Specification
 
 @Slf4j
 @SpringBootTest
-class DefaultMicroserviceISpec extends Specification implements JavaHelper, JavaTestingHelper {
+class ConfigurableMicroserviceISpec extends Specification implements JavaHelper, JavaTestingHelper {
 
     @Autowired
     Generator mainGenerator
@@ -63,7 +63,7 @@ class DefaultMicroserviceISpec extends Specification implements JavaHelper, Java
                 AbstractServer.class
         )
 
-        template = new DefaultMicroservice(
+        template = new ConfigurableMicroservice(
                 rootDirName,
                 packageName,
                 BaseService.class,

@@ -68,4 +68,24 @@ public interface TemplateHelper {
     default Directory springBootApp(Directory root, TextFileTemplate template) {
         return classFile(root, template);
     }
+
+    default String buildServiceName(String serviceName) {
+        return serviceName + "Service";
+    }
+
+    default String buildServiceImplName(String serviceName) {
+        return "Default" + buildServiceName(serviceName);
+    }
+
+    default String buildServiceConfigurationName(String serviceName) {
+        return serviceName + "Config";
+    }
+
+    default String buildServiceAppName(String serviceName) {
+        return serviceName + "App";
+    }
+
+    default String buildServiceControllerName(String serviceName) {
+        return serviceName + "Controller";
+    }
 }

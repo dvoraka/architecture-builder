@@ -9,7 +9,7 @@ import dvoraka.archbuilder.generate.Generator
 import dvoraka.archbuilder.generate.JavaHelper
 import dvoraka.archbuilder.generate.JavaTestingHelper
 import dvoraka.archbuilder.module.Module
-import dvoraka.archbuilder.module.RestMicroserviceTemplate
+import dvoraka.archbuilder.module.RestMicroservice
 import dvoraka.archbuilder.sample.microservice.service.BaseService
 import dvoraka.archbuilder.service.DirService
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator
@@ -22,7 +22,7 @@ import spock.lang.Specification
 
 @Slf4j
 @SpringBootTest
-class RestMicroserviceTemplateISpec extends Specification implements JavaHelper, JavaTestingHelper {
+class RestMicroserviceISpec extends Specification implements JavaHelper, JavaTestingHelper {
 
     @Autowired
     Generator mainGenerator
@@ -43,7 +43,7 @@ class RestMicroserviceTemplateISpec extends Specification implements JavaHelper,
 
     def setup() {
 
-        template = new RestMicroserviceTemplate(
+        template = new RestMicroservice(
                 rootDirName,
                 packageName,
                 BaseService.class,

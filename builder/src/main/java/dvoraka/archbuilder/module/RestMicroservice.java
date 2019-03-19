@@ -21,12 +21,12 @@ import static dvoraka.archbuilder.util.JavaUtils.pkg2path;
 import static dvoraka.archbuilder.util.Utils.noFilenameException;
 import static dvoraka.archbuilder.util.Utils.uncapitalize;
 
-public class RestMicroserviceTemplate implements Module, TemplateHelper {
+public class RestMicroservice implements Module, TemplateHelper {
 
-    private Directory root;
+    private final Directory root;
 
 
-    public RestMicroserviceTemplate(
+    public RestMicroservice(
             String rootDirName,
             String packageName,
             Class<?> superService,
@@ -36,21 +36,17 @@ public class RestMicroserviceTemplate implements Module, TemplateHelper {
     ) {
         root = root(rootDirName);
         Directory srcRoot = srcRoot(root);
-
         Directory srcBase = srcBase(srcRoot, pkg2path(packageName));
 
         // service
-        String serviceFullName = serviceName + "Service";
-        Directory.Builder serviceBuilder = new Directory.Builder("service", DirType.SERVICE)
+        String serviceFullName = buildServiceName(serviceName);
+        Directory service = new Directory.Builder("service", DirType.SERVICE)
                 .parent(srcBase)
                 .superType(superService)
-                .filename(serviceFullName);
-        for (Class<?> typeArgument : typeArguments) {
-            serviceBuilder.parameterType(typeArgument);
-        }
-        Directory service = serviceBuilder
+                .parameterType(typeArguments)
+                .filename(serviceFullName)
                 .build();
-        String serviceImplFullName = "Default" + serviceFullName;
+        String serviceImplFullName = buildServiceImplName(serviceName);
         Directory serviceImpl = new Directory.Builder("service", DirType.SERVICE_IMPL)
                 .parent(srcBase)
                 .superType(service)
@@ -58,15 +54,15 @@ public class RestMicroserviceTemplate implements Module, TemplateHelper {
                 .build();
 
         // controller
-        String controlerName = serviceName + "Controller";
+        String controllerName = buildServiceControllerName(serviceName);
         Directory controller = new Directory.Builder("controller", DirType.NEW_TYPE)
                 .parent(srcBase)
-                .filename(controlerName)
+                .filename(controllerName)
                 .metadata(RestController.class)
                 .build();
 
         // Spring Boot application
-        String appClassName = serviceName + "App";
+        String appClassName = buildServiceAppName(serviceName);
         SourceTemplate appSourceTemplate = new SpringBootApp2Template(appClassName, packageName);
         springBootApp(srcBase, appSourceTemplate);
 
@@ -83,7 +79,7 @@ public class RestMicroserviceTemplate implements Module, TemplateHelper {
 
         beanMappings.add(serviceBeanMapping);
 
-        String springConfigName = serviceName + "Config";
+        String springConfigName = buildServiceConfigurationName(serviceName);
         Directory springConfig = new Directory.Builder("configuration", DirType.SPRING_CONFIG)
                 .parent(srcBase)
                 .filename(springConfigName)

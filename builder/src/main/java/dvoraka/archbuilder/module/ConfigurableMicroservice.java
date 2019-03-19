@@ -27,7 +27,7 @@ public class ConfigurableMicroservice implements Module, TemplateHelper {
 
     public static final String MESSAGE_DIR = "data/message";
 
-    private Directory root;
+    private final Directory root;
 
 
     public ConfigurableMicroservice(

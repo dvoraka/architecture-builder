@@ -13,7 +13,7 @@ import java.util.List;
 import static dvoraka.archbuilder.util.Utils.noFilenameException;
 import static dvoraka.archbuilder.util.Utils.uncapitalize;
 
-public class ServiceSubmodule implements Submodule {
+public class ServiceSubmodule implements JavaSubmodule {
 
     private final String serviceName;
     private final Class<?> superService;

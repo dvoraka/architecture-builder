@@ -6,7 +6,6 @@ import dvoraka.archbuilder.springconfig.BeanMapping;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
 import dvoraka.archbuilder.submodule.NetSubmodule;
 import dvoraka.archbuilder.submodule.ServiceSubmodule;
-import dvoraka.archbuilder.submodule.Submodule;
 import dvoraka.archbuilder.template.NetTemplateConfig;
 import dvoraka.archbuilder.template.TemplateHelper;
 import dvoraka.archbuilder.template.source.SourceTemplate;
@@ -48,7 +47,7 @@ public class ConfigurableMicroservice implements Module, TemplateHelper {
         serviceSubmodule.addSubmoduleTo(srcBase);
 
         // network
-        Submodule netSubmodule = new NetSubmodule(
+        NetSubmodule netSubmodule = new NetSubmodule(
                 serviceName, serviceSubmodule.getService(), netConfig, configGenerator);
         netSubmodule.addSubmoduleTo(srcBase);
 

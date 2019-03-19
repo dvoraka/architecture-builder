@@ -14,7 +14,7 @@ import java.util.List;
 import static dvoraka.archbuilder.module.ConfigurableMicroservice.MESSAGE_DIR;
 import static dvoraka.archbuilder.util.Utils.uncapitalize;
 
-public class NetSubmodule implements Submodule {
+public class NetSubmodule implements JavaSubmodule {
 
     private final String baseName;
     private final Directory service;

@@ -85,6 +85,14 @@ public interface TemplateHelper {
         return serviceName + "App";
     }
 
+    default String buildExceptionName(String baseName) {
+        return baseName + "Exception";
+    }
+
+    default String buildServerName(String baseName) {
+        return baseName + "Server";
+    }
+
     default String buildServiceControllerName(String serviceName) {
         return serviceName + "Controller";
     }

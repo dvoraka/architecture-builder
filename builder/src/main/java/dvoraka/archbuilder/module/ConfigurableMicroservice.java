@@ -4,9 +4,9 @@ import dvoraka.archbuilder.data.DirType;
 import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.springconfig.BeanMapping;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
+import dvoraka.archbuilder.submodule.NetConfig;
 import dvoraka.archbuilder.submodule.NetSubmodule;
 import dvoraka.archbuilder.submodule.ServiceSubmodule;
-import dvoraka.archbuilder.template.NetTemplateConfig;
 import dvoraka.archbuilder.template.TemplateHelper;
 import dvoraka.archbuilder.template.source.SourceTemplate;
 import dvoraka.archbuilder.template.source.SpringBootApp2Template;
@@ -34,7 +34,7 @@ public class ConfigurableMicroservice implements Module, TemplateHelper {
             Class<?> superService,
             List<Class<?>> typeArguments,
             String serviceName,
-            NetTemplateConfig netConfig,
+            NetConfig netConfig,
             SpringConfigGenerator configGenerator
     ) {
         root = root(rootDirName);

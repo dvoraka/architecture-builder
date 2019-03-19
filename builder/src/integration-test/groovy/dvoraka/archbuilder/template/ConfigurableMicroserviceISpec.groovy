@@ -21,6 +21,7 @@ import dvoraka.archbuilder.sample.microservice.server.AbstractServer
 import dvoraka.archbuilder.sample.microservice.service.BaseService
 import dvoraka.archbuilder.service.DirService
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator
+import dvoraka.archbuilder.submodule.NetConfig
 import dvoraka.archbuilder.util.Utils
 import groovy.json.JsonOutput
 import groovy.util.logging.Slf4j
@@ -52,7 +53,7 @@ class ConfigurableMicroserviceISpec extends Specification implements JavaHelper,
 
     def setup() {
 
-        NetTemplateConfig netTemplateConfig = new NetTemplateConfig(
+        NetConfig netTemplateConfig = new NetConfig(
                 ResultData.class,
                 BaseException.class,
                 RequestMessage.class,

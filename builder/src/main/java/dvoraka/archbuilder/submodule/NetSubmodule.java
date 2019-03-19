@@ -5,7 +5,6 @@ import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.exception.GeneratorException;
 import dvoraka.archbuilder.springconfig.BeanMapping;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
-import dvoraka.archbuilder.template.NetTemplateConfig;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ public class NetSubmodule implements JavaSubmodule {
 
     private final String baseName;
     private final Directory service;
-    private final NetTemplateConfig config;
+    private final NetConfig config;
 
     private final SpringConfigGenerator configGenerator;
 
@@ -28,7 +27,7 @@ public class NetSubmodule implements JavaSubmodule {
     public NetSubmodule(
             String baseName,
             Directory service,
-            NetTemplateConfig config,
+            NetConfig config,
             SpringConfigGenerator configGenerator
     ) {
         this.baseName = baseName;
@@ -47,7 +46,7 @@ public class NetSubmodule implements JavaSubmodule {
         }
 
         // exception
-        String exceptionName = getBaseName() + "Exception";
+        String exceptionName = baseName + "Exception";
         Directory exception = new Directory.Builder("exception", DirType.IMPL)
                 .parent(srcBase)
                 .superType(config.getBaseException())
@@ -55,27 +54,27 @@ public class NetSubmodule implements JavaSubmodule {
                 .build();
 
         // data
-        String dataName = getBaseName() + "Data";
+        String dataName = baseName + "Data";
         Directory data = new Directory.Builder("data", DirType.IMPL)
                 .parent(srcBase)
-                .superType(getConfig().getBaseResultData())
+                .superType(config.getBaseResultData())
                 .filename(dataName)
                 .parameterType(exception)
                 .build();
 
         // messages
-        String responseMessageName = getBaseName() + "ResponseMessage";
+        String responseMessageName = baseName + "ResponseMessage";
         Directory responseMessage = new Directory.Builder(MESSAGE_DIR, DirType.IMPL)
                 .parent(srcBase)
-                .superType(getConfig().getResponseBaseMessage())
+                .superType(config.getResponseBaseMessage())
                 .parameterType(data)
                 .parameterType(exception)
                 .filename(responseMessageName)
                 .build();
-        String requestMessageName = getBaseName() + "Message";
+        String requestMessageName = baseName + "Message";
         Directory requestMessage = new Directory.Builder(MESSAGE_DIR, DirType.IMPL)
                 .parent(srcBase)
-                .superType(getConfig().getRequestBaseMessage())
+                .superType(config.getRequestBaseMessage())
                 .parameterType(service)
                 .parameterType(responseMessage)
                 .parameterType(data)
@@ -84,7 +83,7 @@ public class NetSubmodule implements JavaSubmodule {
                 .build();
 
         // server
-        String serverName = getBaseName() + "Server";
+        String serverName = baseName + "Server";
         Directory server = new Directory.Builder("server", DirType.IMPL)
                 .parent(srcBase)
                 .superType(config.getSuperServer())
@@ -93,10 +92,10 @@ public class NetSubmodule implements JavaSubmodule {
                 .build();
 
         // network components
-        String networkComponentName = getBaseName() + "NetComponent";
+        String networkComponentName = baseName + "NetComponent";
         Directory serviceNetworkComponent = new Directory.Builder("net", DirType.IMPL)
                 .parent(srcBase)
-                .superType(getConfig().getSuperNetComponent())
+                .superType(config.getSuperNetComponent())
                 .interfaceType()
                 .parameterType(requestMessage)
                 .parameterType(responseMessage)
@@ -104,11 +103,11 @@ public class NetSubmodule implements JavaSubmodule {
                 .parameterType(exception)
                 .filename(networkComponentName)
                 .build();
-        String netAdapterName = getBaseName() + "NetAdapter";
+        String netAdapterName = baseName + "NetAdapter";
         Directory serviceNetAdapter = new Directory.Builder("net", DirType.IMPL)
                 .parent(srcBase)
                 .superType(serviceNetworkComponent)
-                .superType(getConfig().getBaseNetComponent())
+                .superType(config.getBaseNetComponent())
                 .parameterType(requestMessage)
                 .parameterType(responseMessage)
                 .parameterType(data)
@@ -116,18 +115,18 @@ public class NetSubmodule implements JavaSubmodule {
                 .metadata(Service.class)
                 .filename(netAdapterName)
                 .build();
-        String networkReceiverName = getBaseName() + "NetReceiver";
+        String networkReceiverName = baseName + "NetReceiver";
         Directory networkReceiver = new Directory.Builder("net", DirType.IMPL)
                 .parent(srcBase)
-                .superType(getConfig().getSuperNetReceiver())
+                .superType(config.getSuperNetReceiver())
                 .interfaceType()
                 .parameterType(requestMessage)
                 .filename(networkReceiverName)
                 .build();
-        String networkResponseReceiverName = getBaseName() + "NetResponseReceiver";
+        String networkResponseReceiverName = baseName + "NetResponseReceiver";
         Directory networkResponseReceiver = new Directory.Builder("net", DirType.IMPL)
                 .parent(srcBase)
-                .superType(getConfig().getSuperNetReceiver())
+                .superType(config.getSuperNetReceiver())
                 .interfaceType()
                 .parameterType(responseMessage)
                 .filename(networkResponseReceiverName)
@@ -151,13 +150,5 @@ public class NetSubmodule implements JavaSubmodule {
     @Override
     public List<BeanMapping> getConfiguration() {
         return configuration;
-    }
-
-    public String getBaseName() {
-        return baseName;
-    }
-
-    public NetTemplateConfig getConfig() {
-        return config;
     }
 }

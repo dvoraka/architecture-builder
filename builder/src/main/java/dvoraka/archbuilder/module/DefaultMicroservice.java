@@ -11,7 +11,7 @@ import dvoraka.archbuilder.sample.microservice.net.receive.NetReceiver;
 import dvoraka.archbuilder.sample.microservice.server.AbstractServer;
 import dvoraka.archbuilder.sample.microservice.service.BaseService;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
-import dvoraka.archbuilder.template.NetTemplateConfig;
+import dvoraka.archbuilder.submodule.NetConfig;
 
 import java.util.Collections;
 
@@ -26,7 +26,7 @@ public class DefaultMicroservice implements Module {
             String serviceName,
             SpringConfigGenerator configGenerator
     ) {
-        NetTemplateConfig netTemplateConfig = new NetTemplateConfig(
+        NetConfig netConfig = new NetConfig(
                 ResultData.class,
                 BaseException.class,
                 RequestMessage.class,
@@ -43,7 +43,7 @@ public class DefaultMicroservice implements Module {
                 BaseService.class,
                 Collections.emptyList(),
                 serviceName,
-                netTemplateConfig,
+                netConfig,
                 configGenerator
         );
 

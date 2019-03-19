@@ -1,6 +1,6 @@
-package dvoraka.archbuilder.template;
+package dvoraka.archbuilder.submodule;
 
-public class NetTemplateConfig {
+public class NetConfig {
 
     private final Class<?> baseResultData;
     private final Class<?> baseException;
@@ -15,7 +15,7 @@ public class NetTemplateConfig {
     private final Class<?> superServer;
 
 
-    public NetTemplateConfig(
+    public NetConfig(
             Class<?> baseResultData,
             Class<?> baseException,
             Class<?> requestBaseMessage,

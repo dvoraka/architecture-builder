@@ -5,6 +5,7 @@ import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.springconfig.BeanMapping;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
 import dvoraka.archbuilder.submodule.NetSubmodule;
+import dvoraka.archbuilder.submodule.ServiceSubmodule;
 import dvoraka.archbuilder.submodule.Submodule;
 import dvoraka.archbuilder.template.NetTemplateConfig;
 import dvoraka.archbuilder.template.TemplateHelper;
@@ -20,8 +21,6 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import static dvoraka.archbuilder.util.JavaUtils.pkg2path;
-import static dvoraka.archbuilder.util.Utils.noFilenameException;
-import static dvoraka.archbuilder.util.Utils.uncapitalize;
 
 public class ConfigurableMicroservice implements Module, TemplateHelper {
 
@@ -44,23 +43,14 @@ public class ConfigurableMicroservice implements Module, TemplateHelper {
         Directory srcBase = srcBase(srcRoot, pkg2path(packageName));
 
         // service
-        String serviceFullName = serviceName + "Service";
-        Directory service = new Directory.Builder("service", DirType.SERVICE)
-                .parent(srcBase)
-                .superType(superService)
-                .filename(serviceFullName)
-                .parameterType(typeArguments)
-                .build();
-        String serviceImplFullName = "Default" + serviceFullName;
-        Directory serviceImpl = new Directory.Builder("service", DirType.SERVICE_IMPL)
-                .parent(srcBase)
-                .superType(service)
-                .filename(serviceImplFullName)
-                .build();
+        ServiceSubmodule serviceSubmodule = new ServiceSubmodule(
+                serviceName, superService, typeArguments, configGenerator);
+        serviceSubmodule.addSubmoduleTo(srcBase);
 
         // network
-        Submodule networkModule = new NetSubmodule(serviceName, service, netConfig, configGenerator);
-        networkModule.addSubmodule(srcBase);
+        Submodule netSubmodule = new NetSubmodule(
+                serviceName, serviceSubmodule.getService(), netConfig, configGenerator);
+        netSubmodule.addSubmoduleTo(srcBase);
 
         // Spring Boot application
         String appClassName = serviceName + "App";
@@ -69,18 +59,8 @@ public class ConfigurableMicroservice implements Module, TemplateHelper {
 
         // Spring configuration
         List<BeanMapping> beanMappings = new ArrayList<>();
-        // mappings
-        //TODO: getFilename should return .java suffix
-        String serviceMappingName = uncapitalize(service.getFilename()
-                .orElseThrow(() -> noFilenameException(service)));
-        BeanMapping serviceBeanMapping = new BeanMapping.Builder(serviceMappingName)
-                .typeDir(service)
-                .toTypeDir(serviceImpl)
-                .codeTemplate(configGenerator::simpleReturn)
-                .build();
-
-        beanMappings.add(serviceBeanMapping);
-        beanMappings.addAll(networkModule.getConfiguration());
+        beanMappings.addAll(serviceSubmodule.getConfiguration());
+        beanMappings.addAll(netSubmodule.getConfiguration());
 
         String springConfigName = serviceName + "Config";
         Directory springConfig = new Directory.Builder("configuration", DirType.SPRING_CONFIG)

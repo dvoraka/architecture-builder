@@ -40,7 +40,7 @@ public class NetSubmodule implements Submodule {
     }
 
     @Override
-    public void addSubmodule(Directory srcBase) {
+    public void addSubmoduleTo(Directory srcBase) {
 
         if (!srcBase.isBase()) {
             throw new GeneratorException("Src base must be base.");

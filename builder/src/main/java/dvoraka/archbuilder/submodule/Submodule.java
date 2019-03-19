@@ -7,7 +7,7 @@ import java.util.Collection;
 
 public interface Submodule {
 
-    void addSubmodule(Directory root);
+    void addSubmoduleTo(Directory root);
 
     Collection<BeanMapping> getConfiguration();
 }

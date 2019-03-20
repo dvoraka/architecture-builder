@@ -1,10 +1,11 @@
-package dvoraka.archbuilder.submodule;
+package dvoraka.archbuilder.submodule.service;
 
 import dvoraka.archbuilder.data.DirType;
 import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.exception.GeneratorException;
 import dvoraka.archbuilder.springconfig.BeanMapping;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
+import dvoraka.archbuilder.template.TemplateHelper;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,7 +14,7 @@ import java.util.List;
 import static dvoraka.archbuilder.util.Utils.noFilenameException;
 import static dvoraka.archbuilder.util.Utils.uncapitalize;
 
-public class ServiceSubmodule implements JavaSubmodule {
+public class ConfigurableServiceSubmodule implements ServiceSubmodule, TemplateHelper {
 
     private final String serviceName;
     private final Class<?> superService;
@@ -26,7 +27,7 @@ public class ServiceSubmodule implements JavaSubmodule {
     private Directory service;
 
 
-    public ServiceSubmodule(
+    public ConfigurableServiceSubmodule(
             String serviceName,
             Class<?> superService,
             Collection<Class<?>> typeArguments,

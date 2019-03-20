@@ -21,7 +21,7 @@ import dvoraka.archbuilder.sample.microservice.server.AbstractServer
 import dvoraka.archbuilder.sample.microservice.service.BaseService
 import dvoraka.archbuilder.service.DirService
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator
-import dvoraka.archbuilder.submodule.NetConfig
+import dvoraka.archbuilder.submodule.net.NetConfig
 import dvoraka.archbuilder.util.Utils
 import groovy.json.JsonOutput
 import groovy.util.logging.Slf4j

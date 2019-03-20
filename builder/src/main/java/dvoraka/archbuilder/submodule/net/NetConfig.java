@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.submodule;
+package dvoraka.archbuilder.submodule.net;
 
 public class NetConfig {
 

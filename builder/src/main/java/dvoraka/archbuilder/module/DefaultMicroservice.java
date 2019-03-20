@@ -11,7 +11,7 @@ import dvoraka.archbuilder.sample.microservice.net.receive.NetReceiver;
 import dvoraka.archbuilder.sample.microservice.server.AbstractServer;
 import dvoraka.archbuilder.sample.microservice.service.BaseService;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
-import dvoraka.archbuilder.submodule.NetConfig;
+import dvoraka.archbuilder.submodule.net.NetConfig;
 
 import java.util.Collections;
 

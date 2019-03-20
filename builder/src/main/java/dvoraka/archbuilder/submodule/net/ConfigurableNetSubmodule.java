@@ -1,10 +1,11 @@
-package dvoraka.archbuilder.submodule;
+package dvoraka.archbuilder.submodule.net;
 
 import dvoraka.archbuilder.data.DirType;
 import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.exception.GeneratorException;
 import dvoraka.archbuilder.springconfig.BeanMapping;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
+import dvoraka.archbuilder.template.TemplateHelper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.List;
 import static dvoraka.archbuilder.module.ConfigurableMicroservice.MESSAGE_DIR;
 import static dvoraka.archbuilder.util.Utils.uncapitalize;
 
-public class NetSubmodule implements JavaSubmodule {
+public class ConfigurableNetSubmodule implements NetSubmodule, TemplateHelper {
 
     private final String baseName;
     private final Directory service;
@@ -24,7 +25,7 @@ public class NetSubmodule implements JavaSubmodule {
     private final List<BeanMapping> configuration;
 
 
-    public NetSubmodule(
+    public ConfigurableNetSubmodule(
             String baseName,
             Directory service,
             NetConfig config,

@@ -4,6 +4,8 @@ import dvoraka.archbuilder.data.DirType;
 import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.springconfig.BeanMapping;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
+import dvoraka.archbuilder.submodule.build.BuildSubmodule;
+import dvoraka.archbuilder.submodule.build.ConfigurableGradleSubmodule;
 import dvoraka.archbuilder.submodule.net.ConfigurableNetSubmodule;
 import dvoraka.archbuilder.submodule.net.NetConfig;
 import dvoraka.archbuilder.submodule.net.NetSubmodule;
@@ -76,8 +78,9 @@ public class ConfigurableMicroservice implements Module, TemplateHelper {
         properties(root, new AppPropertiesTemplate());
 
         // build configuration
-        buildGradle(root, new BuildGradleTemplate());
-        settingsGradle(root, new SettingsGradleTemplate(serviceName));
+        BuildSubmodule buildSubmodule = new ConfigurableGradleSubmodule(
+                new BuildGradleTemplate(), new SettingsGradleTemplate(serviceName));
+        buildSubmodule.addSubmoduleTo(root);
 
         // gitignore file
         gitignore(root, new GitignoreTemplate());

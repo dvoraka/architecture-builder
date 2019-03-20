@@ -76,6 +76,7 @@ public class ConfigurableServiceSubmodule implements ServiceSubmodule, TemplateH
         return configuration;
     }
 
+    @Override
     public Directory getService() {
         if (service == null) {
             throw new GeneratorException("Service is not generated yet.");

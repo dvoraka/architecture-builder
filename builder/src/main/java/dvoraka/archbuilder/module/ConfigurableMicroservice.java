@@ -6,7 +6,9 @@ import dvoraka.archbuilder.springconfig.BeanMapping;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
 import dvoraka.archbuilder.submodule.net.ConfigurableNetSubmodule;
 import dvoraka.archbuilder.submodule.net.NetConfig;
+import dvoraka.archbuilder.submodule.net.NetSubmodule;
 import dvoraka.archbuilder.submodule.service.ConfigurableServiceSubmodule;
+import dvoraka.archbuilder.submodule.service.ServiceSubmodule;
 import dvoraka.archbuilder.template.TemplateHelper;
 import dvoraka.archbuilder.template.source.SourceTemplate;
 import dvoraka.archbuilder.template.source.SpringBootApp2Template;
@@ -42,12 +44,12 @@ public class ConfigurableMicroservice implements Module, TemplateHelper {
         Directory srcBase = srcBase(srcRoot, pkg2path(packageName));
 
         // service
-        ConfigurableServiceSubmodule serviceSubmodule = new ConfigurableServiceSubmodule(
+        ServiceSubmodule serviceSubmodule = new ConfigurableServiceSubmodule(
                 serviceName, superService, typeArguments, configGenerator);
         serviceSubmodule.addSubmoduleTo(srcBase);
 
         // network
-        ConfigurableNetSubmodule netSubmodule = new ConfigurableNetSubmodule(
+        NetSubmodule netSubmodule = new ConfigurableNetSubmodule(
                 serviceName, serviceSubmodule.getService(), netConfig, configGenerator);
         netSubmodule.addSubmoduleTo(srcBase);
 

@@ -1,9 +1,9 @@
 package dvoraka.archbuilder.module;
 
-import dvoraka.archbuilder.data.DirType;
 import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.springconfig.BeanMapping;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
+import dvoraka.archbuilder.submodule.SpringConfig;
 import dvoraka.archbuilder.submodule.build.BuildSubmodule;
 import dvoraka.archbuilder.submodule.build.ConfigurableGradleSubmodule;
 import dvoraka.archbuilder.submodule.net.ConfigurableNetSubmodule;
@@ -21,7 +21,6 @@ import dvoraka.archbuilder.template.text.SettingsGradleTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 import static dvoraka.archbuilder.util.JavaUtils.pkg2path;
 
@@ -65,19 +64,13 @@ public class ConfigurableMicroservice implements Module, TemplateHelper {
         beanMappings.addAll(serviceSubmodule.getConfiguration());
         beanMappings.addAll(netSubmodule.getConfiguration());
 
-        String springConfigName = serviceName + "Config";
-        Directory springConfig = new Directory.Builder("configuration", DirType.SPRING_CONFIG)
-                .parent(srcBase)
-                .filename(springConfigName)
-                .build();
-        Supplier<String> callback = () ->
-                configGenerator.genConfiguration(beanMappings, springConfig);
-        springConfig.setTextSupplier(callback);
+        SpringConfig springConfig = new SpringConfig(serviceName, beanMappings, configGenerator);
+        springConfig.addSubmoduleTo(srcBase);
 
         // application properties
         properties(root, new AppPropertiesTemplate());
 
-        // build configuration
+        // build
         BuildSubmodule buildSubmodule = new ConfigurableGradleSubmodule(
                 new BuildGradleTemplate(), new SettingsGradleTemplate(serviceName));
         buildSubmodule.addSubmoduleTo(root);

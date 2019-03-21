@@ -1,9 +1,10 @@
-package dvoraka.archbuilder.submodule;
+package dvoraka.archbuilder.submodule.spring;
 
 import dvoraka.archbuilder.data.DirType;
 import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.springconfig.BeanMapping;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
+import dvoraka.archbuilder.submodule.Submodule;
 import dvoraka.archbuilder.template.TemplateHelper;
 
 import java.util.ArrayList;

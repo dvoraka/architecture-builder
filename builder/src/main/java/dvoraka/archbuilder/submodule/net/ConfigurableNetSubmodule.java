@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static dvoraka.archbuilder.module.ConfigurableMicroservice.MESSAGE_DIR;
+import static dvoraka.archbuilder.module.microservice.ConfigurableMicroservice.MESSAGE_DIR;
 import static dvoraka.archbuilder.util.Utils.uncapitalize;
 
 public class ConfigurableNetSubmodule implements NetSubmodule, TemplateHelper {

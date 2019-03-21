@@ -9,7 +9,7 @@ import dvoraka.archbuilder.generate.Generator
 import dvoraka.archbuilder.generate.JavaHelper
 import dvoraka.archbuilder.generate.JavaTestingHelper
 import dvoraka.archbuilder.module.Module
-import dvoraka.archbuilder.module.RestMicroservice
+import dvoraka.archbuilder.module.microservice.RestMicroservice
 import dvoraka.archbuilder.sample.microservice.service.BaseService
 import dvoraka.archbuilder.service.DirService
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator

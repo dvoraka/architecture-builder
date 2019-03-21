@@ -1,6 +1,7 @@
-package dvoraka.archbuilder.module;
+package dvoraka.archbuilder.module.microservice;
 
 import dvoraka.archbuilder.data.Directory;
+import dvoraka.archbuilder.module.Module;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
 import dvoraka.archbuilder.submodule.build.BuildSubmodule;
 import dvoraka.archbuilder.submodule.build.ConfigurableGradleSubmodule;

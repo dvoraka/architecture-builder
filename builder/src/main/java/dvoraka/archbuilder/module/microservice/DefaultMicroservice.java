@@ -1,11 +1,11 @@
-package dvoraka.archbuilder.module;
+package dvoraka.archbuilder.module.microservice;
 
 import dvoraka.archbuilder.data.Directory;
+import dvoraka.archbuilder.module.Module;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
 import dvoraka.archbuilder.submodule.build.BuildSubmodule;
 import dvoraka.archbuilder.submodule.build.DefaultGradleSubmodule;
 import dvoraka.archbuilder.submodule.net.DefaultNetSubmodule;
-import dvoraka.archbuilder.submodule.net.NetConfig;
 import dvoraka.archbuilder.submodule.net.NetSubmodule;
 import dvoraka.archbuilder.submodule.service.DefaultServiceSubmodule;
 import dvoraka.archbuilder.submodule.service.ServiceSubmodule;

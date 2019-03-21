@@ -8,8 +8,8 @@ import dvoraka.archbuilder.data.Directory
 import dvoraka.archbuilder.generate.Generator
 import dvoraka.archbuilder.generate.JavaHelper
 import dvoraka.archbuilder.generate.JavaTestingHelper
-import dvoraka.archbuilder.module.ConfigurableMicroservice
 import dvoraka.archbuilder.module.Module
+import dvoraka.archbuilder.module.microservice.ConfigurableMicroservice
 import dvoraka.archbuilder.sample.microservice.data.BaseException
 import dvoraka.archbuilder.sample.microservice.data.ResultData
 import dvoraka.archbuilder.sample.microservice.data.message.RequestMessage

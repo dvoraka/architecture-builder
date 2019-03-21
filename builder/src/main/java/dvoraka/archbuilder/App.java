@@ -7,7 +7,7 @@ import dvoraka.archbuilder.build.GradleBuildTool;
 import dvoraka.archbuilder.generate.Generator;
 import dvoraka.archbuilder.generate.LangGenerator;
 import dvoraka.archbuilder.generate.MainGenerator;
-import dvoraka.archbuilder.module.DefaultMicroserviceOld;
+import dvoraka.archbuilder.module.DefaultMicroservice;
 import dvoraka.archbuilder.module.Module;
 import dvoraka.archbuilder.service.DirService;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
@@ -48,14 +48,14 @@ public class App {
             String packageName = "test.budget";
             String serviceName = "Budget";
 
-            Module module = new DefaultMicroserviceOld(
+            Module microservice = new DefaultMicroservice(
                     rootDirName,
                     packageName,
                     serviceName,
                     configGenerator
             );
 
-            mainGenerator.generate(module.getRootDirectory());
+            mainGenerator.generate(microservice.getRootDirectory());
 
             BuildTool buildTool = new GradleBuildTool(new File(rootDirName));
             buildTool.prepareEnv();

@@ -27,12 +27,10 @@ public class DefaultMicroservice implements Module, TemplateHelper {
             String rootDirName,
             String packageName,
             String serviceName,
-            NetConfig netConfig,
             SpringConfigGenerator configGenerator
     ) {
         root = root(rootDirName);
-        Directory srcRoot = srcRoot(root);
-        Directory srcBase = srcBase(srcRoot, pkg2path(packageName));
+        Directory srcBase = srcRootAndBase(root, pkg2path(packageName));
 
         // service
         ServiceSubmodule serviceSubmodule = new DefaultServiceSubmodule(serviceName, configGenerator);

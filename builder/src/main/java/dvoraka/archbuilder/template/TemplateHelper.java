@@ -27,6 +27,10 @@ public interface TemplateHelper {
                 .build();
     }
 
+    default Directory srcRootAndBase(Directory root, String pkgPath) {
+        return srcBase(srcRoot(root), pkgPath);
+    }
+
     default Directory srcAbsBase(Directory root, String pkgPath) {
         return new Directory.Builder(pkgPath, DirType.SRC_BASE_ABSTRACT)
                 .parent(root)

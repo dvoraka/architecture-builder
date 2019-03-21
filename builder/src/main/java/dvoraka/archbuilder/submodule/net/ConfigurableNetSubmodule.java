@@ -9,6 +9,7 @@ import dvoraka.archbuilder.template.TemplateHelper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static dvoraka.archbuilder.module.ConfigurableMicroservice.MESSAGE_DIR;
@@ -149,7 +150,7 @@ public class ConfigurableNetSubmodule implements NetSubmodule, TemplateHelper {
     }
 
     @Override
-    public List<BeanMapping> getConfiguration() {
+    public Collection<BeanMapping> getConfiguration() {
         return configuration;
     }
 }

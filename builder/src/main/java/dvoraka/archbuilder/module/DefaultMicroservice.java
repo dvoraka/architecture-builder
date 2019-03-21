@@ -4,7 +4,7 @@ import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
 import dvoraka.archbuilder.submodule.build.BuildSubmodule;
 import dvoraka.archbuilder.submodule.build.DefaultGradleSubmodule;
-import dvoraka.archbuilder.submodule.net.ConfigurableNetSubmodule;
+import dvoraka.archbuilder.submodule.net.DefaultNetSubmodule;
 import dvoraka.archbuilder.submodule.net.NetConfig;
 import dvoraka.archbuilder.submodule.net.NetSubmodule;
 import dvoraka.archbuilder.submodule.service.DefaultServiceSubmodule;
@@ -39,8 +39,8 @@ public class DefaultMicroservice implements Module, TemplateHelper {
         serviceSubmodule.addSubmoduleTo(srcBase);
 
         // network
-        NetSubmodule netSubmodule = new ConfigurableNetSubmodule(
-                serviceName, serviceSubmodule.getService(), netConfig, configGenerator);
+        NetSubmodule netSubmodule = new DefaultNetSubmodule(
+                serviceName, serviceSubmodule.getService(), configGenerator);
         netSubmodule.addSubmoduleTo(srcBase);
 
         // Spring Boot application

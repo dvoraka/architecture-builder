@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import dvoraka.archbuilder.exception.GeneratorException;
-import dvoraka.archbuilder.util.JavaUtils;
 import dvoraka.archbuilder.util.Utils;
 
 import java.io.File;
@@ -18,6 +17,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Supplier;
+
+import static dvoraka.archbuilder.util.JavaUtils.path2pkg;
 
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
@@ -69,12 +70,12 @@ public class Directory {
     public String getPackageName() {
         String pkgName;
         if (isBase()) {
-            pkgName = getName();
+            pkgName = path2pkg(getName());
         } else {
             if (getName().isEmpty()) {
-                pkgName = JavaUtils.path2pkg(getParent().getPackageName());
+                pkgName = path2pkg(getParent().getPackageName());
             } else {
-                pkgName = JavaUtils.path2pkg(getParent().getPackageName()
+                pkgName = path2pkg(getParent().getPackageName()
                         + File.separatorChar + getName());
             }
         }

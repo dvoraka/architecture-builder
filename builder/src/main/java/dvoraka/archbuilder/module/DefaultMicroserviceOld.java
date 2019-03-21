@@ -15,12 +15,12 @@ import dvoraka.archbuilder.submodule.net.NetConfig;
 
 import java.util.Collections;
 
-public class DefaultMicroservice implements Module {
+public class DefaultMicroserviceOld implements Module {
 
     private final Directory root;
 
 
-    public DefaultMicroservice(
+    public DefaultMicroserviceOld(
             String rootDirName,
             String packageName,
             String serviceName,

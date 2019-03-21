@@ -41,7 +41,6 @@ public class ConfigurableServiceSubmodule implements ServiceSubmodule, TemplateH
         configuration = new ArrayList<>();
     }
 
-
     @Override
     public void addSubmoduleTo(Directory srcBase) {
 

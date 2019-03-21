@@ -93,6 +93,10 @@ public interface TemplateHelper {
         return baseName + "Server";
     }
 
+    default String buildConfigurationName(String baseName) {
+        return baseName + "Config";
+    }
+
     default String buildServiceControllerName(String serviceName) {
         return serviceName + "Controller";
     }

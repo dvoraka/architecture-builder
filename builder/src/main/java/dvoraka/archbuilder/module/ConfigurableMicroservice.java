@@ -2,6 +2,8 @@ package dvoraka.archbuilder.module;
 
 import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
+import dvoraka.archbuilder.submodule.DefaultSpringBootAppSubmodule;
+import dvoraka.archbuilder.submodule.SpringBootAppSubmodule;
 import dvoraka.archbuilder.submodule.SpringConfigSubmodule;
 import dvoraka.archbuilder.submodule.build.BuildSubmodule;
 import dvoraka.archbuilder.submodule.build.ConfigurableGradleSubmodule;
@@ -11,8 +13,6 @@ import dvoraka.archbuilder.submodule.net.NetSubmodule;
 import dvoraka.archbuilder.submodule.service.ConfigurableServiceSubmodule;
 import dvoraka.archbuilder.submodule.service.ServiceSubmodule;
 import dvoraka.archbuilder.template.TemplateHelper;
-import dvoraka.archbuilder.template.source.SourceTemplate;
-import dvoraka.archbuilder.template.source.SpringBootApp2Template;
 import dvoraka.archbuilder.template.text.AppPropertiesTemplate;
 import dvoraka.archbuilder.template.text.BuildGradleTemplate;
 import dvoraka.archbuilder.template.text.GitignoreTemplate;
@@ -53,9 +53,9 @@ public class ConfigurableMicroservice implements Module, TemplateHelper {
         netSubmodule.addSubmoduleTo(srcBase);
 
         // Spring Boot application
-        String appClassName = serviceName + "App";
-        SourceTemplate appSourceTemplate = new SpringBootApp2Template(appClassName, packageName);
-        springBootApp(srcBase, appSourceTemplate);
+        SpringBootAppSubmodule springBootAppSubmodule =
+                new DefaultSpringBootAppSubmodule(serviceName, packageName);
+        springBootAppSubmodule.addSubmoduleTo(srcBase);
 
         // Spring configuration
         SpringConfigSubmodule springConfigSubmodule = new SpringConfigSubmodule(serviceName, configGenerator);

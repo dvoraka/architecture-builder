@@ -5,33 +5,27 @@ import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.module.Module;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
 import dvoraka.archbuilder.submodule.build.BuildSubmodule;
-import dvoraka.archbuilder.submodule.build.ConfigurableGradleSubmodule;
-import dvoraka.archbuilder.submodule.service.ConfigurableServiceSubmodule;
+import dvoraka.archbuilder.submodule.build.DefaultGradleSubmodule;
+import dvoraka.archbuilder.submodule.service.DefaultServiceSubmodule;
 import dvoraka.archbuilder.submodule.service.ServiceSubmodule;
 import dvoraka.archbuilder.submodule.spring.DefaultSpringBootAppSubmodule;
 import dvoraka.archbuilder.submodule.spring.SpringBootAppSubmodule;
 import dvoraka.archbuilder.submodule.spring.SpringConfigSubmodule;
 import dvoraka.archbuilder.template.TemplateHelper;
 import dvoraka.archbuilder.template.text.AppPropertiesTemplate;
-import dvoraka.archbuilder.template.text.BuildGradleTemplate;
 import dvoraka.archbuilder.template.text.GitignoreTemplate;
-import dvoraka.archbuilder.template.text.SettingsGradleTemplate;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 import static dvoraka.archbuilder.util.JavaUtils.pkg2path;
 
-public class RestMicroservice implements Module, TemplateHelper {
+public class DefaultRestMicroservice implements Module, TemplateHelper {
 
     private final Directory root;
 
 
-    public RestMicroservice(
+    public DefaultRestMicroservice(
             String rootDirName,
             String packageName,
-            Class<?> superService,
-            List<Class<?>> typeArguments,
             String serviceName,
             SpringConfigGenerator configGenerator
     ) {
@@ -39,8 +33,7 @@ public class RestMicroservice implements Module, TemplateHelper {
         Directory srcBase = srcRootAndBase(root, pkg2path(packageName));
 
         // service
-        ServiceSubmodule serviceSubmodule = new ConfigurableServiceSubmodule(
-                serviceName, superService, typeArguments, configGenerator);
+        ServiceSubmodule serviceSubmodule = new DefaultServiceSubmodule(serviceName, configGenerator);
         serviceSubmodule.addSubmoduleTo(srcBase);
 
         // controller
@@ -65,8 +58,7 @@ public class RestMicroservice implements Module, TemplateHelper {
         properties(root, new AppPropertiesTemplate());
 
         // build
-        BuildSubmodule buildSubmodule = new ConfigurableGradleSubmodule(
-                new BuildGradleTemplate(), new SettingsGradleTemplate(serviceName));
+        BuildSubmodule buildSubmodule = new DefaultGradleSubmodule(serviceName);
         buildSubmodule.addSubmoduleTo(root);
 
         // gitignore file

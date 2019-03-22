@@ -9,19 +9,9 @@ import dvoraka.archbuilder.generate.Generator
 import dvoraka.archbuilder.generate.JavaHelper
 import dvoraka.archbuilder.generate.JavaTestingHelper
 import dvoraka.archbuilder.module.Module
-import dvoraka.archbuilder.module.microservice.ConfigurableMicroservice
-import dvoraka.archbuilder.sample.microservice.data.BaseException
-import dvoraka.archbuilder.sample.microservice.data.ResultData
-import dvoraka.archbuilder.sample.microservice.data.message.RequestMessage
-import dvoraka.archbuilder.sample.microservice.data.message.ResponseMessage
-import dvoraka.archbuilder.sample.microservice.net.BaseNetComponent
-import dvoraka.archbuilder.sample.microservice.net.ServiceNetComponent
-import dvoraka.archbuilder.sample.microservice.net.receive.NetReceiver
-import dvoraka.archbuilder.sample.microservice.server.AbstractServer
-import dvoraka.archbuilder.sample.microservice.service.BaseService
+import dvoraka.archbuilder.module.microservice.DefaultMicroservice
 import dvoraka.archbuilder.service.DirService
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator
-import dvoraka.archbuilder.submodule.net.NetConfig
 import dvoraka.archbuilder.util.Utils
 import groovy.json.JsonOutput
 import groovy.util.logging.Slf4j
@@ -32,7 +22,7 @@ import spock.lang.Specification
 
 @Slf4j
 @SpringBootTest
-class ConfigurableMicroserviceISpec extends Specification implements JavaHelper, JavaTestingHelper {
+class DefaultMicroserviceISpec extends Specification implements JavaHelper, JavaTestingHelper {
 
     @Autowired
     Generator mainGenerator
@@ -53,24 +43,10 @@ class ConfigurableMicroserviceISpec extends Specification implements JavaHelper,
 
     def setup() {
 
-        NetConfig netTemplateConfig = new NetConfig(
-                ResultData.class,
-                BaseException.class,
-                RequestMessage.class,
-                ResponseMessage.class,
-                ServiceNetComponent.class,
-                NetReceiver.class,
-                BaseNetComponent.class,
-                AbstractServer.class
-        )
-
-        template = new ConfigurableMicroservice(
+        template = new DefaultMicroservice(
                 rootDirName,
                 packageName,
-                BaseService.class,
-                Collections.emptyList(),
                 serviceName,
-                netTemplateConfig,
                 configGenerator
         )
 

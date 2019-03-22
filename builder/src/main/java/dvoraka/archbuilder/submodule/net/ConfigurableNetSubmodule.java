@@ -12,10 +12,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static dvoraka.archbuilder.module.microservice.ConfigurableMicroservice.MESSAGE_DIR;
 import static dvoraka.archbuilder.util.Utils.uncapitalize;
 
 public class ConfigurableNetSubmodule implements NetSubmodule, TemplateHelper {
+
+    public static final String MESSAGE_DIR = "data/message";
 
     private final String baseName;
     private final Directory service;

@@ -3,24 +3,24 @@ package dvoraka.archbuilder.module.microservice;
 import dvoraka.archbuilder.data.DirType;
 import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.module.Module;
-import dvoraka.archbuilder.springconfig.BeanMapping;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
+import dvoraka.archbuilder.submodule.build.BuildSubmodule;
+import dvoraka.archbuilder.submodule.build.ConfigurableGradleSubmodule;
+import dvoraka.archbuilder.submodule.service.ConfigurableServiceSubmodule;
+import dvoraka.archbuilder.submodule.service.ServiceSubmodule;
+import dvoraka.archbuilder.submodule.spring.DefaultSpringBootAppSubmodule;
+import dvoraka.archbuilder.submodule.spring.SpringBootAppSubmodule;
+import dvoraka.archbuilder.submodule.spring.SpringConfigSubmodule;
 import dvoraka.archbuilder.template.TemplateHelper;
-import dvoraka.archbuilder.template.source.SourceTemplate;
-import dvoraka.archbuilder.template.source.SpringBootApp2Template;
 import dvoraka.archbuilder.template.text.AppPropertiesTemplate;
 import dvoraka.archbuilder.template.text.BuildGradleTemplate;
 import dvoraka.archbuilder.template.text.GitignoreTemplate;
 import dvoraka.archbuilder.template.text.SettingsGradleTemplate;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 import static dvoraka.archbuilder.util.JavaUtils.pkg2path;
-import static dvoraka.archbuilder.util.Utils.noFilenameException;
-import static dvoraka.archbuilder.util.Utils.uncapitalize;
 
 public class RestMicroservice implements Module, TemplateHelper {
 
@@ -36,23 +36,12 @@ public class RestMicroservice implements Module, TemplateHelper {
             SpringConfigGenerator configGenerator
     ) {
         root = root(rootDirName);
-        Directory srcRoot = srcRoot(root);
-        Directory srcBase = srcBase(srcRoot, pkg2path(packageName));
+        Directory srcBase = srcRootAndBase(root, pkg2path(packageName));
 
         // service
-        String serviceFullName = buildServiceName(serviceName);
-        Directory service = new Directory.Builder("service", DirType.SERVICE)
-                .parent(srcBase)
-                .superType(superService)
-                .parameterType(typeArguments)
-                .filename(serviceFullName)
-                .build();
-        String serviceImplFullName = buildServiceImplName(serviceName);
-        Directory serviceImpl = new Directory.Builder("service", DirType.SERVICE_IMPL)
-                .parent(srcBase)
-                .superType(service)
-                .filename(serviceImplFullName)
-                .build();
+        ServiceSubmodule serviceSubmodule = new ConfigurableServiceSubmodule(
+                serviceName, superService, typeArguments, configGenerator);
+        serviceSubmodule.addSubmoduleTo(srcBase);
 
         // controller
         String controllerName = buildServiceControllerName(serviceName);
@@ -63,38 +52,22 @@ public class RestMicroservice implements Module, TemplateHelper {
                 .build();
 
         // Spring Boot application
-        String appClassName = buildServiceAppName(serviceName);
-        SourceTemplate appSourceTemplate = new SpringBootApp2Template(appClassName, packageName);
-        springBootApp(srcBase, appSourceTemplate);
+        SpringBootAppSubmodule springBootAppSubmodule =
+                new DefaultSpringBootAppSubmodule(serviceName, packageName);
+        springBootAppSubmodule.addSubmoduleTo(srcBase);
 
         // Spring configuration
-        List<BeanMapping> beanMappings = new ArrayList<>();
-        // mappings
-        String serviceMappingName = uncapitalize(service.getFilename()
-                .orElseThrow(() -> noFilenameException(service)));
-        BeanMapping serviceBeanMapping = new BeanMapping.Builder(serviceMappingName)
-                .typeDir(service)
-                .toTypeDir(serviceImpl)
-                .codeTemplate(configGenerator::simpleReturn)
-                .build();
-
-        beanMappings.add(serviceBeanMapping);
-
-        String springConfigName = buildServiceConfigurationName(serviceName);
-        Directory springConfig = new Directory.Builder("configuration", DirType.SPRING_CONFIG)
-                .parent(srcBase)
-                .filename(springConfigName)
-                .build();
-        Supplier<String> callback = () ->
-                configGenerator.genConfiguration(beanMappings, springConfig);
-        springConfig.setTextSupplier(callback);
+        SpringConfigSubmodule springConfigSubmodule = new SpringConfigSubmodule(serviceName, configGenerator);
+        springConfigSubmodule.addMappings(serviceSubmodule.getConfiguration());
+        springConfigSubmodule.addSubmoduleTo(srcBase);
 
         // application properties
         properties(root, new AppPropertiesTemplate());
 
-        // build configuration
-        buildGradle(root, new BuildGradleTemplate());
-        settingsGradle(root, new SettingsGradleTemplate(serviceName));
+        // build
+        BuildSubmodule buildSubmodule = new ConfigurableGradleSubmodule(
+                new BuildGradleTemplate(), new SettingsGradleTemplate(serviceName));
+        buildSubmodule.addSubmoduleTo(root);
 
         // gitignore file
         gitignore(root, new GitignoreTemplate());

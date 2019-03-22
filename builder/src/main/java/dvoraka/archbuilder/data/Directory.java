@@ -73,10 +73,9 @@ public class Directory {
             pkgName = path2pkg(getName());
         } else {
             if (getName().isEmpty()) {
-                pkgName = path2pkg(getParent().getPackageName());
+                pkgName = getParent().getPackageName();
             } else {
-                pkgName = path2pkg(getParent().getPackageName()
-                        + File.separatorChar + getName());
+                pkgName = getParent().getPackageName() + "." + path2pkg(getName());
             }
         }
 

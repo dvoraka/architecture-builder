@@ -833,6 +833,14 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         return builder;
     }
 
+    private TypeSpec.Builder addJavadoc(Directory directory, TypeSpec.Builder builder) {
+        if (directory.getDoc() != null) {
+            builder.addJavadoc(directory.getDoc() + "\n");
+        }
+
+        return builder;
+    }
+
     private TypeSpec.Builder getTypeSpecBuilder(Directory directory) {
 
         String filename = getFilename(directory);
@@ -886,6 +894,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
         addAnnotations(directory, builder);
         addModifiers(directory, builder);
+        addJavadoc(directory, builder);
 
         TypeSpec typeSpec = builder.build();
 

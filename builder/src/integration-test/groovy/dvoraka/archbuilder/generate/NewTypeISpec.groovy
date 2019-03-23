@@ -28,6 +28,23 @@ class NewTypeISpec extends BaseISpec {
             hasNoDeclaredMethods(clazz)
     }
 
+    def "new simple class with documentation"() {
+        given:
+            Directory newType = new Directory.Builder('newtype', DirType.NEW_TYPE)
+                    .parent(srcBase)
+                    .filename('NewSimpleClass')
+                    .doc('Documentation text.\nsecond line\nthird line')
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(newType.getTypeName())
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            hasNoDeclaredMethods(clazz)
+    }
+
     def "new simple class with annotation"() {
         given:
             Directory newType = new Directory.Builder('newtype', DirType.NEW_TYPE)

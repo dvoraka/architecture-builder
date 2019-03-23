@@ -50,6 +50,7 @@ public class Directory {
     private List<String> metadata;
 
     private String text;
+    private String doc;
     //TODO
     @JsonIgnore
     private Supplier<String> textSupplier;
@@ -183,6 +184,10 @@ public class Directory {
         this.textSupplier = textSupplier;
     }
 
+    public String getDoc() {
+        return doc;
+    }
+
     public Type getIntType() {
         return intType;
     }
@@ -242,6 +247,7 @@ public class Directory {
         private List<String> metadata;
         private String text;
         private Supplier<String> textSupplier;
+        private String doc;
 
         private Type intType = Type.CLASS;
 
@@ -328,6 +334,11 @@ public class Directory {
             return this;
         }
 
+        public Builder doc(String doc) {
+            this.doc = doc;
+            return this;
+        }
+
         public Builder dependsOn(Directory directory) {
             if (type == DirType.SPRING_CONFIG || directory.getType() == DirType.SPRING_CONFIG) {
                 throw new GeneratorException("Spring config must not have any dependencies.");
@@ -390,6 +401,7 @@ public class Directory {
 
             directory.text = this.text;
             directory.textSupplier = this.textSupplier;
+            directory.doc = this.doc;
 
             directory.intType = this.intType;
 

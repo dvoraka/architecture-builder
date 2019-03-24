@@ -258,17 +258,12 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
         String filename = getFilename(directory);
 
-        TypeSpec serviceImpl = TypeSpec.classBuilder(filename)
-                .addModifiers(Modifier.PUBLIC)
+        TypeSpec.Builder serviceImplBuilder = TypeSpec.classBuilder(filename)
                 .addSuperinterface(superClass)
                 .addAnnotation(Service.class)
-                .addMethods(methodSpecs)
-                .build();
+                .addMethods(methodSpecs);
 
-        JavaFile javaFile = JavaFile.builder(directory.getPackageName(), serviceImpl)
-                .build();
-
-        saveJava(directory, javaFile.toString(), javaSuffix(filename));
+        completeAndSaveClassFile(directory, serviceImplBuilder);
     }
 
     private void genCustomType(Directory directory) {

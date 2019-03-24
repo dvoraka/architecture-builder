@@ -260,6 +260,10 @@ public class Directory {
             dependencies = new ArrayList<>();
             parameters = new ArrayList<>();
             metadata = new ArrayList<>();
+
+            if (dirType == DirType.SERVICE) {
+                interfaceType();
+            }
         }
 
         public Builder filename(String filename) {

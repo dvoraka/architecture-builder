@@ -205,12 +205,9 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
 
         String filename = getFilename(directory);
 
-        TypeSpec serviceInterface;
+        TypeSpec.Builder serviceBuilder = TypeSpec.interfaceBuilder(filename);
         if (superClass.getTypeParameters().length == 0) {
-            serviceInterface = TypeSpec.interfaceBuilder(filename)
-                    .addModifiers(Modifier.PUBLIC)
-                    .addSuperinterface(superClass)
-                    .build();
+            serviceBuilder.addSuperinterface(superClass);
         } else {
             TypeVariable<? extends Class<?>>[] typeParameters = superClass.getTypeParameters();
             Map<TypeVariable<?>, Type> typeMapping = getTypeVarMapping(directory, superClass);
@@ -220,16 +217,10 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                     buildTypeArray(typeParameters, typeMapping)
             );
 
-            serviceInterface = TypeSpec.interfaceBuilder(filename)
-                    .addModifiers(Modifier.PUBLIC)
-                    .addSuperinterface(parameterizedTypeName)
-                    .build();
+            serviceBuilder.addSuperinterface(parameterizedTypeName);
         }
 
-        JavaFile javaFile = JavaFile.builder(directory.getPackageName(), serviceInterface)
-                .build();
-
-        saveJava(directory, javaFile.toString(), javaSuffix(filename));
+        completeAndSaveClassFile(directory, serviceBuilder);
     }
 
     private void genServiceImpl(Directory directory) {

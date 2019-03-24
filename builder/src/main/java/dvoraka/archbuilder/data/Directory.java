@@ -21,6 +21,7 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 import static dvoraka.archbuilder.util.JavaUtils.path2pkg;
+import static dvoraka.archbuilder.util.JavaUtils.removeJavaSuffix;
 
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
@@ -417,27 +418,22 @@ public class Directory {
                 parent.addChildren(directory);
             }
 
+            // fix filename for broken clients
+            if (isJavaType(directory) && directory.filename != null
+                    && !directory.filename.endsWith(".java")) {
+                // add .java suffix
+                directory.filename += ".java";
+                log.warn("Bad filename! Adding .java suffix...");
+            }
+
             // generate typename if necessary
             if (isJavaType(directory) && directory.typeName == null) {
-                if (filename == null || filename.isEmpty()) {
+                if (directory.filename == null || directory.filename.isEmpty()) {
                     throw Utils.noFilenameException(directory);
                 }
 
-                if (filename.endsWith(".java")) {
-                    String[] parts = filename.split("\\.");
-                    String typeName = parts[0];
-                    directory.typeName = directory.getPackageName() + "." + typeName;
-                } else {
-                    //TODO: should be removed
-                    directory.typeName = directory.getPackageName() + "." + filename;
-                }
-            }
-
-            // fix filename for broken clients
-            if (isJavaType(directory) && !directory.filename.endsWith(".java")) {
-                // add .java suffix
-                directory.filename += ".java";
-                log.warn("Bad filename! Adding .java suffix.");
+                String simpleTypeName = removeJavaSuffix(directory.filename);
+                directory.typeName = directory.getPackageName() + "." + simpleTypeName;
             }
 
             return directory;

@@ -1,5 +1,6 @@
 package dvoraka.archbuilder.util;
 
+import dvoraka.archbuilder.exception.GeneratorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +34,14 @@ public final class JavaUtils {
 
     public static String javaSuffix(String filename) {
         return filename + ".java";
+    }
+
+    public static String removeJavaSuffix(String filename) {
+        if (!filename.contains(".")) {
+            throw new GeneratorException("No .java suffix found.");
+        }
+
+        return filename.substring(0, filename.lastIndexOf('.'));
     }
 
     public static int compileSource(String pathString) {

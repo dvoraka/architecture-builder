@@ -8,6 +8,7 @@ import com.squareup.javapoet.TypeSpec;
 import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.exception.GeneratorException;
 import dvoraka.archbuilder.generate.JavaHelper;
+import dvoraka.archbuilder.util.JavaUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
@@ -68,10 +69,11 @@ public class DefaultSpringConfigGenerator implements SpringConfigGenerator, Java
             methodSpecs.add(methodSpec);
         }
 
-        String name = dir.getFilename()
+        String filename = dir.getFilename()
                 .orElse("SpringConfig");
+        String typeName = JavaUtils.removeJavaSuffix(filename);
 
-        TypeSpec spec = TypeSpec.classBuilder(name)
+        TypeSpec spec = TypeSpec.classBuilder(typeName)
                 .addAnnotation(Configuration.class)
                 .addMethods(methodSpecs)
                 .build();

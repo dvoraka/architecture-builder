@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import dvoraka.archbuilder.exception.GeneratorException;
 import dvoraka.archbuilder.util.Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -232,6 +234,8 @@ public class Directory {
 
     public static final class Builder {
 
+        private final Logger log = LoggerFactory.getLogger(Builder.class);
+
         private String name;
         private String filename;
         private String typeName;
@@ -414,7 +418,7 @@ public class Directory {
             }
 
             // generate typename if necessary
-            if (isTypenameNecessary(directory) && directory.typeName == null) {
+            if (isJavaType(directory) && directory.typeName == null) {
                 if (filename == null || filename.isEmpty()) {
                     throw Utils.noFilenameException(directory);
                 }
@@ -429,10 +433,17 @@ public class Directory {
                 }
             }
 
+            // fix filename for broken clients
+            if (isJavaType(directory) && !directory.filename.endsWith(".java")) {
+                // add .java suffix
+                directory.filename += ".java";
+                log.warn("Bad filename! Adding .java suffix.");
+            }
+
             return directory;
         }
 
-        private boolean isTypenameNecessary(Directory directory) {
+        private boolean isJavaType(Directory directory) {
             return directory.type == DirType.CUSTOM_TYPE
                     || directory.type == DirType.IMPL
                     || directory.type == DirType.NEW_TYPE

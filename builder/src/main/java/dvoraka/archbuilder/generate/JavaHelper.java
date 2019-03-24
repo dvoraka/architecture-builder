@@ -103,12 +103,14 @@ public interface JavaHelper {
     }
 
     default String defaultServiceImplName(Directory serviceImpl) {
+        String typeName = JavaUtils.removeJavaSuffix(serviceImpl.getFilename()
+                .orElseThrow(() -> new GeneratorException("No filename specified.")));
+
         return new StringBuilder()
                 .append(serviceImpl.getPackageName())
                 .append(".")
                 .append("Default")
-                .append(serviceImpl.getFilename()
-                        .orElseThrow(() -> new GeneratorException("No filename specified.")))
+                .append(typeName)
                 .toString();
     }
 

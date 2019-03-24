@@ -67,7 +67,7 @@ class SpringConfigISpec extends BaseISpec {
 
             Directory configuration = new Directory.Builder('config', DirType.SPRING_CONFIG)
                     .parent(srcBase)
-                    .filename('SpringConfig')
+                    .filename('SpringConfig.java')
                     .build()
             Supplier<String> callback = {
                 return configGenerator.genConfiguration(beanMappings, configuration)

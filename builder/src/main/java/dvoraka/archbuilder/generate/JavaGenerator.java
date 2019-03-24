@@ -47,6 +47,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static dvoraka.archbuilder.util.JavaUtils.removeJavaSuffix;
 import static java.lang.reflect.Modifier.isAbstract;
 import static java.lang.reflect.Modifier.isFinal;
 import static java.lang.reflect.Modifier.isPrivate;
@@ -204,8 +205,9 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         Class<?> superClass = loadClass(superDir.getTypeName());
 
         String filename = getFilename(directory);
+        String typeName = removeJavaSuffix(filename);
 
-        TypeSpec.Builder serviceBuilder = TypeSpec.interfaceBuilder(filename);
+        TypeSpec.Builder serviceBuilder = TypeSpec.interfaceBuilder(typeName);
         if (superClass.getTypeParameters().length == 0) {
             serviceBuilder.addSuperinterface(superClass);
         } else {
@@ -257,8 +259,9 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         List<MethodSpec> methodSpecs = genMethodSpecs(allMethods, typeMapping);
 
         String filename = getFilename(directory);
+        String typeName = removeJavaSuffix(filename);
 
-        TypeSpec.Builder serviceImplBuilder = TypeSpec.classBuilder(filename)
+        TypeSpec.Builder serviceImplBuilder = TypeSpec.classBuilder(typeName)
                 .addSuperinterface(superClass)
                 .addAnnotation(Service.class)
                 .addMethods(methodSpecs);
@@ -286,7 +289,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             throw new GeneratorException("No text.");
         }
 
-        String filename = javaSuffix(getFilename(directory));
+        String filename = getFilename(directory);
 
         saveJava(directory, source, filename);
     }
@@ -830,16 +833,17 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
     private TypeSpec.Builder getTypeSpecBuilder(Directory directory) {
 
         String filename = getFilename(directory);
+        String typeName = removeJavaSuffix(filename);
 
         TypeSpec.Builder builder;
         if (directory.isInterfaceType()) {
-            builder = TypeSpec.interfaceBuilder(filename);
+            builder = TypeSpec.interfaceBuilder(typeName);
         } else if (directory.isEnumType()) {
-            builder = TypeSpec.enumBuilder(filename);
+            builder = TypeSpec.enumBuilder(typeName);
         } else if (directory.isAnnotationType()) {
-            builder = TypeSpec.annotationBuilder(filename);
+            builder = TypeSpec.annotationBuilder(typeName);
         } else {
-            builder = TypeSpec.classBuilder(filename);
+            builder = TypeSpec.classBuilder(typeName);
         }
 
         return builder;
@@ -887,7 +891,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         JavaFile javaFile = JavaFile.builder(directory.getPackageName(), typeSpec)
                 .build();
 
-        saveJava(directory, javaFile.toString(), javaSuffix(getFilename(directory)));
+        saveJava(directory, javaFile.toString(), getFilename(directory));
     }
 
     private GeneratorException noSuperTypeException() {

@@ -5,9 +5,9 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/87c3fd4174c74af7b7a35f717d6c9afe)](https://www.codacy.com/app/dvoraka/architecture-builder?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=dvoraka/architecture-builder&amp;utm_campaign=Badge_Grade)
 
 It's an application/project builder from prebuilt structures. You can use smaller blocks to build your application
-dynamically (generate source code and all other stuff). There are high-level Java templates for building the whole
-project. For instance, micro-service template is for building new micro-service with known architecture. It possible
-to use your own abstract types with the template or build your own template.
+dynamically (generate source code and all other stuff). There are high-level Java modules for building the whole
+project. For instance, micro-service module is for building new micro-service project with known architecture.
+It possible to use your own abstract types with the module or build your own modules/templates.
 
 Prototype currently works with Java 8 only.
 
@@ -17,29 +17,34 @@ Description of main building blocks you can use.
 
 ### Directory
 
-Data structure for defining a part of a project. You can describe filesystem directory, abstract type implementation,
-build configuration and many other situations.
+Data structure for defining parts of a project. You can describe filesystem directory, abstract type implementation,
+dependency on a generated type, build configuration and many other situations.
 
-### Architecture template
+### Architecture module
 
-Architecture template uses **Directory** tree and encapsulates it. It's used for defining a concrete architecture and
-making it configurable, like name of the base package, main abstract class, etc.
+Architecture module uses **Directory** tree and encapsulates it. It's used for defining a concrete 
+architecture/project and making it configurable, like name of the base package, main abstract class,
+type of the build system, etc.
+
+### Architecture submodule
+
+Submodules are smaller than modules and encapsulate parts of a **Directory** tree. For instance, a network subsystem.
 
 ### Source template
 
-For Java classes it's possible to use configurable source templates. For instance, Spring Boot application class
-is usually very similar and you only need to choose the name of the application. The templates are used in Directories.
+For Java classes it's possible to use configurable source templates. For instance, a Spring Boot application class
+is usually very similar and you only need to choose a name of the application. The templates are used by Directories.
 
 ### Text template
 
 Template for any text based data. It could be used simple text builder to build dynamic text templates.
-The templates are used in Directories.
+The templates are used by Directories.
 
 ## Examples
 
 ### Micro-service template
 
-It creates the whole micro-service skeleton based on known abstraction.
+It creates the whole micro-service project skeleton based on known abstraction.
 
 Starting abstraction is (from sample package in the project):
 ```text

@@ -22,7 +22,7 @@ dependency on a generated type, build configuration and many other situations.
 
 ### Architecture module
 
-Architecture module uses **Directory** tree and encapsulates it. It's used for defining a concrete 
+Architecture module uses **Directory** tree and encapsulates it. It's used for defining a concrete
 architecture/project and making it configurable, like name of the base package, main abstract class,
 type of the build system, etc.
 

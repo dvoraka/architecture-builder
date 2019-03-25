@@ -175,7 +175,6 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             }
         }
 
-        // type spec builder
         TypeSpec.Builder implementationBuilder = getTypeSpecBuilder(directory);
 
         implementationBuilder.addMethods(methodSpecs);

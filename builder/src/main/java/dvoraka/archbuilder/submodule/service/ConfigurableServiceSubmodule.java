@@ -6,6 +6,7 @@ import dvoraka.archbuilder.exception.GeneratorException;
 import dvoraka.archbuilder.springconfig.BeanMapping;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
 import dvoraka.archbuilder.template.TemplateHelper;
+import dvoraka.archbuilder.util.JavaUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -59,8 +60,9 @@ public class ConfigurableServiceSubmodule implements ServiceSubmodule, TemplateH
                 .filename(serviceImplFullName)
                 .build();
 
-        String serviceMappingName = uncapitalize(service.getFilename()
-                .orElseThrow(() -> noFilenameException(service)));
+        String serviceFilename = service.getFilename()
+                .orElseThrow(() -> noFilenameException(service));
+        String serviceMappingName = uncapitalize(JavaUtils.removeJavaSuffix(serviceFilename));
         BeanMapping serviceBeanMapping = new BeanMapping.Builder(serviceMappingName)
                 .typeDir(service)
                 .toTypeDir(serviceImpl)

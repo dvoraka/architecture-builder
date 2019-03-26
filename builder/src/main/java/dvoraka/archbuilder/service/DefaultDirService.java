@@ -4,8 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dvoraka.archbuilder.data.DirType;
 import dvoraka.archbuilder.data.Directory;
+import dvoraka.archbuilder.exception.GeneratorException;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -107,8 +109,8 @@ public class DefaultDirService implements DirService {
     @Override
     public Path getFilePath(Directory directory) {
         return Paths.get(directory.getPath()
-                + "/"
-                + directory.getFilename().orElseThrow(RuntimeException::new)
+                + File.separator
+                + directory.getFilename().orElseThrow(() -> new GeneratorException("No filename."))
         );
     }
 }

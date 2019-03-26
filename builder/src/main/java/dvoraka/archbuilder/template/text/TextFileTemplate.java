@@ -2,9 +2,9 @@ package dvoraka.archbuilder.template.text;
 
 public interface TextFileTemplate {
 
-    String getFilename();
-
     String getText();
+
+    String getFilename();
 
     String getPath();
 }

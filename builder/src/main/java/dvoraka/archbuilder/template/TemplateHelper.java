@@ -2,6 +2,7 @@ package dvoraka.archbuilder.template;
 
 import dvoraka.archbuilder.data.DirType;
 import dvoraka.archbuilder.data.Directory;
+import dvoraka.archbuilder.template.source.SourceTemplate;
 import dvoraka.archbuilder.template.text.TextFileTemplate;
 
 public interface TemplateHelper {
@@ -45,11 +46,11 @@ public interface TemplateHelper {
                 .build();
     }
 
-    default Directory classFile(Directory parent, TextFileTemplate template) {
+    default Directory classFile(Directory parent, SourceTemplate template) {
         return new Directory.Builder(template.getPath(), DirType.CUSTOM_TYPE)
                 .parent(parent)
                 .filename(template.getFilename())
-                .text(template.getText())
+                .text(template.getSource())
                 .build();
     }
 
@@ -69,7 +70,7 @@ public interface TemplateHelper {
         return textFile(root, template);
     }
 
-    default Directory springBootApp(Directory root, TextFileTemplate template) {
+    default Directory springBootApp(Directory root, SourceTemplate template) {
         return classFile(root, template);
     }
 

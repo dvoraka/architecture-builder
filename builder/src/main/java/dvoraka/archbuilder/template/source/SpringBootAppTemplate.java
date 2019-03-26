@@ -70,11 +70,6 @@ public class SpringBootAppTemplate implements SourceTemplate {
     }
 
     @Override
-    public String getText() {
-        return getSource();
-    }
-
-    @Override
     public String getPath() {
         return "";
     }

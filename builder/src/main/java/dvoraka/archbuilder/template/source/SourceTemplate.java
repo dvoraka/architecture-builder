@@ -1,12 +1,14 @@
 package dvoraka.archbuilder.template.source;
 
-import dvoraka.archbuilder.template.text.TextFileTemplate;
-
-public interface SourceTemplate extends TextFileTemplate {
+public interface SourceTemplate {
 
     String getSource();
+
+    String getFilename();
 
     String getTypeName();
 
     String getPackageName();
+
+    String getPath();
 }

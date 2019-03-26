@@ -6,6 +6,7 @@ import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeSpec
 import dvoraka.archbuilder.data.DirType
 import dvoraka.archbuilder.data.Directory
+import dvoraka.archbuilder.template.source.EnumTemplate
 import dvoraka.archbuilder.template.source.SourceTemplate
 import dvoraka.archbuilder.template.source.SpringBootAppTemplate
 import dvoraka.archbuilder.util.JavaUtils
@@ -24,9 +25,8 @@ class CustomTypeISpec extends BaseISpec {
     def "Custom type generation"() {
         given:
             String className = 'CustomType'
-            String packagePath = 'test'
-            String path = srcBase.getPackageName() + '/' + packagePath
-            String packageName = JavaUtils.path2pkg(path)
+            String path = 'test'
+            String packageName = srcBase.getPackageName() + '.' + JavaUtils.path2pkg(path)
             String argsName = 'args'
 
             MethodSpec methodSpec = MethodSpec.methodBuilder('main')
@@ -43,7 +43,7 @@ class CustomTypeISpec extends BaseISpec {
             JavaFile javaFile = JavaFile.builder(packageName, typeSpec)
                     .build()
 
-            Directory customType = new Directory.Builder(packagePath, DirType.CUSTOM_TYPE)
+            Directory customType = new Directory.Builder(path, DirType.CUSTOM_TYPE)
                     .parent(srcBase)
                     .filename(javaSuffix(className))
                     .text(javaFile.toString())
@@ -61,8 +61,7 @@ class CustomTypeISpec extends BaseISpec {
     def "Custom type with source template"() {
         given:
             String className = 'CoolApplication'
-            String path = srcBase.getPackageName()
-            String packageName = JavaUtils.path2pkg(path)
+            String packageName = srcBase.getPackageName()
 
             SourceTemplate template = new SpringBootAppTemplate(
                     className,
@@ -86,5 +85,32 @@ class CustomTypeISpec extends BaseISpec {
             runMainMethod(clazz, new String[0])
         then:
             notThrown(Exception)
+    }
+
+    def "Custom type with enum source template"() {
+        given:
+            String enumName = 'CoolEnum'
+            String path = 'enumpkg/test'
+            String packageName = srcBase.getPackageName() + '.' + JavaUtils.path2pkg(path)
+
+            SourceTemplate template = new EnumTemplate(
+                    enumName,
+                    packageName,
+                    'constant1', 'constant2'
+            )
+
+            Directory customType = new Directory.Builder(path, DirType.CUSTOM_TYPE)
+                    .parent(srcBase)
+                    .filename(javaSuffix(enumName))
+                    .text(template.getSource())
+                    .build()
+        when:
+            mainGenerator.generate(root)
+            Class<?> clazz = loadClass(customType.getTypeName())
+        then:
+            notThrown(Exception)
+            isPublicNotAbstract(clazz)
+            hasNoTypeParameters(clazz)
+            clazz.isEnum()
     }
 }

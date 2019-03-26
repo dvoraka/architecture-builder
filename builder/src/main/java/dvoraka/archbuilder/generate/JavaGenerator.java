@@ -159,13 +159,12 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         }
 
         // find methods and gen specs
-        List<Method> allMethods = new ArrayList<>();
-        if (!directory.isAbstractType()) {
-            allMethods = findAllMethods(superTypes);
-        }
+        List<Method> allMethods = directory.isAbstractType()
+                ? new ArrayList<>()
+                : findAllMethods(superTypes);
         //TODO: current merging is very simple - name && parameter count check
-        allMethods = mergeMethods(allMethods);
-        List<MethodSpec> methodSpecs = genMethodSpecs(allMethods, typeMapping);
+        List<Method> mergedMethods = mergeMethods(allMethods);
+        List<MethodSpec> methodSpecs = genMethodSpecs(mergedMethods, typeMapping);
         // add constructor specs if necessary
         if (superClass.isPresent()) {
             Class<?> cls = superClass.get();

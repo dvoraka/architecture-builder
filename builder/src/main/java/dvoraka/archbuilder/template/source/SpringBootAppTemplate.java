@@ -15,6 +15,7 @@ import static java.util.Objects.requireNonNull;
 public class SpringBootAppTemplate implements SourceTemplate {
 
     public static final String ARGS_NAME = "args";
+
     private final String className;
     private final String packageName;
 

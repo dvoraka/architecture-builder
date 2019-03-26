@@ -28,8 +28,7 @@ public class EnumTemplate implements SourceTemplate {
 
     @Override
     public String getSource() {
-
-        TypeSpec.Builder builder = TypeSpec.enumBuilder(getEnumName())
+        TypeSpec.Builder builder = TypeSpec.enumBuilder(enumName)
                 .addModifiers(Modifier.PUBLIC);
 
         for (String constant : constants) {
@@ -44,10 +43,6 @@ public class EnumTemplate implements SourceTemplate {
 
     @Override
     public String getTypeName() {
-        return getEnumName();
-    }
-
-    protected String getEnumName() {
         return enumName;
     }
 
@@ -58,7 +53,7 @@ public class EnumTemplate implements SourceTemplate {
 
     @Override
     public String getFilename() {
-        return JavaUtils.javaSuffix(getEnumName());
+        return JavaUtils.javaSuffix(getTypeName());
     }
 
     @Override

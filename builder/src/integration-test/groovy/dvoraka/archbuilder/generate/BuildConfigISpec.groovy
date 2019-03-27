@@ -23,7 +23,7 @@ class BuildConfigISpec extends BaseISpec {
             BuildGradleTemplate template = new BuildGradleTemplate()
             template.plugins = ['java', 'groovy']
 
-            Directory buildGradle = new Directory.Builder('', DirType.BUILD_CONFIG)
+            Directory buildGradle = new Directory.Builder('', DirType.TEXT)
                     .parent(root)
                     .filename(template.getFilename())
                     .text(template.getText())
@@ -39,7 +39,7 @@ class BuildConfigISpec extends BaseISpec {
         given:
             TextFileTemplate template = new SettingsGradleTemplate('TestProject1')
 
-            Directory settingsGradle = new Directory.Builder('', DirType.BUILD_CONFIG)
+            Directory settingsGradle = new Directory.Builder('', DirType.TEXT)
                     .parent(root)
                     .filename(template.getFilename())
                     .text(template.getText())

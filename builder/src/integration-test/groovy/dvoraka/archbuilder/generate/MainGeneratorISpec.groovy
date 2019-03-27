@@ -62,7 +62,7 @@ class MainGeneratorISpec extends BaseISpec {
 
     def "build config"() {
         given:
-            Directory buildConfig = new Directory.Builder('', DirType.BUILD_CONFIG)
+            Directory buildConfig = new Directory.Builder('', DirType.TEXT)
                     .parent(root)
                     .filename("build.gradle")
                     .text("apply plugin: 'java'")

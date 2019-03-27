@@ -73,7 +73,6 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
     private EnumMap<DirType, Consumer<Directory>> getConfiguration() {
 
         EnumMap<DirType, Consumer<Directory>> configuration = new EnumMap<>(DirType.class);
-        configuration.put(DirType.BUILD_CONFIG, this::genBuildConfig);
         configuration.put(DirType.CUSTOM_TYPE, this::genCustomType);
         configuration.put(DirType.IMPL, this::genImpl);
         configuration.put(DirType.NEW_TYPE, this::genNewType);
@@ -113,9 +112,6 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         addClassPath(Paths.get(directory.getPath()));
     }
 
-    private void genBuildConfig(Directory directory) {
-        genText(directory);
-    }
 
     private void genNewType(Directory directory) {
         log.debug("Generating new type: {}", directory);

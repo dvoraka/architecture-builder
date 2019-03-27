@@ -14,8 +14,6 @@ public enum DirType {
     SRC_BASE_ABSTRACT(true, true),
     SRC_TEST_BASE(false, true),
 
-    BUILD_CONFIG,
-
     SERVICE_ABSTRACT(true, false),
     SERVICE,
     SERVICE_IMPL,

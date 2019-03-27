@@ -96,7 +96,7 @@ class CustomTypeISpec extends BaseISpec {
             SourceTemplate template = new EnumTemplate(
                     enumName,
                     packageName,
-                    'constant1', 'constant2'
+                    'constant1', 'constant2', 'constant3'
             )
 
             Directory customType = new Directory.Builder(path, DirType.CUSTOM_TYPE)

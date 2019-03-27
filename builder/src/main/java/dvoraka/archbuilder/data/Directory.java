@@ -440,7 +440,8 @@ public class Directory {
         }
 
         private boolean isJavaType(Directory directory) {
-            return directory.type == DirType.CUSTOM_TYPE
+            return directory.type == DirType.ABSTRACT
+                    || directory.type == DirType.CUSTOM_TYPE
                     || directory.type == DirType.IMPL
                     || directory.type == DirType.NEW_TYPE
                     || directory.type == DirType.SERVICE

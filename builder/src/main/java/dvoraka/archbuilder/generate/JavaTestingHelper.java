@@ -2,11 +2,15 @@ package dvoraka.archbuilder.generate;
 
 import dvoraka.archbuilder.data.DirType;
 import dvoraka.archbuilder.data.Directory;
+import dvoraka.archbuilder.exception.GeneratorException;
 import dvoraka.archbuilder.service.DirService;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 public interface JavaTestingHelper {
@@ -86,5 +90,22 @@ public interface JavaTestingHelper {
 
         Method mainMethod = clazz.getDeclaredMethod("main", String[].class);
         mainMethod.invoke(null, new Object[]{args});
+    }
+
+    default void fileExists(Directory directory) {
+        if (directory.getType() == DirType.ABSTRACT) {
+            return;
+        }
+
+        String fullPath = directory.getPath() + File.separator + directory.getFilename()
+                .orElseThrow(() -> new GeneratorException("Filename is missing."));
+
+        if (!Files.exists(Paths.get(fullPath))) {
+            throw new GeneratorException("File: " + fullPath + " is missing.");
+        }
+    }
+
+    default void filesExist(DirService dirService, Directory rootDir) {
+        dirService.processDirLeafs(rootDir, this::fileExists);
     }
 }

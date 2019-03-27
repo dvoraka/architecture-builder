@@ -56,6 +56,8 @@ class DefaultMicroserviceISpec extends Specification implements JavaHelper, Java
         when:
             mainGenerator.generate(rootDir)
         then:
+            filesExist(dirService, rootDir)
+        and:
             exists(DirType.SERVICE, rootDir, dirService)
             exists(DirType.SERVICE_IMPL, rootDir, dirService)
             exists(DirType.SPRING_CONFIG, rootDir, dirService)

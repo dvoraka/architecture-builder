@@ -37,50 +37,43 @@ class DefaultMicroserviceISpec extends Specification implements JavaHelper, Java
     String packageName = 'test.budget'
     String serviceName = 'Budget'
 
-    Module template
+    Module module
     Directory rootDir
 
 
     def setup() {
-
-        template = new DefaultMicroservice(
+        module = new DefaultMicroservice(
                 rootDirName,
                 packageName,
                 serviceName,
                 configGenerator
         )
 
-        rootDir = template.getRootDirectory()
+        rootDir = module.getRootDirectory()
     }
 
     def "create micro-service - budget service"() {
         when:
             mainGenerator.generate(rootDir)
-
         then:
             exists(DirType.SERVICE, rootDir, dirService)
             exists(DirType.SERVICE_IMPL, rootDir, dirService)
-
+            exists(DirType.SPRING_CONFIG, rootDir, dirService)
             exists(DirType.TEXT, rootDir, dirService)
-
         when:
             Directory serviceImplDir = dirService.findByType(DirType.SERVICE_IMPL, rootDir)
                     .get()
             Directory serviceDir = dirService.findByType(DirType.SERVICE, rootDir)
                     .get()
-            Class<?> serviceImplClass = loadClass(defaultServiceImplName(serviceDir))
-
+            Class<?> serviceImplClass = loadClass(serviceImplDir.getTypeName())
         then:
             serviceImplClass.getSimpleName() == 'Default' + serviceName + 'Service'
             serviceImplClass.getName() == defaultServiceImplName(serviceDir)
-
         when:
             BuildTool buildTool = new GradleBuildTool(new File(rootDirName))
             buildTool.prepareEnv()
-
         then:
             notThrown(Exception)
-
         cleanup:
             Utils.removeFiles(rootDirName)
     }

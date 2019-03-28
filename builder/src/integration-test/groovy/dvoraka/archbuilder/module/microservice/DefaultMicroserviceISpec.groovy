@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.template
+package dvoraka.archbuilder.module.microservice
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import dvoraka.archbuilder.build.BuildTool

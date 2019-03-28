@@ -84,23 +84,17 @@ class DefaultMicroserviceISpec extends Specification implements JavaHelper, Java
     def "create micro-service with build"() {
         when:
             mainGenerator.generate(rootDir)
-
         then:
             notThrown(Exception)
-
         when:
             BuildTool buildTool = new GradleBuildTool(new File(rootDirName))
             buildTool.prepareEnv()
-
         then:
             notThrown(Exception)
-
         when:
             buildTool.build()
-
         then:
             notThrown(Exception)
-
         cleanup:
             Utils.removeFiles(rootDirName)
             true
@@ -110,7 +104,6 @@ class DefaultMicroserviceISpec extends Specification implements JavaHelper, Java
         when:
             String json = objectMapper.writeValueAsString(rootDir)
             println JsonOutput.prettyPrint(json)
-
         then:
             notThrown(Exception)
     }
@@ -118,13 +111,10 @@ class DefaultMicroserviceISpec extends Specification implements JavaHelper, Java
     def "micro-service directory deserialization"() {
         when:
             String json = objectMapper.writeValueAsString(rootDir)
-
         then:
             notThrown(Exception)
-
         when:
             Directory loadedDir = objectMapper.readValue(json, Directory)
-
         then:
             notThrown(Exception)
             loadedDir == rootDir

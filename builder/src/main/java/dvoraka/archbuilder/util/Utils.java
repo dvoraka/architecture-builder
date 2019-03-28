@@ -30,6 +30,10 @@ public final class Utils {
             return;
         }
 
+        if (path.isAbsolute()) {
+            throw new GeneratorException("Path shouldn't be absolute.");
+        }
+
         Files.walk(path)
                 .sorted(Comparator.reverseOrder())
                 .map(Path::toFile)

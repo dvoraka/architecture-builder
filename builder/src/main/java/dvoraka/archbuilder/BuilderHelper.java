@@ -12,7 +12,25 @@ public class BuilderHelper {
     public BuilderHelper(BuilderProperties properties) {
         this.properties = properties;
 
+        rootDirName = properties.getRootDirName();
+        packageName = properties.getPackageName();
         serviceName = properties.getService().getName();
+    }
+
+    public String getRootDirName() {
+        return rootDirName;
+    }
+
+    public void setRootDirName(String rootDirName) {
+        this.rootDirName = rootDirName;
+    }
+
+    public String getPackageName() {
+        return packageName;
+    }
+
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
     }
 
     public String getServiceName() {

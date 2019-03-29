@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 
@@ -24,12 +25,15 @@ import java.io.File;
  * Template testing.
  */
 @SpringBootApplication
+@EnableConfigurationProperties(BuilderProperties.class)
 public class App {
 
     @Autowired
     private Generator mainGenerator;
     @Autowired
     private SpringConfigGenerator configGenerator;
+    @Autowired
+    private BuilderProperties properties;
 
 
     public static void main(String[] args) {

@@ -1,6 +1,8 @@
 package dvoraka.archbuilder.module.microservice
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import dvoraka.archbuilder.BuilderHelper
+import dvoraka.archbuilder.BuilderProperties
 import dvoraka.archbuilder.build.BuildTool
 import dvoraka.archbuilder.build.GradleBuildTool
 import dvoraka.archbuilder.data.DirType
@@ -32,6 +34,8 @@ class DefaultMicroserviceISpec extends Specification implements JavaHelper, Java
     ObjectMapper objectMapper
     @Autowired
     SpringConfigGenerator configGenerator
+    @Autowired
+    BuilderProperties properties
 
     String rootDirName = 'budget-service'
     String packageName = 'test.budget'
@@ -42,12 +46,12 @@ class DefaultMicroserviceISpec extends Specification implements JavaHelper, Java
 
 
     def setup() {
-        module = new DefaultMicroservice(
-                rootDirName,
-                packageName,
-                serviceName,
-                configGenerator
-        )
+        BuilderHelper helper = new BuilderHelper(properties)
+        helper.setRootDirName(rootDirName)
+        helper.setPackageName(packageName)
+        helper.setServiceName(serviceName)
+
+        module = new DefaultMicroservice(helper, configGenerator)
 
         rootDir = module.getRootDirectory()
     }

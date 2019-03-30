@@ -57,12 +57,7 @@ public class App {
             helper.setPackageName(packageName);
             helper.setServiceName(serviceName);
 
-            Module microservice = new DefaultMicroservice(
-                    rootDirName,
-                    packageName,
-                    serviceName,
-                    configGenerator
-            );
+            Module microservice = new DefaultMicroservice(helper, configGenerator);
 
             mainGenerator.generate(microservice.getRootDirectory());
 

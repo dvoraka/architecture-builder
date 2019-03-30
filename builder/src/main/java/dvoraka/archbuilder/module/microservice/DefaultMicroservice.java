@@ -1,5 +1,6 @@
 package dvoraka.archbuilder.module.microservice;
 
+import dvoraka.archbuilder.BuilderHelper;
 import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.module.Module;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
@@ -23,31 +24,28 @@ public class DefaultMicroservice implements Module, TemplateHelper {
     private final Directory root;
 
 
-    public DefaultMicroservice(
-            String rootDirName,
-            String packageName,
-            String serviceName,
-            SpringConfigGenerator configGenerator
-    ) {
-        root = root(rootDirName);
-        Directory srcBase = srcRootAndBase(root, pkg2path(packageName));
+    public DefaultMicroservice(BuilderHelper helper, SpringConfigGenerator configGenerator) {
+        root = root(helper.getRootDirName());
+        Directory srcBase = srcRootAndBase(root, pkg2path(helper.getPackageName()));
 
         // service
-        ServiceSubmodule serviceSubmodule = new DefaultServiceSubmodule(serviceName, configGenerator);
+        ServiceSubmodule serviceSubmodule =
+                new DefaultServiceSubmodule(helper.getServiceName(), configGenerator);
         serviceSubmodule.addSubmoduleTo(srcBase);
 
         // network
         NetSubmodule netSubmodule = new DefaultNetSubmodule(
-                serviceName, serviceSubmodule.getService(), configGenerator);
+                helper.getServiceName(), serviceSubmodule.getService(), configGenerator);
         netSubmodule.addSubmoduleTo(srcBase);
 
         // Spring Boot application
         SpringBootAppSubmodule springBootAppSubmodule =
-                new DefaultSpringBootAppSubmodule(serviceName, packageName);
+                new DefaultSpringBootAppSubmodule(helper.getServiceName(), helper.getPackageName());
         springBootAppSubmodule.addSubmoduleTo(srcBase);
 
         // Spring configuration
-        SpringConfigSubmodule springConfigSubmodule = new SpringConfigSubmodule(serviceName, configGenerator);
+        SpringConfigSubmodule springConfigSubmodule =
+                new SpringConfigSubmodule(helper.getServiceName(), configGenerator);
         springConfigSubmodule.addMappings(serviceSubmodule.getConfiguration());
         springConfigSubmodule.addMappings(netSubmodule.getConfiguration());
         springConfigSubmodule.addSubmoduleTo(srcBase);
@@ -56,7 +54,7 @@ public class DefaultMicroservice implements Module, TemplateHelper {
         properties(root, new AppPropertiesTemplate());
 
         // build
-        BuildSubmodule buildSubmodule = new DefaultGradleSubmodule(serviceName);
+        BuildSubmodule buildSubmodule = new DefaultGradleSubmodule(helper.getServiceName());
         buildSubmodule.addSubmoduleTo(root);
 
         // gitignore file

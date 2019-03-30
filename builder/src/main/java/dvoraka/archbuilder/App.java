@@ -52,6 +52,11 @@ public class App {
             String packageName = "test.budget";
             String serviceName = "Budget";
 
+            BuilderHelper helper = new BuilderHelper(properties);
+            helper.setRootDirName(rootDirName);
+            helper.setPackageName(packageName);
+            helper.setServiceName(serviceName);
+
             Module microservice = new DefaultMicroservice(
                     rootDirName,
                     packageName,

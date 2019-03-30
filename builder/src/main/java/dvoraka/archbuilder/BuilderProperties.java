@@ -47,7 +47,8 @@ public class BuilderProperties {
 
     public static class Service {
 
-        private String name;
+        private String name = "";
+        private String string = "Service";
 
 
         public String getName() {
@@ -56,6 +57,14 @@ public class BuilderProperties {
 
         public void setName(String name) {
             this.name = name;
+        }
+
+        public String getString() {
+            return string;
+        }
+
+        public void setString(String string) {
+            this.string = string;
         }
     }
 }

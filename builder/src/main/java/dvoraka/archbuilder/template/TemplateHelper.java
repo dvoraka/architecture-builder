@@ -74,9 +74,12 @@ public interface TemplateHelper {
         return classFile(root, template);
     }
 
+    //TODO: move to builder helper
+    ////////////////////////////////
     default String buildServiceName(String serviceName) {
         return serviceName + "Service";
     }
+
 
     default String buildServiceImplName(String serviceName) {
         return "Default" + buildServiceName(serviceName);

@@ -40,4 +40,8 @@ public class BuilderHelper {
     public void setServiceName(String serviceName) {
         this.serviceName = serviceName;
     }
+
+    public String serviceFullName() {
+        return serviceName + properties.getService().getString();
+    }
 }

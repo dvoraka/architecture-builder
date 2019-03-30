@@ -4,9 +4,9 @@ public class BuilderHelper {
 
     private final BuilderProperties properties;
 
-    private String rootDirName;
-    private String packageName;
-    private String serviceName;
+    private final String rootDirName;
+    private final String packageName;
+    private final String serviceName;
 
 
     public BuilderHelper(BuilderProperties properties) {
@@ -17,28 +17,28 @@ public class BuilderHelper {
         serviceName = properties.getService().getName();
     }
 
-    public String getRootDirName() {
-        return rootDirName;
+    public BuilderHelper(
+            BuilderProperties properties,
+            String rootDirName,
+            String packageName,
+            String serviceName
+    ) {
+        this.properties = properties;
+        this.rootDirName = rootDirName;
+        this.packageName = packageName;
+        this.serviceName = serviceName;
     }
 
-    public void setRootDirName(String rootDirName) {
-        this.rootDirName = rootDirName;
+    public String getRootDirName() {
+        return rootDirName;
     }
 
     public String getPackageName() {
         return packageName;
     }
 
-    public void setPackageName(String packageName) {
-        this.packageName = packageName;
-    }
-
     public String getServiceName() {
         return serviceName;
-    }
-
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
     }
 
     public String serviceFullName() {

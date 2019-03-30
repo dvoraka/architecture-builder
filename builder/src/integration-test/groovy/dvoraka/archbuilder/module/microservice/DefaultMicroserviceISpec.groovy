@@ -46,10 +46,7 @@ class DefaultMicroserviceISpec extends Specification implements JavaHelper, Java
 
 
     def setup() {
-        BuilderHelper helper = new BuilderHelper(properties)
-        helper.setRootDirName(rootDirName)
-        helper.setPackageName(packageName)
-        helper.setServiceName(serviceName)
+        BuilderHelper helper = new BuilderHelper(properties, rootDirName, packageName, serviceName)
 
         module = new DefaultMicroservice(helper, configGenerator)
 

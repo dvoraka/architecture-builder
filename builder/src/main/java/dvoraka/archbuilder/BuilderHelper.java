@@ -44,4 +44,16 @@ public class BuilderHelper {
     public String serviceFullName() {
         return serviceName + properties.getService().getString();
     }
+
+    public String serviceImplName() {
+        return properties.getDefaultString() + serviceFullName();
+    }
+
+    public String serviceConfigName() {
+        return getServiceName() + properties.getConfigString();
+    }
+
+    public String serviceAppName() {
+        return getServiceName() + properties.getAppString();
+    }
 }

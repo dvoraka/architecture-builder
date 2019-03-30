@@ -8,6 +8,8 @@ public class BuilderProperties {
     private String rootDirName = "rootDir";
     private String packageName = "package";
 
+    private String appString = "App";
+    private String configString = "Config";
     private String defaultString = "Default";
 
     private Service service = new Service();
@@ -27,6 +29,22 @@ public class BuilderProperties {
 
     public void setPackageName(String packageName) {
         this.packageName = packageName;
+    }
+
+    public String getAppString() {
+        return appString;
+    }
+
+    public void setAppString(String appString) {
+        this.appString = appString;
+    }
+
+    public String getConfigString() {
+        return configString;
+    }
+
+    public void setConfigString(String configString) {
+        this.configString = configString;
     }
 
     public String getDefaultString() {

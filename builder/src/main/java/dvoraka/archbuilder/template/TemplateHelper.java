@@ -80,7 +80,6 @@ public interface TemplateHelper {
         return serviceName + "Service";
     }
 
-
     default String buildServiceImplName(String serviceName) {
         return "Default" + buildServiceName(serviceName);
     }
@@ -92,6 +91,7 @@ public interface TemplateHelper {
     default String buildServiceAppName(String serviceName) {
         return serviceName + "App";
     }
+
 
     default String buildExceptionName(String baseName) {
         return baseName + "Exception";

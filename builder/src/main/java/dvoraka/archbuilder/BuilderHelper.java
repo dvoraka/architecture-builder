@@ -42,7 +42,7 @@ public class BuilderHelper {
     }
 
     public String serviceFullName() {
-        return serviceName + properties.getService().getString();
+        return getServiceName() + properties.getService().getString();
     }
 
     public String serviceImplName() {

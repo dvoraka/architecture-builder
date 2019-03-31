@@ -30,22 +30,22 @@ public class DefaultMicroservice implements Module, TemplateHelper {
 
         // service
         ServiceSubmodule serviceSubmodule =
-                new DefaultServiceSubmodule(helper.getServiceName(), configGenerator);
+                new DefaultServiceSubmodule(helper.getBaseName(), configGenerator);
         serviceSubmodule.addSubmoduleTo(srcBase);
 
         // network
         NetSubmodule netSubmodule = new DefaultNetSubmodule(
-                helper.getServiceName(), serviceSubmodule.getService(), configGenerator);
+                helper.getBaseName(), serviceSubmodule.getService(), configGenerator);
         netSubmodule.addSubmoduleTo(srcBase);
 
         // Spring Boot application
         SpringBootAppSubmodule springBootAppSubmodule =
-                new DefaultSpringBootAppSubmodule(helper.getServiceName(), helper.getPackageName());
+                new DefaultSpringBootAppSubmodule(helper.getBaseName(), helper.getPackageName());
         springBootAppSubmodule.addSubmoduleTo(srcBase);
 
         // Spring configuration
         SpringConfigSubmodule springConfigSubmodule =
-                new SpringConfigSubmodule(helper.getServiceName(), configGenerator);
+                new SpringConfigSubmodule(helper.getBaseName(), configGenerator);
         springConfigSubmodule.addMappings(serviceSubmodule.getConfiguration());
         springConfigSubmodule.addMappings(netSubmodule.getConfiguration());
         springConfigSubmodule.addSubmoduleTo(srcBase);
@@ -54,7 +54,7 @@ public class DefaultMicroservice implements Module, TemplateHelper {
         properties(root, new AppPropertiesTemplate());
 
         // build
-        BuildSubmodule buildSubmodule = new DefaultGradleSubmodule(helper.getServiceName());
+        BuildSubmodule buildSubmodule = new DefaultGradleSubmodule(helper.getBaseName());
         buildSubmodule.addSubmoduleTo(root);
 
         // gitignore file

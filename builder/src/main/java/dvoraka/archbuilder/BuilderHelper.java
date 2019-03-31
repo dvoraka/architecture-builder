@@ -6,7 +6,7 @@ public class BuilderHelper {
 
     private final String rootDirName;
     private final String packageName;
-    private final String serviceName;
+    private final String baseName;
 
 
     public BuilderHelper(BuilderProperties properties) {
@@ -14,19 +14,19 @@ public class BuilderHelper {
 
         rootDirName = properties.getRootDirName();
         packageName = properties.getPackageName();
-        serviceName = properties.getService().getName();
+        baseName = properties.getService().getName();
     }
 
     public BuilderHelper(
             BuilderProperties properties,
             String rootDirName,
             String packageName,
-            String serviceName
+            String baseName
     ) {
         this.properties = properties;
         this.rootDirName = rootDirName;
         this.packageName = packageName;
-        this.serviceName = serviceName;
+        this.baseName = baseName;
     }
 
     public String getRootDirName() {
@@ -37,21 +37,21 @@ public class BuilderHelper {
         return packageName;
     }
 
-    public String getServiceName() {
-        return serviceName;
+    public String getBaseName() {
+        return baseName;
     }
 
     //////////////////////////////////////
     public String serviceAppName() {
-        return getServiceName() + properties.getAppString();
+        return getBaseName() + properties.getAppString();
     }
 
     public String serviceConfigName() {
-        return getServiceName() + properties.getConfigString();
+        return getBaseName() + properties.getConfigString();
     }
 
     public String serviceFullName() {
-        return getServiceName() + properties.getService().getString();
+        return getBaseName() + properties.getService().getString();
     }
 
     public String serviceImplName() {
@@ -59,10 +59,10 @@ public class BuilderHelper {
     }
 
     public String exceptionName() {
-        return getServiceName() + properties.getExceptionString();
+        return getBaseName() + properties.getExceptionString();
     }
 
     public String serverName() {
-        return getServiceName() + properties.getServerString();
+        return getBaseName() + properties.getServerString();
     }
 }

@@ -29,8 +29,7 @@ public class DefaultMicroservice implements Module, TemplateHelper {
         Directory srcBase = srcRootAndBase(root, pkg2path(helper.getPackageName()));
 
         // service
-        ServiceSubmodule serviceSubmodule =
-                new DefaultServiceSubmodule(helper.getBaseName(), configGenerator);
+        ServiceSubmodule serviceSubmodule = new DefaultServiceSubmodule(helper, configGenerator);
         serviceSubmodule.addSubmoduleTo(srcBase);
 
         // network

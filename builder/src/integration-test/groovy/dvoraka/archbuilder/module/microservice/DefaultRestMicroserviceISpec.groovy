@@ -1,6 +1,8 @@
 package dvoraka.archbuilder.module.microservice
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import dvoraka.archbuilder.BuilderHelper
+import dvoraka.archbuilder.BuilderProperties
 import dvoraka.archbuilder.build.BuildTool
 import dvoraka.archbuilder.build.GradleBuildTool
 import dvoraka.archbuilder.data.DirType
@@ -30,6 +32,8 @@ class DefaultRestMicroserviceISpec extends Specification implements JavaHelper, 
     @Autowired
     ObjectMapper objectMapper
     @Autowired
+    BuilderProperties properties
+    @Autowired
     SpringConfigGenerator configGenerator
 
     String rootDirName = 'balance-service'
@@ -41,10 +45,12 @@ class DefaultRestMicroserviceISpec extends Specification implements JavaHelper, 
 
 
     def setup() {
+        BuilderHelper helper = new BuilderHelper(properties, rootDirName, packageName, serviceName)
+
         module = new DefaultRestMicroservice(
                 rootDirName,
                 packageName,
-                serviceName,
+                helper,
                 configGenerator
         )
 

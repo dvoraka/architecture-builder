@@ -1,5 +1,6 @@
 package dvoraka.archbuilder.submodule.service;
 
+import dvoraka.archbuilder.BuilderHelper;
 import dvoraka.archbuilder.data.DirType;
 import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.exception.GeneratorException;
@@ -19,10 +20,10 @@ import static dvoraka.archbuilder.util.Utils.uncapitalize;
 
 public class ConfigurableServiceSubmodule implements ServiceSubmodule, TemplateHelper {
 
-    private final String serviceName;
     private final Class<?> superService;
     private final Collection<Class<?>> typeArguments;
 
+    private final BuilderHelper helper;
     private final SpringConfigGenerator configGenerator;
 
     private final List<BeanMapping> configuration;
@@ -31,14 +32,14 @@ public class ConfigurableServiceSubmodule implements ServiceSubmodule, TemplateH
 
 
     public ConfigurableServiceSubmodule(
-            String serviceName,
             Class<?> superService,
             Collection<Class<?>> typeArguments,
+            BuilderHelper helper,
             SpringConfigGenerator configGenerator
     ) {
-        this.serviceName = serviceName;
         this.superService = superService;
         this.typeArguments = typeArguments;
+        this.helper = helper;
         this.configGenerator = configGenerator;
 
         configuration = new ArrayList<>();
@@ -47,34 +48,34 @@ public class ConfigurableServiceSubmodule implements ServiceSubmodule, TemplateH
     @Override
     public void addSubmoduleTo(Directory srcBase) {
 
-        String serviceFullName = serviceName + "Service";
-        String serviceImplFullName = "Default" + serviceFullName;
-        String dataServiceFullName = serviceName + "DataService";
-        String dataServiceImplFullName = "Default" + serviceName + "DataService";
+        String serviceName = helper.serviceName();
+        String serviceImplName = helper.serviceImplName();
+        String dataServiceName = helper.dataServiceName();
+        String dataServiceImplName = helper.dataServiceImplName();
 
         // service
         service = new Directory.Builder("service", DirType.SERVICE)
                 .parent(srcBase)
                 .superType(superService)
-                .filename(serviceFullName)
+                .filename(serviceName)
                 .parameterType(typeArguments)
                 .build();
         Directory serviceImpl = new Directory.Builder("service", DirType.SERVICE_IMPL)
                 .parent(srcBase)
                 .superType(service)
-                .filename(serviceImplFullName)
+                .filename(serviceImplName)
                 .build();
 
         // data service
         Directory dataService = new Directory.Builder("service", DirType.NEW_TYPE)
                 .parent(srcBase)
-                .filename(javaSuffix(dataServiceFullName))
+                .filename(javaSuffix(dataServiceName))
                 .interfaceType()
                 .build();
         Directory dataServiceImpl = new Directory.Builder("service", DirType.IMPL)
                 .parent(srcBase)
                 .superType(dataService)
-                .filename(javaSuffix(dataServiceImplFullName))
+                .filename(javaSuffix(dataServiceImplName))
                 .metadata(Service.class)
                 .build();
 

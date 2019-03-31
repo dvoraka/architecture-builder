@@ -1,5 +1,6 @@
 package dvoraka.archbuilder.module.microservice;
 
+import dvoraka.archbuilder.BuilderHelper;
 import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.module.Module;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
@@ -26,14 +27,16 @@ public class DefaultRestMicroservice implements Module, TemplateHelper {
     public DefaultRestMicroservice(
             String rootDirName,
             String packageName,
-            String serviceName,
+            BuilderHelper helper,
             SpringConfigGenerator configGenerator
     ) {
         root = root(rootDirName);
         Directory srcBase = srcRootAndBase(root, pkg2path(packageName));
 
+        String serviceName = helper.getBaseName();
+
         // service
-        ServiceSubmodule serviceSubmodule = new DefaultServiceSubmodule(serviceName, configGenerator);
+        ServiceSubmodule serviceSubmodule = new DefaultServiceSubmodule(helper, configGenerator);
         serviceSubmodule.addSubmoduleTo(srcBase);
 
         // controller

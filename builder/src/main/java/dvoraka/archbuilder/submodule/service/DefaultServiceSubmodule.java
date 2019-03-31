@@ -1,5 +1,6 @@
 package dvoraka.archbuilder.submodule.service;
 
+import dvoraka.archbuilder.BuilderHelper;
 import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.sample.microservice.service.BaseService;
 import dvoraka.archbuilder.springconfig.BeanMapping;
@@ -13,12 +14,12 @@ public class DefaultServiceSubmodule implements ServiceSubmodule {
     private final ServiceSubmodule configuredSubmodule;
 
 
-    public DefaultServiceSubmodule(String serviceName, SpringConfigGenerator configGenerator) {
+    public DefaultServiceSubmodule(BuilderHelper helper, SpringConfigGenerator configGenerator) {
 
         configuredSubmodule = new ConfigurableServiceSubmodule(
-                serviceName,
                 BaseService.class,
                 Collections.emptyList(),
+                helper,
                 configGenerator
         );
     }

@@ -46,6 +46,14 @@ public class BuilderHelper {
         return getBaseName() + properties.getConfigString();
     }
 
+    public String dataServiceImplName() {
+        return properties.getDefaultString() + dataServiceName();
+    }
+
+    public String dataServiceName() {
+        return getBaseName() + "Data" + properties.getService().getString();
+    }
+
     public String exceptionName() {
         return getBaseName() + properties.getExceptionString();
     }
@@ -66,11 +74,11 @@ public class BuilderHelper {
         return getBaseName() + properties.getControllerString();
     }
 
-    public String serviceFullName() {
+    public String serviceName() {
         return getBaseName() + properties.getService().getString();
     }
 
     public String serviceImplName() {
-        return properties.getDefaultString() + serviceFullName();
+        return properties.getDefaultString() + serviceName();
     }
 }

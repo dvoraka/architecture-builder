@@ -33,9 +33,9 @@ class DefaultMicroserviceISpec extends Specification implements JavaHelper, Java
     @Autowired
     ObjectMapper objectMapper
     @Autowired
-    SpringConfigGenerator configGenerator
-    @Autowired
     BuilderProperties properties
+    @Autowired
+    SpringConfigGenerator configGenerator
 
     String rootDirName = 'budget-service'
     String packageName = 'test.budget'

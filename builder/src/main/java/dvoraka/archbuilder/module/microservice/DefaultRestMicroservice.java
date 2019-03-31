@@ -38,8 +38,7 @@ public class DefaultRestMicroservice implements Module, TemplateHelper {
         restSubmodule.addSubmoduleTo(srcBase);
 
         // Spring Boot application
-        SpringBootAppSubmodule springBootAppSubmodule =
-                new DefaultSpringBootAppSubmodule(helper.getBaseName(), helper.getPackageName());
+        SpringBootAppSubmodule springBootAppSubmodule = new DefaultSpringBootAppSubmodule(helper);
         springBootAppSubmodule.addSubmoduleTo(srcBase);
 
         // Spring configuration

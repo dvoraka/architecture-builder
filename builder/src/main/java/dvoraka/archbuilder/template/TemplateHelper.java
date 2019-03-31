@@ -76,14 +76,6 @@ public interface TemplateHelper {
 
     //TODO: move to builder helper
     ////////////////////////////////
-    default String buildServiceName(String serviceName) {
-        return serviceName + "Service";
-    }
-
-    default String buildServiceAppName(String serviceName) {
-        return serviceName + "App";
-    }
-
     default String buildConfigurationName(String baseName) {
         return baseName + "Config";
     }

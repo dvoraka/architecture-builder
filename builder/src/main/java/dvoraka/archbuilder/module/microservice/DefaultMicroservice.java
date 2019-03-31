@@ -39,8 +39,7 @@ public class DefaultMicroservice implements Module, TemplateHelper {
         netSubmodule.addSubmoduleTo(srcBase);
 
         // Spring Boot application
-        SpringBootAppSubmodule springBootAppSubmodule =
-                new DefaultSpringBootAppSubmodule(helper.getBaseName(), helper.getPackageName());
+        SpringBootAppSubmodule springBootAppSubmodule = new DefaultSpringBootAppSubmodule(helper);
         springBootAppSubmodule.addSubmoduleTo(srcBase);
 
         // Spring configuration

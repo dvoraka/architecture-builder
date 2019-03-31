@@ -1,5 +1,6 @@
 package dvoraka.archbuilder.submodule.spring;
 
+import dvoraka.archbuilder.BuilderHelper;
 import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.springconfig.BeanMapping;
 import dvoraka.archbuilder.template.TemplateHelper;
@@ -11,19 +12,17 @@ import java.util.Collections;
 
 public class DefaultSpringBootAppSubmodule implements SpringBootAppSubmodule, TemplateHelper {
 
-    private final String baseName;
-    private final String packageName;
+    private final BuilderHelper helper;
 
 
-    public DefaultSpringBootAppSubmodule(String baseName, String packageName) {
-        this.baseName = baseName;
-        this.packageName = packageName;
+    public DefaultSpringBootAppSubmodule(BuilderHelper helper) {
+        this.helper = helper;
     }
 
     @Override
     public void addSubmoduleTo(Directory srcBase) {
-        String appClassName = buildServiceAppName(baseName);
-        SourceTemplate appSourceTemplate = new SpringBootApp2Template(appClassName, packageName);
+        SourceTemplate appSourceTemplate =
+                new SpringBootApp2Template(helper.serviceAppName(), helper.getPackageName());
         springBootApp(srcBase, appSourceTemplate);
     }
 

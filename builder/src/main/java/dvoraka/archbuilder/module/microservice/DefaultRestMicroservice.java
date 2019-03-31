@@ -24,14 +24,10 @@ public class DefaultRestMicroservice implements Module, TemplateHelper {
     private final Directory root;
 
 
-    public DefaultRestMicroservice(
-            String rootDirName,
-            String packageName,
-            BuilderHelper helper,
-            SpringConfigGenerator configGenerator
-    ) {
-        root = root(rootDirName);
-        Directory srcBase = srcRootAndBase(root, pkg2path(packageName));
+    public DefaultRestMicroservice(BuilderHelper helper, SpringConfigGenerator configGenerator) {
+
+        root = root(helper.getRootDirName());
+        Directory srcBase = srcRootAndBase(root, pkg2path(helper.getPackageName()));
 
         String serviceName = helper.getBaseName();
 
@@ -45,7 +41,7 @@ public class DefaultRestMicroservice implements Module, TemplateHelper {
 
         // Spring Boot application
         SpringBootAppSubmodule springBootAppSubmodule =
-                new DefaultSpringBootAppSubmodule(serviceName, packageName);
+                new DefaultSpringBootAppSubmodule(serviceName, helper.getPackageName());
         springBootAppSubmodule.addSubmoduleTo(srcBase);
 
         // Spring configuration

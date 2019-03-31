@@ -25,6 +25,7 @@ public class DefaultMicroservice implements Module, TemplateHelper {
 
 
     public DefaultMicroservice(BuilderHelper helper, SpringConfigGenerator configGenerator) {
+
         root = root(helper.getRootDirName());
         Directory srcBase = srcRootAndBase(root, pkg2path(helper.getPackageName()));
 

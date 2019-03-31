@@ -47,12 +47,7 @@ class DefaultRestMicroserviceISpec extends Specification implements JavaHelper, 
     def setup() {
         BuilderHelper helper = new BuilderHelper(properties, rootDirName, packageName, serviceName)
 
-        module = new DefaultRestMicroservice(
-                rootDirName,
-                packageName,
-                helper,
-                configGenerator
-        )
+        module = new DefaultRestMicroservice(helper, configGenerator)
 
         rootDir = module.getRootDirectory()
     }

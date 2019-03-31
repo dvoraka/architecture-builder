@@ -11,6 +11,8 @@ public class BuilderProperties {
     private String appString = "App";
     private String configString = "Config";
     private String defaultString = "Default";
+    private String exceptionString = "Exception";
+    private String serverString = "Server";
 
     private Service service = new Service();
 
@@ -53,6 +55,22 @@ public class BuilderProperties {
 
     public void setDefaultString(String defaultString) {
         this.defaultString = defaultString;
+    }
+
+    public String getExceptionString() {
+        return exceptionString;
+    }
+
+    public void setExceptionString(String exceptionString) {
+        this.exceptionString = exceptionString;
+    }
+
+    public String getServerString() {
+        return serverString;
+    }
+
+    public void setServerString(String serverString) {
+        this.serverString = serverString;
     }
 
     public Service getService() {

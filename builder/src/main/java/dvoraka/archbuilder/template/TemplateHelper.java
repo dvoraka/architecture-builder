@@ -85,14 +85,6 @@ public interface TemplateHelper {
     }
 
 
-    default String buildExceptionName(String baseName) {
-        return baseName + "Exception";
-    }
-
-    default String buildServerName(String baseName) {
-        return baseName + "Server";
-    }
-
     default String buildConfigurationName(String baseName) {
         return baseName + "Config";
     }

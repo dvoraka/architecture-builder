@@ -41,6 +41,15 @@ public class BuilderHelper {
         return serviceName;
     }
 
+    //////////////////////////////////////
+    public String serviceAppName() {
+        return getServiceName() + properties.getAppString();
+    }
+
+    public String serviceConfigName() {
+        return getServiceName() + properties.getConfigString();
+    }
+
     public String serviceFullName() {
         return getServiceName() + properties.getService().getString();
     }
@@ -49,11 +58,11 @@ public class BuilderHelper {
         return properties.getDefaultString() + serviceFullName();
     }
 
-    public String serviceConfigName() {
-        return getServiceName() + properties.getConfigString();
+    public String exceptionName() {
+        return getServiceName() + properties.getExceptionString();
     }
 
-    public String serviceAppName() {
-        return getServiceName() + properties.getAppString();
+    public String serverName() {
+        return getServiceName() + properties.getServerString();
     }
 }

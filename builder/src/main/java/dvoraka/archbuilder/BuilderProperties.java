@@ -94,6 +94,7 @@ public class BuilderProperties {
 
         private String name = "";
         private String string = "Service";
+        private String pkgName = "service";
 
 
         public String getName() {
@@ -110,6 +111,14 @@ public class BuilderProperties {
 
         public void setString(String string) {
             this.string = string;
+        }
+
+        public String getPkgName() {
+            return pkgName;
+        }
+
+        public void setPkgName(String pkgName) {
+            this.pkgName = pkgName;
         }
     }
 }

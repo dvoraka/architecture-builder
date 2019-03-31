@@ -54,25 +54,25 @@ public class ConfigurableServiceSubmodule implements ServiceSubmodule, TemplateH
         String dataServiceImplName = helper.dataServiceImplName();
 
         // service
-        service = new Directory.Builder("service", DirType.SERVICE)
+        service = new Directory.Builder(helper.servicePkgName(), DirType.SERVICE)
                 .parent(srcBase)
                 .superType(superService)
                 .filename(serviceName)
                 .parameterType(typeArguments)
                 .build();
-        Directory serviceImpl = new Directory.Builder("service", DirType.SERVICE_IMPL)
+        Directory serviceImpl = new Directory.Builder(helper.servicePkgName(), DirType.SERVICE_IMPL)
                 .parent(srcBase)
                 .superType(service)
                 .filename(serviceImplName)
                 .build();
 
         // data service
-        Directory dataService = new Directory.Builder("service", DirType.NEW_TYPE)
+        Directory dataService = new Directory.Builder(helper.servicePkgName(), DirType.NEW_TYPE)
                 .parent(srcBase)
                 .filename(javaSuffix(dataServiceName))
                 .interfaceType()
                 .build();
-        Directory dataServiceImpl = new Directory.Builder("service", DirType.IMPL)
+        Directory dataServiceImpl = new Directory.Builder(helper.servicePkgName(), DirType.IMPL)
                 .parent(srcBase)
                 .superType(dataService)
                 .filename(javaSuffix(dataServiceImplName))

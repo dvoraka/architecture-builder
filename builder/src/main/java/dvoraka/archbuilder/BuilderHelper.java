@@ -81,4 +81,8 @@ public class BuilderHelper {
     public String serviceImplName() {
         return properties.getDefaultString() + serviceName();
     }
+
+    public String servicePkgName() {
+        return properties.getService().getPkgName();
+    }
 }

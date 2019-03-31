@@ -29,23 +29,21 @@ public class DefaultRestMicroservice implements Module, TemplateHelper {
         root = root(helper.getRootDirName());
         Directory srcBase = srcRootAndBase(root, pkg2path(helper.getPackageName()));
 
-        String serviceName = helper.getBaseName();
-
         // service
         ServiceSubmodule serviceSubmodule = new DefaultServiceSubmodule(helper, configGenerator);
         serviceSubmodule.addSubmoduleTo(srcBase);
 
         // controller
-        RestSubmodule restSubmodule = new DefaultRestSubmodule(serviceName);
+        RestSubmodule restSubmodule = new DefaultRestSubmodule(helper.getBaseName());
         restSubmodule.addSubmoduleTo(srcBase);
 
         // Spring Boot application
         SpringBootAppSubmodule springBootAppSubmodule =
-                new DefaultSpringBootAppSubmodule(serviceName, helper.getPackageName());
+                new DefaultSpringBootAppSubmodule(helper.getBaseName(), helper.getPackageName());
         springBootAppSubmodule.addSubmoduleTo(srcBase);
 
         // Spring configuration
-        SpringConfigSubmodule springConfigSubmodule = new SpringConfigSubmodule(serviceName, configGenerator);
+        SpringConfigSubmodule springConfigSubmodule = new SpringConfigSubmodule(helper.getBaseName(), configGenerator);
         springConfigSubmodule.addMappings(serviceSubmodule.getConfiguration());
         springConfigSubmodule.addSubmoduleTo(srcBase);
 
@@ -53,7 +51,7 @@ public class DefaultRestMicroservice implements Module, TemplateHelper {
         properties(root, new AppPropertiesTemplate());
 
         // build
-        BuildSubmodule buildSubmodule = new DefaultGradleSubmodule(serviceName);
+        BuildSubmodule buildSubmodule = new DefaultGradleSubmodule(helper.getBaseName());
         buildSubmodule.addSubmoduleTo(root);
 
         // gitignore file

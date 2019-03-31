@@ -1,5 +1,6 @@
 package dvoraka.archbuilder.submodule.net;
 
+import dvoraka.archbuilder.BuilderHelper;
 import dvoraka.archbuilder.data.DirType;
 import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.exception.GeneratorException;
@@ -18,6 +19,7 @@ public class ConfigurableNetSubmodule implements NetSubmodule, TemplateHelper {
 
     public static final String MESSAGE_DIR = "data/message";
 
+    private final BuilderHelper helper;
     private final String baseName;
     private final Directory service;
     private final NetConfig config;
@@ -28,12 +30,13 @@ public class ConfigurableNetSubmodule implements NetSubmodule, TemplateHelper {
 
 
     public ConfigurableNetSubmodule(
-            String baseName,
+            BuilderHelper helper,
             Directory service,
             NetConfig config,
             SpringConfigGenerator configGenerator
     ) {
-        this.baseName = baseName;
+        this.helper = helper;
+        this.baseName = helper.getBaseName();
         this.service = service;
         this.config = config;
         this.configGenerator = configGenerator;
@@ -49,7 +52,7 @@ public class ConfigurableNetSubmodule implements NetSubmodule, TemplateHelper {
         }
 
         // exception
-        String exceptionName = baseName + "Exception";
+        String exceptionName = helper.exceptionName();
         Directory exception = new Directory.Builder("exception", DirType.IMPL)
                 .parent(srcBase)
                 .superType(config.getBaseException())
@@ -86,7 +89,7 @@ public class ConfigurableNetSubmodule implements NetSubmodule, TemplateHelper {
                 .build();
 
         // server
-        String serverName = baseName + "Server";
+        String serverName = helper.serverName();
         Directory server = new Directory.Builder("server", DirType.IMPL)
                 .parent(srcBase)
                 .superType(config.getSuperServer())

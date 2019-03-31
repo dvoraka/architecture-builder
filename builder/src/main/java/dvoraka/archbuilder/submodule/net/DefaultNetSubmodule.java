@@ -1,5 +1,6 @@
 package dvoraka.archbuilder.submodule.net;
 
+import dvoraka.archbuilder.BuilderHelper;
 import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.springconfig.BeanMapping;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
@@ -13,12 +14,12 @@ public class DefaultNetSubmodule implements NetSubmodule, TemplateHelper {
 
 
     public DefaultNetSubmodule(
-            String baseName,
+            BuilderHelper helper,
             Directory service,
             SpringConfigGenerator configGenerator
     ) {
         configuredSubmodule = new ConfigurableNetSubmodule(
-                baseName,
+                helper,
                 service,
                 new DefaultNetConfig(),
                 configGenerator

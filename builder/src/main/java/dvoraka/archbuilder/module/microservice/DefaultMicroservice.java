@@ -35,7 +35,7 @@ public class DefaultMicroservice implements Module, TemplateHelper {
 
         // network
         NetSubmodule netSubmodule = new DefaultNetSubmodule(
-                helper.getBaseName(), serviceSubmodule.getService(), configGenerator);
+                helper, serviceSubmodule.getService(), configGenerator);
         netSubmodule.addSubmoduleTo(srcBase);
 
         // Spring Boot application

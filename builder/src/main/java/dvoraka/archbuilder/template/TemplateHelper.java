@@ -84,7 +84,6 @@ public interface TemplateHelper {
         return serviceName + "App";
     }
 
-
     default String buildConfigurationName(String baseName) {
         return baseName + "Config";
     }

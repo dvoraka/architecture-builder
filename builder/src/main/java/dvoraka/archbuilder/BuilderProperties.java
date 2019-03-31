@@ -10,6 +10,7 @@ public class BuilderProperties {
 
     private String appString = "App";
     private String configString = "Config";
+    private String controllerString = "Controller";
     private String defaultString = "Default";
     private String exceptionString = "Exception";
     private String serverString = "Server";
@@ -47,6 +48,14 @@ public class BuilderProperties {
 
     public void setConfigString(String configString) {
         this.configString = configString;
+    }
+
+    public String getControllerString() {
+        return controllerString;
+    }
+
+    public void setControllerString(String controllerString) {
+        this.controllerString = controllerString;
     }
 
     public String getDefaultString() {

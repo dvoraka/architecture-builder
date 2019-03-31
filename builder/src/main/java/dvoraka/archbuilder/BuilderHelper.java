@@ -42,20 +42,8 @@ public class BuilderHelper {
     }
 
     //////////////////////////////////////
-    public String serviceAppName() {
-        return getBaseName() + properties.getAppString();
-    }
-
-    public String serviceConfigName() {
+    public String configurationName() {
         return getBaseName() + properties.getConfigString();
-    }
-
-    public String serviceFullName() {
-        return getBaseName() + properties.getService().getString();
-    }
-
-    public String serviceImplName() {
-        return properties.getDefaultString() + serviceFullName();
     }
 
     public String exceptionName() {
@@ -64,5 +52,25 @@ public class BuilderHelper {
 
     public String serverName() {
         return getBaseName() + properties.getServerString();
+    }
+
+    public String serviceAppName() {
+        return getBaseName() + properties.getAppString();
+    }
+
+    public String serviceConfigName() {
+        return getBaseName() + properties.getConfigString();
+    }
+
+    public String serviceControllerName() {
+        return getBaseName() + properties.getControllerString();
+    }
+
+    public String serviceFullName() {
+        return getBaseName() + properties.getService().getString();
+    }
+
+    public String serviceImplName() {
+        return properties.getDefaultString() + serviceFullName();
     }
 }

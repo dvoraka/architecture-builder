@@ -28,36 +28,36 @@ public abstract class AbstractNetworkState<ID, D, PD, SC extends StateContext<ID
 
     protected <
             M extends Message,
-            R extends ResultMessage,
-            RD extends ResultData,
-            E extends Exception,
+            R extends ResultMessage<RD, E>,
+            RD extends ResultData<E>,
+            E extends BaseException,
             C extends ClientNetworkComponent<M, R, E, ?, RD>>
     void send(M message, C client, Consumer<R> callback) {
         setCorrId(message.getId());
 //        client.sendFast(message, callback);
     }
 
-    protected void callback(ResultMessage resultMessage) {
+    protected void callback(ResultMessage<?, ?> resultMessage) {
         checkResultMessage(resultMessage);
     }
 
-    protected void rollbackCallback(ResultMessage resultMessage) {
+    protected void rollbackCallback(ResultMessage<?, ?> resultMessage) {
         checkRollbackResultMessage(resultMessage);
     }
 
-    protected boolean checkId(ResultMessage resultMessage) {
+    protected boolean checkId(ResultMessage<?, ?> resultMessage) {
         return resultMessage.getCorrId().equals(getCorrId());
     }
 
-    protected void checkResultMessage(ResultMessage resultMessage) {
+    protected void checkResultMessage(ResultMessage<?, ?> resultMessage) {
         checkResultMessage(resultMessage, false);
     }
 
-    protected void checkRollbackResultMessage(ResultMessage resultMessage) {
+    protected void checkRollbackResultMessage(ResultMessage<?, ?> resultMessage) {
         checkResultMessage(resultMessage, true);
     }
 
-    private void checkResultMessage(ResultMessage resultMessage, boolean rollback) {
+    private void checkResultMessage(ResultMessage<?, ?> resultMessage, boolean rollback) {
         if (!checkId(resultMessage)) {
             return;
         }

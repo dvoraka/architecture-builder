@@ -1,6 +1,5 @@
 package dvoraka.archbuilder.prototype.statecoordinator.order;
 
-import dvoraka.archbuilder.prototype.statecoordinator.StateContextHandle;
 import dvoraka.archbuilder.prototype.statecoordinator.StateCoordinator;
 import dvoraka.archbuilder.prototype.statecoordinator.state.order.OrderStatus;
 import dvoraka.archbuilder.sample.microservice.data.notification.Notification;
@@ -102,7 +101,7 @@ public class OrderStateCoordinator implements StateCoordinator<Long, OrderData> 
                 context.getLastUpdate().isBefore(Instant.now().minusSeconds(120));
         contexts.values().stream()
                 .filter(predicate)
-                .forEach(StateContextHandle::restartState);
+                .forEach(OrderStateContextHandle::restartState);
 
         // find old notifications and remove them
 //        notifications.entrySet().removeIf(entry ->
@@ -110,7 +109,7 @@ public class OrderStateCoordinator implements StateCoordinator<Long, OrderData> 
 
         // find parked states and release them
         contexts.values().stream()
-                .filter(StateContextHandle::isParked)
+                .filter(OrderStateContextHandle::isParked)
                 .peek(context -> log.debug("Parking context: {}", context.getId()))
                 .forEach(context -> {
                     Notification notification = notifications.remove(context.getId());

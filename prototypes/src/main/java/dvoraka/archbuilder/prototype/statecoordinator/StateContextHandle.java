@@ -11,7 +11,7 @@ public interface StateContextHandle<ID, D, PD> {
     void cancel();
 
     /**
-     * Returns an context ID.
+     * Returns a context ID.
      *
      * @return the context ID
      */

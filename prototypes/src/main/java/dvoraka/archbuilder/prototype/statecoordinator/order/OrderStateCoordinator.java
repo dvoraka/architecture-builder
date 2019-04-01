@@ -66,7 +66,8 @@ public class OrderStateCoordinator implements StateCoordinator<Long, OrderData> 
             return false;
         }
 
-        OrderStatus status = null; // notification.getData().getOrderStatus();
+        OrderData orderData = (OrderData) notification.getData().get("orderData");
+        OrderStatus status = orderData.getStatus();
 
         return status == OrderStatus.COMPLETED
                 || status == OrderStatus.CANCELLED

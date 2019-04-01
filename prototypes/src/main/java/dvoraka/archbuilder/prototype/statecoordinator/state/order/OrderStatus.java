@@ -1,7 +1,8 @@
 package dvoraka.archbuilder.prototype.statecoordinator.state.order;
 
 public enum OrderStatus {
+    NEW,
     COMPLETED,
-    FAILED,
-    CANCELLED
+    CANCELLED,
+    FAILED
 }

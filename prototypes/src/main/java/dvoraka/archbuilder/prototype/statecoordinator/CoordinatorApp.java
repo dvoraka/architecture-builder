@@ -2,6 +2,7 @@ package dvoraka.archbuilder.prototype.statecoordinator;
 
 import dvoraka.archbuilder.prototype.statecoordinator.order.OrderData;
 import dvoraka.archbuilder.prototype.statecoordinator.order.OrderStateCoordinator;
+import dvoraka.archbuilder.prototype.statecoordinator.state.order.OrderStatus;
 
 import java.util.concurrent.TimeUnit;
 
@@ -10,14 +11,17 @@ public class CoordinatorApp {
         System.out.println("Coordinator app");
 
         OrderData order = new OrderData();
-        order.setId(1);
+        order.setId(77);
         order.setUserId(2);
         order.setItemId(3);
+        order.setStatus(OrderStatus.NEW);
 
         OrderStateCoordinator coordinator = new OrderStateCoordinator();
+        coordinator.start();
+
         coordinator.process(order);
 
         // wait for async stuff
-        TimeUnit.SECONDS.sleep(5);
+        TimeUnit.SECONDS.sleep(30);
     }
 }

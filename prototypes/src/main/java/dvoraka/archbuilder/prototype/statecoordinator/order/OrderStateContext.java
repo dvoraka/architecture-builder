@@ -2,6 +2,7 @@ package dvoraka.archbuilder.prototype.statecoordinator.order;
 
 import dvoraka.archbuilder.prototype.statecoordinator.AbstractStateContext;
 import dvoraka.archbuilder.prototype.statecoordinator.state.order.AbstractOrderState;
+import dvoraka.archbuilder.prototype.statecoordinator.state.order.CheckOrderState;
 import dvoraka.archbuilder.prototype.statecoordinator.state.order.CompleteOrderState;
 import dvoraka.archbuilder.prototype.statecoordinator.state.order.InitOrderState;
 import dvoraka.archbuilder.sample.microservice.data.notification.Notification;
@@ -36,10 +37,16 @@ public class OrderStateContext
         this.lastState = lastState;
 
         lastUpdate = Instant.now();
+        config = getConfig();
+    }
 
-        config = new EnumMap<>(CreateOrderState.class);
-        config.put(CreateOrderState.INIT, new InitOrderState(this));
-        config.put(CreateOrderState.COMPLETE, new CompleteOrderState(this));
+    private EnumMap<CreateOrderState, AbstractOrderState> getConfig() {
+        EnumMap<CreateOrderState, AbstractOrderState> configuration = new EnumMap<>(CreateOrderState.class);
+        configuration.put(CreateOrderState.INIT, new InitOrderState(this));
+        configuration.put(CreateOrderState.CHECK, new CheckOrderState(this));
+        configuration.put(CreateOrderState.COMPLETE, new CompleteOrderState(this));
+
+        return configuration;
     }
 
     public static OrderStateContextHandle createContext(
@@ -85,7 +92,6 @@ public class OrderStateContext
     }
 
     private void processStateAsync() {
-
         Mono.fromRunnable(this::processState)
                 .publishOn(Schedulers.parallel())
                 .log()

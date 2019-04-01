@@ -47,6 +47,7 @@ public class OrderStateCoordinator implements StateCoordinator<Long, OrderData> 
     public void start() {
         // load not parked contexts
 
+        // subscribe to notifications
 //        notificationService.subscribe(this::onNotification);
 
         startWatchdog();

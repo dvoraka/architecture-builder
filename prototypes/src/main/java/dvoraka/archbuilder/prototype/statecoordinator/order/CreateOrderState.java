@@ -5,12 +5,23 @@ public enum CreateOrderState {
     INIT {
         @Override
         CreateOrderState getNext() {
-            return COMPLETE;
+            return CHECK;
         }
 
         @Override
         CreateOrderState getPrevious() {
             return END;
+        }
+    },
+    CHECK {
+        @Override
+        CreateOrderState getNext() {
+            return COMPLETE;
+        }
+
+        @Override
+        CreateOrderState getPrevious() {
+            return INIT;
         }
     },
     COMPLETE {
@@ -21,7 +32,7 @@ public enum CreateOrderState {
 
         @Override
         CreateOrderState getPrevious() {
-            return INIT;
+            return CHECK;
         }
     },
     END {

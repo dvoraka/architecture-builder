@@ -1,7 +1,7 @@
 package dvoraka.archbuilder.prototype.statecoordinator.state;
 
-import dvoraka.archbuilder.prototype.statecoordinator.Notification;
 import dvoraka.archbuilder.prototype.statecoordinator.OrderStateContext;
+import dvoraka.archbuilder.sample.microservice.data.notification.Notification;
 
 public final class CompleteOrderState extends AbstractOrderState {
 

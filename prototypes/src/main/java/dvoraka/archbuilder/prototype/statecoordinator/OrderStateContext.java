@@ -3,6 +3,7 @@ package dvoraka.archbuilder.prototype.statecoordinator;
 import dvoraka.archbuilder.prototype.statecoordinator.state.AbstractOrderState;
 import dvoraka.archbuilder.prototype.statecoordinator.state.CompleteOrderState;
 import dvoraka.archbuilder.prototype.statecoordinator.state.InitOrderState;
+import dvoraka.archbuilder.sample.microservice.data.notification.Notification;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 

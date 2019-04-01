@@ -1,6 +1,6 @@
-package dvoraka.archbuilder.prototype.statecoordinator.state;
+package dvoraka.archbuilder.prototype.statecoordinator.state.order;
 
-import dvoraka.archbuilder.prototype.statecoordinator.OrderStateContext;
+import dvoraka.archbuilder.prototype.statecoordinator.order.OrderStateContext;
 
 public final class InitOrderState extends AbstractOrderState {
 

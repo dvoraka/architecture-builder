@@ -1,7 +1,10 @@
-package dvoraka.archbuilder.prototype.statecoordinator;
+package dvoraka.archbuilder.prototype.statecoordinator.order;
 
-import dvoraka.archbuilder.prototype.statecoordinator.state.OrderStatus;
+import dvoraka.archbuilder.prototype.statecoordinator.StateContextHandle;
+import dvoraka.archbuilder.prototype.statecoordinator.StateCoordinator;
+import dvoraka.archbuilder.prototype.statecoordinator.state.order.OrderStatus;
 import dvoraka.archbuilder.sample.microservice.data.notification.Notification;
+import dvoraka.archbuilder.sample.microservice.data.notification.NotificationType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,10 +61,9 @@ public class OrderStateCoordinator implements StateCoordinator<Long, OrderData> 
     }
 
     private boolean resumeCondition(Notification notification) {
-
-//        if (notification.getType() != NotificationType.ORDER_STATUS) {
-//            return false;
-//        }
+        if (notification.getType() != NotificationType.ORDER_STATUS) {
+            return false;
+        }
 
         OrderStatus status = null; // notification.getData().getOrderStatus();
 
@@ -73,9 +75,7 @@ public class OrderStateCoordinator implements StateCoordinator<Long, OrderData> 
     @Override
     public void process(OrderData orderData) {
         log.info("Process for: {}", orderData);
-
         OrderStateContextHandle context = createContext(orderData);
-
         context.processState();
     }
 
@@ -136,7 +136,6 @@ public class OrderStateCoordinator implements StateCoordinator<Long, OrderData> 
      * @return the context
      */
     private OrderStateContextHandle createContext(OrderData orderData) {
-
         // start the context from start
         OrderStateContextHandle context = OrderStateContext.createContext(
                 CreateOrderState.INIT,
@@ -156,7 +155,6 @@ public class OrderStateCoordinator implements StateCoordinator<Long, OrderData> 
      * @return the context
      */
     private OrderStateContextHandle loadContext(long orderId) {
-
 //        OrderStatusEntity orderStatusEntity = repository.findById(orderId)
 //                .orElseThrow(RuntimeException::new);
 

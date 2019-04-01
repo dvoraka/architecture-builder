@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.prototype.statecoordinator.state;
+package dvoraka.archbuilder.prototype.statecoordinator.state.order;
 
 public enum OrderStatus {
     COMPLETED,

@@ -18,7 +18,6 @@ public final class CompleteOrderState extends AbstractOrderState {
 
     @Override
     protected void rollback(OrderStateContext context) {
-
     }
 
     @Override

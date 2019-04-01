@@ -16,10 +16,17 @@ public class CoordinatorApp {
         order.setItemId(3);
         order.setStatus(OrderStatus.NEW);
 
+        OrderData order2 = new OrderData();
+        order2.setId(102);
+        order2.setUserId(2);
+        order2.setItemId(5);
+        order2.setStatus(OrderStatus.NEW);
+
         OrderStateCoordinator coordinator = new OrderStateCoordinator();
         coordinator.start();
 
         coordinator.process(order);
+        coordinator.process(order2);
 
         // wait for async stuff
         TimeUnit.SECONDS.sleep(30);

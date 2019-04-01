@@ -31,7 +31,7 @@ public class OrderStateContext
             CreateOrderState lastState,
             OrderData data
     ) {
-        super(1L, data);
+        super(data.getId(), data);
 
         this.currentState = initState;
         this.lastState = lastState;
@@ -76,7 +76,6 @@ public class OrderStateContext
 
     @Override
     public void cancel() {
-
     }
 
     @Override

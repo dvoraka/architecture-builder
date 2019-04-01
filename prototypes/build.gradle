@@ -4,4 +4,5 @@ dependencies {
     compile project(':data')
 
     compile('org.springframework.amqp:spring-rabbit')
+    compile('io.projectreactor:reactor-core')
 }

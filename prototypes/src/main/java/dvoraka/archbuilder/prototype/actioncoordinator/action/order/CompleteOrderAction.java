@@ -1,6 +1,6 @@
-package dvoraka.archbuilder.prototype.statecoordinator.state.order;
+package dvoraka.archbuilder.prototype.actioncoordinator.action.order;
 
-import dvoraka.archbuilder.prototype.statecoordinator.order.OrderActionContext;
+import dvoraka.archbuilder.prototype.actioncoordinator.order.OrderActionContext;
 import dvoraka.archbuilder.sample.microservice.data.notification.Notification;
 
 import java.util.Map;
@@ -13,7 +13,7 @@ public final class CompleteOrderAction extends AbstractOrderAction {
 
     @Override
     protected void apply(OrderActionContext context) {
-        context.parkState(null);
+        context.parkAction(null);
     }
 
     @Override
@@ -28,9 +28,9 @@ public final class CompleteOrderAction extends AbstractOrderAction {
         OrderStatus status = (OrderStatus) data.get("orderStatus");
 
         if (status == OrderStatus.COMPLETED) {
-            getContext().stateDone();
+            getContext().actionDone();
         } else if (status == OrderStatus.FAILED || status == OrderStatus.CANCELLED) {
-            getContext().stateFailed();
+            getContext().actionFailed();
         }
     }
 }

@@ -1,6 +1,6 @@
-package dvoraka.archbuilder.prototype.statecoordinator.state;
+package dvoraka.archbuilder.prototype.actioncoordinator.action;
 
-import dvoraka.archbuilder.prototype.statecoordinator.ActionContext;
+import dvoraka.archbuilder.prototype.actioncoordinator.ActionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +27,7 @@ public abstract class AbstractAction<ID, D, PD, C extends ActionContext<ID, D, P
             }
         } catch (Exception e) {
             log.warn("Action failed (" + getContext().getId() + ")", e);
-            getContext().stateFailed();
+            getContext().actionFailed();
         }
     }
 

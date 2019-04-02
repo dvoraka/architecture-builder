@@ -1,6 +1,6 @@
-package dvoraka.archbuilder.prototype.statecoordinator.state.order;
+package dvoraka.archbuilder.prototype.actioncoordinator.action.order;
 
-import dvoraka.archbuilder.prototype.statecoordinator.order.OrderActionContext;
+import dvoraka.archbuilder.prototype.actioncoordinator.order.OrderActionContext;
 
 public final class CheckOrderAction extends AbstractOrderAction {
 
@@ -10,7 +10,7 @@ public final class CheckOrderAction extends AbstractOrderAction {
 
     @Override
     protected void apply(OrderActionContext context) {
-        context.stateDone();
+        context.actionDone();
     }
 
     @Override

@@ -1,7 +1,7 @@
-package dvoraka.archbuilder.prototype.statecoordinator.order;
+package dvoraka.archbuilder.prototype.actioncoordinator.order;
 
 
-import dvoraka.archbuilder.prototype.statecoordinator.ActionContextHandle;
+import dvoraka.archbuilder.prototype.actioncoordinator.ActionContextHandle;
 import dvoraka.archbuilder.sample.microservice.data.notification.Notification;
 
 public interface OrderActionContextHandle extends ActionContextHandle<Long, OrderData, Notification> {

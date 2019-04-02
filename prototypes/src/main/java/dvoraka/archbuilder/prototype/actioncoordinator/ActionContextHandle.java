@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.prototype.statecoordinator;
+package dvoraka.archbuilder.prototype.actioncoordinator;
 
 import java.time.Instant;
 import java.util.function.Predicate;
@@ -28,7 +28,7 @@ public interface ActionContextHandle<ID, D, PD> {
     boolean isParked();
 
     /**
-     * Resumes from a parking state
+     * Resumes from a parked action.
      *
      * @param data the data
      */
@@ -42,7 +42,7 @@ public interface ActionContextHandle<ID, D, PD> {
     Predicate<PD> getResumeCondition();
 
     /**
-     * Restarts the current state.
+     * Restarts the current action.
      */
     void restartState();
 

@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.prototype.statecoordinator;
+package dvoraka.archbuilder.prototype.actioncoordinator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,8 +42,8 @@ public abstract class AbstractActionContext<ID, D, PD> implements ActionContext<
     }
 
     @Override
-    public void parkState(Predicate<PD> condition) {
-        log.debug("Park state ({})", getId());
+    public void parkAction(Predicate<PD> condition) {
+        log.debug("Park action ({})", getId());
         resumeCondition = condition;
         setParked(true);
     }

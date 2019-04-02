@@ -1,6 +1,6 @@
-package dvoraka.archbuilder.prototype.statecoordinator.order;
+package dvoraka.archbuilder.prototype.actioncoordinator.order;
 
-import dvoraka.archbuilder.prototype.statecoordinator.state.order.OrderStatus;
+import dvoraka.archbuilder.prototype.actioncoordinator.action.order.OrderStatus;
 
 public class OrderData {
 

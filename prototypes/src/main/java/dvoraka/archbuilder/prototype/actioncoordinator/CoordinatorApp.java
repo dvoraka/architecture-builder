@@ -1,12 +1,13 @@
-package dvoraka.archbuilder.prototype.statecoordinator;
+package dvoraka.archbuilder.prototype.actioncoordinator;
 
-import dvoraka.archbuilder.prototype.statecoordinator.order.OrderActionCoordinator;
-import dvoraka.archbuilder.prototype.statecoordinator.order.OrderData;
-import dvoraka.archbuilder.prototype.statecoordinator.state.order.OrderStatus;
+import dvoraka.archbuilder.prototype.actioncoordinator.action.order.OrderStatus;
+import dvoraka.archbuilder.prototype.actioncoordinator.order.OrderActionCoordinator;
+import dvoraka.archbuilder.prototype.actioncoordinator.order.OrderData;
 
 import java.util.concurrent.TimeUnit;
 
 public class CoordinatorApp {
+
     public static void main(String[] args) throws InterruptedException {
         System.out.println("Coordinator app");
 

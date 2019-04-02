@@ -1,6 +1,6 @@
-package dvoraka.archbuilder.prototype.statecoordinator.state;
+package dvoraka.archbuilder.prototype.actioncoordinator.action;
 
-import dvoraka.archbuilder.prototype.statecoordinator.ActionContext;
+import dvoraka.archbuilder.prototype.actioncoordinator.ActionContext;
 import dvoraka.archbuilder.sample.microservice.data.BaseException;
 import dvoraka.archbuilder.sample.microservice.data.ResultData;
 import dvoraka.archbuilder.sample.microservice.data.message.Message;
@@ -69,10 +69,10 @@ public abstract class AbstractNetworkAction<ID, D, PD, SC extends ActionContext<
             if (rollback) {
                 getContext().rollbackDone();
             } else {
-                getContext().stateDone();
+                getContext().actionDone();
             }
         } catch (BaseException e) {
-            getContext().stateFailed();
+            getContext().actionFailed();
         }
     }
 }

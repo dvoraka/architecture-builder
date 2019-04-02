@@ -1,7 +1,7 @@
-package dvoraka.archbuilder.prototype.statecoordinator.order;
+package dvoraka.archbuilder.prototype.actioncoordinator.order;
 
-import dvoraka.archbuilder.prototype.statecoordinator.ActionCoordinator;
-import dvoraka.archbuilder.prototype.statecoordinator.state.order.OrderStatus;
+import dvoraka.archbuilder.prototype.actioncoordinator.ActionCoordinator;
+import dvoraka.archbuilder.prototype.actioncoordinator.action.order.OrderStatus;
 import dvoraka.archbuilder.sample.microservice.data.notification.Notification;
 import dvoraka.archbuilder.sample.microservice.data.notification.NotificationType;
 import org.slf4j.Logger;
@@ -22,7 +22,7 @@ import java.util.function.Predicate;
 
 
 /**
- * Testing state coordinator implementation.
+ * Testing action coordinator implementation.
  */
 @Service
 public class OrderActionCoordinator implements ActionCoordinator<Long, OrderData> {
@@ -152,7 +152,7 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, OrderData
     /**
      * Loads a context for a given order ID.
      *
-     * @param orderId the saved order ID for the state
+     * @param orderId the saved order ID for the action
      * @return the context
      */
     private OrderActionContextHandle loadContext(long orderId) {

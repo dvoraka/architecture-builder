@@ -1,10 +1,10 @@
-package dvoraka.archbuilder.prototype.statecoordinator.order;
+package dvoraka.archbuilder.prototype.actioncoordinator.order;
 
-import dvoraka.archbuilder.prototype.statecoordinator.AbstractActionContext;
-import dvoraka.archbuilder.prototype.statecoordinator.state.order.AbstractOrderAction;
-import dvoraka.archbuilder.prototype.statecoordinator.state.order.CheckOrderAction;
-import dvoraka.archbuilder.prototype.statecoordinator.state.order.CompleteOrderAction;
-import dvoraka.archbuilder.prototype.statecoordinator.state.order.InitOrderAction;
+import dvoraka.archbuilder.prototype.actioncoordinator.AbstractActionContext;
+import dvoraka.archbuilder.prototype.actioncoordinator.action.order.AbstractOrderAction;
+import dvoraka.archbuilder.prototype.actioncoordinator.action.order.CheckOrderAction;
+import dvoraka.archbuilder.prototype.actioncoordinator.action.order.CompleteOrderAction;
+import dvoraka.archbuilder.prototype.actioncoordinator.action.order.InitOrderAction;
 import dvoraka.archbuilder.sample.microservice.data.notification.Notification;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
@@ -68,7 +68,7 @@ public class OrderActionContext
 
     @Override
     public void resume(Notification notification) {
-        log.debug("Resume state ({}): {}, last state: {}", getId(), getCurrentState(), getLastState());
+        log.debug("Resume action ({}): {}, last action: {}", getId(), getCurrentState(), getLastState());
         setParked(false);
         AbstractOrderAction state = config.get(getCurrentState());
         state.resume(notification);
@@ -84,7 +84,7 @@ public class OrderActionContext
             log.debug("Action context {} done in {}", this.getId(),
                     Duration.between(getCreated(), Instant.now()));
         } else {
-            log.debug("Process state ({}): {}, last state: {}", getId(), getCurrentState(), getLastState());
+            log.debug("Process action ({}): {}, last action: {}", getId(), getCurrentState(), getLastState());
             AbstractOrderAction state = config.get(getCurrentState());
             state.process();
         }
@@ -130,7 +130,7 @@ public class OrderActionContext
 
     @Override
     public void restartState() {
-        log.debug("Restart state ({}): {}", getId(), getCurrentState());
+        log.debug("Restart action ({}): {}", getId(), getCurrentState());
 
         // - it could work but it needs a lot of other logic
         // - for instance, 3 messages with results can come
@@ -145,7 +145,7 @@ public class OrderActionContext
     }
 
     @Override
-    public void stateDone() {
+    public void actionDone() {
         log.debug("Action done for ({}): {}", getId(), getCurrentState());
 
         saveToDb();
@@ -156,7 +156,7 @@ public class OrderActionContext
     }
 
     @Override
-    public void stateFailed() {
+    public void actionFailed() {
         log.debug("Action failed for ({}): {}", getId(), getCurrentState());
 
         saveToDb(); // attempt count
@@ -178,8 +178,8 @@ public class OrderActionContext
     }
 
     @Override
-    public void parkState(Predicate<Notification> condition) {
-        super.parkState(condition);
+    public void parkAction(Predicate<Notification> condition) {
+        super.parkAction(condition);
 
         saveToDb();
     }

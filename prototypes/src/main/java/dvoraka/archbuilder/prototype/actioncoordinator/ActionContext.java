@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.prototype.statecoordinator;
+package dvoraka.archbuilder.prototype.actioncoordinator;
 
 import java.time.Instant;
 import java.util.function.Predicate;
@@ -8,19 +8,19 @@ public interface ActionContext<ID, D, PD> extends ActionContextHandle<ID, D, PD>
     Instant getCreated();
 
     /**
-     * Notifies this context that state is done.
+     * Notifies this context that action is done.
      */
-    void stateDone();
+    void actionDone();
 
     /**
-     * Notifies this context that state failed.
+     * Notifies this context that action failed.
      */
-    void stateFailed();
+    void actionFailed();
 
     /**
-     * Parks the state and release the context.
+     * Parks the action and release the context.
      */
-    void parkState(Predicate<PD> condition);
+    void parkAction(Predicate<PD> condition);
 
     /**
      * Notifies this context that rollback is done.

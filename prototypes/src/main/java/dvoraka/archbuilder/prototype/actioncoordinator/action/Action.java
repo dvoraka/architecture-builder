@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.prototype.statecoordinator.state;
+package dvoraka.archbuilder.prototype.actioncoordinator.action;
 
 public interface Action<PD> {
 

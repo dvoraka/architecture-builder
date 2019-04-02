@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.prototype.statecoordinator.order;
+package dvoraka.archbuilder.prototype.actioncoordinator.order;
 
 public enum CreateOrderState {
 

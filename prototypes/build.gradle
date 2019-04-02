@@ -3,6 +3,7 @@ description = 'Prototypes'
 dependencies {
     compile project(':data')
 
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
     compile('org.springframework.amqp:spring-rabbit')
     compile('io.projectreactor:reactor-core')
 }

@@ -13,7 +13,7 @@ public final class CompleteOrderAction extends AbstractOrderAction {
 
     @Override
     protected void apply(OrderActionContext context) {
-        context.parkAction(null);
+        context.suspendAction(null);
     }
 
     @Override

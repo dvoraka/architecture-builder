@@ -69,7 +69,7 @@ public class OrderActionContext
     @Override
     public void resume(Notification notification) {
         log.debug("Resume action ({}): {}, last action: {}", getId(), getCurrentState(), getLastState());
-        setParked(false);
+        setSuspended(false);
         AbstractOrderAction state = config.get(getCurrentState());
         state.resume(notification);
     }
@@ -178,8 +178,8 @@ public class OrderActionContext
     }
 
     @Override
-    public void parkAction(Predicate<Notification> condition) {
-        super.parkAction(condition);
+    public void suspendAction(Predicate<Notification> condition) {
+        super.suspendAction(condition);
 
         saveToDb();
     }

@@ -15,7 +15,7 @@ public abstract class AbstractActionContext<ID, D, PD> implements ActionContext<
 
     private final Instant created;
 
-    private volatile boolean parked;
+    private volatile boolean suspended;
     private Predicate<PD> resumeCondition;
 
 
@@ -37,19 +37,19 @@ public abstract class AbstractActionContext<ID, D, PD> implements ActionContext<
     }
 
     @Override
-    public boolean isParked() {
-        return parked;
+    public boolean isSuspended() {
+        return suspended;
     }
 
     @Override
-    public void parkAction(Predicate<PD> condition) {
-        log.debug("Park action ({})", getId());
+    public void suspendAction(Predicate<PD> condition) {
+        log.debug("Suspend action ({})", getId());
         resumeCondition = condition;
-        setParked(true);
+        setSuspended(true);
     }
 
-    protected void setParked(boolean parked) {
-        this.parked = parked;
+    protected void setSuspended(boolean suspended) {
+        this.suspended = suspended;
     }
 
     @Override

@@ -30,7 +30,7 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, OrderData
     private static final Logger log = LoggerFactory.getLogger(OrderActionCoordinator.class);
 
     private final Map<Long, OrderActionContextHandle> contexts;
-    private final Set<Long> parkedContexts;
+    private final Set<Long> suspendedContexts;
 
     private final ConcurrentHashMap<Long, Notification> notifications;
 
@@ -38,7 +38,7 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, OrderData
     @Autowired
     public OrderActionCoordinator() {
         contexts = new ConcurrentHashMap<>();
-        parkedContexts = ConcurrentHashMap.newKeySet();
+        suspendedContexts = ConcurrentHashMap.newKeySet();
         notifications = new ConcurrentHashMap<>();
     }
 
@@ -107,21 +107,21 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, OrderData
 //        notifications.entrySet().removeIf(entry ->
 //                entry.getValue().getTimestamp().isBefore(Instant.now().minusSeconds(60)));
 
-        // find parked states and release them
+        // find suspended states and release them
         contexts.values().stream()
-                .filter(OrderActionContextHandle::isParked)
-                .peek(context -> log.debug("Parking context: {}", context.getId()))
+                .filter(OrderActionContextHandle::isSuspended)
+                .peek(context -> log.debug("Suspending context: {}", context.getId()))
                 .forEach(context -> {
                     Notification notification = notifications.remove(context.getId());
                     if (notification != null && resumeCondition(notification)) {
                         context.resume(notification);
                     } else {
-                        parkedContexts.add(context.getId());
+                        suspendedContexts.add(context.getId());
                     }
                 });
-        // remove parked contexts
+        // remove suspended contexts
         contexts.entrySet()
-                .removeIf(entry -> parkedContexts.contains(entry.getKey()));
+                .removeIf(entry -> suspendedContexts.contains(entry.getKey()));
 
         try {
             TimeUnit.SECONDS.sleep(5);
@@ -180,7 +180,7 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, OrderData
         log.debug("On notification: {}", notification);
 
         long orderId = 1; // notification.getData().getOrderId();
-        if (parkedContexts.contains(orderId)) {
+        if (suspendedContexts.contains(orderId)) {
             if (resumeCondition(notification)) {
                 log.debug("Waking up the context: {}...", orderId);
                 // wake up the context

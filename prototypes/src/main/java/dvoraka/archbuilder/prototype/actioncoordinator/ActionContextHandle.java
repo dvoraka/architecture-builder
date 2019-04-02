@@ -25,7 +25,7 @@ public interface ActionContextHandle<ID, D, PD> {
     /**
      * @return <t>true</t> if context is parked
      */
-    boolean isParked();
+    boolean isSuspended();
 
     /**
      * Resumes from a parked action.

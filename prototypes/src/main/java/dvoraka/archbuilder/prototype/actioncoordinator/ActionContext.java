@@ -18,9 +18,11 @@ public interface ActionContext<ID, D, PD> extends ActionContextHandle<ID, D, PD>
     void actionFailed();
 
     /**
-     * Parks the action and release the context.
+     * Suspends the action and release the context.
+     *
+     * @param condition the condition for action resuming
      */
-    void parkAction(Predicate<PD> condition);
+    void suspendAction(Predicate<PD> condition);
 
     /**
      * Notifies this context that rollback is done.

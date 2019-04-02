@@ -3,33 +3,45 @@ package dvoraka.archbuilder.prototype.actioncoordinator;
 import dvoraka.archbuilder.prototype.actioncoordinator.action.order.OrderStatus;
 import dvoraka.archbuilder.prototype.actioncoordinator.order.OrderActionCoordinator;
 import dvoraka.archbuilder.prototype.actioncoordinator.order.OrderData;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 import java.util.concurrent.TimeUnit;
 
+@SpringBootApplication
 public class CoordinatorApp {
 
-    public static void main(String[] args) throws InterruptedException {
-        System.out.println("Coordinator app");
+    public static void main(String[] args) {
+        SpringApplication.run(CoordinatorApp.class, args);
+    }
 
-        OrderData order = new OrderData();
-        order.setId(77);
-        order.setUserId(2);
-        order.setItemId(3);
-        order.setStatus(OrderStatus.NEW);
+    @Bean
+    public CommandLineRunner runner() {
+        return args -> {
+            System.out.println("Coordinator app");
 
-        OrderData order2 = new OrderData();
-        order2.setId(102);
-        order2.setUserId(2);
-        order2.setItemId(5);
-        order2.setStatus(OrderStatus.NEW);
+            OrderData order = new OrderData();
+            order.setId(77);
+            order.setUserId(2);
+            order.setItemId(3);
+            order.setStatus(OrderStatus.NEW);
 
-        OrderActionCoordinator coordinator = new OrderActionCoordinator();
-        coordinator.start();
+            OrderData order2 = new OrderData();
+            order2.setId(102);
+            order2.setUserId(2);
+            order2.setItemId(5);
+            order2.setStatus(OrderStatus.NEW);
 
-        coordinator.process(order);
-        coordinator.process(order2);
+            OrderActionCoordinator coordinator = new OrderActionCoordinator();
+            coordinator.start();
 
-        // wait for async stuff
-        TimeUnit.SECONDS.sleep(30);
+            coordinator.process(order);
+            coordinator.process(order2);
+
+            // wait for async stuff
+            TimeUnit.SECONDS.sleep(30);
+        };
     }
 }

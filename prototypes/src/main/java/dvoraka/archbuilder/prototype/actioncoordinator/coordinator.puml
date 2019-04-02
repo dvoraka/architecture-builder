@@ -1,0 +1,38 @@
+@startuml
+
+title Action coordinator components
+
+database DB as db
+
+[action coordinator] as coordinator
+
+package "context 1" {
+    [action context 1] as context1
+    [action 1] as action1
+    [action 2] as action2
+    [action 3] as action3
+}
+
+package "context 2" {
+    [action context 2] as context2
+    [action 1] as action4
+    [action 2] as action5
+    [action 3] as action6
+}
+
+coordinator -- context1
+coordinator -- context2
+
+context1 -- action1
+context1 -- action2
+context1 -- action3
+
+context2 -- action4
+context2 -- action5
+context2 -- action6
+
+coordinator -- db
+context1 -- db
+context2 -- db
+
+@enduml

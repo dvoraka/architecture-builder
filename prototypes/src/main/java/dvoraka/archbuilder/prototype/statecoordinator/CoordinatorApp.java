@@ -1,7 +1,7 @@
 package dvoraka.archbuilder.prototype.statecoordinator;
 
+import dvoraka.archbuilder.prototype.statecoordinator.order.OrderActionCoordinator;
 import dvoraka.archbuilder.prototype.statecoordinator.order.OrderData;
-import dvoraka.archbuilder.prototype.statecoordinator.order.OrderStateCoordinator;
 import dvoraka.archbuilder.prototype.statecoordinator.state.order.OrderStatus;
 
 import java.util.concurrent.TimeUnit;
@@ -22,7 +22,7 @@ public class CoordinatorApp {
         order2.setItemId(5);
         order2.setStatus(OrderStatus.NEW);
 
-        OrderStateCoordinator coordinator = new OrderStateCoordinator();
+        OrderActionCoordinator coordinator = new OrderActionCoordinator();
         coordinator.start();
 
         coordinator.process(order);

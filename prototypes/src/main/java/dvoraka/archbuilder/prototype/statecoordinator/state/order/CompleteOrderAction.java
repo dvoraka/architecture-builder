@@ -1,23 +1,23 @@
 package dvoraka.archbuilder.prototype.statecoordinator.state.order;
 
-import dvoraka.archbuilder.prototype.statecoordinator.order.OrderStateContext;
+import dvoraka.archbuilder.prototype.statecoordinator.order.OrderActionContext;
 import dvoraka.archbuilder.sample.microservice.data.notification.Notification;
 
 import java.util.Map;
 
-public final class CompleteOrderState extends AbstractOrderState {
+public final class CompleteOrderAction extends AbstractOrderAction {
 
-    public CompleteOrderState(OrderStateContext context) {
+    public CompleteOrderAction(OrderActionContext context) {
         super(context);
     }
 
     @Override
-    protected void apply(OrderStateContext context) {
+    protected void apply(OrderActionContext context) {
         context.parkState(null);
     }
 
     @Override
-    protected void rollback(OrderStateContext context) {
+    protected void rollback(OrderActionContext context) {
     }
 
     @Override

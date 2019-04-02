@@ -1,10 +1,10 @@
 package dvoraka.archbuilder.prototype.statecoordinator.order;
 
-import dvoraka.archbuilder.prototype.statecoordinator.AbstractStateContext;
-import dvoraka.archbuilder.prototype.statecoordinator.state.order.AbstractOrderState;
-import dvoraka.archbuilder.prototype.statecoordinator.state.order.CheckOrderState;
-import dvoraka.archbuilder.prototype.statecoordinator.state.order.CompleteOrderState;
-import dvoraka.archbuilder.prototype.statecoordinator.state.order.InitOrderState;
+import dvoraka.archbuilder.prototype.statecoordinator.AbstractActionContext;
+import dvoraka.archbuilder.prototype.statecoordinator.state.order.AbstractOrderAction;
+import dvoraka.archbuilder.prototype.statecoordinator.state.order.CheckOrderAction;
+import dvoraka.archbuilder.prototype.statecoordinator.state.order.CompleteOrderAction;
+import dvoraka.archbuilder.prototype.statecoordinator.state.order.InitOrderAction;
 import dvoraka.archbuilder.sample.microservice.data.notification.Notification;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
@@ -14,19 +14,19 @@ import java.time.Instant;
 import java.util.EnumMap;
 import java.util.function.Predicate;
 
-public class OrderStateContext
-        extends AbstractStateContext<Long, OrderData, Notification>
-        implements OrderStateContextHandle {
+public class OrderActionContext
+        extends AbstractActionContext<Long, OrderData, Notification>
+        implements OrderActionContextHandle {
 
     private CreateOrderState currentState;
     private CreateOrderState lastState;
 
     private volatile Instant lastUpdate;
 
-    private final EnumMap<CreateOrderState, AbstractOrderState> config;
+    private final EnumMap<CreateOrderState, AbstractOrderAction> config;
 
 
-    private OrderStateContext(
+    private OrderActionContext(
             CreateOrderState initState,
             CreateOrderState lastState,
             OrderData data
@@ -40,21 +40,21 @@ public class OrderStateContext
         config = getConfig();
     }
 
-    private EnumMap<CreateOrderState, AbstractOrderState> getConfig() {
-        EnumMap<CreateOrderState, AbstractOrderState> configuration = new EnumMap<>(CreateOrderState.class);
-        configuration.put(CreateOrderState.INIT, new InitOrderState(this));
-        configuration.put(CreateOrderState.CHECK, new CheckOrderState(this));
-        configuration.put(CreateOrderState.COMPLETE, new CompleteOrderState(this));
+    private EnumMap<CreateOrderState, AbstractOrderAction> getConfig() {
+        EnumMap<CreateOrderState, AbstractOrderAction> configuration = new EnumMap<>(CreateOrderState.class);
+        configuration.put(CreateOrderState.INIT, new InitOrderAction(this));
+        configuration.put(CreateOrderState.CHECK, new CheckOrderAction(this));
+        configuration.put(CreateOrderState.COMPLETE, new CompleteOrderAction(this));
 
         return configuration;
     }
 
-    public static OrderStateContextHandle createContext(
+    public static OrderActionContextHandle createContext(
             CreateOrderState initState,
             CreateOrderState lastState,
             OrderData data
     ) {
-        return new OrderStateContext(
+        return new OrderActionContext(
                 initState,
                 lastState,
                 data
@@ -70,7 +70,7 @@ public class OrderStateContext
     public void resume(Notification notification) {
         log.debug("Resume state ({}): {}, last state: {}", getId(), getCurrentState(), getLastState());
         setParked(false);
-        AbstractOrderState state = config.get(getCurrentState());
+        AbstractOrderAction state = config.get(getCurrentState());
         state.resume(notification);
     }
 
@@ -81,11 +81,11 @@ public class OrderStateContext
     @Override
     public void processState() {
         if (isDone()) {
-            log.debug("State context {} done in {}", this.getId(),
+            log.debug("Action context {} done in {}", this.getId(),
                     Duration.between(getCreated(), Instant.now()));
         } else {
             log.debug("Process state ({}): {}, last state: {}", getId(), getCurrentState(), getLastState());
-            AbstractOrderState state = config.get(getCurrentState());
+            AbstractOrderAction state = config.get(getCurrentState());
             state.process();
         }
     }
@@ -146,7 +146,7 @@ public class OrderStateContext
 
     @Override
     public void stateDone() {
-        log.debug("State done for ({}): {}", getId(), getCurrentState());
+        log.debug("Action done for ({}): {}", getId(), getCurrentState());
 
         saveToDb();
 
@@ -157,7 +157,7 @@ public class OrderStateContext
 
     @Override
     public void stateFailed() {
-        log.debug("State failed for ({}): {}", getId(), getCurrentState());
+        log.debug("Action failed for ({}): {}", getId(), getCurrentState());
 
         saveToDb(); // attempt count
 
@@ -194,7 +194,7 @@ public class OrderStateContext
 
     @Override
     public String toString() {
-        return "OrderStateContext{" +
+        return "OrderActionContext{" +
                 "currentState=" + currentState +
                 '}';
     }

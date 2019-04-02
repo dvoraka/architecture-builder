@@ -1,6 +1,6 @@
 package dvoraka.archbuilder.prototype.statecoordinator.state;
 
-import dvoraka.archbuilder.prototype.statecoordinator.StateContext;
+import dvoraka.archbuilder.prototype.statecoordinator.ActionContext;
 import dvoraka.archbuilder.sample.microservice.data.BaseException;
 import dvoraka.archbuilder.sample.microservice.data.ResultData;
 import dvoraka.archbuilder.sample.microservice.data.message.Message;
@@ -8,13 +8,13 @@ import dvoraka.archbuilder.sample.microservice.data.message.ResultMessage;
 
 import java.util.function.Consumer;
 
-public abstract class AbstractNetworkState<ID, D, PD, SC extends StateContext<ID, D, PD>>
-        extends AbstractState<ID, D, PD, SC> {
+public abstract class AbstractNetworkAction<ID, D, PD, SC extends ActionContext<ID, D, PD>>
+        extends AbstractAction<ID, D, PD, SC> {
 
     private volatile String corrId;
 
 
-    protected AbstractNetworkState(SC context) {
+    protected AbstractNetworkAction(SC context) {
         super(context);
     }
 

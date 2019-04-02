@@ -1,6 +1,6 @@
 package dvoraka.archbuilder.prototype.statecoordinator.order;
 
-import dvoraka.archbuilder.prototype.statecoordinator.StateCoordinator;
+import dvoraka.archbuilder.prototype.statecoordinator.ActionCoordinator;
 import dvoraka.archbuilder.prototype.statecoordinator.state.order.OrderStatus;
 import dvoraka.archbuilder.sample.microservice.data.notification.Notification;
 import dvoraka.archbuilder.sample.microservice.data.notification.NotificationType;
@@ -25,18 +25,18 @@ import java.util.function.Predicate;
  * Testing state coordinator implementation.
  */
 @Service
-public class OrderStateCoordinator implements StateCoordinator<Long, OrderData> {
+public class OrderActionCoordinator implements ActionCoordinator<Long, OrderData> {
 
-    private static final Logger log = LoggerFactory.getLogger(OrderStateCoordinator.class);
+    private static final Logger log = LoggerFactory.getLogger(OrderActionCoordinator.class);
 
-    private final Map<Long, OrderStateContextHandle> contexts;
+    private final Map<Long, OrderActionContextHandle> contexts;
     private final Set<Long> parkedContexts;
 
     private final ConcurrentHashMap<Long, Notification> notifications;
 
 
     @Autowired
-    public OrderStateCoordinator() {
+    public OrderActionCoordinator() {
         contexts = new ConcurrentHashMap<>();
         parkedContexts = ConcurrentHashMap.newKeySet();
         notifications = new ConcurrentHashMap<>();
@@ -76,7 +76,7 @@ public class OrderStateCoordinator implements StateCoordinator<Long, OrderData> 
     @Override
     public void process(OrderData orderData) {
         log.info("Process for: {}", orderData);
-        OrderStateContextHandle context = createContext(orderData);
+        OrderActionContextHandle context = createContext(orderData);
         context.processState();
     }
 
@@ -86,7 +86,7 @@ public class OrderStateCoordinator implements StateCoordinator<Long, OrderData> 
             throw new Exception();
         }
 
-        OrderStateContextHandle context = contexts.get(orderId);
+        OrderActionContextHandle context = contexts.get(orderId);
         context.cancel();
     }
 
@@ -97,11 +97,11 @@ public class OrderStateCoordinator implements StateCoordinator<Long, OrderData> 
         contexts.entrySet().removeIf(entry -> entry.getValue().isDone());
 
         // find stuck contexts and restart them
-        Predicate<OrderStateContextHandle> predicate = context ->
+        Predicate<OrderActionContextHandle> predicate = context ->
                 context.getLastUpdate().isBefore(Instant.now().minusSeconds(120));
         contexts.values().stream()
                 .filter(predicate)
-                .forEach(OrderStateContextHandle::restartState);
+                .forEach(OrderActionContextHandle::restartState);
 
         // find old notifications and remove them
 //        notifications.entrySet().removeIf(entry ->
@@ -109,7 +109,7 @@ public class OrderStateCoordinator implements StateCoordinator<Long, OrderData> 
 
         // find parked states and release them
         contexts.values().stream()
-                .filter(OrderStateContextHandle::isParked)
+                .filter(OrderActionContextHandle::isParked)
                 .peek(context -> log.debug("Parking context: {}", context.getId()))
                 .forEach(context -> {
                     Notification notification = notifications.remove(context.getId());
@@ -136,9 +136,9 @@ public class OrderStateCoordinator implements StateCoordinator<Long, OrderData> 
      * @param orderData the new data
      * @return the context
      */
-    private OrderStateContextHandle createContext(OrderData orderData) {
+    private OrderActionContextHandle createContext(OrderData orderData) {
         // start the context from start
-        OrderStateContextHandle context = OrderStateContext.createContext(
+        OrderActionContextHandle context = OrderActionContext.createContext(
                 CreateOrderState.INIT,
                 null,
                 orderData
@@ -155,14 +155,14 @@ public class OrderStateCoordinator implements StateCoordinator<Long, OrderData> 
      * @param orderId the saved order ID for the state
      * @return the context
      */
-    private OrderStateContextHandle loadContext(long orderId) {
+    private OrderActionContextHandle loadContext(long orderId) {
 //        OrderStatusEntity orderStatusEntity = repository.findById(orderId)
 //                .orElseThrow(RuntimeException::new);
 
         //TODO
 //        OrderData orderData = new DefaultOrderData().setOrderId(60);
 
-        OrderStateContextHandle context = OrderStateContext.createContext(
+        OrderActionContextHandle context = OrderActionContext.createContext(
                 null, null, null
         );
         //TODO: check the context ID
@@ -184,7 +184,7 @@ public class OrderStateCoordinator implements StateCoordinator<Long, OrderData> 
             if (resumeCondition(notification)) {
                 log.debug("Waking up the context: {}...", orderId);
                 // wake up the context
-                OrderStateContextHandle context = loadContext(orderId);
+                OrderActionContextHandle context = loadContext(orderId);
                 context.resume(notification);
             }
         } else {

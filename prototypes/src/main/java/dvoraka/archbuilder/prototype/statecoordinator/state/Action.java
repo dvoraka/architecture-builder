@@ -1,6 +1,6 @@
 package dvoraka.archbuilder.prototype.statecoordinator.state;
 
-public interface State<PD> {
+public interface Action<PD> {
 
     void process();
 

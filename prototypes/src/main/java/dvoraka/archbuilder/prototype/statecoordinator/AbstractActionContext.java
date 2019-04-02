@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.time.Instant;
 import java.util.function.Predicate;
 
-public abstract class AbstractStateContext<ID, D, PD> implements StateContext<ID, D, PD> {
+public abstract class AbstractActionContext<ID, D, PD> implements ActionContext<ID, D, PD> {
 
     protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -19,7 +19,7 @@ public abstract class AbstractStateContext<ID, D, PD> implements StateContext<ID
     private Predicate<PD> resumeCondition;
 
 
-    protected AbstractStateContext(ID id, D data) {
+    protected AbstractActionContext(ID id, D data) {
         this.id = id;
         this.data = data;
 

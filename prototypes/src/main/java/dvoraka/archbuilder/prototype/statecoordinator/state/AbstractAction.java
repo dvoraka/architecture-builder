@@ -1,17 +1,17 @@
 package dvoraka.archbuilder.prototype.statecoordinator.state;
 
-import dvoraka.archbuilder.prototype.statecoordinator.StateContext;
+import dvoraka.archbuilder.prototype.statecoordinator.ActionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class AbstractState<ID, D, PD, C extends StateContext<ID, D, PD>> implements State<PD> {
+public abstract class AbstractAction<ID, D, PD, C extends ActionContext<ID, D, PD>> implements Action<PD> {
 
     protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final C context;
 
 
-    protected AbstractState(C context) {
+    protected AbstractAction(C context) {
         this.context = context;
     }
 
@@ -26,7 +26,7 @@ public abstract class AbstractState<ID, D, PD, C extends StateContext<ID, D, PD>
                 apply(context);
             }
         } catch (Exception e) {
-            log.warn("State failed (" + getContext().getId() + ")", e);
+            log.warn("Action failed (" + getContext().getId() + ")", e);
             getContext().stateFailed();
         }
     }

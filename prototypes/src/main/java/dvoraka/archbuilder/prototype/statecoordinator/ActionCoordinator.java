@@ -1,6 +1,6 @@
 package dvoraka.archbuilder.prototype.statecoordinator;
 
-public interface StateCoordinator<ID, D> {
+public interface ActionCoordinator<ID, D> {
 
     /**
      * Processes a data.

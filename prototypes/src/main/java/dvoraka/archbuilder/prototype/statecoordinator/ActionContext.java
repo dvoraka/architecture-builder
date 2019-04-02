@@ -3,7 +3,7 @@ package dvoraka.archbuilder.prototype.statecoordinator;
 import java.time.Instant;
 import java.util.function.Predicate;
 
-public interface StateContext<ID, D, PD> extends StateContextHandle<ID, D, PD> {
+public interface ActionContext<ID, D, PD> extends ActionContextHandle<ID, D, PD> {
 
     Instant getCreated();
 

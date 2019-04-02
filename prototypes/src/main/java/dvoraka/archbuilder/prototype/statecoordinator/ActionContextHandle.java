@@ -3,7 +3,7 @@ package dvoraka.archbuilder.prototype.statecoordinator;
 import java.time.Instant;
 import java.util.function.Predicate;
 
-public interface StateContextHandle<ID, D, PD> {
+public interface ActionContextHandle<ID, D, PD> {
 
     /**
      * Cancels operations and revert back everything.

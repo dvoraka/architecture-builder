@@ -139,7 +139,7 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, OrderData
     private OrderActionContextHandle createContext(OrderData orderData) {
         // start the context from start
         OrderActionContextHandle context = OrderActionContext.createContext(
-                CreateOrderState.INIT,
+                CreateOrderAction.INIT,
                 null,
                 orderData
         );

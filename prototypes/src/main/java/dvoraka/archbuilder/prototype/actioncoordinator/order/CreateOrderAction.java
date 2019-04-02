@@ -1,53 +1,53 @@
 package dvoraka.archbuilder.prototype.actioncoordinator.order;
 
-public enum CreateOrderState {
+public enum CreateOrderAction {
 
     INIT {
         @Override
-        CreateOrderState getNext() {
+        CreateOrderAction getNext() {
             return CHECK;
         }
 
         @Override
-        CreateOrderState getPrevious() {
+        CreateOrderAction getPrevious() {
             return END;
         }
     },
     CHECK {
         @Override
-        CreateOrderState getNext() {
+        CreateOrderAction getNext() {
             return COMPLETE;
         }
 
         @Override
-        CreateOrderState getPrevious() {
+        CreateOrderAction getPrevious() {
             return INIT;
         }
     },
     COMPLETE {
         @Override
-        CreateOrderState getNext() {
+        CreateOrderAction getNext() {
             return END;
         }
 
         @Override
-        CreateOrderState getPrevious() {
+        CreateOrderAction getPrevious() {
             return CHECK;
         }
     },
     END {
         @Override
-        CreateOrderState getNext() {
+        CreateOrderAction getNext() {
             return null;
         }
 
         @Override
-        CreateOrderState getPrevious() {
+        CreateOrderAction getPrevious() {
             return null;
         }
     };
 
-    abstract CreateOrderState getNext();
+    abstract CreateOrderAction getNext();
 
-    abstract CreateOrderState getPrevious();
+    abstract CreateOrderAction getPrevious();
 }

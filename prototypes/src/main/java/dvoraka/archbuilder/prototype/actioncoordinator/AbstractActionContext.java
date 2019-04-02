@@ -16,7 +16,7 @@ public abstract class AbstractActionContext<ID, D, PD> implements ActionContext<
     private final Instant created;
 
     private volatile boolean suspended;
-    private Predicate<PD> resumeCondition;
+    private Predicate<PD> resumptionCondition;
 
 
     protected AbstractActionContext(ID id, D data) {
@@ -44,7 +44,7 @@ public abstract class AbstractActionContext<ID, D, PD> implements ActionContext<
     @Override
     public void suspendAction(Predicate<PD> condition) {
         log.debug("Suspend action ({})", getId());
-        resumeCondition = condition;
+        resumptionCondition = condition;
         setSuspended(true);
     }
 
@@ -53,8 +53,8 @@ public abstract class AbstractActionContext<ID, D, PD> implements ActionContext<
     }
 
     @Override
-    public Predicate<PD> getResumeCondition() {
-        return resumeCondition;
+    public Predicate<PD> getResumptionCondition() {
+        return resumptionCondition;
     }
 
     @Override

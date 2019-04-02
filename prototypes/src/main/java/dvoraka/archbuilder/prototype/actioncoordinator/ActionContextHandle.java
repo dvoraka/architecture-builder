@@ -35,11 +35,11 @@ public interface ActionContextHandle<ID, D, PD> {
     void resume(PD data);
 
     /**
-     * Returns a condition to resuming the context
+     * Returns a condition to resume the context
      *
      * @return the condition
      */
-    Predicate<PD> getResumeCondition();
+    Predicate<PD> getResumptionCondition();
 
     /**
      * Restarts the current action.

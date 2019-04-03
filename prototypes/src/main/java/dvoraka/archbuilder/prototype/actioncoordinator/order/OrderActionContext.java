@@ -38,10 +38,10 @@ public class OrderActionContext
     ) {
         super(data.getId(), data);
 
-        this.repository = repository;
-
         this.currentAction = initAction;
         this.previousAction = previousAction;
+
+        this.repository = repository;
 
         lastUpdate = Instant.now();
         config = getConfig();
@@ -77,7 +77,7 @@ public class OrderActionContext
 
     @Override
     public void resume(Notification notification) {
-        log.debug("Resume action ({}): {}, last action: {}", getId(), getCurrentAction(), getPreviousAction());
+        log.debug("Resume action ({}): {}, previous action: {}", getId(), getCurrentAction(), getPreviousAction());
         setSuspended(false);
         AbstractOrderAction state = config.get(getCurrentAction());
         state.resume(notification);
@@ -93,7 +93,7 @@ public class OrderActionContext
             log.debug("Action context {} done in {}", this.getId(),
                     Duration.between(getCreated(), Instant.now()));
         } else {
-            log.debug("Process action ({}): {}, last action: {}", getId(), getCurrentAction(), getPreviousAction());
+            log.debug("Process action ({}): {}, previous action: {}", getId(), getCurrentAction(), getPreviousAction());
             AbstractOrderAction state = config.get(getCurrentAction());
             state.process();
         }

@@ -5,6 +5,8 @@ import dvoraka.archbuilder.prototype.actioncoordinator.action.order.AbstractOrde
 import dvoraka.archbuilder.prototype.actioncoordinator.action.order.CheckOrderAction;
 import dvoraka.archbuilder.prototype.actioncoordinator.action.order.CompleteOrderAction;
 import dvoraka.archbuilder.prototype.actioncoordinator.action.order.InitOrderAction;
+import dvoraka.archbuilder.prototype.actioncoordinator.model.OrderActionStatus;
+import dvoraka.archbuilder.prototype.actioncoordinator.repository.OrderActionRepository;
 import dvoraka.archbuilder.sample.microservice.data.notification.Notification;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
@@ -18,8 +20,10 @@ public class OrderActionContext
         extends AbstractActionContext<Long, OrderData, Notification>
         implements OrderActionContextHandle {
 
+    private final OrderActionRepository repository;
+
     private CreateOrderAction currentAction;
-    private CreateOrderAction lastAction;
+    private CreateOrderAction previousAction;
 
     private volatile Instant lastUpdate;
 
@@ -28,13 +32,16 @@ public class OrderActionContext
 
     private OrderActionContext(
             CreateOrderAction initAction,
-            CreateOrderAction lastAction,
-            OrderData data
+            CreateOrderAction previousAction,
+            OrderData data,
+            OrderActionRepository repository
     ) {
         super(data.getId(), data);
 
+        this.repository = repository;
+
         this.currentAction = initAction;
-        this.lastAction = lastAction;
+        this.previousAction = previousAction;
 
         lastUpdate = Instant.now();
         config = getConfig();
@@ -52,12 +59,14 @@ public class OrderActionContext
     public static OrderActionContextHandle createContext(
             CreateOrderAction initState,
             CreateOrderAction lastState,
-            OrderData data
+            OrderData data,
+            OrderActionRepository repository
     ) {
         return new OrderActionContext(
                 initState,
                 lastState,
-                data
+                data,
+                repository
         );
     }
 
@@ -68,7 +77,7 @@ public class OrderActionContext
 
     @Override
     public void resume(Notification notification) {
-        log.debug("Resume action ({}): {}, last action: {}", getId(), getCurrentAction(), getLastAction());
+        log.debug("Resume action ({}): {}, last action: {}", getId(), getCurrentAction(), getPreviousAction());
         setSuspended(false);
         AbstractOrderAction state = config.get(getCurrentAction());
         state.resume(notification);
@@ -84,7 +93,7 @@ public class OrderActionContext
             log.debug("Action context {} done in {}", this.getId(),
                     Duration.between(getCreated(), Instant.now()));
         } else {
-            log.debug("Process action ({}): {}, last action: {}", getId(), getCurrentAction(), getLastAction());
+            log.debug("Process action ({}): {}, last action: {}", getId(), getCurrentAction(), getPreviousAction());
             AbstractOrderAction state = config.get(getCurrentAction());
             state.process();
         }
@@ -106,7 +115,7 @@ public class OrderActionContext
     }
 
     private void setCurrentAction(CreateOrderAction newState) {
-        this.lastAction = this.currentAction;
+        this.previousAction = this.currentAction;
         this.currentAction = newState;
     }
 
@@ -114,13 +123,13 @@ public class OrderActionContext
         return currentAction;
     }
 
-    private CreateOrderAction getLastAction() {
-        return lastAction;
+    private CreateOrderAction getPreviousAction() {
+        return previousAction;
     }
 
     @Override
     public boolean isRollback() {
-        return getLastAction() != null && getLastAction().getNext() != getCurrentAction();
+        return getPreviousAction() != null && getPreviousAction().getNext() != getCurrentAction();
     }
 
     @Override
@@ -185,9 +194,16 @@ public class OrderActionContext
     }
 
     private void saveToDb() {
-        log.debug("Save ({}): {}, {}", getId(), getCurrentAction(), getLastAction());
+        log.debug("Save ({}): {}, {}", getId(), getCurrentAction(), getPreviousAction());
 
         // save current status into DB
+        OrderActionStatus statusEntity = repository.findById(getId())
+                .orElseThrow(RuntimeException::new);
+        statusEntity.setAction(getCurrentAction());
+        statusEntity.setPreviousAction(getPreviousAction());
+
+        repository.save(statusEntity);
+        repository.flush();
 
         update();
     }

@@ -2,6 +2,7 @@ package dvoraka.archbuilder.prototype.actioncoordinator.order;
 
 import dvoraka.archbuilder.prototype.actioncoordinator.ActionCoordinator;
 import dvoraka.archbuilder.prototype.actioncoordinator.action.order.OrderStatus;
+import dvoraka.archbuilder.prototype.actioncoordinator.repository.OrderActionRepository;
 import dvoraka.archbuilder.sample.microservice.data.notification.Notification;
 import dvoraka.archbuilder.sample.microservice.data.notification.NotificationType;
 import org.slf4j.Logger;
@@ -29,6 +30,8 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, OrderData
 
     private static final Logger log = LoggerFactory.getLogger(OrderActionCoordinator.class);
 
+    private final OrderActionRepository repository;
+
     private final Map<Long, OrderActionContextHandle> contexts;
     private final Set<Long> suspendedContexts;
 
@@ -36,7 +39,9 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, OrderData
 
 
     @Autowired
-    public OrderActionCoordinator() {
+    public OrderActionCoordinator(OrderActionRepository repository) {
+        this.repository = repository;
+
         contexts = new ConcurrentHashMap<>();
         suspendedContexts = ConcurrentHashMap.newKeySet();
         notifications = new ConcurrentHashMap<>();
@@ -141,7 +146,8 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, OrderData
         OrderActionContextHandle context = OrderActionContext.createContext(
                 CreateOrderAction.INIT,
                 null,
-                orderData
+                orderData,
+                repository
         );
         //TODO: check the context ID
         contexts.put(context.getId(), context);
@@ -163,7 +169,7 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, OrderData
 //        OrderData orderData = new DefaultOrderData().setOrderId(60);
 
         OrderActionContextHandle context = OrderActionContext.createContext(
-                null, null, null
+                null, null, null, null
         );
         //TODO: check the context ID
         contexts.put(context.getId(), context);

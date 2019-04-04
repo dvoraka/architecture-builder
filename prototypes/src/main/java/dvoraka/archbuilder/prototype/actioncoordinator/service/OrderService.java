@@ -1,6 +1,6 @@
 package dvoraka.archbuilder.prototype.actioncoordinator.service;
 
-import dvoraka.archbuilder.sample.microservice.service.BaseService;
+import dvoraka.archbuilder.prototype.actioncoordinator.order.Order;
 
-public interface OrderService extends BaseService {
+public interface OrderService extends StateService<Order, Long> {
 }

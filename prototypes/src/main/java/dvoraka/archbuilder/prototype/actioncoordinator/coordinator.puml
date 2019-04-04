@@ -4,6 +4,7 @@ title Action coordinator components
 
 database DB as db
 
+[state service] as service
 [action coordinator] as coordinator
 
 package "context 1" {
@@ -20,6 +21,10 @@ package "context 2" {
     [action 3] as action6
 }
 
+data -> service
+
+service -down- coordinator
+
 coordinator -- context1
 coordinator -- context2
 
@@ -31,8 +36,9 @@ context2 -- action4
 context2 -- action5
 context2 -- action6
 
-coordinator -- db
-context1 -- db
-context2 -- db
+service -- db
+coordinator -left- db
+context1 -up- db
+context2 -up- db
 
 @enduml

@@ -17,7 +17,7 @@ import java.util.EnumMap;
 import java.util.function.Predicate;
 
 public class OrderActionContext
-        extends AbstractActionContext<Long, OrderData, Notification>
+        extends AbstractActionContext<Long, Order, Notification>
         implements OrderActionContextHandle {
 
     private final OrderActionRepository repository;
@@ -33,7 +33,7 @@ public class OrderActionContext
     private OrderActionContext(
             CreateOrderAction initAction,
             CreateOrderAction previousAction,
-            OrderData data,
+            Order data,
             OrderActionRepository repository
     ) {
         super(data.getId(), data);
@@ -59,7 +59,7 @@ public class OrderActionContext
     public static OrderActionContextHandle createContext(
             CreateOrderAction initState,
             CreateOrderAction lastState,
-            OrderData data,
+            Order data,
             OrderActionRepository repository
     ) {
         return new OrderActionContext(

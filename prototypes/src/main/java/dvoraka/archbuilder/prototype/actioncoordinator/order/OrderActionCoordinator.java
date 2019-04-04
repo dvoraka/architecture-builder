@@ -2,6 +2,7 @@ package dvoraka.archbuilder.prototype.actioncoordinator.order;
 
 import dvoraka.archbuilder.prototype.actioncoordinator.ActionCoordinator;
 import dvoraka.archbuilder.prototype.actioncoordinator.action.order.OrderStatus;
+import dvoraka.archbuilder.prototype.actioncoordinator.model.OrderActionStatus;
 import dvoraka.archbuilder.prototype.actioncoordinator.repository.OrderActionRepository;
 import dvoraka.archbuilder.sample.microservice.data.notification.Notification;
 import dvoraka.archbuilder.sample.microservice.data.notification.NotificationType;
@@ -26,7 +27,7 @@ import java.util.function.Predicate;
  * Testing action coordinator implementation.
  */
 @Service
-public class OrderActionCoordinator implements ActionCoordinator<Long, OrderData> {
+public class OrderActionCoordinator implements ActionCoordinator<Long, Order> {
 
     private static final Logger log = LoggerFactory.getLogger(OrderActionCoordinator.class);
 
@@ -49,9 +50,10 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, OrderData
 
     @PostConstruct
     public void start() {
-        // load not parked contexts
 
-        // subscribe to notifications
+        // load not suspended contexts
+
+        // subscribe to network notifications
 //        notificationService.subscribe(this::onNotification);
 
         startWatchdog();
@@ -65,13 +67,13 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, OrderData
                 .subscribe();
     }
 
-    private boolean resumeCondition(Notification notification) {
+    private boolean isResumptionCondition(Notification notification) {
         if (notification.getType() != NotificationType.ORDER_STATUS) {
             return false;
         }
 
-        OrderData orderData = (OrderData) notification.getData().get("orderData");
-        OrderStatus status = orderData.getStatus();
+        Order order = (Order) notification.getData().get("order");
+        OrderStatus status = order.getStatus();
 
         return status == OrderStatus.COMPLETED
                 || status == OrderStatus.CANCELLED
@@ -79,15 +81,15 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, OrderData
     }
 
     @Override
-    public void process(OrderData orderData) {
-        log.info("Process for: {}", orderData);
-        OrderActionContextHandle context = createContext(orderData);
+    public void process(Order order) {
+        log.info("Process for: {}", order);
+        OrderActionContextHandle context = createContext(order);
         context.processState();
     }
 
     @Override
     public void cancel(Long orderId) throws Exception {
-        if (contexts.containsKey(orderId)) {
+        if (!contexts.containsKey(orderId)) {
             throw new Exception();
         }
 
@@ -118,7 +120,7 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, OrderData
                 .peek(context -> log.debug("Suspending context: {}", context.getId()))
                 .forEach(context -> {
                     Notification notification = notifications.remove(context.getId());
-                    if (notification != null && resumeCondition(notification)) {
+                    if (notification != null && isResumptionCondition(notification)) {
                         context.resume(notification);
                     } else {
                         suspendedContexts.add(context.getId());
@@ -136,17 +138,17 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, OrderData
     }
 
     /**
-     * Creates a new context for new data.
+     * Creates a new context for an order.
      *
-     * @param orderData the new data
+     * @param order the order
      * @return the context
      */
-    private OrderActionContextHandle createContext(OrderData orderData) {
+    private OrderActionContextHandle createContext(Order order) {
         // start the context from start
         OrderActionContextHandle context = OrderActionContext.createContext(
                 CreateOrderAction.INIT,
                 null,
-                orderData,
+                order,
                 repository
         );
         //TODO: check the context ID
@@ -162,11 +164,11 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, OrderData
      * @return the context
      */
     private OrderActionContextHandle loadContext(long orderId) {
-//        OrderStatusEntity orderStatusEntity = repository.findById(orderId)
-//                .orElseThrow(RuntimeException::new);
+        OrderActionStatus orderStatusEntity = repository.findById(orderId)
+                .orElseThrow(RuntimeException::new);
 
         //TODO
-//        OrderData orderData = new DefaultOrderData().setOrderId(60);
+//        Order orderData = new DefaultOrderData().setOrderId(60);
 
         OrderActionContextHandle context = OrderActionContext.createContext(
                 null, null, null, null
@@ -187,7 +189,7 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, OrderData
 
         long orderId = 1; // notification.getData().getOrderId();
         if (suspendedContexts.contains(orderId)) {
-            if (resumeCondition(notification)) {
+            if (isResumptionCondition(notification)) {
                 log.debug("Waking up the context: {}...", orderId);
                 // wake up the context
                 OrderActionContextHandle context = loadContext(orderId);

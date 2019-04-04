@@ -2,8 +2,8 @@ package dvoraka.archbuilder.prototype.actioncoordinator;
 
 import dvoraka.archbuilder.prototype.actioncoordinator.action.order.OrderStatus;
 import dvoraka.archbuilder.prototype.actioncoordinator.model.OrderActionStatus;
+import dvoraka.archbuilder.prototype.actioncoordinator.order.Order;
 import dvoraka.archbuilder.prototype.actioncoordinator.order.OrderActionCoordinator;
-import dvoraka.archbuilder.prototype.actioncoordinator.order.OrderData;
 import dvoraka.archbuilder.prototype.actioncoordinator.repository.OrderActionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -31,31 +31,18 @@ public class CoordinatorApp {
             System.out.println("Coordinator app");
 
             // create order data
-            OrderData order = new OrderData();
+            Order order = new Order();
             order.setUserId(2);
             order.setItemId(3);
             order.setStatus(OrderStatus.NEW);
-            // create action status data
-            OrderActionStatus status = new OrderActionStatus();
-            status.setTransactionId(UUID.randomUUID().toString());
-            status.setOrderData(order.toString());
-            // save and get ID
-            status = repository.save(status);
-            repository.flush();
-            // set ID
-            order.setId(status.getId());
+            createActionStatus(order);
 
             // second order
-            OrderData order2 = new OrderData();
+            Order order2 = new Order();
             order2.setUserId(2);
             order2.setItemId(5);
             order2.setStatus(OrderStatus.NEW);
-            OrderActionStatus status2 = new OrderActionStatus();
-            status2.setTransactionId(UUID.randomUUID().toString());
-            status2.setOrderData(order.toString());
-            status2 = repository.save(status2);
-            repository.flush();
-            order2.setId(status2.getId());
+            createActionStatus(order2);
 
             OrderActionCoordinator coordinator = new OrderActionCoordinator(repository);
             coordinator.start();
@@ -66,5 +53,17 @@ public class CoordinatorApp {
             // wait for async stuff
             TimeUnit.SECONDS.sleep(30);
         };
+    }
+
+    private void createActionStatus(Order order) {
+        // create order action status data
+        OrderActionStatus status = new OrderActionStatus();
+        status.setTransactionId(UUID.randomUUID().toString()); // will not be random
+        status.setOrderData(order.toString());
+        // save and get ID
+        status = repository.save(status);
+        repository.flush();
+        // set ID
+        order.setId(status.getId()); // order must have some ID before
     }
 }

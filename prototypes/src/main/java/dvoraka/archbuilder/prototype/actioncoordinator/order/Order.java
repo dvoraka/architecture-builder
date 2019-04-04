@@ -2,7 +2,7 @@ package dvoraka.archbuilder.prototype.actioncoordinator.order;
 
 import dvoraka.archbuilder.prototype.actioncoordinator.action.order.OrderStatus;
 
-public class OrderData {
+public class Order {
 
     private long id;
     private long userId;
@@ -44,7 +44,7 @@ public class OrderData {
 
     @Override
     public String toString() {
-        return "OrderData{" +
+        return "Order{" +
                 "id=" + id +
                 ", userId=" + userId +
                 ", itemId=" + itemId +

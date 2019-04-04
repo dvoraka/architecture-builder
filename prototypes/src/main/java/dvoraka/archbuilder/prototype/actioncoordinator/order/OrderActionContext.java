@@ -197,7 +197,7 @@ public class OrderActionContext
         log.debug("Save ({}): {}, {}", getId(), getCurrentAction(), getPreviousAction());
 
         // save action status into DB
-        OrderActionStatus statusEntity = repository.findById(getId())
+        OrderActionStatus statusEntity = repository.findByOrderId(getId())
                 .orElseThrow(RuntimeException::new);
         statusEntity.setAction(getCurrentAction());
         statusEntity.setPreviousAction(getPreviousAction());

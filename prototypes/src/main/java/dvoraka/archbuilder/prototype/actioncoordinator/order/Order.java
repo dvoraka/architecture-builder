@@ -2,9 +2,19 @@ package dvoraka.archbuilder.prototype.actioncoordinator.order;
 
 import dvoraka.archbuilder.prototype.actioncoordinator.action.order.OrderStatus;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity(
+        name = "ORDER_DATA"
+)
 public class Order {
 
+    @Id
+    @GeneratedValue
     private long id;
+
     private long userId;
     private long itemId;
     private OrderStatus status;

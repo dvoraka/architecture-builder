@@ -17,6 +17,7 @@ public class OrderActionStatus {
     @GeneratedValue
     private long id;
 
+    private long orderId;
     private String transactionId;
 
     private CreateOrderAction action;
@@ -33,6 +34,14 @@ public class OrderActionStatus {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(long orderId) {
+        this.orderId = orderId;
     }
 
     public String getTransactionId() {

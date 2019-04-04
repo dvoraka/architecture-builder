@@ -5,6 +5,9 @@ import dvoraka.archbuilder.prototype.actioncoordinator.model.OrderActionStatus;
 import dvoraka.archbuilder.prototype.actioncoordinator.order.Order;
 import dvoraka.archbuilder.prototype.actioncoordinator.order.OrderActionCoordinator;
 import dvoraka.archbuilder.prototype.actioncoordinator.repository.OrderActionRepository;
+import dvoraka.archbuilder.prototype.actioncoordinator.repository.OrderRepository;
+import dvoraka.archbuilder.prototype.actioncoordinator.service.DefaultOrderService;
+import dvoraka.archbuilder.prototype.actioncoordinator.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -18,9 +21,11 @@ import java.util.concurrent.TimeUnit;
 public class CoordinatorApp {
 
     @Autowired
-    private OrderActionRepository repository;
+    private OrderRepository orderRepository;
     @Autowired
-    private OrderActionCoordinator coordinator;
+    private OrderActionRepository orderActionRepository;
+    @Autowired
+    private OrderActionCoordinator actionCoordinator;
 
 
     public static void main(String[] args) {
@@ -46,9 +51,11 @@ public class CoordinatorApp {
             order2.setStatus(OrderStatus.NEW);
             createActionStatus(order2);
 
+            OrderService orderService = new DefaultOrderService(orderRepository, actionCoordinator);
+
             // process orders
-            coordinator.process(order);
-            coordinator.process(order2);
+            actionCoordinator.process(order);
+            actionCoordinator.process(order2);
 
             // wait for async stuff
             TimeUnit.SECONDS.sleep(30);
@@ -61,8 +68,8 @@ public class CoordinatorApp {
         status.setTransactionId(UUID.randomUUID().toString()); // will not be random
         status.setOrderData(order.toString());
         // save and get ID
-        status = repository.save(status);
-        repository.flush();
+        status = orderActionRepository.save(status);
+        orderActionRepository.flush();
         // set ID
         order.setId(status.getId()); // order must have some ID before
     }

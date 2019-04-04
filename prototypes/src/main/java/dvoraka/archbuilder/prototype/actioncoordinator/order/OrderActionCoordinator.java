@@ -2,6 +2,7 @@ package dvoraka.archbuilder.prototype.actioncoordinator.order;
 
 import dvoraka.archbuilder.prototype.actioncoordinator.ActionCoordinator;
 import dvoraka.archbuilder.prototype.actioncoordinator.action.order.OrderStatus;
+import dvoraka.archbuilder.prototype.actioncoordinator.model.Order;
 import dvoraka.archbuilder.prototype.actioncoordinator.model.OrderActionStatus;
 import dvoraka.archbuilder.prototype.actioncoordinator.repository.OrderActionRepository;
 import dvoraka.archbuilder.sample.microservice.data.notification.Notification;

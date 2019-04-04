@@ -5,6 +5,7 @@ import dvoraka.archbuilder.prototype.actioncoordinator.action.order.AbstractOrde
 import dvoraka.archbuilder.prototype.actioncoordinator.action.order.CheckOrderAction;
 import dvoraka.archbuilder.prototype.actioncoordinator.action.order.CompleteOrderAction;
 import dvoraka.archbuilder.prototype.actioncoordinator.action.order.InitOrderAction;
+import dvoraka.archbuilder.prototype.actioncoordinator.model.Order;
 import dvoraka.archbuilder.prototype.actioncoordinator.model.OrderActionStatus;
 import dvoraka.archbuilder.prototype.actioncoordinator.repository.OrderActionRepository;
 import dvoraka.archbuilder.sample.microservice.data.notification.Notification;

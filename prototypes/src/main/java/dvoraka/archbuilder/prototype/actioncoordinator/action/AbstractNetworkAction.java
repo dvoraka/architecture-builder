@@ -1,6 +1,7 @@
 package dvoraka.archbuilder.prototype.actioncoordinator.action;
 
 import dvoraka.archbuilder.prototype.actioncoordinator.ActionContext;
+import dvoraka.archbuilder.prototype.actioncoordinator.ClientNetworkComponent;
 import dvoraka.archbuilder.sample.microservice.data.BaseException;
 import dvoraka.archbuilder.sample.microservice.data.ResultData;
 import dvoraka.archbuilder.sample.microservice.data.message.Message;

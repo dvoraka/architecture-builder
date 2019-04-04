@@ -1,7 +1,7 @@
 package dvoraka.archbuilder.prototype.actioncoordinator.service;
 
+import dvoraka.archbuilder.prototype.actioncoordinator.model.Order;
 import dvoraka.archbuilder.prototype.actioncoordinator.model.OrderActionStatus;
-import dvoraka.archbuilder.prototype.actioncoordinator.order.Order;
 import dvoraka.archbuilder.prototype.actioncoordinator.order.OrderActionCoordinator;
 import dvoraka.archbuilder.prototype.actioncoordinator.repository.OrderActionRepository;
 import dvoraka.archbuilder.prototype.actioncoordinator.repository.OrderRepository;

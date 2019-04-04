@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.prototype.actioncoordinator.order;
+package dvoraka.archbuilder.prototype.actioncoordinator.model;
 
 import dvoraka.archbuilder.prototype.actioncoordinator.action.order.OrderStatus;
 

@@ -19,6 +19,8 @@ public class CoordinatorApp {
 
     @Autowired
     private OrderActionRepository repository;
+    @Autowired
+    private OrderActionCoordinator coordinator;
 
 
     public static void main(String[] args) {
@@ -44,9 +46,7 @@ public class CoordinatorApp {
             order2.setStatus(OrderStatus.NEW);
             createActionStatus(order2);
 
-            OrderActionCoordinator coordinator = new OrderActionCoordinator(repository);
-            coordinator.start();
-
+            // process orders
             coordinator.process(order);
             coordinator.process(order2);
 

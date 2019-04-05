@@ -2,6 +2,9 @@ package dvoraka.archbuilder.prototype.actioncoordinator.action.order;
 
 import dvoraka.archbuilder.prototype.actioncoordinator.order.OrderActionContext;
 
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
 public final class CheckOrderAction extends AbstractOrderAction {
 
     public CheckOrderAction(OrderActionContext context) {
@@ -10,6 +13,11 @@ public final class CheckOrderAction extends AbstractOrderAction {
 
     @Override
     protected void apply(OrderActionContext context) {
+        try {
+            TimeUnit.SECONDS.sleep((long) (new Random().nextFloat() * 5));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         context.actionDone();
     }
 

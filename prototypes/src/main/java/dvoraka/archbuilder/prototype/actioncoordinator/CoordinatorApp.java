@@ -51,8 +51,6 @@ public class CoordinatorApp {
                     orderRepository, orderActionRepository, actionCoordinator);
 
             // process orders
-//            actionCoordinator.process(order);
-//            actionCoordinator.process(order2);
             orderService.process(order, "abc");
             orderService.process(order2, "ddd");
 

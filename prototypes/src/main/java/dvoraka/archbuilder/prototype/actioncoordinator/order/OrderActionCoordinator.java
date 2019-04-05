@@ -84,8 +84,20 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, Order> {
     @Override
     public void process(Order order) {
         log.info("Process for: {}", order);
+        createOrderActionStatus(order);
         OrderActionContextHandle context = createContext(order);
         context.processState();
+    }
+
+    private void createOrderActionStatus(Order order) {
+        log.debug("Creating order action status: {}", order.getId());
+
+        OrderActionStatus status = new OrderActionStatus();
+        status.setOrderId(order.getId());
+        status.setOrderData(order.toString());
+
+        repository.save(status);
+        repository.flush();
     }
 
     @Override

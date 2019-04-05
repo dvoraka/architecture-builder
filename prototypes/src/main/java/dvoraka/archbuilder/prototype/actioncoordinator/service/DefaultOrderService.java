@@ -1,13 +1,12 @@
 package dvoraka.archbuilder.prototype.actioncoordinator.service;
 
 import dvoraka.archbuilder.prototype.actioncoordinator.model.Order;
-import dvoraka.archbuilder.prototype.actioncoordinator.model.OrderActionStatus;
 import dvoraka.archbuilder.prototype.actioncoordinator.order.OrderActionCoordinator;
 import dvoraka.archbuilder.prototype.actioncoordinator.repository.OrderActionRepository;
 import dvoraka.archbuilder.prototype.actioncoordinator.repository.OrderRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
 public class DefaultOrderService implements OrderService {
@@ -15,6 +14,8 @@ public class DefaultOrderService implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderActionRepository orderActionRepository;
     private final OrderActionCoordinator actionCoordinator;
+
+    private static final Logger log = LoggerFactory.getLogger(DefaultOrderService.class);
 
 
     public DefaultOrderService(
@@ -33,28 +34,14 @@ public class DefaultOrderService implements OrderService {
     }
 
     @Override
-    public Long process(Order data, String transactionId) {
-        // save data
-        Order savedOrder = orderRepository.save(data);
-
-        // should be probably anywhere else (coordinator)
-        createOrderActionStatus(savedOrder);
+    public Long process(Order order, String transactionId) {
+        log.debug("Saving order: {}", order);
+        Order savedOrder = orderRepository.save(order);
 
         // run async processing
         actionCoordinator.process(savedOrder);
 
         // return data ID
         return savedOrder.getId();
-    }
-
-    private void createOrderActionStatus(Order order) {
-
-        OrderActionStatus status = new OrderActionStatus();
-        status.setOrderId(order.getId());
-        status.setTransactionId(UUID.randomUUID().toString()); // will not be random
-        status.setOrderData(order.toString());
-
-        orderActionRepository.save(status);
-        orderActionRepository.flush();
     }
 }

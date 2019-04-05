@@ -90,18 +90,22 @@ public class OrderActionContext
 
     @Override
     public void processState() {
+        processStateAsync();
+    }
+
+    private void processStateInt() {
         if (isDone()) {
             log.debug("Action context {} done in {}", this.getId(),
                     Duration.between(getCreated(), Instant.now()));
         } else {
-            log.debug("Process action ({}): {}, previous action: {}", getId(), getCurrentAction(), getPreviousAction());
+            log.debug("Process action ({}): {}, previous: {}", getId(), getCurrentAction(), getPreviousAction());
             AbstractOrderAction state = config.get(getCurrentAction());
             state.process();
         }
     }
 
     private void processStateAsync() {
-        Mono.fromRunnable(this::processState)
+        Mono.fromRunnable(this::processStateInt)
                 .publishOn(Schedulers.parallel())
                 .log()
                 .subscribe();
@@ -156,7 +160,7 @@ public class OrderActionContext
 
     @Override
     public void actionDone() {
-        log.debug("Action done for ({}): {}", getId(), getCurrentAction());
+        log.debug("Action done ({}): {}", getId(), getCurrentAction());
 
         saveToDb();
 
@@ -167,7 +171,7 @@ public class OrderActionContext
 
     @Override
     public void actionFailed() {
-        log.debug("Action failed for ({}): {}", getId(), getCurrentAction());
+        log.debug("Action failed ({}): {}", getId(), getCurrentAction());
 
         saveToDb(); // attempt count
 
@@ -178,7 +182,7 @@ public class OrderActionContext
 
     @Override
     public void rollbackDone() {
-        log.debug("Rollback done for ({}): {}", getId(), getCurrentAction());
+        log.debug("Rollback done ({}): {}", getId(), getCurrentAction());
 
         saveToDb(); // save reverts
 

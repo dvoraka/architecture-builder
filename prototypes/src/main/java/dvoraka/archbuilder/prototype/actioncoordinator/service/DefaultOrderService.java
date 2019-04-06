@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
+
 @Service
 public class DefaultOrderService implements OrderService {
 
@@ -26,6 +28,11 @@ public class DefaultOrderService implements OrderService {
         this.orderRepository = orderRepository;
         this.orderActionRepository = orderActionRepository;
         this.actionCoordinator = actionCoordinator;
+    }
+
+    @PostConstruct
+    public void start() {
+        // load not completed orders and check orderActionRepository
     }
 
     @Override

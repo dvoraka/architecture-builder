@@ -51,7 +51,6 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, Order> {
 
     @PostConstruct
     public void start() {
-
         // load not suspended contexts
 
         // subscribe to network notifications
@@ -85,6 +84,7 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, Order> {
     public void process(Order order) {
         log.info("Process for: {}", order);
         createOrderActionStatus(order);
+
         OrderActionContextHandle context = createContext(order);
         context.processState();
     }
@@ -177,14 +177,17 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, Order> {
      * @return the context
      */
     private OrderActionContextHandle loadContext(long orderId) {
-        OrderActionStatus orderStatusEntity = repository.findById(orderId)
+        OrderActionStatus orderStatusEntity = repository.findByOrderId(orderId)
                 .orElseThrow(RuntimeException::new);
 
-        //TODO
+        //TODO: get order data for new context
 //        Order orderData = new DefaultOrderData().setOrderId(60);
 
         OrderActionContextHandle context = OrderActionContext.createContext(
-                null, null, null, null
+                orderStatusEntity.getAction(),
+                orderStatusEntity.getPreviousAction(),
+                null,
+                repository
         );
         //TODO: check the context ID
         contexts.put(context.getId(), context);

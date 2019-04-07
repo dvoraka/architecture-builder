@@ -40,7 +40,7 @@ public class CoordinatorApp {
                     orderRepository, orderActionRepository, actionCoordinator);
 
             long start = System.currentTimeMillis();
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 1_000; i++) {
                 Order order = new Order();
                 order.setUserId(2);
                 order.setItemId(3);
@@ -48,12 +48,15 @@ public class CoordinatorApp {
 
                 orderService.process(order, UUID.randomUUID().toString());
             }
+            long responseTime = System.currentTimeMillis() - start;
+            TimeUnit.SECONDS.sleep(1);
 
             while (actionCoordinator.getSize() != 0) {
                 System.out.println("waiting...");
                 TimeUnit.SECONDS.sleep(2);
             }
             System.out.println("done in " + (System.currentTimeMillis() - start) + " ms");
+            System.out.println("response time: " + responseTime + " ms");
         };
     }
 }

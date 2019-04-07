@@ -1,5 +1,6 @@
 package dvoraka.archbuilder.prototype.actioncoordinator.order;
 
+import dvoraka.archbuilder.prototype.actioncoordinator.ActionContextHandle;
 import dvoraka.archbuilder.prototype.actioncoordinator.ActionCoordinator;
 import dvoraka.archbuilder.prototype.actioncoordinator.action.order.OrderStatus;
 import dvoraka.archbuilder.prototype.actioncoordinator.model.Order;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import javax.annotation.PostConstruct;
@@ -83,10 +85,22 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, Order> {
     @Override
     public void process(Order order) {
         log.info("Process for: {}", order);
-        createOrderActionStatus(order);
 
-        OrderActionContextHandle context = createContext(order);
-        context.processState();
+        Mono<Object> createOrderActionStatusMono =
+                Mono.fromRunnable(() -> createOrderActionStatus(order));
+
+        Mono<OrderActionContextHandle> createContextMono =
+                Mono.fromCallable(() -> createContext(order));
+
+        createOrderActionStatusMono
+                .publishOn(Schedulers.parallel())
+                .then(createContextMono)
+                .doOnNext(ActionContextHandle::processState)
+                .subscribe();
+
+//        createOrderActionStatus(order);
+//        OrderActionContextHandle context = createContext(order);
+//        context.processState();
     }
 
     private void createOrderActionStatus(Order order) {
@@ -162,6 +176,7 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, Order> {
      * @return the context
      */
     private OrderActionContextHandle createContext(Order order) {
+        log.debug("Creating context: {}", order.getId());
         // start the context from start
         OrderActionContextHandle context = OrderActionContext.createContext(
                 CreateOrderAction.INIT,

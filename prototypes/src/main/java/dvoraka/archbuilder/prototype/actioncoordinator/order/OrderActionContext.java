@@ -90,6 +90,7 @@ public class OrderActionContext
 
     @Override
     public void processState() {
+        log.debug("Process state.");
         processStateAsync();
     }
 

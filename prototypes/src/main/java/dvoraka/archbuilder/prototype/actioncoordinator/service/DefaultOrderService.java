@@ -4,6 +4,7 @@ import dvoraka.archbuilder.prototype.actioncoordinator.model.Order;
 import dvoraka.archbuilder.prototype.actioncoordinator.order.OrderActionCoordinator;
 import dvoraka.archbuilder.prototype.actioncoordinator.repository.OrderActionRepository;
 import dvoraka.archbuilder.prototype.actioncoordinator.repository.OrderRepository;
+import dvoraka.archbuilder.sample.microservice.service.AbstractBaseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 
 @Service
-public class DefaultOrderService implements OrderService {
+public class DefaultOrderService extends AbstractBaseService implements OrderService {
 
     private final OrderRepository orderRepository;
     private final OrderActionRepository orderActionRepository;
@@ -33,11 +34,6 @@ public class DefaultOrderService implements OrderService {
     @PostConstruct
     public void start() {
         // load not completed orders and check orderActionRepository
-    }
-
-    @Override
-    public boolean isRunning() {
-        return false;
     }
 
     @Override

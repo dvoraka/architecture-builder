@@ -232,7 +232,8 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 .findAny()
                 .orElseThrow(this::noSuperTypeException);
 
-        Optional<Class<?>> superClass = findClass(loadSuperTypes(directory));
+        List<Class<?>> superTypes = loadSuperTypes(directory);
+        Optional<Class<?>> superClass = findClass(superTypes);
 
         Class<?> superSuperClass = loadClass(superSuperDir.getTypeName());
         Class<?> superInterface = loadClass(superInterfaceDir.getTypeName());
@@ -250,7 +251,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             typeMapping = getTypeVarMapping(directory, superInterface);
         }
 
-        List<Method> allMethods = findMethods(superInterface);
+        List<Method> allMethods = findAllMethods(superTypes);
         List<Method> mergedMethods = mergeMethods(allMethods);
         List<MethodSpec> methodSpecs = genMethodSpecs(mergedMethods, typeMapping);
 
@@ -708,7 +709,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             if (isAbstract(method.getModifiers())) {
                 for (Method m : methods) {
 
-                    if ((m.equals(method) && !m.isSynthetic() && !isAbstract(m.getModifiers()))) {
+                    if ((!m.equals(method) && !m.isSynthetic() && !isAbstract(m.getModifiers()))) {
 
                         if (m.getName().equals(method.getName())
                                 && m.getParameterCount() == method.getParameterCount()) {

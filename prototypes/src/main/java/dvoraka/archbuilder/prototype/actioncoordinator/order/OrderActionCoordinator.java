@@ -95,7 +95,7 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, Order> {
         createOrderActionStatusMono
                 .publishOn(Schedulers.parallel())
                 .then(createContextMono)
-                .doOnNext(ActionContextHandle::processState)
+                .doOnNext(OrderActionContextHandle::processState)
                 .subscribe();
 
 //        createOrderActionStatus(order);

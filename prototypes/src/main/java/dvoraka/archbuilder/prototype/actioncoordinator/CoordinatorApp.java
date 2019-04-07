@@ -13,6 +13,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication
@@ -33,29 +34,26 @@ public class CoordinatorApp {
     @Bean
     public CommandLineRunner runner() {
         return args -> {
-            System.out.println("Coordinator app");
-
-            // create order data
-            Order order = new Order();
-            order.setUserId(2);
-            order.setItemId(3);
-            order.setStatus(OrderStatus.NEW);
-
-            // second order
-            Order order2 = new Order();
-            order2.setUserId(2);
-            order2.setItemId(5);
-            order2.setStatus(OrderStatus.NEW);
+            System.out.println("Order service app");
 
             OrderService orderService = new DefaultOrderService(
                     orderRepository, orderActionRepository, actionCoordinator);
 
-            // process orders
-            orderService.process(order, "abc");
-            orderService.process(order2, "ddd");
+            long start = System.currentTimeMillis();
+            for (int i = 0; i < 100; i++) {
+                Order order = new Order();
+                order.setUserId(2);
+                order.setItemId(3);
+                order.setStatus(OrderStatus.NEW);
 
-            // wait for async stuff
-            TimeUnit.SECONDS.sleep(30);
+                orderService.process(order, UUID.randomUUID().toString());
+            }
+
+            while (actionCoordinator.getSize() != 0) {
+                System.out.println("waiting...");
+                TimeUnit.SECONDS.sleep(2);
+            }
+            System.out.println("done in " + (System.currentTimeMillis() - start) + " ms");
         };
     }
 }

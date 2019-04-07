@@ -16,4 +16,11 @@ public interface ActionCoordinator<ID, D> {
      * @throws Exception
      */
     void cancel(ID dataId) throws Exception;
+
+    /**
+     * Returns action count.
+     *
+     * @return the size/count
+     */
+    long getSize();
 }

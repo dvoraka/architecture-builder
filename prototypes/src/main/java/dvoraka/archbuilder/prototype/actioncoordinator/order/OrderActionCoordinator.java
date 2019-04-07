@@ -110,6 +110,11 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, Order> {
         context.cancel();
     }
 
+    @Override
+    public long getSize() {
+        return contexts.size();
+    }
+
     private void watchdog() {
         log.debug("Context count: {}", contexts.size());
 

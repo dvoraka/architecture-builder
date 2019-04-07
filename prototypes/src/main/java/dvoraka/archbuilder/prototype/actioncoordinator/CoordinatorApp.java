@@ -3,9 +3,6 @@ package dvoraka.archbuilder.prototype.actioncoordinator;
 import dvoraka.archbuilder.prototype.actioncoordinator.action.order.OrderStatus;
 import dvoraka.archbuilder.prototype.actioncoordinator.model.Order;
 import dvoraka.archbuilder.prototype.actioncoordinator.order.OrderActionCoordinator;
-import dvoraka.archbuilder.prototype.actioncoordinator.repository.OrderActionRepository;
-import dvoraka.archbuilder.prototype.actioncoordinator.repository.OrderRepository;
-import dvoraka.archbuilder.prototype.actioncoordinator.service.DefaultOrderService;
 import dvoraka.archbuilder.prototype.actioncoordinator.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -20,11 +17,9 @@ import java.util.concurrent.TimeUnit;
 public class CoordinatorApp {
 
     @Autowired
-    private OrderRepository orderRepository;
-    @Autowired
-    private OrderActionRepository orderActionRepository;
-    @Autowired
     private OrderActionCoordinator actionCoordinator;
+    @Autowired
+    private OrderService orderService;
 
 
     public static void main(String[] args) {
@@ -36,11 +31,8 @@ public class CoordinatorApp {
         return args -> {
             System.out.println("Order service app");
 
-            OrderService orderService = new DefaultOrderService(
-                    orderRepository, orderActionRepository, actionCoordinator);
-
             long start = System.currentTimeMillis();
-            for (int i = 0; i < 1_000; i++) {
+            for (int i = 0; i < 100; i++) {
                 Order order = new Order();
                 order.setUserId(2);
                 order.setItemId(3);

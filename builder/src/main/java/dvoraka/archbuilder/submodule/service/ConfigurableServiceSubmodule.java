@@ -4,6 +4,7 @@ import dvoraka.archbuilder.BuilderHelper;
 import dvoraka.archbuilder.data.DirType;
 import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.exception.GeneratorException;
+import dvoraka.archbuilder.sample.microservice.service.AbstractBaseService;
 import dvoraka.archbuilder.springconfig.BeanMapping;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
 import dvoraka.archbuilder.template.TemplateHelper;
@@ -63,6 +64,7 @@ public class ConfigurableServiceSubmodule implements ServiceSubmodule, TemplateH
         Directory serviceImpl = new Directory.Builder(helper.servicePkgName(), DirType.SERVICE_IMPL)
                 .parent(srcBase)
                 .superType(service)
+                .superType(AbstractBaseService.class)
                 .filename(serviceImplName)
                 .build();
 

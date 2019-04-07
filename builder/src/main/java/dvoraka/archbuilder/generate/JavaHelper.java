@@ -191,7 +191,7 @@ public interface JavaHelper {
 
     default Optional<Class<?>> findClass(List<Class<?>> classes) {
         return classes.stream()
-                .filter(cls -> !cls.isInterface() || !cls.isArray())
+                .filter(cls -> !(cls.isInterface() || cls.isArray()))
                 .findAny();
     }
 }

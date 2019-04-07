@@ -131,9 +131,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         if (superTypeDirs.isEmpty()) {
             throw noSuperTypeException();
         }
-        List<Class<?>> superTypes = superTypeDirs.stream()
-                .map(dir -> loadClass(dir.getTypeName()))
-                .collect(Collectors.toList());
+        List<Class<?>> superTypes = loadSuperTypes(directory);
         Optional<Class<?>> superClass = findClass(superTypes);
         int parameterCount = getParameterCount(superTypes);
 
@@ -229,36 +227,48 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 .flatMap(Stream::findAny)
                 .orElseThrow(this::noSuperTypeException);
 
-        Directory superDir = directory.getSuperTypes().stream()
+        Directory superInterfaceDir = directory.getSuperTypes().stream()
+                .filter(Directory::isInterfaceType)
                 .findAny()
                 .orElseThrow(this::noSuperTypeException);
 
+        Optional<Class<?>> superClass = findClass(loadSuperTypes(directory));
+
         Class<?> superSuperClass = loadClass(superSuperDir.getTypeName());
-        Class<?> superClass = loadClass(superDir.getTypeName());
-        if (superClass.getTypeParameters().length != 0) {
+        Class<?> superInterface = loadClass(superInterfaceDir.getTypeName());
+        if (superInterface.getTypeParameters().length != 0) {
             throw new GeneratorException("Super class has type parameters!");
         }
 
         // type parameters
         Map<TypeVariable<?>, Type> typeMapping = new HashMap<>();
         if (directory.getParameters().isEmpty()) {
-            if (!superDir.getParameters().isEmpty()) {
-                typeMapping = getTypeVarMapping(superDir, superSuperClass);
+            if (!superInterfaceDir.getParameters().isEmpty()) {
+                typeMapping = getTypeVarMapping(superInterfaceDir, superSuperClass);
             }
         } else {
-            typeMapping = getTypeVarMapping(directory, superClass);
+            typeMapping = getTypeVarMapping(directory, superInterface);
         }
 
-        List<Method> allMethods = findMethods(superClass);
-        List<MethodSpec> methodSpecs = genMethodSpecs(allMethods, typeMapping);
+        List<Method> allMethods = findMethods(superInterface);
+        List<Method> mergedMethods = mergeMethods(allMethods);
+        List<MethodSpec> methodSpecs = genMethodSpecs(mergedMethods, typeMapping);
 
         String filename = getFilename(directory);
         String typeName = removeJavaSuffix(filename);
 
         TypeSpec.Builder serviceImplBuilder = TypeSpec.classBuilder(typeName)
-                .addSuperinterface(superClass)
                 .addAnnotation(Service.class)
                 .addMethods(methodSpecs);
+
+        if (superClass.isPresent()) {
+            serviceImplBuilder
+                    .superclass(superClass.get())
+                    .addSuperinterface(superInterface);
+        } else {
+            serviceImplBuilder
+                    .addSuperinterface(superInterface);
+        }
 
         completeAndSaveClassFile(directory, serviceImplBuilder);
     }
@@ -698,7 +708,7 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
             if (isAbstract(method.getModifiers())) {
                 for (Method m : methods) {
 
-                    if (!(m.equals(method) || m.isSynthetic() || isAbstract(m.getModifiers()))) {
+                    if ((m.equals(method) && !m.isSynthetic() && !isAbstract(m.getModifiers()))) {
 
                         if (m.getName().equals(method.getName())
                                 && m.getParameterCount() == method.getParameterCount()) {
@@ -730,6 +740,12 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
                 .filter(cls -> cls.getTypeParameters().length == paramCount)
                 .findFirst()
                 .orElseThrow(() -> new GeneratorException("No template class found."));
+    }
+
+    private List<Class<?>> loadSuperTypes(Directory directory) {
+        return directory.getSuperTypes().stream()
+                .map(dir -> loadClass(dir.getTypeName()))
+                .collect(Collectors.toList());
     }
 
     private TypeSpec.Builder setSuperType(

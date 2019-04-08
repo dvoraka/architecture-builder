@@ -1,7 +1,7 @@
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 plugins {
-    id 'org.springframework.boot' version '2.1.3.RELEASE' apply false
+    id 'org.springframework.boot' version '2.1.4.RELEASE' apply false
     id 'org.ec4j.editorconfig' version '0.0.3'
 }
 
@@ -38,8 +38,8 @@ subprojects {
         compile('org.springframework.boot:spring-boot-starter-logging')
 
         // Jackson
-        compile('com.fasterxml.jackson.core:jackson-databind')
-        compile('com.fasterxml.jackson.datatype:jackson-datatype-jdk8')
+//        compile('com.fasterxml.jackson.core:jackson-databind')
+//        compile('com.fasterxml.jackson.datatype:jackson-datatype-jdk8')
 
         // JavaPoet
         compile('com.squareup:javapoet:1.11.1')

@@ -1,6 +1,5 @@
 package dvoraka.archbuilder.prototype.actioncoordinator.order;
 
-import dvoraka.archbuilder.prototype.actioncoordinator.ActionContextHandle;
 import dvoraka.archbuilder.prototype.actioncoordinator.ActionCoordinator;
 import dvoraka.archbuilder.prototype.actioncoordinator.action.order.OrderStatus;
 import dvoraka.archbuilder.prototype.actioncoordinator.model.Order;
@@ -115,9 +114,10 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, Order> {
     }
 
     @Override
-    public void cancel(Long orderId) throws Exception {
+    public void cancel(Long orderId) {
         if (!contexts.containsKey(orderId)) {
-            throw new Exception();
+            //TODO
+            throw new RuntimeException("Data not found.");
         }
 
         OrderActionContextHandle context = contexts.get(orderId);

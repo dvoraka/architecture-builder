@@ -7,9 +7,12 @@ import dvoraka.archbuilder.prototype.actioncoordinator.repository.OrderRepositor
 import dvoraka.archbuilder.sample.microservice.service.AbstractBaseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+
+import static java.util.Objects.requireNonNull;
 
 @Service
 public class DefaultOrderService extends AbstractBaseService implements OrderService {
@@ -21,14 +24,15 @@ public class DefaultOrderService extends AbstractBaseService implements OrderSer
     private static final Logger log = LoggerFactory.getLogger(DefaultOrderService.class);
 
 
+    @Autowired
     public DefaultOrderService(
             OrderRepository orderRepository,
             OrderActionRepository orderActionRepository,
             OrderActionCoordinator actionCoordinator
     ) {
-        this.orderRepository = orderRepository;
-        this.orderActionRepository = orderActionRepository;
-        this.actionCoordinator = actionCoordinator;
+        this.orderRepository = requireNonNull(orderRepository);
+        this.orderActionRepository = requireNonNull(orderActionRepository);
+        this.actionCoordinator = requireNonNull(actionCoordinator);
     }
 
     @PostConstruct
@@ -46,5 +50,10 @@ public class DefaultOrderService extends AbstractBaseService implements OrderSer
 
         // return data ID
         return savedOrder.getId();
+    }
+
+    @Override
+    public void cancel(Long id) {
+        actionCoordinator.cancel(id);
     }
 }

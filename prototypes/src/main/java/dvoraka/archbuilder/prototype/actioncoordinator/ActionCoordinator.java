@@ -13,9 +13,10 @@ public interface ActionCoordinator<ID, D> {
      * Cancels processing.
      *
      * @param dataId the data ID
-     * @throws Exception
+     * @throws RuntimeException when data are not found
      */
-    void cancel(ID dataId) throws Exception;
+    //TODO: exception type
+    void cancel(ID dataId);
 
     /**
      * Returns action count.

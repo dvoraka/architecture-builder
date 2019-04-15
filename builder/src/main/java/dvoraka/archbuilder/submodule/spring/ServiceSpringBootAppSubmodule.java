@@ -5,24 +5,24 @@ import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.springconfig.BeanMapping;
 import dvoraka.archbuilder.template.TemplateHelper;
 import dvoraka.archbuilder.template.source.SourceTemplate;
-import dvoraka.archbuilder.template.source.SpringBootAppTemplate;
+import dvoraka.archbuilder.template.source.SpringBootApp2Template;
 
 import java.util.Collection;
 import java.util.Collections;
 
-public class DefaultSpringBootAppSubmodule implements SpringBootAppSubmodule, TemplateHelper {
+public class ServiceSpringBootAppSubmodule implements SpringBootAppSubmodule, TemplateHelper {
 
     private final BuilderHelper helper;
 
 
-    public DefaultSpringBootAppSubmodule(BuilderHelper helper) {
+    public ServiceSpringBootAppSubmodule(BuilderHelper helper) {
         this.helper = helper;
     }
 
     @Override
     public void addSubmoduleTo(Directory srcBase) {
         SourceTemplate appSourceTemplate =
-                new SpringBootAppTemplate(helper.serviceAppName(), helper.getPackageName());
+                new SpringBootApp2Template(helper.serviceAppName(), helper.getPackageName());
         springBootApp(srcBase, appSourceTemplate);
     }
 

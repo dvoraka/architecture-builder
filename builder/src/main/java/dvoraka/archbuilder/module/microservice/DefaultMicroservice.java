@@ -10,7 +10,7 @@ import dvoraka.archbuilder.submodule.net.DefaultNetSubmodule;
 import dvoraka.archbuilder.submodule.net.NetSubmodule;
 import dvoraka.archbuilder.submodule.service.DefaultServiceSubmodule;
 import dvoraka.archbuilder.submodule.service.ServiceSubmodule;
-import dvoraka.archbuilder.submodule.spring.DefaultSpringBootAppSubmodule;
+import dvoraka.archbuilder.submodule.spring.ServiceSpringBootAppSubmodule;
 import dvoraka.archbuilder.submodule.spring.SpringBootAppSubmodule;
 import dvoraka.archbuilder.submodule.spring.SpringConfigSubmodule;
 import dvoraka.archbuilder.template.TemplateHelper;
@@ -39,7 +39,7 @@ public class DefaultMicroservice implements Module, TemplateHelper {
         netSubmodule.addSubmoduleTo(srcBase);
 
         // Spring Boot application
-        SpringBootAppSubmodule springBootAppSubmodule = new DefaultSpringBootAppSubmodule(helper);
+        SpringBootAppSubmodule springBootAppSubmodule = new ServiceSpringBootAppSubmodule(helper);
         springBootAppSubmodule.addSubmoduleTo(srcBase);
 
         // Spring configuration

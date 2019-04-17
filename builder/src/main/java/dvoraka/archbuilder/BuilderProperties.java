@@ -15,6 +15,10 @@ public class BuilderProperties {
     private String exceptionString = "Exception";
     private String serverString = "Server";
 
+    private String dataPkgName = "data";
+    private String exceptionPkgName = "exception";
+    private String serverPkgName = "server";
+
     private Service service = new Service();
 
 
@@ -80,6 +84,30 @@ public class BuilderProperties {
 
     public void setServerString(String serverString) {
         this.serverString = serverString;
+    }
+
+    public String getDataPkgName() {
+        return dataPkgName;
+    }
+
+    public void setDataPkgName(String dataPkgName) {
+        this.dataPkgName = dataPkgName;
+    }
+
+    public String getExceptionPkgName() {
+        return exceptionPkgName;
+    }
+
+    public void setExceptionPkgName(String exceptionPkgName) {
+        this.exceptionPkgName = exceptionPkgName;
+    }
+
+    public String getServerPkgName() {
+        return serverPkgName;
+    }
+
+    public void setServerPkgName(String serverPkgName) {
+        this.serverPkgName = serverPkgName;
     }
 
     public Service getService() {

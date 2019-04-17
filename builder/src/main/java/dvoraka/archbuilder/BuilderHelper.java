@@ -42,6 +42,19 @@ public class BuilderHelper {
     }
 
     //////////////////////////////////////
+    public String dataPkgName() {
+        return properties.getDataPkgName();
+    }
+
+    public String exceptionPkgName() {
+        return properties.getExceptionPkgName();
+    }
+
+    public String serverPkgName() {
+        return properties.getServerPkgName();
+    }
+
+    //////////////////////////////////////
     public String configurationName() {
         return getBaseName() + properties.getConfigString();
     }

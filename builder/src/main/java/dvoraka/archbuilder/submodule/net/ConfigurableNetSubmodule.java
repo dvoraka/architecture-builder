@@ -53,7 +53,7 @@ public class ConfigurableNetSubmodule implements NetSubmodule, TemplateHelper {
 
         // exception
         String exceptionName = helper.exceptionName();
-        Directory exception = new Directory.Builder("exception", DirType.IMPL)
+        Directory exception = new Directory.Builder(helper.exceptionPkgName(), DirType.IMPL)
                 .parent(srcBase)
                 .superType(config.getBaseException())
                 .filename(exceptionName)
@@ -61,7 +61,7 @@ public class ConfigurableNetSubmodule implements NetSubmodule, TemplateHelper {
 
         // data
         String dataName = baseName + "Data";
-        Directory data = new Directory.Builder("data", DirType.IMPL)
+        Directory data = new Directory.Builder(helper.dataPkgName(), DirType.IMPL)
                 .parent(srcBase)
                 .superType(config.getBaseResultData())
                 .filename(dataName)
@@ -90,7 +90,7 @@ public class ConfigurableNetSubmodule implements NetSubmodule, TemplateHelper {
 
         // server
         String serverName = helper.serverName();
-        Directory server = new Directory.Builder("server", DirType.IMPL)
+        Directory server = new Directory.Builder(helper.serverPkgName(), DirType.IMPL)
                 .parent(srcBase)
                 .superType(config.getSuperServer())
                 .filename(serverName)

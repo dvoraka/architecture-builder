@@ -59,16 +59,24 @@ public class BuilderHelper {
         return getBaseName() + properties.getConfigString();
     }
 
+    public String dataName() {
+        return getBaseName() + properties.getDataString();
+    }
+
     public String dataServiceImplName() {
         return properties.getDefaultString() + dataServiceName();
     }
 
     public String dataServiceName() {
-        return getBaseName() + "Data" + properties.getService().getString();
+        return getBaseName() + properties.getDataString() + properties.getService().getString();
     }
 
     public String exceptionName() {
         return getBaseName() + properties.getExceptionString();
+    }
+
+    public String requestMessageName() {
+        return getBaseName() + properties.getMessageString();
     }
 
     public String serverName() {

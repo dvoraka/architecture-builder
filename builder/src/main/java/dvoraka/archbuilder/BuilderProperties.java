@@ -11,8 +11,10 @@ public class BuilderProperties {
     private String appString = "App";
     private String configString = "Config";
     private String controllerString = "Controller";
+    private String dataString = "Data";
     private String defaultString = "Default";
     private String exceptionString = "Exception";
+    private String messageString = "Message";
     private String serverString = "Server";
 
     private String dataPkgName = "data";
@@ -62,6 +64,14 @@ public class BuilderProperties {
         this.controllerString = controllerString;
     }
 
+    public String getDataString() {
+        return dataString;
+    }
+
+    public void setDataString(String dataString) {
+        this.dataString = dataString;
+    }
+
     public String getDefaultString() {
         return defaultString;
     }
@@ -76,6 +86,14 @@ public class BuilderProperties {
 
     public void setExceptionString(String exceptionString) {
         this.exceptionString = exceptionString;
+    }
+
+    public String getMessageString() {
+        return messageString;
+    }
+
+    public void setMessageString(String messageString) {
+        this.messageString = messageString;
     }
 
     public String getServerString() {

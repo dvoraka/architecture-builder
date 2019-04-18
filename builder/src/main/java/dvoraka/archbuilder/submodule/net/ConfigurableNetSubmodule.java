@@ -52,19 +52,17 @@ public class ConfigurableNetSubmodule implements NetSubmodule, TemplateHelper {
         }
 
         // exception
-        String exceptionName = helper.exceptionName();
         Directory exception = new Directory.Builder(helper.exceptionPkgName(), DirType.IMPL)
                 .parent(srcBase)
                 .superType(config.getBaseException())
-                .filename(exceptionName)
+                .filename(helper.exceptionName())
                 .build();
 
         // data
-        String dataName = baseName + "Data";
         Directory data = new Directory.Builder(helper.dataPkgName(), DirType.IMPL)
                 .parent(srcBase)
                 .superType(config.getBaseResultData())
-                .filename(dataName)
+                .filename(helper.dataName())
                 .parameterType(exception)
                 .build();
 
@@ -77,7 +75,6 @@ public class ConfigurableNetSubmodule implements NetSubmodule, TemplateHelper {
                 .parameterType(exception)
                 .filename(responseMessageName)
                 .build();
-        String requestMessageName = baseName + "Message";
         Directory requestMessage = new Directory.Builder(MESSAGE_DIR, DirType.IMPL)
                 .parent(srcBase)
                 .superType(config.getRequestBaseMessage())
@@ -85,15 +82,14 @@ public class ConfigurableNetSubmodule implements NetSubmodule, TemplateHelper {
                 .parameterType(responseMessage)
                 .parameterType(data)
                 .parameterType(exception)
-                .filename(requestMessageName)
+                .filename(helper.requestMessageName())
                 .build();
 
         // server
-        String serverName = helper.serverName();
         Directory server = new Directory.Builder(helper.serverPkgName(), DirType.IMPL)
                 .parent(srcBase)
                 .superType(config.getSuperServer())
-                .filename(serverName)
+                .filename(helper.serverName())
                 .metadata(Service.class)
                 .build();
 
@@ -139,7 +135,7 @@ public class ConfigurableNetSubmodule implements NetSubmodule, TemplateHelper {
                 .build();
 
         // create configuration
-        BeanMapping serverBeanMapping = new BeanMapping.Builder(uncapitalize(serverName))
+        BeanMapping serverBeanMapping = new BeanMapping.Builder(uncapitalize(helper.serverName()))
                 .typeDir(server)
                 .toTypeDir(server)
                 .codeTemplate(configGenerator::simpleReturn)

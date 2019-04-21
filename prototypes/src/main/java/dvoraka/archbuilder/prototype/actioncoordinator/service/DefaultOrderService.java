@@ -1,6 +1,8 @@
 package dvoraka.archbuilder.prototype.actioncoordinator.service;
 
+import dvoraka.archbuilder.prototype.actioncoordinator.action.order.OrderStatus;
 import dvoraka.archbuilder.prototype.actioncoordinator.model.Order;
+import dvoraka.archbuilder.prototype.actioncoordinator.model.OrderActionStatus;
 import dvoraka.archbuilder.prototype.actioncoordinator.order.OrderActionCoordinator;
 import dvoraka.archbuilder.prototype.actioncoordinator.repository.OrderActionRepository;
 import dvoraka.archbuilder.prototype.actioncoordinator.repository.OrderRepository;
@@ -11,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
@@ -37,7 +41,33 @@ public class DefaultOrderService extends AbstractBaseService implements OrderSer
 
     @PostConstruct
     public void start() {
-        // load not completed orders and check orderActionRepository
+
+        // all orders (should be filtered for NEW status)
+        List<Order> orders = orderRepository.findAll();
+        // processing orders
+        List<OrderActionStatus> processingOrders = orderActionRepository.findAll();
+
+        // check not started orders
+        List<Order> notStartedOrders = new ArrayList<>();
+        for (Order order : orders) {
+            if (order.getStatus() == OrderStatus.NEW) {
+
+                boolean found = false;
+                for (OrderActionStatus processingOrder : processingOrders) {
+                    if (processingOrder.getOrderId() == order.getId()) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    log.warn("Not started order: {}", order);
+                    notStartedOrders.add(order);
+                }
+            }
+        }
+
+        notStartedOrders.forEach(actionCoordinator::process);
     }
 
     @Override

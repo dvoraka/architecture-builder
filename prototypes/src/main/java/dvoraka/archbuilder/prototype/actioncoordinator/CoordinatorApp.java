@@ -32,7 +32,7 @@ public class CoordinatorApp {
             System.out.println("Order service app");
 
             long start = System.currentTimeMillis();
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 5; i++) {
                 Order order = new Order();
                 order.setUserId(2);
                 order.setItemId(3);

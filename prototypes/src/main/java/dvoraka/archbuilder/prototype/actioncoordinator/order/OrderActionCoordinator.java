@@ -18,6 +18,7 @@ import reactor.core.scheduler.Schedulers;
 import javax.annotation.PostConstruct;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -53,6 +54,12 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, Order> {
     @PostConstruct
     public void start() {
         // load not suspended contexts
+        List<OrderActionStatus> statuses = repository.findAll();
+        for (OrderActionStatus status : statuses) {
+            if (!status.isSuspended()) {
+                loadContext(status.getOrderId());
+            }
+        }
 
         // subscribe to network notifications
 //        notificationService.subscribe(this::onNotification);
@@ -197,15 +204,15 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, Order> {
      * @return the context
      */
     private OrderActionContextHandle loadContext(long orderId) {
-        OrderActionStatus orderStatusEntity = repository.findByOrderId(orderId)
+        OrderActionStatus actionStatus = repository.findByOrderId(orderId)
                 .orElseThrow(RuntimeException::new);
 
         //TODO: get order data for new context
 //        Order orderData = new DefaultOrderData().setOrderId(60);
 
         OrderActionContextHandle context = OrderActionContext.createContext(
-                orderStatusEntity.getAction(),
-                orderStatusEntity.getPreviousAction(),
+                actionStatus.getAction(),
+                actionStatus.getPreviousAction(),
                 null,
                 repository
         );

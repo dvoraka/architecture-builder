@@ -1,6 +1,8 @@
 package dvoraka.archbuilder.prototype.actioncoordinator;
 
-public interface ActionCoordinator<ID, D> {
+import dvoraka.archbuilder.sample.microservice.data.BaseException;
+
+public interface ActionCoordinator<ID, D, E extends BaseException> {
 
     /**
      * Processes a data.
@@ -13,10 +15,9 @@ public interface ActionCoordinator<ID, D> {
      * Cancels processing.
      *
      * @param dataId the data ID
-     * @throws RuntimeException when data are not found
+     * @throws E when cancel fails
      */
-    //TODO: exception type
-    void cancel(ID dataId);
+    void cancel(ID dataId) throws E;
 
     /**
      * Returns action count.

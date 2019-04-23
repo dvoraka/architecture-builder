@@ -1,6 +1,7 @@
 package dvoraka.archbuilder.prototype.actioncoordinator.service;
 
 import dvoraka.archbuilder.prototype.actioncoordinator.action.order.OrderStatus;
+import dvoraka.archbuilder.prototype.actioncoordinator.exception.StateException;
 import dvoraka.archbuilder.prototype.actioncoordinator.model.Order;
 import dvoraka.archbuilder.prototype.actioncoordinator.model.OrderActionStatus;
 import dvoraka.archbuilder.prototype.actioncoordinator.order.OrderActionCoordinator;
@@ -84,6 +85,10 @@ public class DefaultOrderService extends AbstractBaseService implements OrderSer
 
     @Override
     public void cancel(Long id) {
-        actionCoordinator.cancel(id);
+        try {
+            actionCoordinator.cancel(id);
+        } catch (StateException e) {
+            log.warn("Cancel failed!", e);
+        }
     }
 }

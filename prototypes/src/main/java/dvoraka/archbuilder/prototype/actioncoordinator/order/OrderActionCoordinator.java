@@ -2,6 +2,7 @@ package dvoraka.archbuilder.prototype.actioncoordinator.order;
 
 import dvoraka.archbuilder.prototype.actioncoordinator.ActionCoordinator;
 import dvoraka.archbuilder.prototype.actioncoordinator.action.order.OrderStatus;
+import dvoraka.archbuilder.prototype.actioncoordinator.exception.StateException;
 import dvoraka.archbuilder.prototype.actioncoordinator.model.Order;
 import dvoraka.archbuilder.prototype.actioncoordinator.model.OrderActionStatus;
 import dvoraka.archbuilder.prototype.actioncoordinator.repository.OrderActionRepository;
@@ -25,16 +26,20 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
+import static java.util.Objects.requireNonNull;
+
 
 /**
  * Testing action coordinator implementation.
  */
 @Service
-public class OrderActionCoordinator implements ActionCoordinator<Long, Order> {
+public class OrderActionCoordinator implements ActionCoordinator<Long, Order, StateException> {
+
+    private final OrderActionRepository repository;
 
     private static final Logger log = LoggerFactory.getLogger(OrderActionCoordinator.class);
 
-    private final OrderActionRepository repository;
+    private static final int WATCHDOG_DELAY_S = 10;
 
     private final Map<Long, OrderActionContextHandle> contexts;
     private final Set<Long> suspendedContexts;
@@ -44,7 +49,7 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, Order> {
 
     @Autowired
     public OrderActionCoordinator(OrderActionRepository repository) {
-        this.repository = repository;
+        this.repository = requireNonNull(repository);
 
         contexts = new ConcurrentHashMap<>();
         suspendedContexts = ConcurrentHashMap.newKeySet();
@@ -69,7 +74,7 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, Order> {
 
     private void startWatchdog() {
         Flux
-                .interval(Duration.ofSeconds(10), Schedulers.elastic())
+                .interval(Duration.ofSeconds(WATCHDOG_DELAY_S), Schedulers.elastic())
                 .onBackpressureDrop()
                 .doOnNext(l -> watchdog())
                 .subscribe();
@@ -121,7 +126,7 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, Order> {
     }
 
     @Override
-    public void cancel(Long orderId) {
+    public void cancel(Long orderId) throws StateException {
         if (!contexts.containsKey(orderId)) {
             //TODO
             throw new RuntimeException("Data not found.");

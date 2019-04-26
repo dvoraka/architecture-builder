@@ -2,7 +2,7 @@ package dvoraka.archbuilder.prototype.actioncoordinator.service;
 
 import dvoraka.archbuilder.sample.microservice.service.BaseService;
 
-public interface StateService<D, ID> extends BaseService {
+public interface StateService<D, ID, E extends Enum<E>> extends BaseService {
 
     /**
      * Processes a data. A transaction ID is for idempotency.
@@ -19,4 +19,6 @@ public interface StateService<D, ID> extends BaseService {
      * @param id the data ID
      */
     void cancel(ID id);
+
+    E getStatus(ID id);
 }

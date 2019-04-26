@@ -4,6 +4,7 @@ import dvoraka.archbuilder.prototype.actioncoordinator.action.order.OrderStatus;
 import dvoraka.archbuilder.prototype.actioncoordinator.exception.StateException;
 import dvoraka.archbuilder.prototype.actioncoordinator.model.Order;
 import dvoraka.archbuilder.prototype.actioncoordinator.model.OrderActionStatus;
+import dvoraka.archbuilder.prototype.actioncoordinator.order.CreateOrderAction;
 import dvoraka.archbuilder.prototype.actioncoordinator.order.OrderActionCoordinator;
 import dvoraka.archbuilder.prototype.actioncoordinator.repository.OrderActionRepository;
 import dvoraka.archbuilder.prototype.actioncoordinator.repository.OrderRepository;
@@ -90,5 +91,11 @@ public class DefaultOrderService extends AbstractBaseService implements OrderSer
         } catch (StateException e) {
             log.warn("Cancel failed!", e);
         }
+    }
+
+    @Override
+    public CreateOrderAction getStatus(Long id) {
+        //TODO
+        return null;
     }
 }

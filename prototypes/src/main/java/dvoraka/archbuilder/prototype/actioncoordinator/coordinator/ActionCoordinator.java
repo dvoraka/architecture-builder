@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.prototype.actioncoordinator;
+package dvoraka.archbuilder.prototype.actioncoordinator.coordinator;
 
 import dvoraka.archbuilder.sample.microservice.data.BaseException;
 

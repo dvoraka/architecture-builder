@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.prototype.actioncoordinator;
+package dvoraka.archbuilder.prototype.actioncoordinator.context;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

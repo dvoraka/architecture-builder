@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.prototype.actioncoordinator;
+package dvoraka.archbuilder.prototype.actioncoordinator.context;
 
 import java.time.Instant;
 import java.util.function.Predicate;

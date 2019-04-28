@@ -1,10 +1,10 @@
 package dvoraka.archbuilder.prototype.actioncoordinator.order;
 
-import dvoraka.archbuilder.prototype.actioncoordinator.AbstractActionContext;
 import dvoraka.archbuilder.prototype.actioncoordinator.action.order.AbstractOrderAction;
 import dvoraka.archbuilder.prototype.actioncoordinator.action.order.CheckOrderAction;
 import dvoraka.archbuilder.prototype.actioncoordinator.action.order.CompleteOrderAction;
 import dvoraka.archbuilder.prototype.actioncoordinator.action.order.InitOrderAction;
+import dvoraka.archbuilder.prototype.actioncoordinator.context.AbstractActionContext;
 import dvoraka.archbuilder.prototype.actioncoordinator.model.Order;
 import dvoraka.archbuilder.prototype.actioncoordinator.model.OrderActionStatus;
 import dvoraka.archbuilder.prototype.actioncoordinator.repository.OrderActionRepository;

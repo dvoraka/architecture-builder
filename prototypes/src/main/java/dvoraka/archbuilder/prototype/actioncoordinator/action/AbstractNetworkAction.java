@@ -1,7 +1,7 @@
 package dvoraka.archbuilder.prototype.actioncoordinator.action;
 
 import dvoraka.archbuilder.prototype.actioncoordinator.context.ActionContext;
-import dvoraka.archbuilder.prototype.actioncoordinator.net.ClientNetworkComponent;
+import dvoraka.archbuilder.prototype.actioncoordinator.net.ClientNetComponent;
 import dvoraka.archbuilder.sample.microservice.data.BaseException;
 import dvoraka.archbuilder.sample.microservice.data.ResultData;
 import dvoraka.archbuilder.sample.microservice.data.message.Message;
@@ -32,10 +32,10 @@ public abstract class AbstractNetworkAction<ID, D, PD, SC extends ActionContext<
             R extends ResultMessage<RD, E>,
             RD extends ResultData<E>,
             E extends BaseException,
-            C extends ClientNetworkComponent<M, R, E, ?, RD>>
+            C extends ClientNetComponent<M, R, E, ?, RD>>
     void send(M message, C client, Consumer<R> callback) {
         setCorrId(message.getId());
-//        client.sendFast(message, callback);
+        client.sendFast(message, callback);
     }
 
     protected void callback(ResultMessage<?, ?> resultMessage) {

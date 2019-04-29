@@ -13,7 +13,6 @@ public final class CheckOrderAction extends AbstractOrderAction {
     @Override
     protected void apply(OrderActionContext context) {
         try {
-//            TimeUnit.SECONDS.sleep((long) (new Random().nextFloat() * 5));
             TimeUnit.SECONDS.sleep(3);
         } catch (InterruptedException e) {
             e.printStackTrace();

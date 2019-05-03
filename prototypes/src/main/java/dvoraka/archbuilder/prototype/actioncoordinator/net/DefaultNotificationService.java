@@ -1,10 +1,12 @@
 package dvoraka.archbuilder.prototype.actioncoordinator.net;
 
 import dvoraka.archbuilder.sample.microservice.data.notification.Notification;
+import dvoraka.archbuilder.sample.microservice.net.Acknowledgment;
 import dvoraka.archbuilder.sample.microservice.net.NetMessageListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +26,11 @@ public class DefaultNotificationService implements NotificationService {
         listeners = new ArrayList<>();
     }
 
+    @PostConstruct
+    public void start() {
+        notificationComponent.addMessageListener(this::onNotification);
+    }
+
     @Override
     public void publish(Notification notification) {
         try {
@@ -36,5 +43,14 @@ public class DefaultNotificationService implements NotificationService {
     @Override
     public void subscribe(NetMessageListener<Notification> listener) {
         listeners.add(listener);
+    }
+
+    private void onNotification(Notification notification, Acknowledgment acknowledgment) {
+        //TODO: ack
+        for (NetMessageListener<Notification> listener : listeners) {
+            listener.onMessage(notification, acknowledgment);
+        }
+
+        acknowledgment.ack();
     }
 }

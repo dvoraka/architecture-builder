@@ -2,7 +2,7 @@ package dvoraka.archbuilder.prototype.actioncoordinator.net;
 
 import dvoraka.archbuilder.sample.microservice.data.notification.Notification;
 import dvoraka.archbuilder.sample.microservice.net.Acknowledgment;
-import dvoraka.archbuilder.sample.microservice.net.NetMessageListener;
+import dvoraka.archbuilder.sample.microservice.net.NotificationListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +17,7 @@ public class DefaultNotificationService implements NotificationService {
 
     private final NotificationComponent notificationComponent;
 
-    private final List<NetMessageListener<Notification>> listeners;
+    private final List<NotificationListener> listeners;
 
 
     @Autowired
@@ -41,14 +41,14 @@ public class DefaultNotificationService implements NotificationService {
     }
 
     @Override
-    public void subscribe(NetMessageListener<Notification> listener) {
+    public void subscribe(NotificationListener listener) {
         listeners.add(listener);
     }
 
     private void onNotification(Notification notification, Acknowledgment acknowledgment) {
-        //TODO: ack
-        for (NetMessageListener<Notification> listener : listeners) {
-            listener.onMessage(notification, acknowledgment);
+
+        for (NotificationListener listener : listeners) {
+            listener.onNotification(notification);
         }
 
         acknowledgment.ack();

@@ -9,7 +9,6 @@ import dvoraka.archbuilder.prototype.actioncoordinator.net.NotificationService;
 import dvoraka.archbuilder.prototype.actioncoordinator.repository.OrderActionRepository;
 import dvoraka.archbuilder.sample.microservice.data.notification.Notification;
 import dvoraka.archbuilder.sample.microservice.data.notification.NotificationType;
-import dvoraka.archbuilder.sample.microservice.net.Acknowledgment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,7 +70,7 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, Order, St
             }
         }
 
-        // subscribe to network notifications
+        // subscribe to notifications
         notificationService.subscribe(this::onNotification);
 
         startWatchdog();
@@ -232,7 +231,7 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, Order, St
         return context;
     }
 
-    private void onNotification(Notification notification, Acknowledgment acknowledgment) {
+    private void onNotification(Notification notification) {
 //        if (notification.getType() != NotificationType.ORDER_STATUS
 //                || notification.getData() == null) {
 //            return;

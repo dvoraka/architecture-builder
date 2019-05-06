@@ -5,7 +5,6 @@ import dvoraka.archbuilder.prototype.actioncoordinator.model.Order;
 import dvoraka.archbuilder.prototype.actioncoordinator.net.NotificationComponent;
 import dvoraka.archbuilder.prototype.actioncoordinator.order.OrderActionCoordinator;
 import dvoraka.archbuilder.prototype.actioncoordinator.service.OrderService;
-import dvoraka.archbuilder.sample.microservice.data.notification.CheckNotification;
 import dvoraka.archbuilder.sample.microservice.data.notification.Notification;
 import dvoraka.archbuilder.sample.microservice.net.DummyAcknowledgment;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +36,8 @@ public class CoordinatorApp {
         return args -> {
             System.out.println("Order service app");
 
+            long orderId = -1;
+
             final int orderCount = 3;
             long start = System.currentTimeMillis();
             for (int i = 0; i < orderCount; i++) {
@@ -45,7 +46,7 @@ public class CoordinatorApp {
                 order.setItemId(3);
                 order.setStatus(OrderStatus.NEW);
 
-                orderService.process(order, UUID.randomUUID().toString());
+                orderId = orderService.process(order, UUID.randomUUID().toString());
             }
             long responseTime = System.currentTimeMillis() - start;
             TimeUnit.SECONDS.sleep(1);
@@ -57,8 +58,10 @@ public class CoordinatorApp {
             System.out.println("done in " + (System.currentTimeMillis() - start) + " ms");
             System.out.println("response time: " + responseTime + " ms");
 
-            Notification notification = new CheckNotification();
+            Notification notification = new TestingNotification(orderId);
             notificationComponent.onMessage(notification, new DummyAcknowledgment());
+
+            TimeUnit.SECONDS.sleep(10);
         };
     }
 }

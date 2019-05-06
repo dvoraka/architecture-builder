@@ -1,6 +1,5 @@
 package dvoraka.archbuilder.prototype.actioncoordinator.order;
 
-import dvoraka.archbuilder.prototype.actioncoordinator.action.order.OrderStatus;
 import dvoraka.archbuilder.prototype.actioncoordinator.coordinator.ActionCoordinator;
 import dvoraka.archbuilder.prototype.actioncoordinator.exception.StateException;
 import dvoraka.archbuilder.prototype.actioncoordinator.model.Order;
@@ -84,16 +83,19 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, Order, St
     }
 
     private boolean isResumptionCondition(Notification notification) {
-        if (notification.getType() != NotificationType.ORDER_STATUS) {
+        if (notification.getType() != NotificationType.CHECK) {
             return false;
         }
 
-        Order order = (Order) notification.getData().get("order");
-        OrderStatus status = order.getStatus();
+        //TODO
+        return true;
 
-        return status == OrderStatus.COMPLETED
-                || status == OrderStatus.CANCELLED
-                || status == OrderStatus.FAILED;
+//        Order order = (Order) notification.getData().get("order");
+//        OrderStatus status = order.getStatus();
+
+//        return status == OrderStatus.COMPLETED
+//                || status == OrderStatus.CANCELLED
+//                || status == OrderStatus.FAILED;
     }
 
     @Override
@@ -158,8 +160,8 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, Order, St
                 .forEach(OrderActionContextHandle::restartState);
 
         // find old notifications and remove them
-//        notifications.entrySet().removeIf(entry ->
-//                entry.getValue().getTimestamp().isBefore(Instant.now().minusSeconds(60)));
+        notifications.entrySet().removeIf(entry ->
+                entry.getValue().getTimestamp().isBefore(Instant.now().minusSeconds(60)));
 
         // find suspended states and release them
         contexts.values().stream()
@@ -217,11 +219,13 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, Order, St
 
         //TODO: get order data for new context
 //        Order orderData = new DefaultOrderData().setOrderId(60);
+        Order order = new Order();
+        order.setId(orderId);
 
         OrderActionContextHandle context = OrderActionContext.createContext(
                 actionStatus.getAction(),
                 actionStatus.getPreviousAction(),
-                null,
+                order,
                 repository
         );
         //TODO: check the context ID
@@ -238,7 +242,7 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, Order, St
 
         log.debug("On notification: {}", notification);
 
-        long orderId = 1; // notification.getData().getOrderId();
+        long orderId = (long) notification.getData().get("orderId");
         if (suspendedContexts.contains(orderId)) {
             if (isResumptionCondition(notification)) {
                 log.debug("Waking up the context: {}...", orderId);

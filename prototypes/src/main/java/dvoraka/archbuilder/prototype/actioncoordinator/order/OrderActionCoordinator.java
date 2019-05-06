@@ -50,10 +50,9 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, Order, St
 
 
     @Autowired
-    public OrderActionCoordinator(OrderActionRepository repository) {
+    public OrderActionCoordinator(OrderActionRepository repository, NotificationService notificationService) {
         this.repository = requireNonNull(repository);
-        //TODO
-        notificationService = null;
+        this.notificationService = requireNonNull(notificationService);
 
         contexts = new ConcurrentHashMap<>();
         suspendedContexts = ConcurrentHashMap.newKeySet();

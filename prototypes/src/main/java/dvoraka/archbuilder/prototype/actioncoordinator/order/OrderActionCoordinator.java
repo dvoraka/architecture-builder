@@ -231,10 +231,10 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, Order, St
     }
 
     private void onNotification(Notification notification) {
-//        if (notification.getType() != NotificationType.ORDER_STATUS
-//                || notification.getData() == null) {
-//            return;
-//        }
+        if (notification.getType() != NotificationType.CHECK
+                || notification.getData() == null) {
+            return;
+        }
 
         log.debug("On notification: {}", notification);
 

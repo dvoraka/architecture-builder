@@ -67,7 +67,7 @@ public class CoordinatorApp {
                 notificationComponent.onMessage(notification, new DummyAcknowledgment());
             }
 
-            TimeUnit.SECONDS.sleep(20);
+            TimeUnit.SECONDS.sleep(30);
         };
     }
 }

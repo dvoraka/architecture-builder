@@ -31,6 +31,8 @@ public final class CompleteOrderAction extends AbstractOrderAction {
             getContext().actionDone();
         } else if (status == OrderStatus.FAILED || status == OrderStatus.CANCELLED) {
             getContext().actionFailed();
+        } else {
+            log.warn("Unknown status: {}", status);
         }
     }
 }

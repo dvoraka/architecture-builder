@@ -13,6 +13,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -36,7 +38,7 @@ public class CoordinatorApp {
         return args -> {
             System.out.println("Order service app");
 
-            long orderId = -1;
+            List<Long> orderIds = new ArrayList<>();
 
             final int orderCount = 3;
             long start = System.currentTimeMillis();
@@ -46,7 +48,8 @@ public class CoordinatorApp {
                 order.setItemId(3);
                 order.setStatus(OrderStatus.NEW);
 
-                orderId = orderService.process(order, UUID.randomUUID().toString());
+                long orderId = orderService.process(order, UUID.randomUUID().toString());
+                orderIds.add(orderId);
             }
             long responseTime = System.currentTimeMillis() - start;
             TimeUnit.SECONDS.sleep(1);
@@ -58,10 +61,13 @@ public class CoordinatorApp {
             System.out.println("done in " + (System.currentTimeMillis() - start) + " ms");
             System.out.println("response time: " + responseTime + " ms");
 
-            Notification notification = new TestingNotification(orderId);
-            notificationComponent.onMessage(notification, new DummyAcknowledgment());
+            // send notifications
+            for (Long orderId : orderIds) {
+                Notification notification = new TestingNotification(orderId);
+                notificationComponent.onMessage(notification, new DummyAcknowledgment());
+            }
 
-            TimeUnit.SECONDS.sleep(10);
+            TimeUnit.SECONDS.sleep(20);
         };
     }
 }

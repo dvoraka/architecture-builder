@@ -229,6 +229,7 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, Order, St
                 repository
         );
         //TODO: check the context ID
+        log.debug("Loading context: {}", context);
         contexts.put(context.getId(), context);
 
         return context;

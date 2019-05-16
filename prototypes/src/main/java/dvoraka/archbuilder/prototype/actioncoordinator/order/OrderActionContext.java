@@ -98,6 +98,7 @@ public class OrderActionContext
         if (isDone()) {
             log.debug("Action context {} done in {}", this.getId(),
                     Duration.between(getCreated(), Instant.now()));
+            saveToDb();
         } else {
             log.debug("Process action ({}): {}, previous: {}", getId(), getCurrentAction(), getPreviousAction());
             AbstractOrderAction state = config.get(getCurrentAction());
@@ -218,6 +219,7 @@ public class OrderActionContext
     @Override
     public String toString() {
         return "OrderActionContext{" +
+                "id=" + getId() + ", " +
                 "currentAction=" + currentAction +
                 '}';
     }

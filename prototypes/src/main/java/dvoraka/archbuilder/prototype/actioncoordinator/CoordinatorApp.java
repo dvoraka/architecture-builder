@@ -67,7 +67,12 @@ public class CoordinatorApp {
                 notificationComponent.onMessage(notification, new DummyAcknowledgment());
             }
 
-            TimeUnit.SECONDS.sleep(30);
+            TimeUnit.SECONDS.sleep(3);
+
+            while (actionCoordinator.getSize() != 0) {
+                System.out.println("waiting...");
+                TimeUnit.SECONDS.sleep(2);
+            }
         };
     }
 }

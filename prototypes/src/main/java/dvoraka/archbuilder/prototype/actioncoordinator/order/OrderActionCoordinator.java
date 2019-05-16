@@ -150,7 +150,13 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, Order, St
         log.debug("Context count: {}", contexts.size());
 
         // find ended contexts and remove them
-        contexts.entrySet().removeIf(entry -> entry.getValue().isDone());
+        contexts.entrySet().removeIf(entry -> {
+            boolean done = entry.getValue().isDone();
+            if (done) {
+                log.debug("Removing done context: {}", entry.getValue());
+            }
+            return done;
+        });
 
         // find stuck contexts and restart them
         Predicate<OrderActionContextHandle> predicate = context ->
@@ -229,8 +235,12 @@ public class OrderActionCoordinator implements ActionCoordinator<Long, Order, St
                 repository
         );
         //TODO: check the context ID
-        log.debug("Loading context: {}", context);
-        contexts.put(context.getId(), context);
+        if (context.isDone()) {
+            log.debug("Context already done: {}", context);
+        } else {
+            log.debug("Loading context: {}", context);
+            contexts.put(context.getId(), context);
+        }
 
         return context;
     }

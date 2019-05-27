@@ -24,6 +24,11 @@ public enum DirType {
 
     TEXT,
 
+    /**
+     * Currently redundant because you can specify the supertype directly.
+     *
+     * @see Directory.Builder#superType(Class)
+     */
     ABSTRACT(true, false),
     IMPL;
 

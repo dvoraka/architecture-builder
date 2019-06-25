@@ -235,17 +235,17 @@ public class JavaGenerator implements LangGenerator, JavaHelper {
         List<Class<?>> superTypes = loadSuperTypes(directory);
         Optional<Class<?>> superClass = findClass(superTypes);
 
-        Class<?> superSuperClass = loadClass(superSuperDir.getTypeName());
+        Class<?> superSuperType = loadClass(superSuperDir.getTypeName());
         Class<?> superInterface = loadClass(superInterfaceDir.getTypeName());
         if (superInterface.getTypeParameters().length != 0) {
-            throw new GeneratorException("Super class has type parameters!");
+            throw new GeneratorException("Superinterface has type parameters!");
         }
 
         // type parameters
         Map<TypeVariable<?>, Type> typeMapping = new HashMap<>();
         if (directory.getParameters().isEmpty()) {
             if (!superInterfaceDir.getParameters().isEmpty()) {
-                typeMapping = getTypeVarMapping(superInterfaceDir, superSuperClass);
+                typeMapping = getTypeVarMapping(superInterfaceDir, superSuperType);
             }
         } else {
             typeMapping = getTypeVarMapping(directory, superInterface);

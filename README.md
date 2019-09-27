@@ -93,7 +93,7 @@ budget-service/
     └── main
         ├── java
         │   └── test
-        │       └── microservice
+        │       └── budget
         │           ├── BudgetApp.java
         │           ├── configuration
         │           │   └── BudgetConfig.java
@@ -119,3 +119,42 @@ budget-service/
 ```
 
 And then you can insert your logic easily into prepared structure.
+
+Source code for the generation:
+```java
+package dvoraka.archbuilder;
+
+import dvoraka.archbuilder.build.BuildTool;
+import dvoraka.archbuilder.build.GradleBuildTool;
+import dvoraka.archbuilder.generate.Generator;
+import dvoraka.archbuilder.module.Module;
+import dvoraka.archbuilder.module.microservice.DefaultMicroservice;
+import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import java.io.File;
+
+public class MicroserviceTemplate {
+
+    public static void main(String[] args) {
+
+        AnnotationConfigApplicationContext context =
+                new AnnotationConfigApplicationContext("dvoraka.archbuilder");
+        Generator mainGenerator = context.getBean(Generator.class);
+        SpringConfigGenerator configGenerator = context.getBean(SpringConfigGenerator.class);
+        BuilderProperties properties = context.getBean(BuilderProperties.class);
+
+        String rootDirName = "budget-service";
+        String packageName = "test.budget";
+        String serviceName = "Budget";
+
+        BuilderHelper helper = new BuilderHelper(properties, rootDirName, packageName, serviceName);
+        Module microservice = new DefaultMicroservice(helper, configGenerator);
+
+        mainGenerator.generate(microservice.getRootDirectory());
+
+        BuildTool buildTool = new GradleBuildTool(new File(rootDirName));
+        buildTool.prepareEnv();
+    }
+}
+```

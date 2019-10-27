@@ -63,7 +63,7 @@ subprojects {
         testCompile('org.spockframework:spock-spring:1.1-groovy-2.4')
 
         // Development tools
-        compile('org.springframework.boot:spring-boot-configuration-processor')
+        annotationProcessor('org.springframework.boot:spring-boot-configuration-processor')
         compile('org.springframework.boot:spring-boot-devtools')
     }
 

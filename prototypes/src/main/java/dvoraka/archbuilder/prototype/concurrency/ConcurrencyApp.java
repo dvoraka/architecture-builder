@@ -72,7 +72,7 @@ public class ConcurrencyApp {
 
             // executor service - 6 threads
             System.out.println("executor service 6 thread...");
-            ExecutorService executorService2 = Executors.newFixedThreadPool(6);
+            ExecutorService executorService2 = Executors.newFixedThreadPool(loops);
             stopWatch.start("executor service 6 threads");
             IntStream.range(0, loops)
                     .mapToObj(loop -> executorService2.submit(tasks::task1))
@@ -96,7 +96,20 @@ public class ConcurrencyApp {
             }).get();
             stopWatch.stop();
 
+            // completable future - common pool
+            System.out.println("completable future...");
+            stopWatch.start("completable future");
+            CompletableFuture.allOf(IntStream.range(0, loops)
+                    .mapToObj(loop -> CompletableFuture.runAsync(tasks::task1))
+                    .toArray(CompletableFuture[]::new))
+                    .get();
+            stopWatch.stop();
+
+            System.out.println();
             System.out.println(stopWatch.prettyPrint());
+
+            executorService.shutdown();
+            executorService2.shutdown();
         };
     }
 

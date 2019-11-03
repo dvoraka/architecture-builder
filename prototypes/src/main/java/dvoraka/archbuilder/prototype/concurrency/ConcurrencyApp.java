@@ -8,6 +8,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.util.StopWatch;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 @SpringBootApplication
 public class ConcurrencyApp {
@@ -50,6 +53,18 @@ public class ConcurrencyApp {
             stopWatch.start("new thread");
             thread1.start();
             thread1.join();
+            stopWatch.stop();
+
+            // executor service - 1 thread
+            System.out.println("executor service 1 thread...");
+            ExecutorService executorService = Executors.newSingleThreadExecutor();
+            stopWatch.start("executor service 1 thread");
+            Future<?> future = executorService.submit(() -> {
+                for (int i = 0; i < loops; i++) {
+                    tasks.task1();
+                }
+            });
+            future.get();
             stopWatch.stop();
 
             // completable future simple

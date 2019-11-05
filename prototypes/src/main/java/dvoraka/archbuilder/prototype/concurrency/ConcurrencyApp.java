@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.util.StopWatch;
+import reactor.core.publisher.Mono;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -104,6 +105,17 @@ public class ConcurrencyApp {
                     .mapToObj(loop -> CompletableFuture.runAsync(tasks::task1))
                     .toArray(CompletableFuture[]::new))
                     .get();
+            stopWatch.stop();
+
+            // Reactor simple
+            System.out.println("Reactor simple...");
+            stopWatch.start("Reactor simple");
+            Mono.fromRunnable(() -> {
+                for (int i = 0; i < loops; i++) {
+                    tasks.task1();
+                }
+            })
+                    .subscribe();
             stopWatch.stop();
 
             System.out.println();

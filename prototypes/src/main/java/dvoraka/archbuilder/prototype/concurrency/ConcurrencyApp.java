@@ -25,6 +25,7 @@ public class ConcurrencyApp {
     /**
      * Scenario 1:
      * <li>6 times task1 (unlimited thread count)</li>
+     * <li>chaining task1 to task2</li>
      */
     @Bean
     public CommandLineRunner runner() {

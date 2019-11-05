@@ -12,6 +12,16 @@ public class Tasks {
         return "task1";
     }
 
+    public Integer task2(String data) {
+        try {
+            Thread.sleep(1_000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return 2;
+    }
+
     public String task5() {
         try {
             Thread.sleep(5_000);

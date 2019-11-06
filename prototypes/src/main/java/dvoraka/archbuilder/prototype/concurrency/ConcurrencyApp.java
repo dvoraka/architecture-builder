@@ -26,77 +26,86 @@ public class ConcurrencyApp {
     /**
      * Scenario 1:
      * <li>6 times task1 (unlimited thread count)</li>
+     * Scenario 2:
      * <li>chaining task1 to task2</li>
+     * Scenario 3:
+     * <li>comparing thread count effectivity</li>
      */
     @Bean
     public CommandLineRunner runner() {
         return args -> {
             System.out.println("Concurrency app");
 
-            final int loops = 6;
-            final StopWatch stopWatch = new StopWatch("Concurrency app");
-            Tasks tasks = new Tasks();
+            scenario1();
+        };
+    }
 
-            warmup();
+    private void scenario1() throws InterruptedException, ExecutionException {
 
-            // main thread
-            System.out.println("main thread...");
-            stopWatch.start("main thread");
+        final int loops = 6;
+        final StopWatch stopWatch = new StopWatch("Concurrency app");
+        Tasks tasks = new Tasks();
+
+        warmup();
+
+        // main thread
+        System.out.println("main thread...");
+        stopWatch.start("main thread");
+        for (int i = 0; i < loops; i++) {
+            tasks.task1();
+        }
+        stopWatch.stop();
+
+        // new thread
+        System.out.println("new thread...");
+        Runnable runnable = () -> {
             for (int i = 0; i < loops; i++) {
                 tasks.task1();
             }
-            stopWatch.stop();
+        };
+        Thread thread1 = new Thread(runnable);
+        stopWatch.start("new thread");
+        thread1.start();
+        thread1.join();
+        stopWatch.stop();
 
-            // new thread
-            System.out.println("new thread...");
-            Runnable runnable = () -> {
-                for (int i = 0; i < loops; i++) {
-                    tasks.task1();
-                }
-            };
-            Thread thread1 = new Thread(runnable);
-            stopWatch.start("new thread");
-            thread1.start();
-            thread1.join();
-            stopWatch.stop();
+        // executor service - 1 thread
+        System.out.println("executor service 1 thread...");
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        stopWatch.start("executor service 1 thread");
+        Future<?> future = executorService.submit(() -> {
+            for (int i = 0; i < loops; i++) {
+                tasks.task1();
+            }
+        });
+        future.get();
+        stopWatch.stop();
 
-            // executor service - 1 thread
-            System.out.println("executor service 1 thread...");
-            ExecutorService executorService = Executors.newSingleThreadExecutor();
-            stopWatch.start("executor service 1 thread");
-            Future<?> future = executorService.submit(() -> {
-                for (int i = 0; i < loops; i++) {
-                    tasks.task1();
-                }
-            });
-            future.get();
-            stopWatch.stop();
+        // executor service - 6 threads
+        System.out.println("executor service 6 thread...");
+        ExecutorService executorService2 = Executors.newFixedThreadPool(loops);
+        stopWatch.start("executor service 6 threads");
+        IntStream.range(0, loops)
+                .mapToObj(loop -> executorService2.submit(tasks::task1))
+                .collect(Collectors.toList())
+                .forEach(stringFuture -> {
+                    try {
+                        stringFuture.get();
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                });
+        stopWatch.stop();
 
-            // executor service - 6 threads
-            System.out.println("executor service 6 thread...");
-            ExecutorService executorService2 = Executors.newFixedThreadPool(loops);
-            stopWatch.start("executor service 6 threads");
-            IntStream.range(0, loops)
-                    .mapToObj(loop -> executorService2.submit(tasks::task1))
-                    .collect(Collectors.toList())
-                    .forEach(stringFuture -> {
-                        try {
-                            stringFuture.get();
-                        } catch (InterruptedException | ExecutionException e) {
-                            e.printStackTrace();
-                        }
-                    });
-            stopWatch.stop();
-
-            // completable future simple
-            System.out.println("completable future simple...");
-            stopWatch.start("completable future simple");
-            CompletableFuture.runAsync(() -> {
-                for (int i = 0; i < loops; i++) {
-                    tasks.task1();
-                }
-            }).get();
-            stopWatch.stop();
+        // completable future simple
+        System.out.println("completable future simple...");
+        stopWatch.start("completable future simple");
+        CompletableFuture.runAsync(() -> {
+            for (int i = 0; i < loops; i++) {
+                tasks.task1();
+            }
+        }).get();
+        stopWatch.stop();
 
             // completable future - common pool
             System.out.println("completable future...");
@@ -118,12 +127,11 @@ public class ConcurrencyApp {
                     .subscribe();
             stopWatch.stop();
 
-            System.out.println();
-            System.out.println(stopWatch.prettyPrint());
+        System.out.println();
+        System.out.println(stopWatch.prettyPrint());
 
-            executorService.shutdown();
-            executorService2.shutdown();
-        };
+        executorService.shutdown();
+        executorService2.shutdown();
     }
 
     private void warmup() {

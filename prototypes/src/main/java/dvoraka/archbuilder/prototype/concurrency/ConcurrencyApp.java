@@ -107,25 +107,25 @@ public class ConcurrencyApp {
         }).get();
         stopWatch.stop();
 
-            // completable future - common pool
-            System.out.println("completable future...");
-            stopWatch.start("completable future");
-            CompletableFuture.allOf(IntStream.range(0, loops)
-                    .mapToObj(loop -> CompletableFuture.runAsync(tasks::task1))
-                    .toArray(CompletableFuture[]::new))
-                    .get();
-            stopWatch.stop();
+        // completable future - common pool
+        System.out.println("completable future...");
+        stopWatch.start("completable future");
+        CompletableFuture.allOf(IntStream.range(0, loops)
+                .mapToObj(loop -> CompletableFuture.runAsync(tasks::task1))
+                .toArray(CompletableFuture[]::new))
+                .get();
+        stopWatch.stop();
 
-            // Reactor simple
-            System.out.println("Reactor simple...");
-            stopWatch.start("Reactor simple");
-            Mono.fromRunnable(() -> {
-                for (int i = 0; i < loops; i++) {
-                    tasks.task1();
-                }
-            })
-                    .subscribe();
-            stopWatch.stop();
+        // Reactor simple
+        System.out.println("Reactor simple...");
+        stopWatch.start("Reactor simple");
+        Mono.fromRunnable(() -> {
+            for (int i = 0; i < loops; i++) {
+                tasks.task1();
+            }
+        })
+                .subscribe();
+        stopWatch.stop();
 
         System.out.println();
         System.out.println(stopWatch.prettyPrint());

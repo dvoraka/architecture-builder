@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.util.StopWatch;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -36,8 +38,41 @@ public class ConcurrencyApp {
         return args -> {
             System.out.println("Concurrency app");
 
-            scenario1();
+            Tasks tasks = new Tasks();
+
+            final int taskCount = 100;
+            for (int i = 1; i <= taskCount; i++) {
+
+                int loops = taskCount / i;
+
+                System.out.println(i + " threads, " + loops + " loops");
+                for (int j = 0; j < loops; j++) {
+                    run1(tasks, i);
+                }
+            }
+
+//            scenario1();
         };
+    }
+
+    private void run1(Tasks tasks, int threadCount) {
+
+        List<Thread> threads = new ArrayList<>();
+
+        for (int i = 0; i < threadCount; i++) {
+            Runnable runnable = tasks::task1;
+            Thread thread = new Thread(runnable);
+            threads.add(thread);
+            thread.start();
+        }
+
+        threads.forEach(thread -> {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private void scenario1() throws InterruptedException, ExecutionException {

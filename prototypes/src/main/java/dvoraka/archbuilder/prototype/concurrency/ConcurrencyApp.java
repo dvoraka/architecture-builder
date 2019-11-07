@@ -45,6 +45,10 @@ public class ConcurrencyApp {
 
                 int loops = taskCount / i;
 
+                if ((i * loops) + 1 < taskCount) {
+                    continue;
+                }
+
                 System.out.println(i + " threads, " + loops + " loops");
                 for (int j = 0; j < loops; j++) {
                     run1(tasks, i);

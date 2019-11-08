@@ -38,22 +38,28 @@ public class ConcurrencyApp {
         return args -> {
             System.out.println("Concurrency app");
 
+            final StopWatch stopWatch = new StopWatch("Thread effectivity app");
             Tasks tasks = new Tasks();
 
-            final int taskCount = 100;
+            final int taskCount = 1000;
             for (int i = 1; i <= taskCount; i++) {
 
                 int loops = taskCount / i;
 
+                //TODO
                 if ((i * loops) + 1 < taskCount) {
                     continue;
                 }
 
+                stopWatch.start(i + " threads");
                 System.out.println(i + " threads, " + loops + " loops");
                 for (int j = 0; j < loops; j++) {
                     run1(tasks, i);
                 }
+                stopWatch.stop();
             }
+
+            System.out.println(stopWatch.prettyPrint());
 
 //            scenario1();
         };

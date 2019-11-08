@@ -38,51 +38,9 @@ public class ConcurrencyApp {
         return args -> {
             System.out.println("Concurrency app");
 
-            final StopWatch stopWatch = new StopWatch("Thread effectivity app");
-            Tasks tasks = new Tasks();
-
-            final int taskCount = 1000;
-            for (int i = 1; i <= taskCount; i++) {
-
-                int loops = taskCount / i;
-
-                //TODO
-                if ((i * loops) + 1 < taskCount) {
-                    continue;
-                }
-
-                stopWatch.start(i + " threads");
-                System.out.println(i + " threads, " + loops + " loops");
-                for (int j = 0; j < loops; j++) {
-                    run1(tasks, i);
-                }
-                stopWatch.stop();
-            }
-
-            System.out.println(stopWatch.prettyPrint());
-
 //            scenario1();
+//            scenario3();
         };
-    }
-
-    private void run1(Tasks tasks, int threadCount) {
-
-        List<Thread> threads = new ArrayList<>();
-
-        for (int i = 0; i < threadCount; i++) {
-            Runnable runnable = tasks::task1;
-            Thread thread = new Thread(runnable);
-            threads.add(thread);
-            thread.start();
-        }
-
-        threads.forEach(thread -> {
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        });
     }
 
     private void scenario1() throws InterruptedException, ExecutionException {
@@ -177,6 +135,53 @@ public class ConcurrencyApp {
 
         executorService.shutdown();
         executorService2.shutdown();
+    }
+
+    private void scenario3() {
+
+        final StopWatch stopWatch = new StopWatch("Thread effectivity app");
+        Tasks tasks = new Tasks();
+
+        final int taskCount = 1000;
+        for (int i = 1; i <= taskCount; i++) {
+
+            int loops = taskCount / i;
+
+            //TODO
+            if ((i * loops) + 1 < taskCount) {
+                continue;
+            }
+
+            stopWatch.start(i + " threads");
+            System.out.println(i + " threads, " + loops + " loops");
+            for (int j = 0; j < loops; j++) {
+                run1(tasks, i);
+            }
+            stopWatch.stop();
+        }
+
+        System.out.println();
+        System.out.println(stopWatch.prettyPrint());
+    }
+
+    private void run1(Tasks tasks, int threadCount) {
+
+        List<Thread> threads = new ArrayList<>();
+
+        for (int i = 0; i < threadCount; i++) {
+            Runnable runnable = tasks::task1;
+            Thread thread = new Thread(runnable);
+            threads.add(thread);
+            thread.start();
+        }
+
+        threads.forEach(thread -> {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private void warmup() {

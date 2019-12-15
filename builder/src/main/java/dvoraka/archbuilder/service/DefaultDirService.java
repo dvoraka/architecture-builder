@@ -96,14 +96,7 @@ public class DefaultDirService implements DirService {
 
     @Override
     public Directory fromJson(String json) throws JsonProcessingException {
-        try {
-            return objectMapper.readValue(json, Directory.class);
-        } catch (JsonProcessingException e) {
-            throw e;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return objectMapper.readValue(json, Directory.class);
     }
 
     @Override

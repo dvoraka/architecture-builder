@@ -52,11 +52,12 @@ subprojects {
         runtimeOnly group: 'org.gradle', name: 'gradle-wrapper', version: '5.0'
 
         // Testing
+        //
         // Spring testing
         testImplementation('org.springframework.boot:spring-boot-starter-test')
         // Spock
-        testImplementation('org.spockframework:spock-core:1.1-groovy-2.4')
-        testImplementation('org.spockframework:spock-spring:1.1-groovy-2.4')
+        testImplementation('org.spockframework:spock-core:1.3-groovy-2.5')
+        testImplementation('org.spockframework:spock-spring:1.3-groovy-2.5')
 
         // Development tools
         annotationProcessor('org.springframework.boot:spring-boot-configuration-processor')

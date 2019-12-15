@@ -32,17 +32,13 @@ subprojects {
 
     dependencies {
         // Spring Boot starter
-        compile('org.springframework.boot:spring-boot-starter')
-        compile('org.springframework.boot:spring-boot-starter-web')
+        implementation('org.springframework.boot:spring-boot-starter')
+        implementation('org.springframework.boot:spring-boot-starter-web')
         // Spring logging
-        compile('org.springframework.boot:spring-boot-starter-logging')
-
-        // Jackson
-//        compile('com.fasterxml.jackson.core:jackson-databind')
-//        compile('com.fasterxml.jackson.datatype:jackson-datatype-jdk8')
+        implementation('org.springframework.boot:spring-boot-starter-logging')
 
         // JavaPoet
-        compile('com.squareup:javapoet:1.11.1')
+        implementation('com.squareup:javapoet:1.11.1')
 
         // Lombok
 //    compileOnly('org.projectlombok:lombok')
@@ -50,17 +46,17 @@ subprojects {
 
         // Gradle tooling API
         implementation group: 'org.gradle', name: 'gradle-tooling-api', version: '5.0'
-        testCompile group: 'org.gradle', name: 'gradle-tooling-api', version: '5.0'
+        testImplementation group: 'org.gradle', name: 'gradle-tooling-api', version: '5.0'
         // Gradle sources (will be removed)
         runtimeOnly group: 'org.gradle', name: 'gradle-core', version: '5.0'
         runtimeOnly group: 'org.gradle', name: 'gradle-wrapper', version: '5.0'
 
         // Testing
         // Spring testing
-        testCompile('org.springframework.boot:spring-boot-starter-test')
+        testImplementation('org.springframework.boot:spring-boot-starter-test')
         // Spock
-        testCompile('org.spockframework:spock-core:1.1-groovy-2.4')
-        testCompile('org.spockframework:spock-spring:1.1-groovy-2.4')
+        testImplementation('org.spockframework:spock-core:1.1-groovy-2.4')
+        testImplementation('org.spockframework:spock-spring:1.1-groovy-2.4')
 
         // Development tools
         annotationProcessor('org.springframework.boot:spring-boot-configuration-processor')

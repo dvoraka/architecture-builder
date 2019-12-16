@@ -99,8 +99,16 @@ public class BuilderHelper {
         return getBaseName() + properties.getService().getString();
     }
 
+    public String restClientServiceName() {
+        return "RestClient" + getBaseName() + properties.getService().getString();
+    }
+
     public String serviceImplName() {
         return properties.getDefaultString() + serviceName();
+    }
+
+    public String restClientServiceImplName() {
+        return properties.getDefaultString() + restClientServiceName();
     }
 
     public String servicePkgName() {

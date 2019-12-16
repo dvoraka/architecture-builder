@@ -8,8 +8,9 @@ import dvoraka.archbuilder.submodule.build.BuildSubmodule;
 import dvoraka.archbuilder.submodule.build.DefaultGradleSubmodule;
 import dvoraka.archbuilder.submodule.rest.DefaultRestSubmodule;
 import dvoraka.archbuilder.submodule.rest.RestSubmodule;
-import dvoraka.archbuilder.submodule.service.RestClientServiceSubmodule;
 import dvoraka.archbuilder.submodule.service.ServiceSubmodule;
+import dvoraka.archbuilder.submodule.service.rest.RestClientServiceSubmodule;
+import dvoraka.archbuilder.submodule.service.rest.RestServerServiceSubmodule;
 import dvoraka.archbuilder.submodule.spring.ServiceSpringBootAppSubmodule;
 import dvoraka.archbuilder.submodule.spring.SpringBootAppSubmodule;
 import dvoraka.archbuilder.submodule.spring.SpringConfigSubmodule;
@@ -29,10 +30,12 @@ public class V2RestMicroservice implements Module, TemplateHelper {
         root = root(helper.getRootDirName());
         Directory srcBase = srcRootAndBase(root, pkg2path(helper.getPackageName()));
 
-        // service
-//        ServiceSubmodule serviceSubmodule = new DefaultServiceSubmodule(helper, configGenerator);
-        ServiceSubmodule serviceSubmodule = new RestClientServiceSubmodule(helper, configGenerator);
-        serviceSubmodule.addSubmoduleTo(srcBase);
+        // client service
+        ServiceSubmodule clientServiceSubmodule = new RestClientServiceSubmodule(helper, configGenerator);
+        clientServiceSubmodule.addSubmoduleTo(srcBase);
+        // server service
+        ServiceSubmodule serverServiceSubmodule = new RestServerServiceSubmodule(helper, configGenerator);
+        serverServiceSubmodule.addSubmoduleTo(srcBase);
 
         // controller
         RestSubmodule restSubmodule = new DefaultRestSubmodule(helper.getBaseName());
@@ -44,7 +47,8 @@ public class V2RestMicroservice implements Module, TemplateHelper {
 
         // Spring configuration
         SpringConfigSubmodule springConfigSubmodule = new SpringConfigSubmodule(helper.getBaseName(), configGenerator);
-        springConfigSubmodule.addMappings(serviceSubmodule.getConfiguration());
+        springConfigSubmodule.addMappings(clientServiceSubmodule.getConfiguration());
+        springConfigSubmodule.addMappings(serverServiceSubmodule.getConfiguration());
         springConfigSubmodule.addSubmoduleTo(srcBase);
 
         // application properties

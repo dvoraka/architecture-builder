@@ -1,22 +1,23 @@
-package dvoraka.archbuilder.submodule.service;
+package dvoraka.archbuilder.submodule.service.rest;
 
 import dvoraka.archbuilder.BuilderHelper;
 import dvoraka.archbuilder.data.Directory;
 import dvoraka.archbuilder.sample.microservice.service.BaseService;
 import dvoraka.archbuilder.springconfig.BeanMapping;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
+import dvoraka.archbuilder.submodule.service.ServiceSubmodule;
 
 import java.util.Collection;
 import java.util.Collections;
 
-public class RestClientServiceSubmodule implements ServiceSubmodule {
+public class RestServerServiceSubmodule implements ServiceSubmodule {
 
     private final ServiceSubmodule configuredSubmodule;
 
 
-    public RestClientServiceSubmodule(BuilderHelper helper, SpringConfigGenerator configGenerator) {
+    public RestServerServiceSubmodule(BuilderHelper helper, SpringConfigGenerator configGenerator) {
 
-        configuredSubmodule = new ConfigurableRestClientServiceSubmodule(
+        configuredSubmodule = new ConfigurableRestServerServiceSubmodule(
                 BaseService.class,
                 Collections.emptyList(),
                 helper,

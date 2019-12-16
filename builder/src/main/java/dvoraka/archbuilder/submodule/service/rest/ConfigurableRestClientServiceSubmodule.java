@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.submodule.service;
+package dvoraka.archbuilder.submodule.service.rest;
 
 import dvoraka.archbuilder.BuilderHelper;
 import dvoraka.archbuilder.data.DirType;
@@ -7,6 +7,7 @@ import dvoraka.archbuilder.exception.GeneratorException;
 import dvoraka.archbuilder.sample.microservice.service.AbstractBaseService;
 import dvoraka.archbuilder.springconfig.BeanMapping;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
+import dvoraka.archbuilder.submodule.service.ServiceSubmodule;
 import dvoraka.archbuilder.template.TemplateHelper;
 import dvoraka.archbuilder.util.JavaUtils;
 

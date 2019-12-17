@@ -32,8 +32,8 @@ public class V2RestMicroservice implements Module, TemplateHelper {
         Directory srcBase = srcRootAndBase(root, pkg2path(helper.getPackageName()));
 
         // services
-        ServiceSubmodule clientServiceSubmodule = new RestClientServiceSubmodule(helper, configGenerator);
-        clientServiceSubmodule.addSubmoduleTo(srcBase);
+        ServiceSubmodule servicesSubmodule = new RestClientServiceSubmodule(helper, configGenerator);
+        servicesSubmodule.addSubmoduleTo(srcBase);
 
         // network data
         NetSubmodule netSubmodule = new RestNetSubmodule(helper);
@@ -49,8 +49,7 @@ public class V2RestMicroservice implements Module, TemplateHelper {
 
         // Spring configuration
         SpringConfigSubmodule springConfigSubmodule = new SpringConfigSubmodule(helper.getBaseName(), configGenerator);
-        springConfigSubmodule.addMappings(clientServiceSubmodule.getConfiguration());
-//        springConfigSubmodule.addMappings(serverServiceSubmodule.getConfiguration());
+        springConfigSubmodule.addMappings(servicesSubmodule.getConfiguration());
         springConfigSubmodule.addSubmoduleTo(srcBase);
 
         // application properties

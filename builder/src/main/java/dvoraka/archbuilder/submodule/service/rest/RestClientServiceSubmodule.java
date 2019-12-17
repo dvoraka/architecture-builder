@@ -17,7 +17,7 @@ public class RestClientServiceSubmodule implements ServiceSubmodule {
 
     public RestClientServiceSubmodule(BuilderHelper helper, SpringConfigGenerator configGenerator) {
 
-        configuredSubmodule = new ConfigurableRestClientServiceSubmodule(
+        configuredSubmodule = new ConfigurableRestServicesSubmodule(
                 BaseService.class,
                 Collections.emptyList(),
                 helper,

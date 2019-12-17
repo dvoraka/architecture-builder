@@ -10,7 +10,6 @@ import dvoraka.archbuilder.submodule.rest.DefaultRestSubmodule;
 import dvoraka.archbuilder.submodule.rest.RestSubmodule;
 import dvoraka.archbuilder.submodule.service.ServiceSubmodule;
 import dvoraka.archbuilder.submodule.service.rest.RestClientServiceSubmodule;
-import dvoraka.archbuilder.submodule.service.rest.RestServerServiceSubmodule;
 import dvoraka.archbuilder.submodule.spring.ServiceSpringBootAppSubmodule;
 import dvoraka.archbuilder.submodule.spring.SpringBootAppSubmodule;
 import dvoraka.archbuilder.submodule.spring.SpringConfigSubmodule;
@@ -34,8 +33,8 @@ public class V2RestMicroservice implements Module, TemplateHelper {
         ServiceSubmodule clientServiceSubmodule = new RestClientServiceSubmodule(helper, configGenerator);
         clientServiceSubmodule.addSubmoduleTo(srcBase);
         // server service
-        ServiceSubmodule serverServiceSubmodule = new RestServerServiceSubmodule(helper, configGenerator);
-        serverServiceSubmodule.addSubmoduleTo(srcBase);
+//        ServiceSubmodule serverServiceSubmodule = new RestServerServiceSubmodule(helper, configGenerator);
+//        serverServiceSubmodule.addSubmoduleTo(srcBase);
 
         // controller
         RestSubmodule restSubmodule = new DefaultRestSubmodule(helper.getBaseName());
@@ -48,7 +47,7 @@ public class V2RestMicroservice implements Module, TemplateHelper {
         // Spring configuration
         SpringConfigSubmodule springConfigSubmodule = new SpringConfigSubmodule(helper.getBaseName(), configGenerator);
         springConfigSubmodule.addMappings(clientServiceSubmodule.getConfiguration());
-        springConfigSubmodule.addMappings(serverServiceSubmodule.getConfiguration());
+//        springConfigSubmodule.addMappings(serverServiceSubmodule.getConfiguration());
         springConfigSubmodule.addSubmoduleTo(srcBase);
 
         // application properties

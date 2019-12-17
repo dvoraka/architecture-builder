@@ -7,13 +7,16 @@ import dvoraka.archbuilder.template.TemplateHelper;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
+import java.util.Collections;
 
-public class DefaultRestSubmodule implements RestSubmodule, TemplateHelper {
+public class RestControllerSubmodule implements RestSubmodule, TemplateHelper {
+
+    public static final String CONTROLLER_DIR = "controller";
 
     private final String baseName;
 
 
-    public DefaultRestSubmodule(String baseName) {
+    public RestControllerSubmodule(String baseName) {
         this.baseName = baseName;
     }
 
@@ -22,7 +25,7 @@ public class DefaultRestSubmodule implements RestSubmodule, TemplateHelper {
 
         // controller
         String controllerName = buildServiceControllerName(baseName);
-        Directory controller = new Directory.Builder("controller", DirType.NEW_TYPE)
+        Directory controller = new Directory.Builder(CONTROLLER_DIR, DirType.NEW_TYPE)
                 .parent(srcBase)
                 .filename(controllerName)
                 .metadata(RestController.class)
@@ -32,6 +35,6 @@ public class DefaultRestSubmodule implements RestSubmodule, TemplateHelper {
     @Override
     public Collection<BeanMapping> getConfiguration() {
         //TODO
-        return null;
+        return Collections.emptyList();
     }
 }

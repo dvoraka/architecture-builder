@@ -6,7 +6,7 @@ import dvoraka.archbuilder.module.Module;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
 import dvoraka.archbuilder.submodule.build.BuildSubmodule;
 import dvoraka.archbuilder.submodule.build.DefaultGradleSubmodule;
-import dvoraka.archbuilder.submodule.rest.DefaultRestSubmodule;
+import dvoraka.archbuilder.submodule.rest.RestControllerSubmodule;
 import dvoraka.archbuilder.submodule.rest.RestSubmodule;
 import dvoraka.archbuilder.submodule.service.DefaultServiceSubmodule;
 import dvoraka.archbuilder.submodule.service.ServiceSubmodule;
@@ -34,7 +34,7 @@ public class DefaultRestMicroservice implements Module, TemplateHelper {
         serviceSubmodule.addSubmoduleTo(srcBase);
 
         // controller
-        RestSubmodule restSubmodule = new DefaultRestSubmodule(helper.getBaseName());
+        RestSubmodule restSubmodule = new RestControllerSubmodule(helper.getBaseName());
         restSubmodule.addSubmoduleTo(srcBase);
 
         // Spring Boot application

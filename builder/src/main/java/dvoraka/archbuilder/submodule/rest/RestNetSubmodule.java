@@ -1,4 +1,4 @@
-package dvoraka.archbuilder.submodule.net;
+package dvoraka.archbuilder.submodule.rest;
 
 import dvoraka.archbuilder.BuilderHelper;
 import dvoraka.archbuilder.data.DirType;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class RestNetSubmodule implements NetSubmodule, TemplateHelper {
+public class RestNetSubmodule implements RestSubmodule, TemplateHelper {
 
     public static final String MESSAGE_DIR = "data/message";
 
@@ -22,7 +22,6 @@ public class RestNetSubmodule implements NetSubmodule, TemplateHelper {
 
     public RestNetSubmodule(BuilderHelper helper) {
         this.helper = helper;
-
         configuration = new ArrayList<>();
     }
 
@@ -34,15 +33,15 @@ public class RestNetSubmodule implements NetSubmodule, TemplateHelper {
         }
 
         // messages
-        Directory responseMessage = new Directory.Builder(MESSAGE_DIR, DirType.IMPL)
-                .parent(srcBase)
-                .superType(Object.class)
-                .filename(helper.responseMessageName())
-                .build();
         Directory requestMessage = new Directory.Builder(MESSAGE_DIR, DirType.IMPL)
                 .parent(srcBase)
                 .superType(Object.class)
                 .filename(helper.requestMessageName())
+                .build();
+        Directory responseMessage = new Directory.Builder(MESSAGE_DIR, DirType.IMPL)
+                .parent(srcBase)
+                .superType(Object.class)
+                .filename(helper.responseMessageName())
                 .build();
     }
 

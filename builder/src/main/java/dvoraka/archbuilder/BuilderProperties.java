@@ -15,6 +15,7 @@ public class BuilderProperties {
     private String defaultString = "Default";
     private String exceptionString = "Exception";
     private String messageString = "Message";
+    private String responseString = "Response";
     private String serverString = "Server";
 
     private String dataPkgName = "data";
@@ -98,6 +99,10 @@ public class BuilderProperties {
 
     public String getServerString() {
         return serverString;
+    }
+
+    public String getResponseString() {
+        return responseString;
     }
 
     public void setServerString(String serverString) {

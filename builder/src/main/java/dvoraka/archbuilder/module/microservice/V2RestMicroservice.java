@@ -6,6 +6,8 @@ import dvoraka.archbuilder.module.Module;
 import dvoraka.archbuilder.springconfig.SpringConfigGenerator;
 import dvoraka.archbuilder.submodule.build.BuildSubmodule;
 import dvoraka.archbuilder.submodule.build.DefaultGradleSubmodule;
+import dvoraka.archbuilder.submodule.net.NetSubmodule;
+import dvoraka.archbuilder.submodule.net.RestNetSubmodule;
 import dvoraka.archbuilder.submodule.rest.DefaultRestSubmodule;
 import dvoraka.archbuilder.submodule.rest.RestSubmodule;
 import dvoraka.archbuilder.submodule.service.ServiceSubmodule;
@@ -29,12 +31,13 @@ public class V2RestMicroservice implements Module, TemplateHelper {
         root = root(helper.getRootDirName());
         Directory srcBase = srcRootAndBase(root, pkg2path(helper.getPackageName()));
 
-        // client service
+        // services
         ServiceSubmodule clientServiceSubmodule = new RestClientServiceSubmodule(helper, configGenerator);
         clientServiceSubmodule.addSubmoduleTo(srcBase);
-        // server service
-//        ServiceSubmodule serverServiceSubmodule = new RestServerServiceSubmodule(helper, configGenerator);
-//        serverServiceSubmodule.addSubmoduleTo(srcBase);
+
+        // network data
+        NetSubmodule netSubmodule = new RestNetSubmodule(helper);
+        netSubmodule.addSubmoduleTo(srcBase);
 
         // controller
         RestSubmodule restSubmodule = new DefaultRestSubmodule(helper.getBaseName());

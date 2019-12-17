@@ -79,6 +79,10 @@ public class BuilderHelper {
         return getBaseName() + properties.getMessageString();
     }
 
+    public String responseMessageName() {
+        return getBaseName() + properties.getResponseString() + properties.getMessageString();
+    }
+
     public String serverName() {
         return getBaseName() + properties.getServerString();
     }
